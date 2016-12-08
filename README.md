@@ -94,35 +94,20 @@ b) Edit Information - (i)
 (ii) View Stats (Show based on a date range, default by current month) 
 
 a) New customers
-
 b) Product sold
-
 c) Orders
-
 d) Avg order value
-
 e) Revenue this period
-
 f) Total revenue
-
 g) Tax collected
-
 h) Shipping collected
-
 i) Order revenue graph
-
 j) Low stock
-
 k) Completed orders
-
 l) Top sellers
-
 m) Top customers
-
 n) Store Views & Impressions
-
 o) Product likes
-
 p) Follows
 
 (iii) Inventory Management - products
@@ -146,23 +131,16 @@ a) Create
 15. Product attribute - Shirt, Jewelry... etc
 
 b) Edit - (iii)
-
 c) Delete - (iii)
-
 d) View - (iii)
-
 e) Search - (iii)
 
 (iv) Order Management
 
 a) Search
-
 b) List
-
 c) View
-
 d) Filter
-
 e) Change status
 
 (v) Shipping
@@ -183,7 +161,6 @@ a) Discount configurations
 (viii) Currencies
 
 a) Set base currency
-
 b) (Currency switching in site based using a third party tool like(https://openexchangerates.org/)
 
 (ix) Languages(Currently we are using English only)
@@ -197,9 +174,7 @@ b) (Currency switching in site based using a third party tool like(https://opene
 (xiii) Sending money to brand
 
 a) Using - PayPal payout
-
 b) Based on a threshold of the amount
-
 c) Brands need to get a PayPal ID for this and that need to be updated in there admin dashboard
 
 (xiv) Payment gateway (credit cards only ) for now
@@ -251,17 +226,13 @@ a) Add
 5. Created 
 
 b) Edit - (iii)
-
 c) Delete - (iii)
-
 d) View - (iii)
-
 e) Search - (iii)
 
 (iv) View Stats (Show based on a date range, default by current month) 
 
 a) View individual products sold per collection 
-
 b) View total overall sales commission received for all collections & View total overall sales per collection 
 
 (v) Billing
@@ -280,17 +251,21 @@ b) Receipts
 c) Change subscription level
 
 1. Default plan
+
 - Curator gets 1% commission for items that actually sell from their collections. 
 
 2. Silver plan
+
 - Curator gets 1.5% commission for items that actually sell from their collections. 
 - Can choose 2 brands to seed them products every quarter 
 
 3. Gold plan
+
 - Curator gets 2% commission for items that actually sell from their collections. 
 - Get to choose 4 brands to seed them products every quarter 
 
 4. Platinum plan
+
 - Curator gets 3% commission for items that actually sell from their collections. 
 - Get to choose 7 brands to seed them products every quarter 
 
