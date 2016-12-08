@@ -1,37 +1,58 @@
 # Backend Administration
 
-## Master Module:
-This module controls the entire application. This sets and changes any rules & data models globally and for specific sub modules. The master module has the ability to create (n) amount of sub module components. Anyone can be given access to login into the master module if they are made superusers.
+## Master Module
+This module contains the dashboard that controls the entire application. Anyone can be given access to login into the master module if they are made superusers. The master module as well has two **sub modules** called brand module & influencer module. 
 
-## Sub Modules:
-Their are only two types sub modules brand module & influencer module. Sub modules contain module specific rules and data models pertaining to the individual sub module. As well sub modules have global rules and data models shared across all sub modules. Every sub module has set of APIs that link to the current IOS app to get, post and update data, for that specific sub module.
+## Sub Modules
+Sub modules contain global/specific settings & data models. Each of the sub modules have the ability to generate links to create **Sub module components**. 
+- Sub modules contain specific settings that apply to the individual module only.
+- Sub modules have shared settings that apply to both modules.
+- Sub modules contain data models that apply to the individual module only.
+- Sub modules have shared data models that apply to both modules.
 
+### Sub Module components:
+Sub modules componets are made from the sub module brand or influencer. They are essentially mini applications that has a dashboard. They are created from their respective sub modulues and house data for brands or influencers which in turn is then stored in our database. Each component has an internal API that links to the root sub module.
 
+## Module API's
+### Sub module to Sub module: 
+-
+### Sub module to Sub module components: 
+-
+### Sub module to IOS APP:
+-
+
+## Module Architecture
 ### Master Module:
-```Master dashboard```
-(i)  Ability to edit, delete, active/inactive all information for each sub module.
+(i)  Ability to change settings & data models for each sub module.
 
-(ii) Change rules that govern specific sub modules and the global rules that govern all modules
+(ii) Create, update, delete and view each sub module's stats & information from their components. 
 
-(iii) Create, delete and update module specific data models and global data models
+### Sub Modules: 
+#### Global settings
+-
 
-(iv) View each sub module's stats & information. See overview of all sub modules stats.
+#### Specific settings
+##### *Brand sub module*
+-
 
-(v) Create which modules to create. Depending on the selection an invite sign up link is created to share with brands or influencers - ie every link allows brands or influencers to create a sub module that has all the required data needed. The links expires after 48 hours and a new one will have to be issued.
+##### *Influencer sub module*
+-
 
-```Master Module Data Models```
-This will be a skeleton of what the brand and influencer models are. Baked in with some global settings
+#### Global data models
+-
 
-```Master Module Rules```
-This will be a skeleton of what the brand and influencer rules are. Baked in with some global settings.
+#### Specific data models
+##### *Brand sub module*
+-
 
-```Master Module API```
-This creates, updates, and deletes any information associated with the modules.
+##### *Influencer sub module*
+-
 
-### Brand Sub Module:
-```Brand dashboard```
+### Brand sub module component:
 (i) Brand Information
+
 a) Add Information
+
 1. Store Name
 2. Store Image
 3. City
@@ -46,6 +67,7 @@ a) Add Information
 b) Edit Information - (i)
 
 (ii) View Stats (Show based on a date range, default by current month) 
+
 a) New customers
 b) Product sold
 c) Orders
@@ -64,7 +86,9 @@ o) Product likes
 p) Follows
 
 (iii) Inventory Management - products
+
 a) Create
+
 1. Name
 2. Description
 3. Color
@@ -87,6 +111,7 @@ d) View - (iii)
 e) Search - (iii)
 
 (iv) Order Management
+
 a) Search
 b) List
 c) View
@@ -94,17 +119,22 @@ d) Filter
 e) Change status
 
 (v) Shipping
+
 a) Change status
 
 (vi) Taxes
+
 a) Configure tax
 
 (vii) Discounts
+
 a) Discount configurations
+
 1. Fixed discount - ie get £5 off DVDs
 2. Percentage discount - ie get 25% off books
 
 (viii) Currencies
+
 a) Set base currency
 b) (Currency switching in site based using a third party tool like(https://openexchangerates.org/)
 
@@ -117,6 +147,7 @@ b) (Currency switching in site based using a third party tool like(https://opene
 (xii) Commission logic implementation
 
 (xiii) Sending money to brand
+
 a) Using - PayPal payout
 b) Based on a threshold of the amount
 c) Brands need to get a PayPal ID for this and that need to be updated in there admin dashboard
@@ -124,23 +155,20 @@ c) Brands need to get a PayPal ID for this and that need to be updated in there 
 (xiv) Payment gateway (credit cards only ) for now
 
 (xv) Personal Information
+
 a) edit - (xv)
+
 1. email
 2. username
 3. password
 4. full name
 5. last name
 
-```Brand Module Data Models```
-
-```Brand Module Rules```
-
-```Brand Module API's```
-
-### Influencer Module:
-```Influencer dashboard```
+### Influencer sub module component:
 (i) Influencer Information
+
 a) add
+
 1. Image
 2. City
 3. State (USA) or Country (international)
@@ -161,32 +189,40 @@ a) edit - (ii)
 4. full name
 
 (iii) Collections 
+
 a) Add
+
 1. Name
 2. Description
-3. Select Products *(Many to Many Foreign Key relationship to Brand Model)* - ie You see a list of brands from the Brands API, then all the products related to each brand. An Influencer can only see Brands that match their style preference **See Influencer Information (a) #5**. Each product can only be selected once by an influencer to be added to their collection, if selected it wont be available for other influencers to add into their collection, until the influencer removes the product from their collection, deletes their collection or if a brand removes the product from their dashboard. Here is an example of what it would look like: http://recordit.co/kT6NT5msi6
+3. Select Products *(Many to Many Foreign Key relationship to Brand Model)* - ie You see a list of brands from the Sub module brand API  **See Module API's**, then all the products related to each brand. An Influencer can only see Brands that match their style preference **See Influencer Information (a) #5**. Each product can only be selected once by an influencer to be added to their collection, if selected it wont be available for other influencers to add into their collection, until the influencer removes the product from their collection, deletes their collection or if a brand removes the product from their dashboard. Here is an example of what it would look like: http://recordit.co/kT6NT5msi6
 4. Modified
 5. Created 
+
 b) Edit - (iii)
 c) Delete - (iii)
 d) View - (iii)
 e) Search - (iii)
 
 (iv) View Stats (Show based on a date range, default by current month) 
+
 a) View individual products sold per collection 
 b) View total overall sales commission received for all collections & View total overall sales per collection 
 
 (v) Billing
+
 a) payment details
+
 1. Credit card & Billing address
 - add
 - update
 - delete
 
 b) Receipts
+
 1. Download invoice as PDF
 
 c) Change subscription level
+
 1. Default plan
 - Curator gets 1% commission for items that actually sell from their collections. 
 
@@ -203,20 +239,6 @@ c) Change subscription level
 - Get to choose 7 brands to seed them products every quarter 
 
 d) Change Billing Cycle
+
 1. Monthly  - default
 2. Yearly
-
-```Influencer Module Data Models```
-
-```Influencer Module Rules```
-
-```Influencer Module API's```
-
-
-# IOS APP
-
-```Receiving API's from backend```
-
-
-
-
