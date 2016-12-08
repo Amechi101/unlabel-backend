@@ -14,10 +14,14 @@ Sub modules contain global/specific settings & data models. Each of the sub modu
 Sub modules componets are made from the sub module brand or influencer. They are essentially mini applications that has a dashboard. They are created from their respective sub modulues and house data for brands or influencers which in turn is then stored in our database. Each component has an internal API that links to the root sub module.
 
 ## Module API's
+Module API's have a two way communication
+
 ### Sub module to Sub module: 
 -
+
 ### Sub module to Sub module components: 
 -
+
 ### Sub module to IOS APP:
 -
 
@@ -69,20 +73,35 @@ b) Edit Information - (i)
 (ii) View Stats (Show based on a date range, default by current month) 
 
 a) New customers
+
 b) Product sold
+
 c) Orders
+
 d) Avg order value
+
 e) Revenue this period
+
 f) Total revenue
+
 g) Tax collected
+
 h) Shipping collected
+
 i) Order revenue graph
+
 j) Low stock
+
 k) Completed orders
+
 l) Top sellers
+
 m) Top customers
+
 n) Store Views & Impressions
+
 o) Product likes
+
 p) Follows
 
 (iii) Inventory Management - products
@@ -106,16 +125,23 @@ a) Create
 15. Product attribute - Shirt, Jewelry... etc
 
 b) Edit - (iii)
+
 c) Delete - (iii)
+
 d) View - (iii)
+
 e) Search - (iii)
 
 (iv) Order Management
 
 a) Search
+
 b) List
+
 c) View
+
 d) Filter
+
 e) Change status
 
 (v) Shipping
@@ -136,6 +162,7 @@ a) Discount configurations
 (viii) Currencies
 
 a) Set base currency
+
 b) (Currency switching in site based using a third party tool like(https://openexchangerates.org/)
 
 (ix) Languages(Currently we are using English only)
@@ -149,7 +176,9 @@ b) (Currency switching in site based using a third party tool like(https://opene
 (xiii) Sending money to brand
 
 a) Using - PayPal payout
+
 b) Based on a threshold of the amount
+
 c) Brands need to get a PayPal ID for this and that need to be updated in there admin dashboard
 
 (xiv) Payment gateway (credit cards only ) for now
@@ -182,7 +211,9 @@ a) add
 b) Edit Information - (i)
 
 (ii) Personal Information
+
 a) edit - (ii)
+
 1. email
 2. username
 3. password
@@ -199,13 +230,17 @@ a) Add
 5. Created 
 
 b) Edit - (iii)
+
 c) Delete - (iii)
+
 d) View - (iii)
+
 e) Search - (iii)
 
 (iv) View Stats (Show based on a date range, default by current month) 
 
 a) View individual products sold per collection 
+
 b) View total overall sales commission received for all collections & View total overall sales per collection 
 
 (v) Billing
