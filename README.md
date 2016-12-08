@@ -1,4 +1,25 @@
-# Backend Administration
+# Technology Stack
+### Language
+- Python
+- Swift
+
+### Infrastructure
+- AWS Ec2
+- AWS s3
+- AWS Cloudfront
+
+### Server Technologies
+- Django
+
+
+### Database
+- PostgreSQL
+
+### Third Party Tools
+-
+
+
+# Backend (Administration)
 
 ## Master Module
 This module contains the dashboard that controls the entire application. Anyone can be given access to login into the master module if they are made superusers. The master module as well has two **sub modules** called brand module & influencer module. 
@@ -277,3 +298,7 @@ d) Change Billing Cycle
 
 1. Monthly  - default
 2. Yearly
+
+# Front-End (Client side)
+
+## IOS
