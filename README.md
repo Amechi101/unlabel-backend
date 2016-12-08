@@ -76,7 +76,7 @@ Module API's have a two way communication
 ### Brand sub module component:
 **(i) Brand Information**
 
-- a) Add Information
+`a) Add Information`
 
 1. Store Name
 2. Store Image
@@ -89,30 +89,30 @@ Module API's have a two way communication
 9. Brand Website
 10. Activate or Deactivate store (this will hide all information associated with brand within the app to be viewed by users)
 
-- b) Edit Information - (i)
+`b) Edit Information - (i)`
 
 **(ii) View Stats (Show based on a date range, default by current month)**
 
-- a) New customers
-- b) Product sold
-- c) Orders
-- d) Avg order value
-- e) Revenue this period
-- f) Total revenue
-- g) Tax collected
-- h) Shipping collected
-- i) Order revenue graph
-- j) Low stock
-- k) Completed orders
-- l) Top sellers
-- m) Top customers
-- n) Store Views & Impressions
-- o) Product likes
-- p) Follows
+`a) New customers`
+`b) Product sold`
+`c) Orders`
+`d) Avg order value`
+`e) Revenue this period`
+`f) Total revenue`
+`g) Tax collected`
+`h) Shipping collected`
+`i) Order revenue graph`
+`j) Low stock`
+`k) Completed orders`
+`l) Top sellers`
+`m) Top customers`
+`n) Store Views & Impressions`
+`o) Product likes`
+`p) Follows`
 
 **(iii) Inventory Management - products**
 
-- a) Create
+`a) Create`
 
 1. Name
 2. Description
@@ -130,38 +130,38 @@ Module API's have a two way communication
 14. Created 
 15. Product attribute - Shirt, Jewelry... etc
 
-- b) Edit - (iii)
-- c) Delete - (iii)
-- d) View - (iii)
-- e) Search - (iii)
+`b) Edit - (iii)`
+`c) Delete - (iii)`
+`d) View - (iii)`
+`e) Search - (iii)`
 
 **(iv) Order Management**
 
-- a) Search
-- b) List
-- c) View
-- d) Filter
-- e) Change status
+`a) Search`
+`b) List`
+`c) View`
+`d) Filter`
+`e) Change status`
 
 **(v) Shipping**
 
-- a) Change status
+`a) Change status`
 
 **(vi) Taxes**
 
-- a) Configure tax
+`a) Configure tax`
 
 **(vii) Discounts**
 
-- a) Discount configurations
+`a) Discount configurations`
 
 1. Fixed discount - ie get £5 off DVDs
 2. Percentage discount - ie get 25% off books
 
 **(viii) Currencies**
 
-- a) Set base currency
-- b) (Currency switching in site based using a third party tool like(https://openexchangerates.org/)
+`a) Set base currency`
+`b) (Currency switching in site based using a third party tool like(https://openexchangerates.org/)`
 
 **(ix) Languages(Currently we are using English only)**
 
@@ -173,15 +173,15 @@ Module API's have a two way communication
 
 **(xiii) Sending money to brand**
 
-- a) Using - PayPal payout
-- b) Based on a threshold of the amount
-- c) Brands need to get a PayPal ID for this and that need to be updated in there admin dashboard
+`a) Using - PayPal payout`
+`b) Based on a threshold of the amount`
+`c) Brands need to get a PayPal ID for this and that need to be updated in there admin dashboard`
 
 **(xiv) Payment gateway (credit cards only ) for now**
 
 **(xv) Personal Information**
 
-- a) edit - (xv)
+`a) edit - (xv)`
 
 1. email
 2. username
@@ -192,7 +192,7 @@ Module API's have a two way communication
 ### Influencer sub module component:
 **(i) Influencer Information**
 
-- a) add
+`a) add`
 
 1. Image
 2. City
@@ -204,11 +204,11 @@ Module API's have a two way communication
 8. Website
 9. Activate or Deactivate influencer (this will hide all information associated with influencer within the app to be viewed by users)
 
-- b) Edit Information - (i)
+`b) Edit Information - (i)`
 
 **(ii) Personal Information**
 
-- a) edit - (ii)
+`a) edit - (ii)`
 
 1. email
 2. username
@@ -217,7 +217,7 @@ Module API's have a two way communication
 
 **(iii) Collections** 
 
-- a) Add
+`a) Add`
 
 1. Name
 2. Description
@@ -225,30 +225,30 @@ Module API's have a two way communication
 4. Modified
 5. Created 
 
-- b) Edit - (iii)
-- c) Delete - (iii)
-- d) View - (iii)
-- e) Search - (iii)
+`b) Edit - (iii)`
+`c) Delete - (iii)`
+`d) View - (iii)`
+`e) Search - (iii)`
 
 **(iv) View Stats (Show based on a date range, default by current month)**
 
-- a) View individual products sold per collection 
-- b) View total overall sales commission received for all collections & View total overall sales per collection 
+`a) View individual products sold per collection` 
+`b) View total overall sales commission received for all collections & View total overall sales per collection`
 
 **(v) Billing**
 
-- a) payment details
+`a) payment details`
 
 1. Credit card & Billing address
 - add
 - update
 - delete
 
-- b) Receipts
+`b) Receipts`
 
 1. Download invoice as PDF
 
-- c) Change subscription level
+`c) Change subscription level`
 
 1. Default plan
 
@@ -269,7 +269,7 @@ Module API's have a two way communication
 - Curator gets 3% commission for items that actually sell from their collections. 
 - Get to choose 7 brands to seed them products every quarter 
 
-- d) Change Billing Cycle
+`d) Change Billing Cycle`
 
 1. Monthly  - default
 2. Yearly
