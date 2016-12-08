@@ -48,9 +48,9 @@ Module API's have a two way communication
 
 ## Module Architecture
 ### Master Module:
-(i)  Ability to change settings & data models for each sub module.
+**(i)  Ability to change settings & data models for each sub module.**
 
-(ii) Create, update, delete and view each sub module's stats & information from their components. 
+**(ii) Create, update, delete and view each sub module's stats & information from their components.**
 
 ### Sub Modules: 
 #### Global settings
@@ -74,7 +74,7 @@ Module API's have a two way communication
 -
 
 ### Brand sub module component:
-(i) Brand Information
+**(i) Brand Information**
 
 - a) Add Information
 
@@ -91,7 +91,7 @@ Module API's have a two way communication
 
 - b) Edit Information - (i)
 
-(ii) View Stats (Show based on a date range, default by current month) 
+**(ii) View Stats (Show based on a date range, default by current month)**
 
 - a) New customers
 - b) Product sold
@@ -110,7 +110,7 @@ Module API's have a two way communication
 - o) Product likes
 - p) Follows
 
-(iii) Inventory Management - products
+**(iii) Inventory Management - products**
 
 - a) Create
 
@@ -135,7 +135,7 @@ Module API's have a two way communication
 - d) View - (iii)
 - e) Search - (iii)
 
-(iv) Order Management
+**(iv) Order Management**
 
 - a) Search
 - b) List
@@ -143,43 +143,43 @@ Module API's have a two way communication
 - d) Filter
 - e) Change status
 
-(v) Shipping
+**(v) Shipping**
 
 - a) Change status
 
-(vi) Taxes
+**(vi) Taxes**
 
 - a) Configure tax
 
-(vii) Discounts
+**(vii) Discounts**
 
 - a) Discount configurations
 
 1. Fixed discount - ie get £5 off DVDs
 2. Percentage discount - ie get 25% off books
 
-(viii) Currencies
+**(viii) Currencies**
 
 - a) Set base currency
 - b) (Currency switching in site based using a third party tool like(https://openexchangerates.org/)
 
-(ix) Languages(Currently we are using English only)
+**(ix) Languages(Currently we are using English only)**
 
-(x) Shipping details can be updated (Like status) - (There is no integration with the third party services - That will be managed manually using their interface)
+**(x) Shipping details can be updated (Like status) - (There is no integration with the third party services - That will be managed manually using their interface)**
 
-(xi) Multiple currencies
+**(xi) Multiple currencies**
 
-(xii) Commission logic implementation
+**(xii) Commission logic implementation**
 
-(xiii) Sending money to brand
+**(xiii) Sending money to brand**
 
 - a) Using - PayPal payout
 - b) Based on a threshold of the amount
 - c) Brands need to get a PayPal ID for this and that need to be updated in there admin dashboard
 
-(xiv) Payment gateway (credit cards only ) for now
+**(xiv) Payment gateway (credit cards only ) for now**
 
-(xv) Personal Information
+**(xv) Personal Information**
 
 - a) edit - (xv)
 
@@ -190,7 +190,7 @@ Module API's have a two way communication
 5. last name
 
 ### Influencer sub module component:
-(i) Influencer Information
+**(i) Influencer Information**
 
 - a) add
 
@@ -206,7 +206,7 @@ Module API's have a two way communication
 
 - b) Edit Information - (i)
 
-(ii) Personal Information
+**(ii) Personal Information**
 
 - a) edit - (ii)
 
@@ -215,7 +215,7 @@ Module API's have a two way communication
 3. password
 4. full name
 
-(iii) Collections 
+**(iii) Collections** 
 
 - a) Add
 
@@ -230,12 +230,12 @@ Module API's have a two way communication
 - d) View - (iii)
 - e) Search - (iii)
 
-(iv) View Stats (Show based on a date range, default by current month) 
+**(iv) View Stats (Show based on a date range, default by current month)**
 
 - a) View individual products sold per collection 
 - b) View total overall sales commission received for all collections & View total overall sales per collection 
 
-(v) Billing
+**(v) Billing**
 
 - a) payment details
 
