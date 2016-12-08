@@ -252,22 +252,8 @@ Module API's have a two way communication
 
 1. Default plan
 
-- Curator gets 1% commission for items that actually sell from their collections. 
-
-2. Silver plan
-
-- Curator gets 1.5% commission for items that actually sell from their collections. 
-- Can choose 2 brands to seed them products every quarter 
-
-3. Gold plan
-
-- Curator gets 2% commission for items that actually sell from their collections. 
-- Get to choose 4 brands to seed them products every quarter 
-
-4. Platinum plan
-
-- Curator gets 3% commission for items that actually sell from their collections. 
-- Get to choose 7 brands to seed them products every quarter 
+- Curator gets 1.5% commission for items that actually sell from their collections.
+- Can make unlimited collections 
 
 `d) Change Billing Cycle`
 
