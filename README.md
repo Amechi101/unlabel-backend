@@ -225,7 +225,7 @@ a) Add
 
 1. Name
 2. Description
-3. Select Products *(Many to Many Foreign Key relationship to Brand Model)* - ie You see a list of brands from the Sub module brand API  **See Module API's**, then all the products related to each brand. An Influencer can only see Brands that match their style preference **See Influencer Information (a) #5**. Each product can only be selected once by an influencer to be added to their collection, if selected it wont be available for other influencers to add into their collection, until the influencer removes the product from their collection, deletes their collection or if a brand removes the product from their dashboard. Here is an example of what it would look like: http://recordit.co/kT6NT5msi6
+3. Select Products *(Many to Many Foreign Key relationship)* - ie You see a list of brands from the `sub module brand API, *See Module API's*`, then all the products related to each brand. An Influencer can only see brands that have the same style preferences they have. Each product can only be selected once by an influencer to be added to their collection, if selected it wont be available for other influencers to add into their collection, until the influencer removes the product from their collection, deletes their collection or if a brand removes the product. Here is an example of what the selection UI would look like: http://recordit.co/kT6NT5msi6
 4. Modified
 5. Created 
 
