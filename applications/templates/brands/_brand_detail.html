@@ -1,0 +1,141 @@
+{% extends "site/site_base.html" %}
+
+{% load i18n %}
+{% load cloudinary %}
+
+{% block social_extra_meta_tags %}
+    <meta property="og:image" content="{% cloudinary_url brand.brand_feature_image %}" />
+    <meta property="og:title" content="{{ brand.brand_name|title }}" />
+    <meta property="og:description" content="{{ brand.brand_description }}" /> 
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+{% endblock %}
+
+{% block head_title %}{{ brand.brand_name|title }}{% endblock %}
+
+{% block body_class %}brand-detail{% endblock %}
+
+{% block extra_top_nav_right %}
+	<a href="/#{{brand.brand_name}}" class="topbar-bt-card mobile">
+        <span class="topbar-bt-card-icon text">Home</span>
+    </a>
+{% endblock %}
+
+{% block body %}
+	<section class="intro intro-home">
+        <div class="intro-bg" style="background-image: url(&#39;{% cloudinary_url brand.brand_feature_image %}&#39;);"></div>
+        <div class="intro-inner">
+            <h1 class="home">{{ brand.brand_name|title }}</h1>
+            <h6><p> {{brand.brand_city}}</p></h6>
+        </div>
+        <a href="#brandInfo" class="scroll-suggest scroll-to-section">
+            <span class="icon icon-mouse">
+                <span>
+                    <i></i>
+                    <i></i>
+                </span>
+            </span>
+        </a>
+    </section>
+	<section id="brandInfo" class="label-about">
+		<h2>About</h2>
+		
+		<p>{{ brand.brand_description }}</p>
+		
+		<!-- <div class="border"></div>	 -->
+		
+<!-- 		<p class="ios-only">*Must download Unlabel app to shop {{ brand.brand_name|title }}. Available for IOS only. </br>If you dont have IOS, signup on our waitlist <a target="_blank" href="http://eepurl.com/bzBZ3r">here</a> to be notified when we launch on Android.</p>
+		 -->
+		<div class="label-button-wrapper">
+			<div class="label-button-links">
+<!-- 				<a data-name="{{ brand.brand_name }}" href="https://itunes.apple.com/us/app/unlabel-discover-emerging/id1092257876?ls=1&mt=8" class="label-button product-link" target="_blank">
+					Follow
+				</a>  -->
+				<a data-website-name="{{ brand.brand_name }}" href="{{ brand.brand_website_url }}" target="_blank" class="label-button product-link-website">
+					View Website
+				</a> 
+			</dir>
+		</div>
+	</section>
+	<section class="site-footer-row top-row">
+	    <div class="footer-row-border flexbox">
+	        <div class="footer-social-ctn ctn-4 flexbox">
+	            <div class="col-1 flexbox flex-center flex-column">
+	            	<div class="footer-social-link">
+						<span class="flexbox flex-center">
+							<span class="round-ico">
+								<span class="dark-letter"></span>
+							</span>
+							<span class="footer-social-link-text phrase flex-grow-2">
+								<p style="color:rgb(69, 73, 78);">Category:</p>
+								<span style="color:color:rgb(69, 73, 78); font-family:'NeutraFace2TextBook';">
+									{% for category in category_list %}
+										{{category}}{% if not forloop.last %},{% else %}{% endif %}
+									{% endfor %}
+								</span>
+							</span>
+						</span>
+					</div>
+	            </div>
+	            <div class="col-1 flexbox flex-center flex-column">
+	                <div class="footer-social-link">
+						<span class="flexbox flex-center">
+							<span class="round-ico">
+								<span class="dark-letter"></span>
+							</span>
+							<span class="footer-social-link-text phrase hit flex-grow-2">
+								<p style="color:rgb(69, 73, 78);">Style:</p>
+								<span style="color:color:rgb(69, 73, 78); font-family:'NeutraFace2TextBook';">
+									{% for style in style_list %}
+										{{style}}{% if not forloop.last %},{% else %}{% endif %}
+									{% endfor %}
+								</span>
+							</span>
+						</span>
+					</div>
+	            </div>
+	            <div class="col-1 flexbox flex-center flex-column">
+		            <div class="footer-social-link">
+						<span class="flexbox flex-center">
+							<span class="round-ico">
+								<span class="dark-letter"></span>
+							</span>
+							<span class="footer-social-link-text phrase flex-grow-2">
+								<p style="color:rgb(69, 73, 78);">Sex:</p>
+								<span style="color:color:rgb(69, 73, 78); font-family:'NeutraFace2TextBook';">
+									{% if brand.menswear and not brand.womenswear %}
+	                                    Menswear
+	                                {% elif brand.womenswear and not brand.menswear %} 
+	                                    Womenswear
+	                                {% elif brand.menswear and brand.womenswear %}   
+	                                    Menswear & Womenswear
+	                                {% else %}  
+	                                    <!-- Nothing -->
+	                                {% endif %} 
+								</span>
+							</span>
+		                </span>
+		               </div>
+	            </div>
+	            <div class="col-1 flexbox flex-center flex-column">
+	                <div class="footer-social-link">
+						<span class="flexbox flex-center">
+							<span class="round-ico">
+								<span class="dark-letter"></span>
+							</span>
+							<span class="footer-social-link-text phrase flex-grow-2">
+								<p style="color:rgb(69, 73, 78);">Location:</p>
+								<span style="color:color:rgb(69, 73, 78); font-family:'NeutraFace2TextBook';" class="text">{{brand.brand_city}}</span>
+							</span>
+						</span>
+					</div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+{% endblock %}
+{% block extra_script %}
+    <script>
+        UnlabelModule.utils.scrollToSection();
+    </script>
+{% endblock %}
+

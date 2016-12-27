@@ -1,0 +1,132 @@
+{% extends "site/site_base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% block social_extra_meta_tags %}
+    <meta property="og:image" content="{% cloudinary_url brand.brand_feature_image %}" />
+    <meta property="og:title" content="{{brand.brand_name | title }} x {{ SITE_NAME | title }}" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    <meta property="og:description" content="Hi {{brand.brand_name | title }}! If your seeing this it's because you received an email or invite card to join our invite-only curated marketplace for independent brands." /> 
+{% endblock %}
+
+{% block head_title %}{{brand.brand_name | title }} x {{ SITE_NAME | title }}{% endblock %}
+
+{% block body_class %}brand-invite{% endblock %}
+
+{% block logo %}{% include "site/utils/header/_logo_black.html" %}{% endblock %} 
+
+{% block body %}
+    <div class="ajax-container displayed" id="part-home">
+        <header class="brand-invite-header">
+            <h1 class="header-animate">Hi {{brand.brand_name | title }}! If you're seeing this it's because you received an invite card to join our invite-only curated marketplace for independent brands.</h1>
+
+            <div class="hero-container" style="height: 681px;">
+                <div class="background-wrapper" style="background-image: url(&#39;{% cloudinary_url brand.brand_feature_image %}&#39;);">
+                    <img src="{% cloudinary_url brand.brand_feature_image %}" class="background header-animate">
+                </div>
+                <div class="hero-scroll header-animate" style="margin-left: -521px;"><a href="#unlabelBrandInvite" class="scroll-to-section">Scroll<span class="arrow"></span></a></div>
+            </div>
+        </header>
+
+        <section id="unlabelBrandInvite" class="presentation"> 
+            <div class="slide-1">
+                <h2 class="text">
+                    At Unlabel we care about what’s new and inspiring in the world of fashion that's all around us! Independent brands in particular are what we love due to their innovative style and focus on sustainability. So, we set out to connect the entire world with amazing brands (like you!) that we actually shop, admire and are genuinely excited about. 
+                    <br/>
+                    <br/>
+                    Currently, we are building a mobile direct-to-consumer marketplace, listed below are some of the benefits of joining.
+                </h2>
+            </div>
+                
+            <br/>
+            
+            <div class="slide-1">
+                <h1>01</h1>
+                <h2 class="text">
+                    First and foremost, since we only work with independent brands, {{brand.brand_name | title }} will join a focused community of like minded independent designers and creatives, no big fast fashion brands here.
+                </h2>
+            </div>
+            
+       <!--      <div class="slide-1">
+                <h1>02</h1>
+                <h2 class="text">
+                    Shoppers can easily filter to find {{brand.brand_name | title }} by location, brand style and other key categories giving your brand a better way to be discovered on the platform.
+                </h2>
+            </div>
+             -->
+            <div class="slide-1">
+                <h1>02</h1>
+                <h2 class="text">
+                    Shoppers can follow {{brand.brand_name | title }} and be alerted via push notifications to their phones when you're having a sale or when new products have been uploaded which will keep your brand in the pocket of your loyal customers 24/7.
+                </h2>
+            </div>
+
+            <div class="line"></div>
+        </section>
+
+        <section class="skills">
+            <div class="center">
+                <h1 style="color:#ffffff;">03</h1>
+                <p>Our Independent Content Creators will expand {{brand.brand_name | title }}'s reach and keep your brand and products in touch with their buzzing community of followers.</p>
+                <ul>
+                    <li>1. We research and hand select the best Independent Content Creators from all over the world with the most engaged and active online communities.</li>
+
+                    <li>2. Independent Content Creators rent products from you.</li>
+                    
+                    <li>3. Independent Content Creators produce content from your products and post them on the Unlabel Platform, as well as share the content with their dedicated communities.</li>
+
+                    <li>4. Independent Content Creators then return the products to you after an alloted rental period.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="position">
+            <div class="slide-1">
+                <h1 style="text-align:center; width:69%;">04</h1>
+                <p class="text">
+                    Last but not least you will have an admin portal allowing 100% control over inventory, shipping & orders, and monitoring of sales.
+                </p>   
+            </div>
+            <div class="line"></div>
+        </section>
+
+        <footer class="footer">
+            <div>
+                <h1>Thank You!</h1>
+                <p class="text">
+                    We hope {{brand.brand_name | title }} can join us and our growing community! At this point all you have to do is press the sign up button on the left to join our waitlist, or if you would like more information by chatting with our founder just press the contact button on the right to send us a note and we will get back to you asap; See you soon!
+                </p>
+                <div class="label-button-links">
+                    <a href="http://eepurl.com/ciXM1T" class="label-button">
+                        Join Waitlist
+                    </a> 
+                    <a href="mailto:info@unlabel.us?subject={{brand.brand_name | title }} x Unlabel" class="label-button">
+                        Chat with Us
+                    </a>  
+                </div>
+            </div>  
+        </footer>
+    </div>
+{% endblock %}
+
+{% block global_filter %}{% endblock %}
+
+{% block extra_script %}
+    <script>
+        window.sr = ScrollReveal({ 
+            reset: false,
+            duration: 700, 
+            easing: 'cubic-bezier(0.6, 0.2, 0.1, 1)',
+            scale: 0
+        });
+
+        sr.reveal('.presentation > *');
+        sr.reveal('.skills > *');
+        sr.reveal('.position > *');
+        sr.reveal('.footer > *');
+
+        UnlabelModule.utils.scrollToSection();
+    </script>
+{% endblock %}

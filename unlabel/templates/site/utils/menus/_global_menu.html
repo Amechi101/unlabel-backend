@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<div id="menu" class="menu">
+	<ul class="links">
+        <li class="link">
+            <a href="{% url 'home' %}"><span>Home</span></a>
+        </li>
+        <li class="link">
+            <a href="{% url 'about' %}"><span>About</span></a>
+        </li>
+<!--         <li class="link">
+            <a target="_blank" href="https://itunes.apple.com/us/app/unlabel-discover-emerging/id1092257876?ls=1&mt=8"><span>Download App</span></a>
+        </li> -->
+<!--         <li class="link">
+            <a href="{% url 'influencers' %}"><span>#UnlabelDiscovery</span></a>
+        </li> -->
+    	<li class="link">
+      		<a href="{% url 'terms' %}"><span>Terms & Conditions</span></a>
+    	</li>
+    	<li class="link">
+      		<a href="{% url 'privacy-policy' %}"><span>Privacy Policy</span></a>
+    	</li>
+    	<li class="link">
+      		<a href="{% url 'contact' %}"><span>Contact</span></a>
+    	</li>
+  	</ul>
+  	<div class="menu-bottom">
+    	<div class="share">
+      		<span class="share-title">FOLLOW US</span>
+      		<a class="share-entry share-entry--instagram" href="https://instagram.com/unlabel_us/" rel="nofollow" target="_blank">
+        		<span class="share-icon"></span>
+      		</a>
+    	</div>
+  	</div>
+  	<a href="#" id="unlabel-menu-close" class="menu-bt-close">
+    	<span class="icon"></span>
+  	</a>
+</div>

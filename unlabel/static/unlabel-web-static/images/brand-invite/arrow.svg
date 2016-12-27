@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="26.071px" height="14.143px" viewBox="-6.036 5.964 26.071 14.143" enable-background="new -6.036 5.964 26.071 14.143"
+	 xml:space="preserve">
+<g>
+	<g transform="translate(-385.000000, -707.000000)">
+		<g transform="translate(205.000000, 60.000000)">
+			<g transform="translate(187.000000, 660.500000) rotate(-270.000000) translate(-187.000000, -660.500000) translate(173.500000, 652.500000)">
+			<rect x="1.036" y="8.036" transform="matrix(2.578893e-06 1 -1 2.578893e-06 22.0713 -3.9995)" fill="#45494E" width="24" height="2"/>
+			<path fill="#45494E" d="M13.036-2.206l5.657,5.656l1.415-1.414l-6.365-6.364l-0.707-0.707L5.964,2.036
+					L7.379,3.45L13.036-2.206z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

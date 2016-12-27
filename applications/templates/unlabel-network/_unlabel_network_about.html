@@ -1,0 +1,32 @@
+{% extends "site/site_base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+{% load staticfiles %} 
+{% load cloudinary %}
+
+{% block head_title %}{% trans "Unlabel Network" %}{% endblock %}
+
+{% block body_id %}unlabel-network-about{% endblock %}
+
+{% block main_container_class %}page-block introblock{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="introblock-content-cont">
+            <!-- <div class="unlabel-logo-network introblock-content"><img alt="logo" src="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459974185/unlabel_logo_2015-01_m9i7eu_5_d8rcf8.svg">
+            </div> -->
+            <div class="content block-content introblock-content">
+                    <p class="opening">Dear Labels,</p>
+                    </br>
+                    <p>
+                    The Unlabel Network is composed of brilliant independent fashion labels that strive to create a distinct difference between them and everyone else. Our mission is simple, curating labels from around the world that create inspiration for everyone.</br></br>So for all the labels that are apart of the network <a href="{% url 'admin:index' %}">welcome back</a> and for those who wish to <a href="{% url 'unlabel-network-signup' %}">join the network</a> we thank you.
+                </p>
+                </br>
+                </br>
+                <p class="closing">Sincerely,</br>The Unlabel Team</p>
+            </div>
+        </div>
+    </div>  
+{% endblock %}
+

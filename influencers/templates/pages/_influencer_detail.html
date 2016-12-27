@@ -1,0 +1,161 @@
+{% extends "site/site_base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% block social_extra_meta_tags %}
+    <meta content="article" property="og:type">
+    <meta property="og:image" content="{% cloudinary_url influencer.image %}" />
+    <meta property="og:title" content="Unlabel Influencer: {{ influencer.name|title }}" />
+    <meta property="og:description" content="Read the style profile of Unlabel Influencer: {{ influencer.name|title }} and see what they discovered using the Unlabel app. Available now for IOS." /> 
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+{% endblock %}
+
+{% block twitter_social_cards %}
+    <!-- Twitter -->
+    <meta content="summary" name="twitter:card">
+    <meta content="Style profile of Unlabel Influencer: {{ influencer.name|title }}" name="twitter:description">
+    <meta content="Unlabel Influencer: {{ influencer.name|title }}" name="twitter:title">
+    <meta content="{{ SITE_NAME }}" name="twitter:site">
+    <meta content="{% cloudinary_url influencer.image %}" name="twitter:image">
+    <meta content="{{ SITE_NAME }}" name="twitter:creator">
+{% endblock %}
+
+{% block head_title %}Style Profile of: {{ influencer.name|title }} - Unlabel Influencer{% endblock %}
+
+{% block logo %}{% include "site/utils/header/_logo_black.html" %}{% endblock %} 
+
+{% block extra_top_nav_right %}
+    <a href="{% url 'influencers' %}#{{influencer.name|title}}" class="topbar-bt-card mobile">
+        <span class="topbar-bt-card-icon text">Back</span>
+    </a>
+{% endblock %}
+
+{% block body_class %}influncers-detail{% endblock %}
+
+{% block body %}
+    <section class="site-content news-article">
+        <div class="content-area">
+            <div class="site-main">
+                <article class="hentry">
+                    <header class="entry-header">
+                        <h1 class="entry-title">Unlabel Influencer: {{influencer.name|title }}</h1>
+                    </header>
+                    <div class="entry-content">
+                        {% if influencer.photographer_credit_isActive == True %}
+                            <p style="text-align: center;">
+                                Photo by {{ influencer.photographer_credit }}
+                            </p>
+                        {% else %}
+              
+                        {% endif %}
+                        <p style="text-align: center;">
+                            <img alt="{{ influencer.name }}" class="influencer-main-img" src="{% cloudinary_url influencer.image %}" />
+                        </p>
+
+                        <p style="text-align: center;">
+                            <strong>Instagram:<br></strong> 
+                            <a target="_blank" href="{{ influencer.instagram_url }}">
+                                <span>@{{ influencer.instagram_handle }}</span>
+                            </a>
+                        </p>
+
+                        {% if influencer.website_isActive == True %}
+                            <p style="text-align: center;">
+                                <strong>Website:<br></strong> 
+                                <a target="_blank" href="{{ influencer.website_url }}">
+                                    <span>{{ influencer.website_name|title }}</span>
+                                </a>
+                            </p>
+                        {% else %}
+
+                        {% endif %}
+                    
+                        <p style="text-align: center;">
+                            <strong>Your #UnlabelDiscovery:<br></strong> 
+                            <a href="{{ influencer.brands.get_absolute_url }}">
+                                <span>{{ influencer.brands.brand_name|title }}</span>
+                            </a>
+                        </p>
+
+                        <p style="text-align: center;">
+                            <strong>What caught your attention about {{ influencer.brands.brand_name|title }}?:<br></strong> 
+                            <span>{{ influencer.question_brand_attraction }}</span>
+                        </p>
+                    
+                        <p style="text-align: center;">
+                            <strong>What's your favorite product from {{ influencer.brands.brand_name|title }} and why?:<br></strong> 
+
+                            <span>Favorite product,</span>
+                            <a target="_blank" href="{{ influencer.question_product_favorite_url }}">
+                                <span>{{ influencer.question_product_favorite_name }}</span>.
+                            </a> 
+                            <span>{{ influencer.question_product_favorite_explanation }}</span>
+                        </p>
+
+                        <p style="text-align: center;">
+                            <strong>What outfit would you pair your product choice with?:<br></strong> 
+                            <span>{{ influencer.question_product_favorite_product_pairing }}</span>
+                        </p>
+
+                        <p style="text-align: center;">
+                            <strong>Your favorite season Fall, Winter, Spring or Summer?:<br></strong> 
+                            <span>{{ influencer.question_favorite_season }}</span>
+                        </p>
+                        
+                        <p style="text-align: center;">
+                            <strong>Your personal style in three words:<br></strong>
+                            <span>
+                                {{ influencer.question_personal_style_one|title }}
+                            </span>
+                        </p>
+                        
+                        <p style="text-align: center;">
+                            <strong>One piece of fashion advice:<br></strong> 
+                            <span>{{ influencer.question_fashion_advice }}</span>
+                        </p>
+                    </div>
+
+                    <div class="widget-area left">
+                        <div class="sidebar-toggle" style="height: 618px;">Sidebar</div>
+                    </div>
+                    
+                    <div class="social">
+                        <h2>Share</h2>
+                        <ul class="social-links">
+                            <li class="social-facebook">
+                                <a target="_blank" href="http://www.facebook.com/sharer.php?u={{ request.build_absolute_uri }}">
+                                Facebook</a>
+                            </li>
+                            <li class="social-twitter">
+                                <a href="https://twitter.com/intent/tweet?text=Style profile of Unlabel Influencer: {{ influencer.name|title }}&amp;url={{ request.build_absolute_uri }}"
+                                target="_blank">Twitter</a>
+                            </li>
+                            <li class="social-pinterest">
+                                <a href="http://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri }}&media={% cloudinary_url influencer.image %}&description=Read the style profile of Unlabel Influencer: {{ influencer.name|title }} and see what they discovered using the Unlabel app. Available now for IOS."
+                                target="_blank">Pinterest</a>
+                            </li>
+                            <li class="social-tumblr">
+                                <a target="_blank" href="http://www.tumblr.com/share?v=3&u={{ request.build_absolute_uri }}&t=Unlabel Influencer: {{ influencer.name|title }}">
+                                Tumblr</a>
+                            </li>
+                        </ul>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
