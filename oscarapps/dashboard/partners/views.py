@@ -7,9 +7,13 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
-
+from oscarapps.partner.models import Style
 
 class PartnerManageView(CorePartnerManageView):
+
+
+
+
     form_class = PartnerCreateForm
 
     def get_object(self, queryset=None):
@@ -34,10 +38,12 @@ class PartnerAddressManageView(generic.UpdateView):
     form_class = PartnerAddressForm
     # success_url = reverse_lazy('dashboard:partner-manage')
 
+
     def get_success_url(self):
         return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})
 
     def get_object(self, queryset=None):
+        print Style.objects.all()
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
         address = self.partner.primary_address
         if address is None:

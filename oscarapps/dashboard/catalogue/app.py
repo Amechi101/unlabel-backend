@@ -7,8 +7,15 @@ from oscar.core.loading import get_class
 class CatalogueApplication(CoreCatalogueApplication):
 
 
-    style_preference_manage_view = get_class('dashboard.catalogue.views',
-                                 'StockAlertListView')
+    style_list_view = get_class('oscarapps.dashboard.catalogue.views',
+                                 'StyleListView')
+
+    style_create_view = get_class('oscarapps.dashboard.catalogue.views',
+                                 'StyleCreateView')
+    style_manage_view = get_class('oscarapps.dashboard.catalogue.views',
+                                 'StyleManageView')
+    style_delete_view = get_class('oscarapps.dashboard.catalogue.views',
+                                 'StyleDeleteView')
 
     def get_urls(self):
         urls = [
@@ -62,9 +69,13 @@ class CatalogueApplication(CoreCatalogueApplication):
                 self.product_class_delete_view.as_view(),
                 name='catalogue-class-delete'),
 
-            url(r'^style-preference/(?P<pk>\d+)/list/$',
-                self.style_preference_manage_view.as_view(),
-                name='catalogue-style-preference-list'),
+            url(r'^style/$', self.style_list_view.as_view(), name='style-list'),
+            url(r'^style/create/$', self.style_create_view.as_view(),
+                name='style-create'),
+            url(r'^style/(?P<pk>\d+)/$', self.style_manage_view.as_view(),
+                name='style-manage'),
+            url(r'^style/(?P<pk>\d+)/delete/$', self.style_delete_view.as_view(),
+                name='style-delete'),
 
         ]
         return self.post_process_urls(urls)

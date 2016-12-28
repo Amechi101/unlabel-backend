@@ -2,20 +2,17 @@ from oscar.apps.partner.abstract_models import AbstractPartner
 from oscarapps.catalogue.models import Category
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import pgettext_lazy
 
 class Style(models.Model):
     """
     List of Styles
     """
-    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
+    name = models.CharField(
+        pgettext_lazy(u"Style's name", u"Name"), max_length=128, blank=True)
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
     # Metadata
-    class Meta:
-        verbose_name = _('Style')
-        verbose_name_plural = _('Styles')
-
     def __str__(self):
         return "{0}".format( self.name )
 
@@ -39,7 +36,7 @@ class Partner(AbstractPartner):
         default=BOTH,
         verbose_name=_('Sex Type')
     )
-    style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style'))
+    style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preference'))
     category = models.ManyToManyField(Category, blank=True, verbose_name=_('Category'))
 
 from oscar.apps.partner.models import *

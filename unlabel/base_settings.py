@@ -37,7 +37,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
             },
             {
                 'label': _('Style Preference'),
-                'url_name': 'dashboard:catalogue-style-preference-list',
+                'url_name': 'dashboard:style-list',
             },
             {
                 'label': _('Categories'),

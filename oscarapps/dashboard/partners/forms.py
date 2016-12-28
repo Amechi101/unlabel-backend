@@ -1,5 +1,5 @@
 from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
-from oscarapps.partner.models import Partner
+from oscarapps.partner.models import Partner,Style
 from oscar.apps.dashboard.partners.forms import PartnerAddressForm
 
 

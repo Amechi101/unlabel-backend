@@ -1,4 +1,11 @@
 from django.contrib import admin
-from .models import Style
-admin.site.register(Style)
-from oscar.apps.partner.admin import *  # noqa
+from oscar.core.loading import get_model
+
+Style = get_model('partner', 'Style')
+
+class StyleAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description',)
+
+admin.site.register(Style, StyleAdmin)
+
+from oscar.apps.partner.admin import *
