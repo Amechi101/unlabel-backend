@@ -25,24 +25,26 @@ from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open( os.path.join(BASE_DIR, "fixtures", "secrets.json") ) as f:
+with open(os.path.join(BASE_DIR, "fixtures", "secrets.json")) as f:
     secrets = json.loads(f.read())
+
 
 def get_secret(setting, secrets=secrets):
     """
     Get the secret variable or return explicit exception.
     """
-    
+
     try:
         return secrets[setting]
     except KeyError:
         error_msg = "Set the {0} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
 
-cloudinary.config( 
-    cloud_name = get_secret("CLOUDINARY_CLOUD_NAME"), 
-    api_key = get_secret("CLOUDINARY_API_KEY"), 
-    api_secret = get_secret("CLOUDINARY_API_SECRET") 
+
+cloudinary.config(
+    cloud_name=get_secret("CLOUDINARY_CLOUD_NAME"),
+    api_key=get_secret("CLOUDINARY_API_KEY"),
+    api_secret=get_secret("CLOUDINARY_API_SECRET")
 )
 
 SECRET_KEY = get_secret("SECRET_KEY")
@@ -53,7 +55,7 @@ INSTALLED_APPS = [
     # external
     'material',
     'material.admin',
-    
+
     # django core
     'django.contrib.admin',
     'django.contrib.auth',
@@ -81,8 +83,14 @@ INSTALLED_APPS = [
 from oscar import get_core_apps
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-      ['oscarapps.partner'])
-
+    [
+        'oscarapps.partner',
+        'oscarapps.catalogue',
+        'oscarapps.address',
+        'oscarapps.dashboard',
+        'oscarapps.dashboard.partners',
+        'oscarapps.dashboard.catalogue'
+    ])
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -112,7 +120,7 @@ HAYSTACK_CONNECTIONS = {
 ROOT_URLCONF = 'unlabel.urls'
 
 # TEMPLATES = [
-#     {
+# {
 #         'BACKEND': 'django.template.backends.django.DjangoTemplates',
 #         'DIRS': ['unlabel/templates', 'applications/templates'],
 #         'APP_DIRS': True,
@@ -138,9 +146,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-            OSCAR_MAIN_TEMPLATE_DIR
-        ]+['unlabel/templates', 'applications/templates'],
+                    os.path.join(BASE_DIR, 'oscarapps/templates'),
+                    OSCAR_MAIN_TEMPLATE_DIR
+                ] + ['unlabel/templates', 'applications/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,7 +172,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
