@@ -25,6 +25,13 @@ class PartnerManageView(CorePartnerManageView):
         ctx['users'] = self.partner.users.all()
         return ctx
 
+    def form_valid(self, form):
+        self.partner.name = form.cleaned_data['name']
+        self.partner.save()
+        return super(PartnerManageView, self).form_valid(form)
+
+
+
 class PartnerAddressManageView(generic.UpdateView):
 
     template_name = 'dashboard/partners/partner_manage.html'
