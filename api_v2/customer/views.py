@@ -31,26 +31,26 @@ class CustomerRegisterView(APIView):
                 if serializer.is_valid():
                     serializer.save()
 
-                    # mailid=request.data["email"]
-                    # email = EmailMessage()
-                    # email.subject = "Registration succesfull at unlabel"
-                    # email.content_subtype = "html"
-                    # email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                    #                 <body>
-                    #                 <h2>Welcome to unlabel</h2>
-                    #                 <p style = 'font-size:14px;'>Hello,</p>
-                    #                 <p>Your email has been succesfully registered with Unlabel.<br/>
-                    #                 </p>
-                    #                 <br/>
-                    #                 <br/>
-                    #                 Thank you!<br/><br/>
-                    #                 <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                    #                 </body>
-                    #                 </head>
-                    #                 </html>"""
-                    # email.from_email = "Unlabel App"
-                    # email.to=[mailid]
-                    # email.send()
+                    mailid=request.data["email"]
+                    email = EmailMessage()
+                    email.subject = "Registration succesfull at unlabel"
+                    email.content_subtype = "html"
+                    email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                                    <body>
+                                    <h2>Welcome to unlabel</h2>
+                                    <p style = 'font-size:14px;'>Hello,</p>
+                                    <p>Your email has been succesfully registered with Unlabel.<br/>
+                                    </p>
+                                    <br/>
+                                    <br/>
+                                    Thank you!<br/><br/>
+                                    <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                                    </body>
+                                    </head>
+                                    </html>"""
+                    email.from_email = "Unlabel App"
+                    email.to=[mailid]
+                    email.send()
 
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -81,9 +81,7 @@ class CustomerForgotPassword(APIView):
 
     def post(self,request,*args,**kwargs):
         if request.data["email"]:
-            print("--------------1")
             if User.objects.filter(email=request.data["email"]).exists():
-                print("-------------------2")
                 EmailConfirm=EmailConfirmation.objects.create(email=request.data["email"])
 
                 current_site = Site.objects.get_current()
@@ -98,7 +96,6 @@ class CustomerForgotPassword(APIView):
                     'protocol': 'http',
                 }
                 try:
-                    print("----------------3")
                     tosend= context['protocol']+'://'+context['domain']+'/api_v2/reset/'+context['uid']+'/'+context['token']
 
                     mailid=request.data["email"]
