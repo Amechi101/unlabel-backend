@@ -9,6 +9,8 @@ from applications.views import BrandInviteView
 from oscar.app import application
 from django.conf.urls.i18n import i18n_patterns
 
+from oscarapi.app import application as api
+
 urlpatterns = [
 	# admin
 	url(r"^admin/", include(admin.site.urls)),
@@ -35,6 +37,11 @@ urlpatterns = [
 
     # api's
 	url(r"unlabel-network/", include('unlabel_api.urls')),
+
+    # api_v2
+    url(r'^api/', include(api.urls)),
+
+    url(r'^api_v2/',include('api_v2.urls')),
 ]
 
 

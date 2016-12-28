@@ -76,12 +76,19 @@ INSTALLED_APPS = [
     'unlabel_api',
     'applications',
     'influencers',
+
+    #oscar-api
+    'rest_framework',
+    'oscarapi',
+    'rest_framework.authtoken',
+    'rest_auth',
+
 ]
 
 from oscar import get_core_apps
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
-      ['oscarapps.partner'])
+      ['oscarapps.partner','oscarapps.customer'])
 
 
 MIDDLEWARE_CLASSES = (
@@ -93,7 +100,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'oscar.apps.basket.middleware.BasketMiddleware',
+    # 'oscar.apps.basket.middleware.BasketMiddleware',
+
+    # api and oscar view mix middleware
+    'oscarapi.middleware.ApiBasketMiddleWare',
+    # session management
+    'oscarapi.middleware.HeaderSessionMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
@@ -135,34 +147,34 @@ ROOT_URLCONF = 'unlabel.urls'
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-            OSCAR_MAIN_TEMPLATE_DIR
-        ]+['unlabel/templates', 'applications/templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.tz',
+   {
+       'BACKEND': 'django.template.backends.django.DjangoTemplates',
+       'DIRS': [
+                   os.path.join(BASE_DIR, 'oscarapps/templates'),
+                   OSCAR_MAIN_TEMPLATE_DIR
+               ] + ['unlabel/templates', 'applications/templates'],
+       'APP_DIRS': True,
+       'OPTIONS': {
+           'context_processors': [
+               'django.template.context_processors.debug',
+               'django.template.context_processors.request',
+               'django.contrib.auth.context_processors.auth',
+               'django.contrib.messages.context_processors.messages',
+               'django.template.context_processors.i18n',
+               'django.template.context_processors.media',
+               'django.template.context_processors.tz',
 
-                'oscar.apps.search.context_processors.search_form',
-                'oscar.apps.promotions.context_processors.promotions',
-                'oscar.apps.checkout.context_processors.checkout',
-                'oscar.apps.customer.notifications.context_processors.notifications',
-                'oscar.core.context_processors.metadata',
+               'oscar.apps.search.context_processors.search_form',
+               'oscar.apps.promotions.context_processors.promotions',
+               'oscar.apps.checkout.context_processors.checkout',
+               'oscar.apps.customer.notifications.context_processors.notifications',
+               'oscar.core.context_processors.metadata',
 
-                'unlabel.context_processors.theme',
-                'unlabel.context_processors.consts',
-            ],
-        },
-    },
+               'unlabel.context_processors.theme',
+               'unlabel.context_processors.consts',
+           ],
+       },
+   },
 ]
 
 
@@ -213,4 +225,31 @@ USE_L10N = True
 USE_TZ = True
 
 
+# REST_FRAMEWORK = {
+#     'PAGINATE_BY': 1,
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+#     'MAX_PAGINATE_BY': 100,
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         # 'rest_framework.permissions.IsAuthenticated',
+#     ),
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.BasicAuthentication',
+#     ),
+#     # 'DEFAULT_RENDERER_CLASSES': (
+#     #     'rest_framework.renderers.JSONRenderer',
+#     # ),
+#     'DEFAULT_PARSER_CLASSES': (
+#         'rest_framework.parsers.JSONParser',
+#     )
+# }
 
+
+#---Site Email Settings----
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'unlabelapp123'
+EMAIL_HOST_USER = 'unlabelapp@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
