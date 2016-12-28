@@ -19,11 +19,7 @@
     </ul>
 {% endblock %}
 
-{% block headertext %}{{ partner.name }}
-        {{partner.pk}}
-    <a class="btn btn-info" style="float: right"  href="{% url 'dashboard:partner-address-manage' pk=partner.pk  %}" >{% trans "  Add / Edit Address" %}</a>
-
-{% endblock %}
+{% block headertext %}{{ partner.name }}{% endblock %}
 
 {% block dashboard_content %}
 
@@ -33,7 +29,6 @@
                 <h2>{{ title }}</h2>
             </div>
             {% include "dashboard/partials/form.html" with form=form class="well" %}
-
         </div>
     </div>
     <div class="row">
