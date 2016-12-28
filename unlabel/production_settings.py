@@ -19,8 +19,19 @@ CSRF_COOKIE_HTTPONLY = True
 
 X_FRAME_OPTIONS = 'DENY'
 
+# DATABASES = {
+#     'default': dj_database_url.config(default=get_secret("BRANDS_PRODUCTION_DB_URL")),
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(default=get_secret("BRANDS_PRODUCTION_DB_URL")),
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'unlabel',
+       'USER': 'prod',
+       'PASSWORD': 'prod',
+       'HOST': '',
+       'PORT': '5432',
+   }
 }
 
 CACHES = {
@@ -29,3 +40,5 @@ CACHES = {
         'TIMEOUT': 60
     }
 }
+
+

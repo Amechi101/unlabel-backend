@@ -1,7 +1,6 @@
 Django==1.9
 #MySQL-python==1.2.5
 #PyMySQL==0.7.6
-#psycopg2==2.5.1
 SQLAlchemy==0.9.9
 Unidecode==0.04.19
 chardet==2.3.0
