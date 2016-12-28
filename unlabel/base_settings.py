@@ -80,6 +80,9 @@ INSTALLED_APPS = [
     #oscar-api
     'rest_framework',
     'oscarapi',
+    'rest_framework.authtoken',
+    'rest_auth',
+
 ]
 
 from oscar import get_core_apps
@@ -144,34 +147,34 @@ ROOT_URLCONF = 'unlabel.urls'
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-            OSCAR_MAIN_TEMPLATE_DIR
-        ]+['unlabel/templates', 'applications/templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                'django.template.context_processors.tz',
+   {
+       'BACKEND': 'django.template.backends.django.DjangoTemplates',
+       'DIRS': [
+                   os.path.join(BASE_DIR, 'oscarapps/templates'),
+                   OSCAR_MAIN_TEMPLATE_DIR
+               ] + ['unlabel/templates', 'applications/templates'],
+       'APP_DIRS': True,
+       'OPTIONS': {
+           'context_processors': [
+               'django.template.context_processors.debug',
+               'django.template.context_processors.request',
+               'django.contrib.auth.context_processors.auth',
+               'django.contrib.messages.context_processors.messages',
+               'django.template.context_processors.i18n',
+               'django.template.context_processors.media',
+               'django.template.context_processors.tz',
 
-                'oscar.apps.search.context_processors.search_form',
-                'oscar.apps.promotions.context_processors.promotions',
-                'oscar.apps.checkout.context_processors.checkout',
-                'oscar.apps.customer.notifications.context_processors.notifications',
-                'oscar.core.context_processors.metadata',
+               'oscar.apps.search.context_processors.search_form',
+               'oscar.apps.promotions.context_processors.promotions',
+               'oscar.apps.checkout.context_processors.checkout',
+               'oscar.apps.customer.notifications.context_processors.notifications',
+               'oscar.core.context_processors.metadata',
 
-                'unlabel.context_processors.theme',
-                'unlabel.context_processors.consts',
-            ],
-        },
-    },
+               'unlabel.context_processors.theme',
+               'unlabel.context_processors.consts',
+           ],
+       },
+   },
 ]
 
 
