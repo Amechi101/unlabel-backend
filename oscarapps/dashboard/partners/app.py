@@ -15,7 +15,7 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
             url(r'^(?P<pk>\d+)/delete/$', self.delete_view.as_view(),
                 name='partner-delete'),
 
-            url(r'^(?P<partner_pk>\d+)/address/$',
+            url(r'^(?P<pk>\d+)/address/$',
                 self.partner_address_manage_view.as_view(),
                 name='partner-address-manage'),
 
@@ -34,4 +34,4 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='partner-user-update'),
         ]
         return self.post_process_urls(urls)
-from oscar.apps.dashboard.partners.app import *
+application = PartnersDashboardApplication()

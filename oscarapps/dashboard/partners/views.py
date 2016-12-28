@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse_lazy
 from django.views import generic
+
+
 class PartnerManageView(CorePartnerManageView):
     form_class = PartnerCreateForm
 
@@ -25,11 +27,15 @@ class PartnerManageView(CorePartnerManageView):
         ctx['users'] = self.partner.users.all()
         return ctx
 
+
 class PartnerAddressManageView(generic.UpdateView):
 
-    template_name = 'dashboard/partners/partner_manage.html'
+    template_name = 'dashboard/partners/partner_address_manage.html'
     form_class = PartnerAddressForm
-    success_url = reverse_lazy('dashboard:partner-manage')
+    # success_url = reverse_lazy('dashboard:partner-manage')
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
