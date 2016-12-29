@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "Styles" %} | {{ block.super }}
+    {% trans "Influencers" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -11,14 +11,14 @@
         <li>
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
-        <li class="active">{% trans "Styles" %}</li>
+        <li class="active">{% trans "Influencers" %}</li>
     </ul>
 {% endblock %}
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'dashboard:style-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new style" %}</a>
-        <h1>{% trans "Styles" %}</h1>
+        <a href="{% url 'dashboard:influencer-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new influencer" %}</a>
+        <h1>{% trans "Influencers" %}</h1>
     </div>
 {% endblock header %}
 
@@ -28,7 +28,7 @@
             {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
             <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
             {% if is_filtered %}
-                <a class="btn btn-default" href="{% url 'dashboard:style-list' %}" >{% trans "Reset" %}</a>
+                <a class="btn btn-default" href="{% url 'dashboard:influencer-list' %}" >{% trans "Reset" %}</a>
             {% endif %}
         </form>
     </div>
@@ -39,14 +39,14 @@
             <caption>
                 <i class="icon-briefcase icon-large"></i>{{ queryset_description }}
             </caption>
-            {% if styles %}
+            {% if influencers %}
                 <tr>
                     <th>{% anchor 'name' _('Name') %}</th>
                 </tr>
-                {% for style in styles %}
+                {% for influencer in influencers %}
                     <tr>
                         <td>
-                            <a href="{% url 'dashboard:style-manage' pk=style.pk %}">{{ style.name }}</a>
+                            <a href="{% url 'dashboard:influencer-manage' pk=influencer.pk %}">{{ influencer.name }}</a>
                         </td>
                         <td>
                             <div class="btn-toolbar">
@@ -56,8 +56,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="{% url 'dashboard:style-manage' pk=style.pk %}">{% trans "Manage style" %}</a></li>
-                                        <li><a href="{% url 'dashboard:style-delete' pk=style.pk %}">{% trans "Delete style" %}</a></li>
+                                        <li><a href="{% url 'dashboard:influencer-manage' pk=influencer.pk %}">{% trans "Manage influencer" %}</a></li>
+                                        <li><a href="{% url 'dashboard:influencer-delete' pk=influencer.pk %}">{% trans "Delete influencer" %}</a></li>
                                    </ul>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr><td>{% trans "No styles found." %}</td></tr>
+                <tr><td>{% trans "No influencer found." %}</td></tr>
             {% endif %}
         </table>
         {% include "dashboard/partials/pagination.html" %}

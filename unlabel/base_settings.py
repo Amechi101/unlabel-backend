@@ -36,7 +36,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'url_name': 'dashboard:catalogue-class-list',
             },
             {
-                'label': _('Style Preference'),
+                'label': _('Style Preferences'),
                 'url_name': 'dashboard:style-list',
             },
             {
@@ -66,9 +66,14 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'url_name': 'dashboard:order-stats',
             },
             {
-                'label': _('Partners'),
+                'label': _('Brands'),
                 'url_name': 'dashboard:partner-list',
             },
+            {
+                'label': _('Influencers'),
+                'url_name': 'dashboard:influencer-list',
+            },
+
             # The shipping method dashboard is disabled by default as it might
             # be confusing. Weight-based shipping methods aren't hooked into
             # the shipping repository by default (as it would make
@@ -205,7 +210,6 @@ INSTALLED_APPS = [
     'oscarapi',
     'rest_framework.authtoken',
     'rest_auth',
-
 ]
 
 from oscar import get_core_apps

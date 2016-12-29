@@ -4,7 +4,7 @@
 
 {% block body_class %}{{ block.super }} create-page style{% endblock %}
 {% block title %}
-    {{ style.name }} | {% trans "Styles" %} | {{ block.super }}
+    {{ influencer.name }} | {% trans "Influencers" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,13 +13,13 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:style-list' %}">{% trans "Styles" %}</a>
+            <a href="{% url 'dashboard:influencer-list' %}">{% trans "Influencers" %}</a>
         </li>
-        <li class="active">{{ style.name }}</li>
+        <li class="active">{{ influencer.name }}</li>
     </ul>
 {% endblock %}
 
-{% block headertext %}{{ style.name }}{% endblock %}
+{% block headertext %}{{ influencer.name }}{% endblock %}
 
 {% block dashboard_content %}
 

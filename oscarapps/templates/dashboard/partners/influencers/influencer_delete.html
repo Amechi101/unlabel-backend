@@ -4,7 +4,7 @@
 {% block body_class %}{{ block.super }} delete-page{% endblock %}
 
 {% block title %}
-    {% trans "Delete style" %} | {% trans "Style" %} | {{ block.super }}
+    {% trans "Delete Influencer" %} | {% trans "Influencers" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,26 +13,23 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:style-list' %}">{% trans "Styles" %}</a>
-        </li>
-        <li>
-            <a href="{% url 'dashboard:style-manage' pk=style.pk %}">{{ style.name }}</a>
+            <a href="{% url 'dashboard:influencer-list' %}">{% trans "Influencers" %}</a>
         </li>
         <li class="active">{% trans "Delete?" %}</li>
     </ul>
 {% endblock %}
 
 {% block headertext %}
-    {{ style.name }}
+    {{ influencer.name }}
 {% endblock %}
 
 {% block dashboard_content %}
     <form action="" method="post">
         {% csrf_token %}
-        <p>{% trans "Are you sure you want to delete this style?" %}</p>
+        <p>{% trans "Are you sure you want to delete this influencer?" %}</p>
         <div class="form-actions">
             <button class="btn btn-lg btn-danger" type="submit" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button> {% trans "or" %}
-            <a href="{% url 'dashboard:style-list' %}">{% trans "cancel" %}</a>
+            <a href="{% url 'dashboard:influencer-list' %}">{% trans "cancel" %}</a>
         </div>
     </form>
 {% endblock dashboard_content %}
