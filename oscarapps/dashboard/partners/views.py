@@ -12,14 +12,14 @@ from django.views import generic
 # from oscarapps.partner.models import Style
 from oscar.views import sort_queryset
 from django.core.urlresolvers import reverse,reverse_lazy
-
+from django.views.generic import FormView
 
 
 #=======
 #Partner views
 #=======
 
-class PartnerManageView(CorePartnerManageView):
+class PartnerManageView(CorePartnerManageView, FormView):
 
     form_class = PartnerCreateForm
 
@@ -39,12 +39,17 @@ class PartnerManageView(CorePartnerManageView):
         return ctx
 
     def form_valid(self, form):
+        print "override function======================="
+        storage = messages.get_messages(self.request)
+        print storage._loaded_messages
+        #
+        # del storage._loaded_messages[0]
         messages.success(
             self.request, _("Brand '%s' was updated successfully.") %
             self.partner.name)
         self.partner.name = form.cleaned_data['name']
         self.partner.save()
-        return super(PartnerManageView, self).form_valid(form)
+        return super(FormView, self).form_valid(form)
 
 
 class PartnerAddressManageView(generic.UpdateView):
