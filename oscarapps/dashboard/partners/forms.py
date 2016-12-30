@@ -1,16 +1,10 @@
 from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
 from oscarapps.partner.models import Partner
-from oscar.apps.dashboard.partners.forms import PartnerAddressForm
-
-
-
 
 class PartnerCreateForm(CorePartnerCreateForm):
     class Meta:
-        fields = ('name', 'website_url', 'description', 'sex_type', 'image', 'is_active', 'style_Preference', 'category')
+        fields = ('name', 'brand_website_url', 'brand_description', 'sex_type', 'brand_feature_image', 'brand_isActive', 'brand_style', 'category')
         model = Partner
-
-
 
 from django import forms
 from django.utils.translation import pgettext_lazy

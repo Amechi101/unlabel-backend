@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 
-from influencers.views import InfluencerListView, InfluencerDetailView
+from oscarapps.influencers.views import InfluencerListView, InfluencerDetailView
 
 
 urlpatterns = [

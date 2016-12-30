@@ -1,5 +1,4 @@
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
-from oscar.apps.dashboard.partners.views import PartnerCreateView as CorePartnerCreateView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
 from oscar.apps.dashboard.partners.views import PartnerAddressForm
@@ -9,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-# from oscarapps.partner.models import Style
 from oscar.views import sort_queryset
 from django.core.urlresolvers import reverse,reverse_lazy
 from django.views.generic import FormView
@@ -39,11 +37,6 @@ class PartnerManageView(CorePartnerManageView, FormView):
         return ctx
 
     def form_valid(self, form):
-        print "override function======================="
-        storage = messages.get_messages(self.request)
-        print storage._loaded_messages
-        #
-        # del storage._loaded_messages[0]
         messages.success(
             self.request, _("Brand '%s' was updated successfully.") %
             self.partner.name)
@@ -56,7 +49,6 @@ class PartnerAddressManageView(generic.UpdateView):
 
     template_name = 'dashboard/partners/partner_address_manage.html'
     form_class = PartnerAddressForm
-    # success_url = reverse_lazy('dashboard:partner-manage')
 
     def get_success_url(self):
         return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})

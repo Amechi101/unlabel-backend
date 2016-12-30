@@ -203,7 +203,7 @@ INSTALLED_APPS = [
     'unlabel',
     'unlabel_api',
     'applications',
-    'influencers',
+    'oscarapps.influencers',
 
     #oscar-api
     'rest_framework',

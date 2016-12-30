@@ -11,6 +11,17 @@ from oscar.core.compat import get_user_model
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 
+
+
+
+
+
+
+
+
+
+#style views
+
 Style = get_model('partner', 'Style')
 (
     StyleSearchForm, StyleCreateForm

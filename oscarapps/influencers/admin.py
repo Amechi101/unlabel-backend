@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
-from influencers.models import Influencers
+from oscarapps.influencers.models import Influencers
 # from influencers.models import Influencers, City, StateCountry
 
 
