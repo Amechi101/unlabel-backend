@@ -19,12 +19,13 @@ from django.utils.encoding import force_bytes
 
 
 class CustomerRegisterView(APIView):
-    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     http_method_names = ('post',)
 
     def post(self,request,*args,**kwargs):
         try:
-            email_exist = User.objects.filter(email=request.data["email"])
+            # email_exist = User.objects.filter(email=request.data["email"])
+            email_exist = User.objects.filter(email__iexact = request.data["email"])
             if not email_exist:
                 serializer = CustomerRegisterSerializer(data=request.data)
                 if serializer.is_valid():
@@ -49,7 +50,7 @@ class CustomerRegisterView(APIView):
                                     </html>"""
                     email.from_email = "Unlabel App"
                     email.to=[mailid]
-                    email.send()
+                    # email.send()
 
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
