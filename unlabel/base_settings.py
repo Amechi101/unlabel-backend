@@ -233,24 +233,25 @@ USE_L10N = True
 USE_TZ = True
 
 
-# REST_FRAMEWORK = {
-#     'PAGINATE_BY': 1,
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'MAX_PAGINATE_BY': 100,
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         # 'rest_framework.permissions.IsAuthenticated',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.BasicAuthentication',
-#     ),
-#     # 'DEFAULT_RENDERER_CLASSES': (
-#     #     'rest_framework.renderers.JSONRenderer',
-#     # ),
-#     'DEFAULT_PARSER_CLASSES': (
-#         'rest_framework.parsers.JSONParser',
-#     )
-# }
+REST_FRAMEWORK = {
+    'PAGINATE_BY': 1,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'MAX_PAGINATE_BY': 100,
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework.parsers.JSONParser',
+    # )
+}
 
 
 #---Site Email Settings----

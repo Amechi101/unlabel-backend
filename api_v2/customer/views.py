@@ -15,11 +15,10 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.utils.encoding import force_bytes
 
-from oscarapps.customer.models import EmailConfirmation
+# from oscarapps.customer.models import EmailConfirmation
 
 
 class CustomerRegisterView(APIView):
-    # authentication = (authentication.TokenAuthentication,)
     # permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('post',)
 
@@ -62,17 +61,26 @@ class CustomerRegisterView(APIView):
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 class CustomerPasswordUpdateView(APIView):
+    authentication = (authentication.SessionAuthentication,)
     http_method_names = ('post',)
 
     def post(self,request,*args,**kwargs):
         try:
-            customer=User.objects.get(email=request.data["email"])
+            if request.user.is_authenticated():
+                customer=request.user
+            # customer=User.objects.get(email=request.data["email"])
+            else:
+                content={"message":"Please login first."}
+                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         except:
-            content={"message":"given email does not exist"}
+            content={"message":"given email does not exist."}
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         customer.set_password(request.data["password"])
         customer.save()
-        content={"message":"password changed successfully"}
+        content={"message":"password changed successfully. Please login to continue."}
+        request.session.clear()
+        request.session.delete()
+        request.session = None
         return Response(content,status=status.HTTP_201_CREATED)
 
 
@@ -82,7 +90,7 @@ class CustomerForgotPassword(APIView):
     def post(self,request,*args,**kwargs):
         if request.data["email"]:
             if User.objects.filter(email=request.data["email"]).exists():
-                EmailConfirm=EmailConfirmation.objects.create(email=request.data["email"])
+                # EmailConfirm=EmailConfirmation.objects.create(email=request.data["email"])
 
                 current_site = Site.objects.get_current()
                 domain = current_site.domain
@@ -129,3 +137,22 @@ class CustomerForgotPassword(APIView):
         content={"message":"email does not exist"}
         return Response(content,status=status.HTTP_200_OK)
 
+class CustomerProfileUpdateView(APIView):
+    authentication = (authentication.SessionAuthentication,)
+    http_method_names = ('post',)
+
+    def post(self,request,*args,**kwargs):
+        try:
+            if request.user.is_authenticated():
+                customer=request.user
+            # customer=User.objects.get(email=request.data["email"])
+            else:
+                content={"message":"Please login first."}
+                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        except:
+            content={"message":"given email does not exist."}
+            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        customer.first_name=request.data["first_name"]
+        customer.save()
+        content={"message":"name changed successfully"}
+        return Response(content,status=status.HTTP_200_OK)
