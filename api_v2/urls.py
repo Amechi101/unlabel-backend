@@ -16,8 +16,12 @@ urlpatterns = [
     url(r'customer_forgot_password/',
         customerViews.CustomerForgotPassword.as_view(),name='customer_forgot_password_view'),
 
-    url(r'customer_profile_update',
-        customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view')
+    url(r'customer_profile_update/',
+        customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
+
+    url(r'customer_login/',customerViews.LoginView.as_view(),name='customer-login-view'),
+
+    url(r'^customer_logout/',customerViews.LogoutView.as_view(),name='customer-logout- View')
 
 ]
 
