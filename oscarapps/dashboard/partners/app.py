@@ -16,6 +16,18 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                                  'InfluencerDeleteView')
 
 
+    user_link_view = get_class('dashboard.partners.views',
+                               'InfluencerUserLinkView')
+    user_unlink_view = get_class('dashboard.partners.views',
+                                 'InfluencerUserUnlinkView')
+    user_create_view = get_class('dashboard.partners.views',
+                                 'InfluencerUserCreateView')
+    user_select_view = get_class('dashboard.partners.views',
+                                 'InfluencerUserSelectView')
+    user_update_view = get_class('dashboard.partners.views',
+                                 'InfluencerUserUpdateView')
+
+
 
 
     industry_preference_list_view = get_class('oscarapps.dashboard.partners.views',
@@ -67,6 +79,21 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='influencer-delete'),
 
 
+            url(r'^(?P<influencer_pk>\d+)/users/add/$',
+                self.user_create_view.as_view(),
+                name='influencer-user-create'),
+            url(r'^(?P<influencer_pk>\d+)/users/select/$',
+                self.user_select_view.as_view(),
+                name='influencer-user-select'),
+            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/link/$',
+                self.user_link_view.as_view(), name='influencer-user-link'),
+            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/unlink/$',
+                self.user_unlink_view.as_view(), name='influencer-user-unlink'),
+            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/update/$',
+                self.user_update_view.as_view(),
+                name='influencer-user-update'),
+
+
 
             url(r'^industry_preference/$', self.industry_preference_list_view.as_view(), name='industry-list'),
             url(r'^industry_preference/create/$', self.industry_preference_create_view.as_view(),
@@ -75,6 +102,9 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='industry-manage'),
             url(r'^industry_preference/(?P<pk>\d+)/delete/$', self.industry_preference_delete_view.as_view(),
                 name='industry-delete'),
+
+
+
         ]
         return self.post_process_urls(urls)
 application = PartnersDashboardApplication()

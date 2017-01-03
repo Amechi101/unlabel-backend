@@ -2,9 +2,9 @@
 {% load sorting_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page style{% endblock %}
+{% block body_class %}{{ block.super }} create-page industry{% endblock %}
 {% block title %}
-    {{ influencer.name }} | {% trans "Influencers" %} | {{ block.super }}
+    {{ industry.name }} | {% trans "Industries" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
