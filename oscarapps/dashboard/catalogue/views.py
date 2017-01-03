@@ -128,3 +128,6 @@ class StyleDeleteView(generic.DeleteView):
 
 
 
+
+
+

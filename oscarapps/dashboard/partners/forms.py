@@ -28,4 +28,26 @@ class InfluencerCreateForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('name', 'instagram_url', 'website_url', 'influencer_isActive', 'style_Preference', 'bio')
+        fields = ('name', 'instagram_url', 'website_url', 'influencer_isActive', 'style_Preference', 'industry_choice' , 'bio')
+
+
+
+Industry = get_model('influencers', 'Industry')
+
+class IndustrySearchForm(forms.Form):
+    name = forms.CharField(
+        required=False, label=pgettext_lazy(u"Industry's name", u"Name"))
+
+
+class IndustryCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(IndustryCreateForm, self).__init__(*args, **kwargs)
+        # Partner.name is optional and that is okay. But if creating through
+        # the dashboard, it seems sensible to enforce as it's the only field
+        # in the form.
+        self.fields['name'].required = True
+
+    class Meta:
+        model = Industry
+        fields = ('name', 'description')

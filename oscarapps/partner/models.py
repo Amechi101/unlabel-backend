@@ -4,8 +4,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from applications.models import City
-
-from cloudinary.models import CloudinaryField
 from applications.mixins import ValidateModelMixin
 
 
@@ -20,7 +18,8 @@ class Partner(AbstractPartner):
     )
     brand_website_url = models.URLField(max_length=100, default="", blank=True, verbose_name=_('Website'))
     brand_description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-    brand_feature_image = CloudinaryField('Featured Brand Image', null=True, blank=True)
+    brand_feature_image = models.ImageField(_('Image'), upload_to='uploads', blank=True,
+                              null=True, max_length=255)
     brand_isActive = models.BooleanField(default=False, verbose_name=_('Brand Active'),
         help_text=_('Check to activate brand'))
     sex_type = models.CharField(

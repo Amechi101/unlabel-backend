@@ -17,6 +17,17 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
+
+    industry_preference_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'IndustryListView')
+
+    industry_preference_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'IndustryCreateView')
+    industry_preference_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'IndustryManageView')
+    industry_preference_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'IndustryDeleteView')
+
     def get_urls(self):
         urls = [
             url(r'^$', self.list_view.as_view(), name='partner-list'),
@@ -54,6 +65,16 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='influencer-manage'),
             url(r'^influencer/(?P<pk>\d+)/delete/$', self.influencer_delete_view.as_view(),
                 name='influencer-delete'),
+
+
+
+            url(r'^industry_preference/$', self.industry_preference_list_view.as_view(), name='industry-list'),
+            url(r'^industry_preference/create/$', self.industry_preference_create_view.as_view(),
+                name='industry-create'),
+            url(r'^industry_preference/(?P<pk>\d+)/$', self.industry_preference_manage_view.as_view(),
+                name='industry-manage'),
+            url(r'^industry_preference/(?P<pk>\d+)/delete/$', self.industry_preference_delete_view.as_view(),
+                name='industry-delete'),
         ]
         return self.post_process_urls(urls)
 application = PartnersDashboardApplication()

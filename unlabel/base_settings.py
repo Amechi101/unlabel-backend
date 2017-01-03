@@ -11,12 +11,12 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 from django.utils.translation import ugettext_lazy as _
 import os
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 import json
 import dj_database_url
 from oscar.defaults import *
+
+
+
 OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
@@ -24,7 +24,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'url_name': 'dashboard:index',
     },
     {
-        'label': _('Catalogue'),
+        'label': _('Inventory Management'),
         'icon': 'icon-sitemap',
         'children': [
             {
@@ -35,10 +35,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Product Types'),
                 'url_name': 'dashboard:catalogue-class-list',
             },
-            {
-                'label': _('Style Preferences'),
-                'url_name': 'dashboard:style-list',
-            },
+
             {
                 'label': _('Categories'),
                 'url_name': 'dashboard:catalogue-category-list',
@@ -50,6 +47,10 @@ OSCAR_DASHBOARD_NAVIGATION = [
             {
                 'label': _('Low stock alerts'),
                 'url_name': 'dashboard:stock-alert-list',
+            },
+            {
+                'label': _('Style Preferences'),
+                'url_name': 'dashboard:style-list',
             },
         ]
     },
@@ -72,6 +73,10 @@ OSCAR_DASHBOARD_NAVIGATION = [
             {
                 'label': _('Influencers'),
                 'url_name': 'dashboard:influencer-list',
+            },
+            {
+                'label': _('Industry Preferences '),
+                'url_name': 'dashboard:industry-list',
             },
 
             # The shipping method dashboard is disabled by default as it might
@@ -155,6 +160,18 @@ with open(os.path.join(BASE_DIR, "fixtures", "secrets.json")) as f:
     secrets = json.loads(f.read())
 
 
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_S3_SECURE_URLS = False       # use http instead of https
+AWS_QUERYSTRING_AUTH = False     # don't add complex authentication-related query parameters for requests
+AWS_S3_ACCESS_KEY_ID = 'AKIAIWCAMKSI7I763E7A'     # enter your access key id
+AWS_S3_SECRET_ACCESS_KEY = 'XaCKTRxXb/NBS60sQhJAvnWh6NcKpQJjlg80K0xb' # enter your secret access key
+AWS_STORAGE_BUCKET_NAME = 'unlabel'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+MEDIA_URL = 'https://%s/media/' % AWS_S3_CUSTOM_DOMAIN
+MEDIA_ROOT = '%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+
+
+
 def get_secret(setting, secrets=secrets):
     """
     Get the secret variable or return explicit exception.
@@ -167,11 +184,6 @@ def get_secret(setting, secrets=secrets):
         raise ImproperlyConfigured(error_msg)
 
 
-cloudinary.config(
-    cloud_name=get_secret("CLOUDINARY_CLOUD_NAME"),
-    api_key=get_secret("CLOUDINARY_API_KEY"),
-    api_secret=get_secret("CLOUDINARY_API_SECRET")
-)
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
@@ -197,6 +209,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tastypie',
     'widget_tweaks',
+    'storages',
 
 
     # project
@@ -386,3 +399,9 @@ EMAIL_HOST_USER = 'unlabelapp@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
+assert len(SECRET_KEY) > 20, 'Please set SECRET_KEY in local_settings.py'

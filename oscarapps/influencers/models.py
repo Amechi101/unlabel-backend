@@ -25,7 +25,7 @@ class BaseApplicationModel(models.Model):
 
 
 class Industry(models.Model):
-    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Industry Preferences'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Industry Preference'))
 
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
@@ -34,6 +34,8 @@ class Industry(models.Model):
         verbose_name = _('Industry')
         verbose_name_plural = _('Industries')
 
+    def __str__(self):
+        return self.name
 
 class Influencers(BaseApplicationModel):
     """
@@ -43,7 +45,7 @@ class Influencers(BaseApplicationModel):
     #new fields
     style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preference'))
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
-    industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry')
+    industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry Preferences')
 
 
     #old fields
