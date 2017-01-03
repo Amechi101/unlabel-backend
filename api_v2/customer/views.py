@@ -52,7 +52,7 @@ class CustomerRegisterView(APIView):
                                     </html>"""
                     email.from_email = "Unlabel App"
                     email.to=[mailid]
-                    # email.send()
+                    email.send()
 
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
