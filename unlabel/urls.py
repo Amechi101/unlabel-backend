@@ -37,7 +37,7 @@ urlpatterns = [
 	url(r"^brands/", include('applications.urls')),
 
     # influencers
-	url(r"^unlabel-discovery/", include('influencers.urls')),
+	url(r"^unlabel-discovery/", include('oscarapps.influencers.urls')),
 
     # api's
 	url(r"unlabel-network/", include('unlabel_api.urls')),

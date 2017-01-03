@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import cloudinary.models
 from django.db import migrations, models
 import django.db.models.deletion
-import influencers.mixins
+import oscarapps.influencers.mixins
 
 
 class Migration(migrations.Migration):
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'City',
                 'verbose_name_plural': 'Cities',
             },
-            bases=(influencers.mixins.ValidateModelMixin, models.Model),
+            bases=(oscarapps.influencers.mixins.ValidateModelMixin, models.Model),
         ),
         migrations.CreateModel(
             name='Influencers',
@@ -77,7 +77,7 @@ class Migration(migrations.Migration):
                 'verbose_name': 'State or Country',
                 'verbose_name_plural': 'State or Country',
             },
-            bases=(influencers.mixins.ValidateModelMixin, models.Model),
+            bases=(oscarapps.influencers.mixins.ValidateModelMixin, models.Model),
         ),
         migrations.AddField(
             model_name='city',

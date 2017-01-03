@@ -6,12 +6,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
-from influencers.mixins import ValidateModelMixin
+from oscarapps.influencers.mixins import ValidateModelMixin
 
 from cloudinary.models import CloudinaryField
 
 from applications.models import Brand
-
+from oscarapps.partner.models import Style
 class BaseApplicationModel(models.Model):
     """
     An abstract base class model that common attributes
@@ -24,49 +24,69 @@ class BaseApplicationModel(models.Model):
         abstract = True
 
 
+class Industry(models.Model):
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Industry Preference'))
+
+    description = models.TextField(blank=True, default="", verbose_name=_('Description'))
+
+    # Metadata
+    class Meta:
+        verbose_name = _('Industry')
+        verbose_name_plural = _('Industries')
+
+    def __str__(self):
+        return self.name
+
 class Influencers(BaseApplicationModel):
     """
     Information for each influencer
     """
-    
+
+    #new fields
+    style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preference'))
+    bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
+    industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry Preferences')
+
+
+    #old fields
     #General info
     name = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Influencer name'))
-    
+
     instagram_handle = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Instagram handle'))
-    
+
     instagram_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Instagram url'))
-    
-    hometown = models.ForeignKey('City', null=True, blank=True, default="", verbose_name=_('Hometown'))
+
+    # hometown = models.ForeignKey('City', null=True, blank=True, default="", verbose_name=_('Hometown'))
 
     website_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Website url'))
-    
+
     website_name = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Website name'))
 
-    website_isActive = models.BooleanField(default=False, verbose_name=_('Website active'), 
+    website_isActive = models.BooleanField(default=False, verbose_name=_('Website active'),
         help_text=_('Check to activate website'))
 
     image = CloudinaryField('Influencer Image', null=True, blank=True)
-    
+
     photographer_credit = models.CharField(max_length=255, blank=True, default="", verbose_name=_('Photographer credit'),
         help_text=_('To give credit for photographer for image'))
-    
-    photographer_credit_isActive = models.BooleanField(default=False, verbose_name=_('Photographer credit active'), 
+
+    photographer_credit_isActive = models.BooleanField(default=False, verbose_name=_('Photographer credit active'),
         help_text=_('Check to activate photographer credit'))
 
-    #brand 
-    brands = models.ForeignKey(Brand, null=True, blank=True, default="", help_text=_('Please select your brand'), verbose_name=_('Brand name'),
-        related_name='brands')
+    #brand
+    # brands = models.ForeignKey(Brand, null=True, blank=True, default="", help_text=_('Please select your brand'), verbose_name=_('Brand name'),
+    #     related_name='brands')
     question_brand_attraction = models.TextField(blank=True, default="", verbose_name=_('Brand attraction'))
-    
+
     #product
     question_product_favorite_name = models.CharField(max_length=255, blank=True, default="", verbose_name=_('Favorite product name'))
     question_product_favorite_explanation = models.TextField(blank=True, default="", verbose_name=_('Favorite product explanation'))
     question_product_favorite_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Favorite product url'))
     question_product_favorite_product_pairing = models.TextField(blank=True, default="", verbose_name=_('Product pairing explanation'))
-    
+
     #personal style
     question_personal_style_one = models.CharField(max_length=255, blank=True, default="", verbose_name=_('Personal style 1'))
-    
+
     # other questions
     question_fashion_advice = models.TextField(blank=True, default="", verbose_name=_('Fashion advice'))
     question_favorite_season = models.TextField(blank=True, default="", verbose_name=_('Favorite season'))
@@ -77,7 +97,6 @@ class Influencers(BaseApplicationModel):
     # active
     influencer_isActive = models.BooleanField(default=False, verbose_name=_('Influencer active'), 
         help_text=_('Check to activate influencer'))
-    
 
     # Metadata
     class Meta: 
@@ -94,11 +113,11 @@ class Influencers(BaseApplicationModel):
         for field in self._meta.fields:
 
             value = getattr(self, field.name)
-            
+
             if field.name == 'name' or field.name == 'instagram_handle' or field.name == 'website_name':
                 try:
                     setattr(self, field.name, value.strip())
-                    
+
                     setattr(self, field.name, value.lower())
 
                 except Exception:
@@ -154,3 +173,4 @@ class StateCountry(ValidateModelMixin, BaseApplicationModel):
 
     def __str__(self):
         return "{0}".format( self.name )
+

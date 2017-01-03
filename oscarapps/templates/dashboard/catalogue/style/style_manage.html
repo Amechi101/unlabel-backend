@@ -2,9 +2,9 @@
 {% load sorting_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page partners{% endblock %}
+{% block body_class %}{{ block.super }} create-page style{% endblock %}
 {% block title %}
-    {{ partner.name }} | {% trans "Brands" %} | {{ block.super }}
+    {{ style.name }} | {% trans "Styles" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,13 +13,13 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:partner-list' %}">{% trans "Brands" %}</a>
+            <a href="{% url 'dashboard:style-list' %}">{% trans "Styles" %}</a>
         </li>
-        <li class="active">{{ partner.name }}</li>
+        <li class="active">{{ style.name }}</li>
     </ul>
 {% endblock %}
 
-{% block headertext %}{{ partner.name }}{% endblock %}
+{% block headertext %}{{ style.name }}{% endblock %}
 
 {% block dashboard_content %}
 

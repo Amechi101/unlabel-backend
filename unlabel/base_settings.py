@@ -9,15 +9,146 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
-
+from django.utils.translation import ugettext_lazy as _
 import os
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 import json
 import dj_database_url
 from oscar.defaults import *
 
+
+
+OSCAR_DASHBOARD_NAVIGATION = [
+    {
+        'label': _('Dashboard'),
+        'icon': 'icon-th-list',
+        'url_name': 'dashboard:index',
+    },
+    {
+        'label': _('Inventory Management'),
+        'icon': 'icon-sitemap',
+        'children': [
+            {
+                'label': _('Products'),
+                'url_name': 'dashboard:catalogue-product-list',
+            },
+            {
+                'label': _('Product Types'),
+                'url_name': 'dashboard:catalogue-class-list',
+            },
+
+            {
+                'label': _('Categories'),
+                'url_name': 'dashboard:catalogue-category-list',
+            },
+            {
+                'label': _('Ranges'),
+                'url_name': 'dashboard:range-list',
+            },
+            {
+                'label': _('Low stock alerts'),
+                'url_name': 'dashboard:stock-alert-list',
+            },
+            {
+                'label': _('Style Preferences'),
+                'url_name': 'dashboard:style-list',
+            },
+        ]
+    },
+    {
+        'label': _('Fulfilment'),
+        'icon': 'icon-shopping-cart',
+        'children': [
+            {
+                'label': _('Orders'),
+                'url_name': 'dashboard:order-list',
+            },
+            {
+                'label': _('Statistics'),
+                'url_name': 'dashboard:order-stats',
+            },
+            {
+                'label': _('Brands'),
+                'url_name': 'dashboard:partner-list',
+            },
+            {
+                'label': _('Influencers'),
+                'url_name': 'dashboard:influencer-list',
+            },
+            {
+                'label': _('Industry Preferences '),
+                'url_name': 'dashboard:industry-list',
+            },
+
+            # The shipping method dashboard is disabled by default as it might
+            # be confusing. Weight-based shipping methods aren't hooked into
+            # the shipping repository by default (as it would make
+            # customising the repository slightly more difficult).
+            # {
+            #     'label': _('Shipping charges'),
+            #     'url_name': 'dashboard:shipping-method-list',
+            # },
+        ]
+    },
+    {
+        'label': _('Customers'),
+        'icon': 'icon-group',
+        'children': [
+            {
+                'label': _('Customers'),
+                'url_name': 'dashboard:users-index',
+            },
+            {
+                'label': _('Stock alert requests'),
+                'url_name': 'dashboard:user-alert-list',
+            },
+        ]
+    },
+    {
+        'label': _('Offers'),
+        'icon': 'icon-bullhorn',
+        'children': [
+            {
+                'label': _('Offers'),
+                'url_name': 'dashboard:offer-list',
+            },
+            {
+                'label': _('Vouchers'),
+                'url_name': 'dashboard:voucher-list',
+            },
+        ],
+    },
+    {
+        'label': _('Content'),
+        'icon': 'icon-folder-close',
+        'children': [
+            {
+                'label': _('Content blocks'),
+                'url_name': 'dashboard:promotion-list',
+            },
+            {
+                'label': _('Content blocks by page'),
+                'url_name': 'dashboard:promotion-list-by-page',
+            },
+            {
+                'label': _('Pages'),
+                'url_name': 'dashboard:page-list',
+            },
+            {
+                'label': _('Email templates'),
+                'url_name': 'dashboard:comms-list',
+            },
+            {
+                'label': _('Reviews'),
+                'url_name': 'dashboard:reviews-list',
+            },
+        ]
+    },
+    {
+        'label': _('Reports'),
+        'icon': 'icon-bar-chart',
+        'url_name': 'dashboard:reports-index',
+    },
+]
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
@@ -28,6 +159,18 @@ REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
 with open(os.path.join(BASE_DIR, "fixtures", "secrets.json")) as f:
     secrets = json.loads(f.read())
+
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_S3_SECURE_URLS = False       # use http instead of https
+AWS_QUERYSTRING_AUTH = False     # don't add complex authentication-related query parameters for requests
+AWS_S3_ACCESS_KEY_ID = 'AKIAIWCAMKSI7I763E7A'     # enter your access key id
+AWS_S3_SECRET_ACCESS_KEY = 'XaCKTRxXb/NBS60sQhJAvnWh6NcKpQJjlg80K0xb' # enter your secret access key
+AWS_STORAGE_BUCKET_NAME = 'unlabel'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+MEDIA_URL = 'https://%s/media/' % AWS_S3_CUSTOM_DOMAIN
+MEDIA_ROOT = '%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+
 
 
 def get_secret(setting, secrets=secrets):
@@ -42,11 +185,6 @@ def get_secret(setting, secrets=secrets):
         raise ImproperlyConfigured(error_msg)
 
 
-cloudinary.config(
-    cloud_name=get_secret("CLOUDINARY_CLOUD_NAME"),
-    api_key=get_secret("CLOUDINARY_API_KEY"),
-    api_secret=get_secret("CLOUDINARY_API_SECRET")
-)
 
 SECRET_KEY = get_secret("SECRET_KEY")
 
@@ -72,13 +210,14 @@ INSTALLED_APPS = [
     'bootstrap3',
     'tastypie',
     'widget_tweaks',
+    'storages',
 
 
     # project
     'unlabel',
     'unlabel_api',
     'applications',
-    'influencers',
+    'oscarapps.influencers',
 
     #oscar-api
     'rest_framework',
@@ -88,7 +227,6 @@ INSTALLED_APPS = [
 
     ###for oscar-api
     'api_v2',
-
 ]
 
 from oscar import get_core_apps
@@ -268,12 +406,10 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
 
+# try:
+#     from local_settings import *
+# except ImportError:
+#     pass
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
-#
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'media/')
-
-
+assert len(SECRET_KEY) > 20, 'Please set SECRET_KEY in local_settings.py'
 
