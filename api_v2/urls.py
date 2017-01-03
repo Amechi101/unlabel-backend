@@ -1,8 +1,9 @@
 from django.conf.urls import include, url,patterns
 from rest_framework import routers
 from .customer import views as customerViews
+from .address import views as addressViews
 
-
+#####   customer urls   #####
 urlpatterns = [
 	# api's
 	# url(r'^labels-api/', include() ) ,
@@ -15,9 +16,24 @@ urlpatterns = [
     url(r'customer_forgot_password/',
         customerViews.CustomerForgotPassword.as_view(),name='customer_forgot_password_view'),
 
+    url(r'customer_profile_update/',
+        customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
+
+    # url(r'customer_login/',customerViews.LoginView.as_view(),name='customer-login-view'),
+
+    # url(r'^customer_logout/',customerViews.LogoutView.as_view(),name='customer-logout- View')
+
 ]
 
-urlpatterns = patterns(
+##### address urls  #####
+
+urlpatterns = urlpatterns + [
+
+    # url(r'add_address/',)
+]
+
+
+urlpatterns = urlpatterns + patterns(
                 'django.contrib.auth.views',
                 url(r'^password-reset-done/$', 'password_reset_done',
                    {'template_name': 'profiles/password_reset_done.html',},name='password-reset-done'),
