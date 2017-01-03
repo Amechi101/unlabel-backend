@@ -16,6 +16,7 @@ from django.contrib.sites.models import Site
 from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+import re
 
 # from oscarapps.customer.models import EmailConfirmation
 
@@ -26,42 +27,52 @@ class CustomerRegisterView(APIView):
 
     def post(self,request,*args,**kwargs):
         try:
-            # email_exist = User.objects.filter(email=request.data["email"])
-            email_exist = User.objects.filter(email__iexact = request.data["email"])
-            if not email_exist:
-                serializer = CustomerRegisterSerializer(data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
+            if len(str(request.data["first_name"])) != 0 and len(str(request.data["first_name"])) < 30 :
+                match=re.search('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',request.data["email"])
+                if match:
+                    # email_exist = User.objects.filter(email=request.data["email"])
+                    email_exist = User.objects.filter(email__iexact = request.data["email"])
+                    if not email_exist:
+                        serializer = CustomerRegisterSerializer(data=request.data)
+                        if serializer.is_valid():
+                            serializer.save()
 
-                    mailid=request.data["email"]
-                    email = EmailMessage()
-                    email.subject = "Registration succesfull at unlabel"
-                    email.content_subtype = "html"
-                    email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                                    <body>
-                                    <h2>Welcome to unlabel</h2>
-                                    <p style = 'font-size:14px;'>Hello,</p>
-                                    <p>Your email has been succesfully registered with Unlabel.<br/>
-                                    </p>
-                                    <br/>
-                                    <br/>
-                                    Thank you!<br/><br/>
-                                    <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                                    </body>
-                                    </head>
-                                    </html>"""
-                    email.from_email = "Unlabel App"
-                    email.to=[mailid]
-                    email.send()
+                            mailid=request.data["email"]
+                            email = EmailMessage()
+                            email.subject = "Registration succesful at unlabel"
+                            email.content_subtype = "html"
+                            email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                                            <body>
+                                            <h2>Welcome to unlabel</h2>
+                                            <p style = 'font-size:14px;'>Hello,</p>
+                                            <p>Your email has been succesfully registered with Unlabel.<br/>
+                                            </p>
+                                            <br/>
+                                            <br/>
+                                            Thank you!<br/><br/>
+                                            <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                                            </body>
+                                            </head>
+                                            </html>"""
+                            email.from_email = "Unlabel App"
+                            email.to=[mailid]
+                            email.send()
 
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                content={"message":"email already registered"}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                    else:
+                        content={"message":"email already registered"}
+                        return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    content={"invalid email"}
+                    return Response(content,status=status.HTTP_400_BAD_REQUEST)
+            else :
+                content={"invalid name. name should be less than 30 characters"}
+                return Response(content,status=status.HTTP_400_BAD_REQUEST)
         except:
-            content={"message":"no data"}
+            content={"message":"Please validate the data and try again."}
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
 
 class CustomerPasswordUpdateView(APIView):
     authentication = (authentication.SessionAuthentication,)
@@ -93,7 +104,8 @@ class CustomerForgotPassword(APIView):
 
     def post(self,request,*args,**kwargs):
         if request.data["email"]:
-            if User.objects.filter(email=request.data["email"]).exists():
+            if User.objects.filter(email__iexact=request.data["email"]).exists():
+
                 # EmailConfirm=EmailConfirmation.objects.create(email=request.data["email"])
 
                 current_site = Site.objects.get_current()
@@ -160,4 +172,5 @@ class CustomerProfileUpdateView(APIView):
         customer.save()
         content={"message":"name changed successfully"}
         return Response(content,status=status.HTTP_200_OK)
+
 
