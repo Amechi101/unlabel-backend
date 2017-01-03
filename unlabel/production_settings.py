@@ -33,7 +33,7 @@ X_FRAME_OPTIONS = 'DENY'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': 'unlabel',
+       'NAME': 'unlabel_dev',
        'USER': 'prod',
        'PASSWORD': 'prod',
        'HOST': '127.0.0.1',
