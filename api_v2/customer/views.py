@@ -104,54 +104,49 @@ class CustomerForgotPassword(APIView):
 
     def post(self,request,*args,**kwargs):
         if request.data["email"]:
-            if User.objects.filter(email__iexact=request.data["email"]).exists():
-
-                # EmailConfirm=EmailConfirmation.objects.create(email=request.data["email"])
-
-                current_site = Site.objects.get_current()
-                domain = current_site.domain
-
-                user = User.objects.get(email=request.data["email"])
-                context = {
-                    'domain': domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'user': user,
-                    'token': default_token_generator.make_token(user),
-                    'protocol': 'http',
-                }
-                try:
-                    tosend= context['protocol']+'://'+context['domain']+'/api_v2/reset/'+context['uid']+'/'+context['token']
-
-                    mailid=request.data["email"]
-                    email = EmailMessage()
-                    email.subject = "Password Reset at unlabel"
-                    email.content_subtype = "html"
-                    email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                                    <body>
-                                    <br><br>
-                                    You're receiving this email because you requested a password reset for your user account at Unlabel.
-                                    <br><br>
-                                    Please go to the following page and choose a new password:
-                                    <br><br>
-                                    """+tosend+"""
-                                    <br><br>
-                                    Thanks for using our site!
-                                    <br/>
-                                    <br/>
-                                    <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                                    </body>
-                                    </head>
-                                    </html>"""
-                    email.from_email = "Unlabel App"
-                    email.to=[mailid]
-                    email.send()
-
-                    return Response({'code':'OK'}, status.HTTP_200_OK)
-                except:
-                    return Response({'code':'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
-
-        content={"message":"email does not exist"}
-        return Response(content,status=status.HTTP_404_NOT_FOUND)
+            try:
+                if User.objects.filter(email__iexact=request.data["email"]).exists():
+                    current_site = Site.objects.get_current()
+                    domain = current_site.domain
+                    user = User.objects.get(email__iexact=request.data["email"])
+                    context = {
+                        'domain': domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'user': user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    try:
+                        tosend= context['protocol']+'://'+context['domain']+'/api_v2/reset/'+context['uid']+'/'+context['token']
+                        mailid=request.data["email"]
+                        email = EmailMessage()
+                        email.subject = "Password Reset at unlabel"
+                        email.content_subtype = "html"
+                        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                                        <body>
+                                        <br><br>
+                                        You're receiving this email because you requested a password reset for your user account at Unlabel.
+                                        <br><br>
+                                        Please go to the following page and choose a new password:
+                                        <br><br>
+                                        """+tosend+"""
+                                        <br><br>
+                                        Thanks for using our site!
+                                        <br/>
+                                        <br/>
+                                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                                        </body>
+                                        </head>
+                                        </html>"""
+                        email.from_email = "Unlabel App"
+                        email.to=[mailid]
+                        email.send()
+                        return Response({'code':'OK'}, status.HTTP_200_OK)
+                    except:
+                        return Response({'code':'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
+            except:
+                content={"message":"email does not exist"}
+                return Response(content,status=status.HTTP_404_NOT_FOUND)
 
 class CustomerProfileUpdateView(APIView):
     authentication = (authentication.SessionAuthentication,)
