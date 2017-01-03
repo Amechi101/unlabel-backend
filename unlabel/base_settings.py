@@ -24,6 +24,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
 with open(os.path.join(BASE_DIR, "fixtures", "secrets.json")) as f:
     secrets = json.loads(f.read())
@@ -84,6 +85,9 @@ INSTALLED_APPS = [
     'oscarapi',
     'rest_framework.authtoken',
     'rest_auth',
+
+    ###for oscar-api
+    'api_v2',
 
 ]
 
@@ -237,9 +241,10 @@ REST_FRAMEWORK = {
     'PAGINATE_BY': 1,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'MAX_PAGINATE_BY': 100,
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -262,3 +267,13 @@ EMAIL_HOST_USER = 'unlabelapp@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
+
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
+#
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'media/')
+
+
+

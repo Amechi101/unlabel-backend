@@ -12,6 +12,7 @@ from rest_framework import status
 from django.core.mail.message import EmailMessage
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from .serializers import UserAddressSerializer
 
 
 
@@ -20,4 +21,4 @@ class AddAddressView(APIView):
     http_method_names = ('post',)
 
     def post(self,request,*args,**kwargs):
-        pass
+        serializer = UserAddressSerializer(data=request.data)
