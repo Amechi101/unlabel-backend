@@ -2,11 +2,13 @@ from django.conf.urls import include, url,patterns
 from rest_framework import routers
 from .customer import views as customerViews
 from .address import views as addressViews
+from catalogue import views as catalogueViews
+# from django.contrib.auth.views import
 
 #####   customer urls   #####
 urlpatterns = [
-	# api's
-	# url(r'^labels-api/', include() ) ,
+
+    ###-------customer apis
     url(r'customer_register/',
         customerViews.CustomerRegisterView.as_view(),name='register_view'),
 
@@ -19,9 +21,8 @@ urlpatterns = [
     url(r'customer_profile_update/',
         customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
 
-    # url(r'customer_login/',customerViews.LoginView.as_view(),name='customer-login-view'),
-
-    # url(r'^customer_logout/',customerViews.LogoutView.as_view(),name='customer-logout- View')
+    ###-----product apis
+    url(r'product_list/',catalogueViews.ProductListView.as_view(),name='product_list_view')
 
 ]
 

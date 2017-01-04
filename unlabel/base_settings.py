@@ -238,9 +238,13 @@ USE_TZ = True
 
 
 REST_FRAMEWORK = {
-    'PAGINATE_BY': 1,
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'MAX_PAGINATE_BY': 100,
+    # 'PAGINATE_BY': 1,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'MAX_PAGINATE_BY': 100,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'MAX_PAGINATE_BY': 10,
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',
