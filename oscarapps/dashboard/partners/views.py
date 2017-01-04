@@ -251,10 +251,11 @@ class InfluencerDeleteView(generic.DeleteView):
 
 class InfluencerUserCreateView(generic.CreateView):
     model = User
-    template_name = 'dashboard/partners/partner_user_form.html'
+    template_name = 'influencers/influencer_user_form.html'
     form_class = NewUserForm
 
     def dispatch(self, request, *args, **kwargs):
+        print kwargs.get('influencer_pk'),"Create======================="
         self.influencer = get_object_or_404(
             Influencers, pk=kwargs.get('influencer_pk', None))
         return super(InfluencerUserCreateView, self).dispatch(
@@ -279,17 +280,19 @@ class InfluencerUserCreateView(generic.CreateView):
 
 
 class InfluencerUserSelectView(generic.ListView):
-    template_name = 'dashboard/partners/partner_user_select.html'
+    template_name = '/influencers/influencer_user_select.html'
     form_class = UserEmailForm
     context_object_name = 'users'
 
     def dispatch(self, request, *args, **kwargs):
+
         self.influencer = get_object_or_404(
             Influencers, pk=kwargs.get('influencer_pk', None))
         return super(InfluencerUserSelectView, self).dispatch(
             request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        print kwargs.get('influencer_pk'),"select======================="
         data = None
         if 'email' in request.GET:
             data = request.GET
@@ -371,7 +374,7 @@ class InfluencerUserUnlinkView(generic.View):
         influencer = get_object_or_404(Influencers, pk=influencer_pk)
         if self.unlink_user(user, influencer):
             msg = render_to_string(
-                'dashboard/partners/messages/user_unlinked.html',
+                'influencers/influencer_user_unlinked.html',
                 {'user_name': name,
                  'influencer_name': influencer.name,
                  'user_pk': user_pk,
@@ -391,7 +394,7 @@ class InfluencerUserUnlinkView(generic.View):
 
 
 class InfluencerUserUpdateView(generic.UpdateView):
-    template_name = 'dashboard/influencers/partner_user_form.html'
+    template_name = 'influencers/influencer_user_form.html'
     form_class = ExistingUserForm
 
     def get_object(self, queryset=None):
