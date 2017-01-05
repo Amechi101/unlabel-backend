@@ -21,8 +21,11 @@ urlpatterns = [
     url(r'customer_profile_update/',
         customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
 
+    url(r'^rest-auth/facebook/$', customerViews.FacebookLogin.as_view(), name='fb_login'),
+
     ###-----product apis
-    url(r'product_list/',catalogueViews.ProductListView.as_view(),name='product_list_view')
+    url(r'product_list/',catalogueViews.ProductListView.as_view(),name='product_list_view'),
+
 
 ]
 

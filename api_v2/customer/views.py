@@ -17,6 +17,9 @@ from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import re
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
+
 
 # from oscarapps.customer.models import EmailConfirmation
 
@@ -167,5 +170,9 @@ class CustomerProfileUpdateView(APIView):
         customer.save()
         content={"message":"name changed successfully"}
         return Response(content,status=status.HTTP_200_OK)
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
 
 

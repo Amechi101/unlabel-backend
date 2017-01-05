@@ -49,6 +49,9 @@ urlpatterns = [
 
     url(r'^api_v2/',include('api_v2.urls')),
 
+    url(r'^rest-auth/', include('rest_auth.urls')),
+
+
  ]# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
 #               + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

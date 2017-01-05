@@ -212,7 +212,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'storages',
 
-
     # project
     'unlabel',
     'unlabel_api',
@@ -220,12 +219,20 @@ INSTALLED_APPS = [
     'oscarapps.influencers',
 
     #oscar-api
-    'rest_framework',
     'oscarapi',
+
+    'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
 
-    ###for oscar-api
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+
+    ###for oscar-api over ride
     'api_v2',
 ]
 
@@ -263,7 +270,7 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'oscar.apps.customer.auth_backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 HAYSTACK_CONNECTIONS = {
@@ -323,6 +330,11 @@ TEMPLATES = [
 
                'unlabel.context_processors.theme',
                'unlabel.context_processors.consts',
+
+               'django.core.context_processors.request',
+               'django.contrib.auth.context_processors.auth',
+               # 'allauth.account.context_processors.account',
+               # 'allauth.socialaccount.context_processors.socialaccount',
            ],
        },
    },
@@ -417,3 +429,24 @@ DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
 
 assert len(SECRET_KEY) > 20, 'Please set SECRET_KEY in local_settings.py'
 
+SOCIALACCOUNT_PROVIDERS = \
+    {'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email', 'public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': 'path.to.callable',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4'}}
