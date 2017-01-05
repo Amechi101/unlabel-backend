@@ -92,6 +92,7 @@ class InfluencerManageView(generic.UpdateView):
         return self.influencer
 
     def get_initial(self):
+
         return {'name': self.influencer.name}
 
     def get_context_data(self, **kwargs):
@@ -280,7 +281,7 @@ class InfluencerUserUpdateView(generic.UpdateView):
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerUserUpdateView, self).get_context_data(**kwargs)
         name = self.object.get_full_name() or self.object.email
-        ctx['partner'] = self.influencer
+        ctx['influencer'] = self.influencer
         ctx['title'] = _("Edit user '%s'") % name
         return ctx
 
