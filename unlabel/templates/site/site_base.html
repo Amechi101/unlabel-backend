@@ -1,0 +1,102 @@
+{% extends "site/base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% block social_meta_tags_base %}
+    <meta property="og:image:width" content="900" /> 
+    <meta property="og:image:height" content="900" />
+    <meta property="og:site_name" content="{{ SITE_NAME }}" />
+    <meta property="og:type" content="website" />
+    <meta property="fb:app_id" content="1421811444777881">
+
+    {% block social_extra_meta_tags %}
+        <meta property="og:image" content="http://res.cloudinary.com/hqz2myoz0/image/upload/v1478571139/Desktop_HD_bp6fwd.jpg" />
+        <meta property="og:title" content="Curated selections of independent fashion brands from around the world." />
+        <meta property="og:description" content="Unlabel is a mobile app that provides you a curated selection of independent fashion brands from around the world." /> 
+        <meta property="og:url" content="{{ THEME_PRODUCTION_URL }}" />
+    {% endblock %}
+    
+    {% block twitter_social_cards %}{% endblock %}
+{% endblock %}
+
+
+{% block style_base %}  
+    <!-- Stylesheets for Unlabel -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{% static "css/core/site.css" %}?v={{ THEME_VERSION }}" />
+    {% block extra_style %}{% endblock %}
+
+    <!-- Icon links -->
+    <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193811/favicon_crrgjl.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193811/favicon-16x16_geeul0.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/favicon-32x32_qudami.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/favicon-96x96_ddegaa.png">
+    <!-- non-retina iPhone pre iOS 7 -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-57x57_jvueru.png">
+    <!-- non-retina iPad pre iOS 7 -->
+    <link rel="apple-touch-icon" sizes="60x60" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-60x60_dgrbwe.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-72x72_do3ohm.png">
+    <!-- non-retina iPad iOS 7 -->
+    <link rel="apple-touch-icon" sizes="76x76" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-76x76_pc6qrd.png">
+    <!-- retina iPhone pre iOS 7 -->
+    <link rel="apple-touch-icon" sizes="114x114" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-114x114_ovphk1.png">
+    <!-- retina iPhone iOS 7 -->
+    <link rel="apple-touch-icon" sizes="120x120" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-120x120_sunrhm.png">
+    <!-- retina iPad pre iOS 7 -->
+    <link rel="apple-touch-icon" sizes="144x144" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193811/apple-icon-144x144_h1788o.png">
+    <!-- retina iPad iOS 7 -->
+    <link rel="apple-touch-icon" sizes="152x152" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-152x152_vcu2zg.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://res.cloudinary.com/hqz2myoz0/image/upload/v1459193810/apple-icon-180x180_dupkzv.png">
+{% endblock %}
+
+{% block top_script_base %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    {% block top_script_extra %}{% endblock %}
+{% endblock %}
+
+{% block extra_head_base %}
+    {% block extra_head %}{% endblock %}
+{% endblock %}
+
+{% block script_base %}
+    <script src="{% static "js/vendor/vendor.min.js" %}"></script>
+    <script src="{% static "js/core/page-loading.js" %}"></script>  
+    <script src="{% static "js/core/site.js" %}"></script> 
+    
+    {% block script_unlabel_base %}
+        <script>
+            ;(function( $ ) {
+                UnlabelModule.headerMenusToggleApi.init();
+                UnlabelModule.googleEvents.init(); 
+            })(jQuery);
+        </script>
+        {% block extra_script %}{% endblock %}
+    {% endblock %}
+
+    <!-- Google Analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-61999157-3', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+    <!-- Cookies -->
+    <script type="text/javascript">
+        var _iub = _iub || [];
+        _iub.csConfiguration = {
+            cookiePolicyId: 7829057,
+            siteId: 529264,
+            lang: "en"
+        };
+        (function (w, d) {
+            var loader = function () { var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src = "//cdn.iubenda.com/cookie_solution/beta/iubenda_cs.js"; tag.parentNode.insertBefore(s, tag); };
+            if (w.addEventListener) { w.addEventListener("load", loader, false); } else if (w.attachEvent) { w.attachEvent("onload", loader); } else { w.onload = loader; }
+        })(window, document);
+    </script>
+{% endblock %}
+

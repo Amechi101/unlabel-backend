@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load cloudinary %}
+
+<!-- Brands -->
+<section id="unlabelBrands">
+    <figure class="featured-work-grid">
+        <div class="pure-g">
+            {% for brand in brand_list %}  
+                <div id="{{brand.brand_name}}" data-menswear="{{brand.menswear}}" data-womenswear="{{brand.womenswear}}" class="pure-u-1 pure-u-sm-1-3 labels">
+                    <div class="relative-container">
+                        <div class="grid-tint" style="background-image:url(&#39;{% cloudinary_url brand.brand_feature_image BRANDIMAGES %}&#39;);"></div>
+                        <div class="table-cell">
+                            <label class="work-title">{{brand.brand_name}}</label>
+                            <label class="brand-location">{{brand.brand_city}}</label>
+                            <a data-name="{{brand.brand_name}}" class="box-button" href="{{brand.get_absolute_url}}">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </figure>
+</section>

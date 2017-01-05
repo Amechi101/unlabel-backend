@@ -1,0 +1,29 @@
+{% extends "site/site_base.html" %}
+
+{% load i18n %}
+
+{% block social_extra_meta_tags %}
+    <meta property="og:title" content="Contact" />
+    <meta property="og:description" content="Get in touch, with the Unlabel Team." /> 
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+{% endblock %}
+
+{% block head_title %}{% trans "Contact" %}{% endblock %}
+
+{% block body_class %}contact{% endblock %}
+
+{% block body %}
+	<section id="contact">
+	    <h1>
+	        Touch or Click <a style="text-decoration:underline !important; color:#ffffff;" href="mailto:{{ THEME_CONTACT_EMAIL }} ">Here</a> to get in touch.
+	    </h1>
+	    <div style="background-image: url(https://res.cloudinary.com/hqz2myoz0/image/upload/v1463244288/photo-1423784346385-c1d4dac9893a_nbekgz.jpg); background-size:cover; background-position: 50% 100%; background-repeat: no-repeat; width:100%; height:100%; position:absolute; top:0; left:0;"></div>
+	    </div>
+	 </section>
+{% endblock %}
+
+
+
+
+
+

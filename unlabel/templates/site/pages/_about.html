@@ -1,0 +1,87 @@
+{% extends "site/site_base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+{% load cloudinary %}
+
+{% block social_extra_meta_tags %}
+    <meta property="og:title" content="About" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+{% endblock %}
+
+{% block head_title %}{% trans "About" %}{% endblock %}
+
+{% block body_class %}about{% endblock %}
+
+{% block body %}
+    <section class="intro intro-home">
+        <div class="intro-inner">
+            <h1 class="home">Our Mission</h1>
+            <!-- <h6><p>Unlabel's goal is to be a mobile app that provides you the best curated selections of emerging and independent fashion designers from around the world. Allowing you to see what else the fashion world has to offer.</p></h6> -->
+            <h6><p>We believe that fashion is more than fast-fashion brands and big department stores: it's the opposite. Our goal is to provide you with a curated selection of independent fashion brands from around the world.</p></h6>
+            <h6><p></p></h6>
+        </div>
+    </section>
+
+<!--     <section id="unlabelAbout-1" class="intro intro-home">
+        <div class="intro-inner">
+            <h1 class="home">Our Focus</h1>
+            <h6><p>Unlabel strives to help individuals looking for something new to wear other than *<span style="text-decoration: underline;">insert fast-fashion brand here</span>* and not have to spend hours online and offline to find it. While creating a niche community for designers to be surrounded by each other and thrive.</p></h6>
+        </div>
+        <a href="#unlabelAbout-2" class="scroll-suggest scroll-to-section">
+            <span class="icon icon-mouse">
+                <span>
+                    <i></i>
+                    <i></i>
+                </span>
+            </span>
+        </a>
+    </section> -->
+
+<!--     <section id="unlabelAbout-1" class="intro intro-home">
+        <div class="intro-inner">
+            <h1 class="home">Our Curations</h1>
+            <h6><p>We deliver unique, undiscovered, and underground designers who focus on sustainability, quality, and innovation.</p></h6>
+        </div>
+        <a href="#unlabelAbout-2" class="scroll-suggest scroll-to-section">
+            <span class="icon icon-mouse">
+                <span>
+                    <i></i>
+                    <i></i>
+                </span>
+            </span>
+        </a>
+    </section> -->
+
+<!--     <section id="unlabelAbout-2" class="intro intro-home">
+        <div class="intro-inner">
+            <h1 class="home">What you can do</h1>
+            <h6><p>Unlabel allows you to follow designers you like, share them with your friends, and shop on their websites all without leaving the app.</p></h6>
+        </div>
+        <a href="#unlabelAbout-3" class="scroll-suggest scroll-to-section">
+            <span class="icon icon-mouse">
+                <span>
+                    <i></i>
+                    <i></i>
+                </span>
+            </span>
+        </a>
+    </section> -->
+
+<!--     <section id="unlabelAbout-2" class="intro intro-home">
+        <div class="intro-bg" style="background-image: url(&#39;https://res.cloudinary.com/hqz2myoz0/image/upload/v1475725958/iPhone6s.Free_Space_Gray_dz4wdp.png&#39;);"></div>
+        <div class="intro-inner">
+            <h1 class="home">Download Now</h1>
+            <h6><p>Unlabel is available now for IOS, download <a style="color: #ffffff; text-decoration: underline !important;" href="https://itunes.apple.com/us/app/unlabel-discover-emerging/id1092257876?ls=1&mt=8">here</a>.</p></h6>
+            <h6><p>Android users don't fret! Sign up <a style="color: #ffffff; text-decoration: underline !important;" href="http://eepurl.com/bzBZ3r">here</a> to know when we launch in the google play store.</p></h6>
+        </div>
+    </section>
+ -->
+<!--<section class="unlabel-about">
+	    <div class="about">
+	        <p class="first">
+	           Unlabel’s mission is providing curated selections of only emerging and independent fashion designers from around the world to help make discovery of these designers universally accessible to everyone.
+	        </p>
+	    </div>
+	</section> -->
+{% endblock %}

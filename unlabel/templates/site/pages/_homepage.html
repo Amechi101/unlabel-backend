@@ -1,0 +1,55 @@
+{% extends "site/site_base.html" %}
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Curated selections of independent fashion brands from around the world." %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block extra_top_nav_right %}
+<!--     <a id="unlabel-filter-open" href="javascript:void(0);" class="topbar-bt-card mobile">
+        <span class="topbar-bt-card-icon text">Filter</span>
+    </a>
+ -->{% endblock %}
+
+{% block body %}
+    <!-- Unlabel Intro -->
+    <section class="intro intro-home">
+        <div class="intro-bg" style="background-image: url(&#39;http://res.cloudinary.com/hqz2myoz0/image/upload/v1475558494/iPhone_9_anbqph.png&#39;);"></div>
+        <div class="intro-inner">
+            <h1 class="home">Unlabel</h1>
+            <h6><p>Shop curated selections of independent fashion brands from around the world.</p></h6>
+            <h6><p>Available for IOS soon.</p></h6>
+        </div>
+        <a href="#unlabelBrands" class="scroll-suggest scroll-to-section">
+            <span class="icon icon-mouse">
+                <span>
+                    <i></i>
+                    <i></i>
+                </span>
+            </span>
+        </a>
+    </section>
+
+    {% block brands %}{% include "brands/_brands.html" %}{% endblock %}
+{% endblock %}
+
+{% block extra_script %}
+    <script>
+        UnlabelModule.filter.init();
+        UnlabelModule.utils.scrollToSection();
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+

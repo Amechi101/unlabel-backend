@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--[if lt IE 9]><html class="ie"><![endif]-->
+<!--[if gte IE 9]><!--><html lang="{{ LANGUAGE_CODE }}"  class="no-js"><!--<![endif]-->
+    <head> 
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta name="description" content="Unlabel is a mobile app that provides you a curated selection of independent fashion brands from around the world."></meta>
+        <meta name="author" content="Unlabel Team"></meta>
+        <meta name="apple-itunes-app" content="app-id=1092257876">
+        {% block social_meta_tags_base %}
+            {% block social_extra_meta_tags %}{% endblock %}
+        {% endblock %}
+
+        <link rel="canonical" href="{{ THEME_PRODUCTION_URL }}" />
+
+        {% block meta_tags_base %}
+            {% block extra_meta_tags %}{% endblock %}
+        {% endblock %}
+
+        <title>{% block head_title_base %}{% if SITE_NAME %}{{ SITE_NAME }} | {% endif %}{% block head_title %}{% endblock %}{% endblock %}</title>
+        
+        {% block style_base %}
+            {% block extra_style %}{% endblock %}
+        {% endblock %}
+
+        {% block top_script_base %}
+            {% block top_script_extra %} {% endblock %}
+        {% endblock %}
+        
+        {% block html5shim %}
+            <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+        {% endblock %}
+
+        {% block extra_head_base %}
+            {% block extra_head %}{% endblock %}
+        {% endblock %}
+    </head>
+    <body id="" class="{% block body_class %}{% endblock %}">
+        {% block body_destroy %}   
+            <!-- Page loading -->
+            <div class="preloader-wrap pos-f-t-l full-size" data-active="true" data-preloader-on="off">
+                <div class="preloader-bg pos-a full-size"></div>
+                <div class="loading-gif pos-a">
+                    <img src="https://res.cloudinary.com/hqz2myoz0/image/upload/v1468800079/unlabel_logo_2015-01_dt0q7k.svg" />
+                    <h2>Unlabel</h2>
+                </div>
+            </div>
+            
+            <!-- Page Transition -->
+            <div class="page-sweeper page-sweeper-under pos-f-t-l full-size" data-active="false"><div></div></div>
+            <div class="page-sweeper pos-f-t-l full-size" data-active="false"><div></div></div>
+            
+            {% block header %}
+            <!-- Header -->
+            <div id="topbar">
+                <div class="topbar-title desktop unlabel-logo">
+                    <div id="unlabel-menu-open" class="nav-left">
+                        <a class="home" href="javascript:void(0);">
+                            {% block logo %}
+                                <img src="https://res.cloudinary.com/hqz2myoz0/image/upload/v1474327914/unlabel_logo_white_dylprt.svg" />
+                            {% endblock %}
+                        </a>
+                        <a href="javascript:void(0);" class="topbar-bt-menu">
+                            <span class="lines">
+                                <span class="line line--0"></span>
+                                <span class="line line--1"></span>
+                                <span class="line line--2"></span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="nav-right">
+                        {% block extra_top_nav_right %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
+
+            {% block body_base %}
+                <!-- content -->
+                <main id="gloabal-content" role="main">
+                    {% block body %}{% endblock %}
+                </main>
+            {% endblock %}
+
+            {% block global_menu %}{% include "site/utils/menus/_global_menu.html" %}{% endblock %} 
+            {% block global_filter %}{% include "site/utils/menus/_global_filter.html" %}{% endblock %}
+        {% endblock %}
+        
+        <!-- JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+
+        {% block script_base %}
+            {% block extra_script %}{% endblock %}
+        {% endblock %}
+    </body>
+</html>

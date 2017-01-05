@@ -1,0 +1,35 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page style{% endblock %}
+{% block title %}
+    {{ style.name }} | {% trans "Styles" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:style-list' %}">{% trans "Styles" %}</a>
+        </li>
+        <li class="active">{{ style.name }}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ style.name }}{% endblock %}
+
+{% block dashboard_content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-header">
+                <h2>{{ title }}</h2>
+            </div>
+            {% include "dashboard/partials/form.html" with form=form class="well" %}
+        </div>
+    </div>
+
+{% endblock dashboard_content %}

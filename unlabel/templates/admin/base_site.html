@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+
+{% load admin_static material_admin i18n %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+
+{% block page_title %}
+<div class="page-title">{% block brand-logo %}{% trans 'Administration' %}{% endblock %}</div>
+{% endblock %}
+

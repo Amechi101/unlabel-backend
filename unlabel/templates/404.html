@@ -1,0 +1,18 @@
+{% extends "site/site_base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Page Not found" %}{% endblock %}
+
+{% block body_class %}lost{% endblock %}
+
+{% block body %}
+<section id="lost">
+    <h1>
+        Nothing to see here. Head back to the <a style="text-decoration:underline !important; color:#ffffff;" href="/">Homepage</a> if your lost.
+    </h1>
+    <div style="background-image: url(https://res.cloudinary.com/hqz2myoz0/image/upload/v1460049383/photo-1453974336165-b5c58464f1ed_fnbwyw.jpg); background-size:cover; background-position: 50% 100%; background-repeat: no-repeat; width:100%; height:100%; position:absolute; top:0; left:0;">
+    </div>
+</section>
+{% endblock %}
