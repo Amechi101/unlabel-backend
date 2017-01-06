@@ -11,6 +11,7 @@ from oscarapps.influencers.mixins import ValidateModelMixin
 from cloudinary.models import CloudinaryField
 
 from applications.models import Brand
+from oscarapps.address.models import Locations
 from oscarapps.partner.models import Style
 class BaseApplicationModel(models.Model):
     """
@@ -55,9 +56,7 @@ class Influencers(BaseApplicationModel):
     style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preferences'))
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry Preferences')
-    city = models.CharField(max_length=30, null=False, default="city_name", verbose_name=_('City') )
-    state_or_country = models.CharField(max_length=200, null=False, default="state or country", verbose_name=_('Location'),
-                            help_text=_('Enter your State (USA only) or Country (International only)'))
+    location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
 
     users = models.ManyToManyField(
         AUTH_USER_MODEL, related_name="influencers",
@@ -92,7 +91,7 @@ class Influencers(BaseApplicationModel):
     # question_favorite_season = models.TextField(blank=True, default="", verbose_name=_('Favorite season'))
 
     # Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('Influencer')
         verbose_name_plural = _('Influencers')
 

@@ -28,7 +28,8 @@ class InfluencerCreateForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('name', 'instagram_url', 'website_url', 'isActive', 'style_Preference', 'industry_choice', 'bio', 'city', 'state_or_country')
+        fields = ('name', 'instagram_url', 'website_url', 'isActive', 'style_Preference', 'industry_choice', 'bio',
+                  'location', 'image')
 
 
 Industry = get_model('influencers', 'Industry')

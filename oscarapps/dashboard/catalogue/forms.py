@@ -12,7 +12,7 @@ class ProductForm(CoreProductForm):
     class Meta(CoreProductForm.Meta):
         fields = [
             'title', 'upc', 'description', 'care_info_description',
-            'size_and_fit_description', 'color', 'size', 'item_sex_type']
+            'size_and_fit_description', 'color', 'size', 'item_sex_type', 'influencers']
 
 
 class StyleSearchForm(forms.Form):

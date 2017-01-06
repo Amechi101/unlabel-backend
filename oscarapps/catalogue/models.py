@@ -5,11 +5,16 @@ from django.utils.translation import ugettext_lazy as _
 
 
 from applications.models import currencies
-
-
+from oscarapps.influencers.models import *
 
 class Category(AbstractCategory):
     pass
+
+class Colors(models.Model):
+   color = models.CharField(null=True, max_length=10, blank=True, verbose_name=_('Color'))
+
+   def __str__(self):
+        return "{0}".format( self.color )
 
 
 
@@ -22,7 +27,7 @@ class Product(AbstractProduct):
         (FEMALE, 'Female'),
         (UNISEX, 'Unisex'),
     )
-   color = models.CharField(unique=True, max_length=10, blank=True, default="", verbose_name=_('Color'))
+
    care_info_description = models.TextField(blank=True, default="", verbose_name=_('Care Information'))
    size_and_fit_description = models.TextField(blank=True, default="", verbose_name=_('Size And Fit Information'))
    size = models.IntegerField(null=True)
@@ -34,7 +39,7 @@ class Product(AbstractProduct):
    likes = models.IntegerField(default=0)
    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
-
+   color = models.ManyToManyField(Colors, null=True, blank=True, verbose_name=_('Color(s)'))
 
 
    #old fields
@@ -44,7 +49,7 @@ class Product(AbstractProduct):
    product_isActive = models.BooleanField(default=False, verbose_name=_('Product Active'),
         help_text=_('Check to display your product on the app, uncheck to undisplay your product on the app'))
 
-   # brand = models.ForeignKey('Brand', null=True, help_text=_('Select Your Brand'), verbose_name=_('Label Name'))
+   influencers = models.ForeignKey('influencers.Influencers', null=True, verbose_name=_('Label Name'))
 
 
    #Metadata
