@@ -12,24 +12,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='emailconfirmation',
-            name='created_time',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='Created Date'),
-        ),
-        migrations.AlterField(
-            model_name='emailconfirmation',
-            name='email',
-            field=models.EmailField(max_length=250, verbose_name='Email'),
-        ),
-        migrations.AlterField(
-            model_name='emailconfirmation',
-            name='key',
-            field=models.CharField(max_length=255, verbose_name='Hash Key'),
-        ),
-        migrations.AlterField(
-            model_name='emailconfirmation',
-            name='link_expired',
-            field=models.BooleanField(default=False, verbose_name='Link Expired'),
-        ),
+
     ]

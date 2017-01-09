@@ -12,21 +12,21 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='partner',
-            name='brand_description',
-            field=models.TextField(blank=True, default='', verbose_name='Description'),
-        ),
-        migrations.AlterField(
-            model_name='partner',
-            name='brand_feature_image',
-            field=models.ImageField(blank=True, max_length=255, null=True, upload_to='uploads', verbose_name='Image'),
-        ),
-        migrations.AlterField(
-            model_name='partner',
-            name='brand_website_url',
-            field=models.URLField(blank=True, default='', max_length=100, verbose_name='Website'),
-        ),
+        # migrations.AlterField(
+        #     model_name='partner',
+        #     name='brand_description',
+        #     field=models.TextField(blank=True, default='', verbose_name='Description'),
+        # ),
+        # migrations.AlterField(
+        #     model_name='partner',
+        #     name='brand_feature_image',
+        #     field=models.ImageField(blank=True, max_length=255, null=True, upload_to='uploads', verbose_name='Image'),
+        # ),
+        # migrations.AlterField(
+        #     model_name='partner',
+        #     name='brand_website_url',
+        #     field=models.URLField(blank=True, default='', max_length=100, verbose_name='Website'),
+        # ),
         migrations.AlterField(
             model_name='partner',
             name='sex_type',

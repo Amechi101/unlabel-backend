@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('catalogue', '0030_auto_20170106_0532'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('customer', '0005_delete_emailconfirmation'),
+        ('customer', '0006_delete_emailconfirmation'),
     ]
 
     operations = [
