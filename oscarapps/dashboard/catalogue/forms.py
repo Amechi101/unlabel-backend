@@ -11,9 +11,11 @@ Style = get_model('partner', 'Style')
 class ProductForm(CoreProductForm):
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'care_info_description',
-            'size_and_fit_description', 'color', 'size', 'item_sex_type', 'influencers']
-
+            'title', 'upc', 'description', 'material_info',
+            'size_and_fit_description', 'size', 'item_sex_type', 'status', 'rental_status']
+        labels = {
+            'title': _('Name'),
+        }
 
 class StyleSearchForm(forms.Form):
     name = forms.CharField(
