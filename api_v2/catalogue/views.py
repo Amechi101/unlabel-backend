@@ -16,7 +16,6 @@ from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import re
-
 import functools
 import itertools
 from six.moves import map
@@ -32,7 +31,8 @@ from oscarapi.basket.operations import assign_basket_strategy
 from rest_framework import viewsets
 from oscarapi.views import basic
 from rest_framework import pagination
-
+from oscarapps.customer.models import UserProductLike
+from oscarapps.catalogue.models import Product
 
 Selector = get_class('partner.strategy', 'Selector')
 
@@ -65,3 +65,43 @@ class ProductListView(generics.ListAPIView):
     # pagination_class = pagination.PageNumberPagination
     queryset = Product.objects.all()
     serializer_class = serializers.ProductLinkSerializer
+
+
+
+class ProductLikeView(APIView):
+    '''
+    API for a customer liking a product, and
+    unliking a product if liked already.
+    '''
+    http_method_names = ('get')
+    authentication = authentication.SessionAuthentication
+
+    def get(self,request,prod_id,*args,**kwargs):
+        try :
+            if request.user.is_authenticated():
+                customer = request.user
+            else :
+                content = { "message":"Please login first." }
+                return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            try :
+                Prod = Product.objects.get(id = prod_id)
+            except :
+                content = { "message":"Invalid Product id." }
+                return Response(content,status = status.HTTP_200_OK)
+            try :
+                prodlike_exists = UserProductLike.objects.get(user = customer,product_like = prod)
+            except :
+                prodlike = UserProductLike.objects.create(user = customer,product_like = prod)
+                prodlike.save()
+                Prod.likes = Prod.likes + 1
+                content = { "message":"Product Liked" }
+                return Response(content,status = status.HTTP_200_OK)
+            prodlike_exists.delete()
+            Prod.likes = Prod.likes - 1
+            content = { "message":"Product Dis-liked" }
+            return Response(content,status = status.HTTP_200_OK)
+        except :
+            content = { "message":"Some error occured. Please try again later" }
+            return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+

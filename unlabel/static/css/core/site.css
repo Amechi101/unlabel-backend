@@ -4059,3 +4059,8 @@ body.single .entry-title {
         font-size: 2em;
     }
 }
+
+.form-align{
+    font-size: 16px;
+    padding-top: 150px;
+}
