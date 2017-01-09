@@ -49,7 +49,7 @@ class Product(AbstractProduct):
    product_isActive = models.BooleanField(default=False, verbose_name=_('Product Active'),
         help_text=_('Check to display your product on the app, uncheck to undisplay your product on the app'))
 
-   influencers = models.ForeignKey('influencers.Influencers', null=True, verbose_name=_('Label Name'))
+   influencers = models.ForeignKey('influencers.Influencers', null=True, verbose_name=_('Influencers'))
 
 
    #Metadata
@@ -58,7 +58,7 @@ class Product(AbstractProduct):
         verbose_name_plural = _('Products')
 
    def __str__(self):
-        return "{0}".format( self.product_name )
+        return "{0}".format( self.title )
 
 
 
