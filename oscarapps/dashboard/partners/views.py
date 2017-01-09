@@ -3,15 +3,20 @@ from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerLi
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
 from oscar.apps.dashboard.partners.views import PartnerAddressForm
 from oscarapps.dashboard.partners.forms import PartnerCreateForm
+from oscar.apps.dashboard.partners.forms import UserEmailForm
+from django.contrib.auth.models import Permission
+from oscar.apps.customer.utils import normalise_email
 from oscarapps.partner.models import Partner
-from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404,redirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from oscar.views import sort_queryset
 from django.core.urlresolvers import reverse,reverse_lazy
 from django.views.generic import FormView
-
+from oscar.core.compat import get_user_model
+User = get_user_model()
 
 #=======
 #Partner views
@@ -23,8 +28,7 @@ class PartnerManageView(CorePartnerManageView, FormView):
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        partner_details = self.partner
-        return partner_details
+        return self.partner
 
     def get_initial(self):
         return {'name': self.partner.name}
@@ -79,6 +83,7 @@ class PartnerAddressManageView(generic.UpdateView):
         return super(PartnerAddressManageView, self).form_valid(form)
 
 
+
 class PartnerListView(CorePartnerListView):
 
     def get_queryset(self):
@@ -129,238 +134,4 @@ class PartnerCreateView(generic.CreateView):
         return reverse('dashboard:partner-list')
 
 
-# ================
-# Influencer views
-# ================
-
-
-from oscar.core.loading import get_classes, get_model
-Influencers = get_model('influencers', 'Industry')
-(
-    InfluencerSearchForm, InfluencerCreateForm
-) = get_classes(
-    'dashboard.partners.forms',
-    ['InfluencerSearchForm', 'InfluencerCreateForm'], 'oscarapps')
-
-
-class InfluencerListView(generic.ListView):
-    model = Influencers
-
-    context_object_name = 'influencers'
-    template_name = 'dashboard/partners/influencers/influencer_list.html'
-    form_class = InfluencerSearchForm
-
-    def get_queryset(self):
-        qs = self.model._default_manager.all()
-        qs = sort_queryset(qs, self.request, ['name'])
-        self.description = _("All Influencers")
-
-        # We track whether the queryset is filtered to determine whether we
-        # show the search form 'reset' button.
-        self.is_filtered = False
-        self.form = self.form_class(self.request.GET)
-        if not self.form.is_valid():
-            return qs
-
-        data = self.form.cleaned_data
-
-        if data['name']:
-            qs = qs.filter(name__icontains=data['name'])
-            self.description = _("Influencers matching '%s'") % data['name']
-            self.is_filtered = True
-
-        return qs
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerListView, self).get_context_data(**kwargs)
-        ctx['queryset_description'] = self.description
-        ctx['form'] = self.form
-        ctx['is_filtered'] = self.is_filtered
-        return ctx
-
-
-class InfluencerCreateView(generic.CreateView):
-    model = Influencers
-    template_name = 'dashboard/partners/influencers/influencer_form.html'
-    form_class = InfluencerCreateForm
-    success_url = reverse_lazy('dashboard:influencer-list')
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerCreateView, self).get_context_data(**kwargs)
-        ctx['title'] = _('Create new influencer')
-        return ctx
-
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Influencer '%s' was created successfully.") %
-                         self.object.name)
-        return reverse('dashboard:influencer-list')
-
-#
-class InfluencerManageView(generic.UpdateView):
-    """
-    This multi-purpose view renders out a form to edit the partner's details,
-    the associated address and a list of all associated users.
-    """
-    template_name = 'dashboard/partners/influencers/influencer_manage.html'
-    form_class = InfluencerCreateForm
-    success_url = reverse_lazy('dashboard:influencer-list')
-
-    def get_object(self, queryset=None):
-        self.style = get_object_or_404(Influencers, pk=self.kwargs['pk'])
-        style = self.style
-        return style
-
-    def get_initial(self):
-        return {'name': self.style.name}
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerManageView, self).get_context_data(**kwargs)
-        ctx['partner'] = self.style
-        ctx['title'] = self.style.name
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Influencer '%s' was updated successfully.") %
-            self.style.name)
-        self.style.name = form.cleaned_data['name']
-        self.style.save()
-        return super(InfluencerManageView, self).form_valid(form)
-
-
-class InfluencerDeleteView(generic.DeleteView):
-    model = Influencers
-    template_name = 'dashboard/partners/influencers/influencer_delete.html'
-
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Influencer '%s' was deleted successfully.") %
-                         self.object.name)
-        return reverse('dashboard:influencer-list')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#=========================
-#Industry Preferences Views
-#==========================
-Industries = get_model('influencers', 'Industry')
-(
-    IndustrySearchForm, IndustryCreateForm
-) = get_classes(
-    'dashboard.partners.forms',
-    ['IndustrySearchForm', 'IndustryCreateForm'], 'oscarapps')
-
-
-class IndustryListView(generic.ListView):
-    model = Industries
-
-    context_object_name = 'industries'
-    template_name = 'dashboard/partners/industries/industry_list.html'
-    form_class = IndustrySearchForm
-
-    def get_queryset(self):
-        qs = self.model._default_manager.all()
-        qs = sort_queryset(qs, self.request, ['name'])
-        self.description = _("All Industry Preferences")
-
-        # We track whether the queryset is filtered to determine whether we
-        # show the search form 'reset' button.
-        self.is_filtered = False
-        self.form = self.form_class(self.request.GET)
-        if not self.form.is_valid():
-            return qs
-
-        data = self.form.cleaned_data
-
-        if data['name']:
-            qs = qs.filter(name__icontains=data['name'])
-            self.description = _("Industry preferences matching '%s'") % data['name']
-            self.is_filtered = True
-
-        return qs
-
-    def get_context_data(self, **kwargs):
-        ctx = super(IndustryListView, self).get_context_data(**kwargs)
-        ctx['queryset_description'] = self.description
-        ctx['form'] = self.form
-        ctx['is_filtered'] = self.is_filtered
-        return ctx
-
-
-class IndustryCreateView(generic.CreateView):
-    model = Industries
-    template_name = 'dashboard/partners/industries/industry_form.html'
-    form_class = IndustryCreateForm
-    success_url = reverse_lazy('dashboard:industry-list')
-
-    def get_context_data(self, **kwargs):
-        ctx = super(IndustryCreateView, self).get_context_data(**kwargs)
-        ctx['title'] = _('Create new industry preference')
-        return ctx
-
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Industry preference '%s' was created successfully.") %
-                         self.object.name)
-        return reverse('dashboard:industry-list')
-
-
-class IndustryManageView(generic.UpdateView):
-    """
-    This multi-purpose view renders out a form to edit the partner's details,
-    the associated address and a list of all associated users.
-    """
-    template_name = 'dashboard/partners/industries/industry_manage.html'
-    form_class = IndustryCreateForm
-    success_url = reverse_lazy('dashboard:industry-list')
-
-    def get_object(self, queryset=None):
-        self.style = get_object_or_404(Industries, pk=self.kwargs['pk'])
-        style = self.style
-        return style
-
-    def get_initial(self):
-        return {'name': self.style.name}
-
-    def get_context_data(self, **kwargs):
-        ctx = super(IndustryManageView, self).get_context_data(**kwargs)
-        ctx['partner'] = self.style
-        ctx['title'] = self.style.name
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Industry preference '%s' was updated successfully.") %
-            self.style.name)
-        self.style.name = form.cleaned_data['name']
-        self.style.save()
-        return super(IndustryManageView, self).form_valid(form)
-
-
-class IndustryDeleteView(generic.DeleteView):
-    model = Industries
-    template_name = 'dashboard/partners/industries/industry_delete.html'
-
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Industry Preference '%s' was deleted successfully.") %
-                         self.object.name)
-        return reverse('dashboard:industry-list')
 
