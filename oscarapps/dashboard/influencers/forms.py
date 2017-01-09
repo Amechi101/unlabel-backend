@@ -81,7 +81,7 @@ class NewUserForm(EmailUserCreationForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['first_name', 'last_name', 'email']) + ['password1', 'password2']
+            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']
 
 
 class ExistingUserForm(forms.ModelForm):
@@ -139,4 +139,4 @@ class ExistingUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['first_name', 'last_name']) + ['password1', 'password2']
+            [ 'username', 'first_name', 'last_name']) + ['password1', 'password2']
