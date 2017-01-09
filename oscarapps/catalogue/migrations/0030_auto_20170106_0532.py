@@ -17,11 +17,11 @@ class Migration(migrations.Migration):
             name='care_info_description',
             field=models.TextField(blank=True, default='', verbose_name='Care Information'),
         ),
-        migrations.AlterField(
-            model_name='product',
-            name='color',
-            field=models.CharField(blank=True, default='', max_length=10, unique=True, verbose_name='Color'),
-        ),
+        # migrations.AlterField(
+        #     model_name='product',
+        #     name='color',
+        #     field=models.CharField(blank=True, default='', max_length=10, unique=True, verbose_name='Color'),
+        # ),
         migrations.AlterField(
             model_name='product',
             name='item_sex_type',
