@@ -1,5 +1,7 @@
 from unlabel.base_settings import *
 
+##production settings
+
 DEBUG = False
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
