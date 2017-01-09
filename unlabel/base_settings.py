@@ -155,6 +155,7 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 
 with open(os.path.join(BASE_DIR, "fixtures", "secrets.json")) as f:
     secrets = json.loads(f.read())
@@ -211,7 +212,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'storages',
 
-
     # project
     'unlabel',
     'unlabel_api',
@@ -219,10 +219,21 @@ INSTALLED_APPS = [
     'oscarapps.influencers',
 
     #oscar-api
-    'rest_framework',
     'oscarapi',
+
+    'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+
+    ###for oscar-api over ride
+    'api_v2',
 ]
 
 from oscar import get_core_apps
@@ -259,7 +270,7 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'oscar.apps.customer.auth_backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 HAYSTACK_CONNECTIONS = {
@@ -319,6 +330,11 @@ TEMPLATES = [
 
                'unlabel.context_processors.theme',
                'unlabel.context_processors.consts',
+
+               'django.core.context_processors.request',
+               'django.contrib.auth.context_processors.auth',
+               # 'allauth.account.context_processors.account',
+               # 'allauth.socialaccount.context_processors.socialaccount',
            ],
        },
    },
@@ -371,24 +387,30 @@ USE_L10N = True
 USE_TZ = True
 
 
-# REST_FRAMEWORK = {
-#     'PAGINATE_BY': 1,
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'MAX_PAGINATE_BY': 100,
-#     'DEFAULT_PERMISSION_CLASSES': (
-#         # 'rest_framework.permissions.IsAuthenticated',
-#     ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.SessionAuthentication',
-#         'rest_framework.authentication.BasicAuthentication',
-#     ),
-#     # 'DEFAULT_RENDERER_CLASSES': (
-#     #     'rest_framework.renderers.JSONRenderer',
-#     # ),
-#     'DEFAULT_PARSER_CLASSES': (
-#         'rest_framework.parsers.JSONParser',
-#     )
-# }
+REST_FRAMEWORK = {
+    # 'PAGINATE_BY': 1,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'MAX_PAGINATE_BY': 100,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'MAX_PAGINATE_BY': 10,
+    'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework.parsers.JSONParser',
+    # )
+}
 
 
 #---Site Email Settings----
@@ -399,9 +421,32 @@ EMAIL_HOST_USER = 'unlabelapp@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
-try:
-    from local_settings import *
-except ImportError:
-    pass
+
+# try:
+#     from local_settings import *
+# except ImportError:
+#     pass
 
 assert len(SECRET_KEY) > 20, 'Please set SECRET_KEY in local_settings.py'
+
+SOCIALACCOUNT_PROVIDERS = \
+    {'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email', 'public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': 'path.to.callable',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4'}}
