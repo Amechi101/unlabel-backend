@@ -75,23 +75,6 @@ class AvailableDateTime(models.Model):
         return "{0}".format(availabilty)
 
 
-class RentalInformation(models.Model):
-   street_address = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Street Address'))
-   post_box = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Apartment/P.O.Box') )
-   phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits are allowed.")
-   city = models.CharField(max_length=20, default="", verbose_name=_('City'))
-   state_province = models.CharField(max_length=20, default="", verbose_name=_('State/Province'))
-   country = models.ForeignKey(Country, default="", verbose_name=_('Country'))
-   contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
-   availability = models.ForeignKey('AvailableDateTime', null=True, blank=True, default="", verbose_name=_('Availability'))
-
-   class Meta:
-        verbose_name = _('Rental Information')
-        verbose_name_plural = _('Rental Informations')
-
-   def __str__(self):
-        return "{0}".format(self.line1)
-
 
 class Partner(AbstractPartner):
     MALE = 'M'
@@ -111,13 +94,21 @@ class Partner(AbstractPartner):
         default=BOTH,
         verbose_name=_('Sex Type')
     )
-    rental_info = models.ManyToManyField('RentalInformation', blank=True, verbose_name=_('Rental Information'))
     style_preferences = models.ManyToManyField('Style', blank=True, verbose_name=_('Style Preference'))
     store_type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Store Type'))
     store_categories = models.ManyToManyField('BrandCategories', blank=True, verbose_name=_('Store Categories'))
     isActive = models.BooleanField(default=True, verbose_name=_('Store Active'),
         help_text=_('Check|Un check to activate|deactivate store'))
     slug = models.SlugField(max_length=255, verbose_name=_('Brand Slug'), default="", blank=True)
+    street_address = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Street Address'))
+    post_box = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Apartment/P.O.Box') )
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits are allowed.")
+    city = models.CharField(max_length=20, default="", verbose_name=_('City'))
+    state_province = models.CharField(max_length=20, default="", verbose_name=_('State/Province'))
+    country = models.ForeignKey(Country, default="", verbose_name=_('Country'))
+    contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
+    availability = models.ForeignKey('AvailableDateTime', null=True, blank=True, default="", verbose_name=_('Availability'))
+
 
 
 from oscar.apps.partner.models import *
