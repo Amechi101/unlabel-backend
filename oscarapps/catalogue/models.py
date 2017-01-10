@@ -88,14 +88,13 @@ class Product(AbstractProduct):
 
 
 
-
    #Metadata
    class Meta:
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
    def __str__(self):
-        return "{0}".format( self.product_name )
+        return "{0}".format( self.title )
 
 
 
