@@ -4,7 +4,7 @@ from oscar.apps.address.abstract_models import AbstractAddress
 from oscar.apps.partner.abstract_models import AbstractPartner
 from django.core.validators import RegexValidator
 from oscarapps.address.models import Locations
-
+from oscar.apps.address.models import Country
 
 class Style(models.Model):
 
@@ -75,9 +75,13 @@ class AvailableDateTime(models.Model):
         return "{0}".format(availabilty)
 
 
-class RentalInformation(AbstractAddress):
+class RentalInformation(models.Model):
+   street_address = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Street Address'))
    post_box = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Apartment/P.O.Box') )
    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits are allowed.")
+   city = models.CharField(max_length=20, default="", verbose_name=_('City'))
+   state_province = models.CharField(max_length=20, default="", verbose_name=_('State/Province'))
+   country = models.ForeignKey(Country, default="", verbose_name=_('Country'))
    contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
    availability = models.ForeignKey('AvailableDateTime', null=True, blank=True, default="", verbose_name=_('Availability'))
 
