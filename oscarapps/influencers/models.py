@@ -27,7 +27,6 @@ class BaseApplicationModel(models.Model):
 
 class Industry(models.Model):
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Industry Preference'))
-
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
     # Metadata
@@ -38,29 +37,42 @@ class Industry(models.Model):
     def __str__(self):
         return self.name
 
+
+class InfluencerPhysicalAttributes(models.Model):
+
+    height = models.DecimalField(max_digits=10, decimal_places=3, blank=True, verbose_name=_('Height'), help_text=_('US Measurements'))
+    chest_or_bust = models.DecimalField(max_digits=10, decimal_places=3, blank=True, verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
+    hips = models.DecimalField(max_digits=10, decimal_places=3, blank=True, verbose_name=_('hips'), help_text=_('US Measurements'))
+    waist = models.DecimalField(max_digits=10, decimal_places=3, blank=True, verbose_name=_('waist'), help_text=_('US Measurements'))
+    shoe_size = models.DecimalField(max_digits=10, decimal_places=3, blank=True, verbose_name=_('shoe_size'), help_text=_('US Measurements'))
+
+
+
+
 class Influencers(BaseApplicationModel):
     """
     Information for each influencer
     """
 
 
-    name = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Influencer name'))
-    instagram_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Instagram url'))
-    website_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Website url'))
+    name = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Name'))
     image = models.ImageField(upload_to='Influencers', null=True, blank=True)
-    isActive = models.BooleanField(default=False, verbose_name=_('Influencer active'),
-        help_text=_('Check to activate influencer'))
-    slug = models.SlugField(max_length=255, verbose_name=_('Influencer Slug'), default="", blank=True)
-
-    #new fields
-    style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preferences'))
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
-    industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry Preferences')
+    physical_attributes = models.ManyToManyField('InfluencerPhysicalAttributes', blank=True, verbose_name=_('Physical Attributes'))
+
     location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
 
     users = models.ManyToManyField(
         AUTH_USER_MODEL, related_name="influencers",
         blank=True, verbose_name=_("Users"))
+    
+    # industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry Preferences')
+    # style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preferences'))
+    # isActive = models.BooleanField(default=False, verbose_name=_('Influencer active'),
+    #     help_text=_('Check to activate influencer'))
+    # slug = models.SlugField(max_length=255, verbose_name=_('Influencer Slug'), default="", blank=True)
+    # instagram_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Instagram url'))
+    # website_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Website url'))
 
     #Old wanted Fields
     #influencer_isActive = models.BooleanField(default=False, verbose_name=_('Influencer active'),

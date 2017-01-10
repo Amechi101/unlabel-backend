@@ -94,7 +94,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-group',
         'children': [
             {
-                'label': _('Customers'),
+                'label': _('Usersmers'),
                 'url_name': 'dashboard:users-index',
             },
             {
@@ -171,6 +171,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 MEDIA_URL = 'https://%s/media/' % AWS_S3_CUSTOM_DOMAIN
 MEDIA_ROOT = '%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
 OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
+
 
 
 def get_secret(setting, secrets=secrets):
