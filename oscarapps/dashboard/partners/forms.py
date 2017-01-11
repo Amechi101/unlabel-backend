@@ -48,6 +48,9 @@ class PartnerAddressForm(CorePartnerAddressForm):
 
 
 
+#################
+#Brand store type
+#################
 
 BrandStoreType = get_model('partner', 'BrandStoreType')
 
@@ -68,3 +71,50 @@ class StoreTypeCreateForm(forms.ModelForm):
         model = BrandStoreType
         fields = ('name', )
 
+
+
+#################
+#Brand categories
+#################
+
+BrandCategories = get_model('partner', 'BrandCategories')
+
+
+class BrandCategorySearchForm(forms.Form):
+    name = forms.CharField(
+        required=False, label=pgettext_lazy(u"BrandCategories's name", u"Name"))
+
+
+class BrandCategoryCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(BrandCategoryCreateForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].required = True
+
+    class Meta:
+        model = BrandCategories
+        fields = ('name', 'description', 'type')
+
+#################
+#Brand Styles
+#################
+
+BrandStyle = get_model('partner', 'BrandStyle')
+
+
+class BrandStyleSearchForm(forms.Form):
+    name = forms.CharField(
+        required=False, label=pgettext_lazy(u"BrandStyle's name", u"Name"))
+
+
+class BrandStyleCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(BrandStyleCreateForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].required = True
+
+    class Meta:
+        model = BrandStyle
+        fields = ('name', 'description', 'type')

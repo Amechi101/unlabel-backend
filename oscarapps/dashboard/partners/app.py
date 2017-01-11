@@ -18,6 +18,26 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                                  'StoreTypeDeleteView')
 
 
+
+    brand_category_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryListView')
+    brand_category_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryCreateView')
+    brand_category_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryManageView')
+    brand_category_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryDeleteView')
+
+    brand_style_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleListView')
+    brand_style_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleCreateView')
+    brand_style_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleManageView')
+    brand_style_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleDeleteView')
+
+
     def get_urls(self):
         urls = [
             url(r'^$', self.list_view.as_view(), name='partner-list'),
@@ -55,6 +75,25 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='store-type-manage'),
             url(r'^store_type/(?P<pk>\d+)/delete/$', self.store_type_delete_view.as_view(),
                 name='store-type-delete'),
+
+
+
+            url(r'^brand_category/$', self.brand_category_list_view.as_view(), name='brand-category-list'),
+            url(r'^brand_category/create/$', self.brand_category_create_view.as_view(),
+                name='brand-category-create'),
+            url(r'^brand_category/(?P<pk>\d+)/$', self.brand_category_manage_view.as_view(),
+                name='brand-category-manage'),
+            url(r'^brand_category/(?P<pk>\d+)/delete/$', self.brand_category_delete_view.as_view(),
+                name='brand-category-delete'),
+
+
+            url(r'^brand_style/$', self.brand_style_list_view.as_view(), name='brand-style-list'),
+            url(r'^brand_style/create/$', self.brand_style_create_view.as_view(),
+                name='brand-style-create'),
+            url(r'^brand_style/(?P<pk>\d+)/$', self.brand_style_manage_view.as_view(),
+                name='brand-style-manage'),
+            url(r'^brand_style/(?P<pk>\d+)/delete/$', self.brand_style_delete_view.as_view(),
+                name='brand-style-delete'),
 
 
         ]

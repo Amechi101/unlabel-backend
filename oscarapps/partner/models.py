@@ -30,14 +30,14 @@ class BrandStoreType(models.Model):
         verbose_name_plural = _('Store Types')
 
     def __str__(self):
-        return "{0}".format(self.store_type)
+        return "{0}".format(self.name)
 
 
 class BrandCategories(models.Model):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Category'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Store Type'))
+    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Category'))
 
     # Metadata
     class Meta:
@@ -45,14 +45,14 @@ class BrandCategories(models.Model):
         verbose_name_plural = _('Brand Categories')
 
     def __str__(self):
-        return "{0}".format(self.categories)
+        return "{0}".format(self.name)
 
 
 class BrandStyle(models.Model):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Store Type'))
+    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Style'))
     # Metadata
     class Meta:
         verbose_name = _('Brand Style')
