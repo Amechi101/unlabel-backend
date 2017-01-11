@@ -1,7 +1,7 @@
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
-from oscar.apps.dashboard.partners.views import PartnerAddressForm
+from oscar.apps.dashboard.partners.forms import PartnerAddressForm
 from oscarapps.dashboard.partners.forms import PartnerCreateForm
 from oscar.apps.dashboard.partners.forms import UserEmailForm
 from django.contrib.auth.models import Permission
