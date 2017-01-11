@@ -31,26 +31,6 @@ class InfluencerCreateForm(forms.ModelForm):
         fields = ('name', 'bio', 'location', 'image', 'physical_attributes')
 
 
-Industry = get_model('influencers', 'Industry')
-
-
-class IndustrySearchForm(forms.Form):
-    name = forms.CharField(
-        required=False, label=pgettext_lazy(u"Industry's name", u"Name"))
-
-
-class IndustryCreateForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(IndustryCreateForm, self).__init__(*args, **kwargs)
-
-        self.fields['name'].required = True
-
-    class Meta:
-        model = Industry
-        fields = ('name', 'description')
-
-
 ROLE_CHOICES = (
     ('staff', _('Full dashboard access')),
     ('limited', _('Limited dashboard access')),

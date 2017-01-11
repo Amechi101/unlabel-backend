@@ -22,7 +22,7 @@ class Style(models.Model):
 
 class BrandStoreType(models.Model):
 
-    store_type = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Store Type'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Store Type'))
 
     # Metadata
     class Meta:
@@ -35,7 +35,7 @@ class BrandStoreType(models.Model):
 
 class BrandCategories(models.Model):
 
-    categories = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Category'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Category'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
     type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Store Type'))
 

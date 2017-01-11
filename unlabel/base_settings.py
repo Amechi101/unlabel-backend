@@ -75,8 +75,8 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'url_name': 'dashboard:influencer-list',
             },
             {
-                'label': _('Industry Preferences '),
-                'url_name': 'dashboard:industry-list',
+                'label': _('Store Types'),
+                'url_name': 'dashboard:store-type-list',
             },
 
             # The shipping method dashboard is disabled by default as it might
@@ -94,7 +94,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-group',
         'children': [
             {
-                'label': _('Usersmers'),
+                'label': _('Users'),
                 'url_name': 'dashboard:users-index',
             },
             {

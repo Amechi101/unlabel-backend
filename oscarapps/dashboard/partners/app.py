@@ -7,6 +7,17 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerAddressManageView')
 
+    store_type_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'StoreTypeListView')
+
+    store_type_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'StoreTypeCreateView')
+    store_type_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'StoreTypeManageView')
+    store_type_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'StoreTypeDeleteView')
+
+
     def get_urls(self):
         urls = [
             url(r'^$', self.list_view.as_view(), name='partner-list'),
@@ -36,6 +47,14 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='partner-user-update'),
 
 
+
+            url(r'^store_type/$', self.store_type_list_view.as_view(), name='store-type-list'),
+            url(r'^store_type/create/$', self.store_type_create_view.as_view(),
+                name='store-type-create'),
+            url(r'^store_type/(?P<pk>\d+)/$', self.store_type_manage_view.as_view(),
+                name='store-type-manage'),
+            url(r'^store_type/(?P<pk>\d+)/delete/$', self.store_type_delete_view.as_view(),
+                name='store-type-delete'),
 
 
         ]

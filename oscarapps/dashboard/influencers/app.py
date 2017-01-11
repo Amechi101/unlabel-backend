@@ -28,17 +28,6 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
-
-    industry_preference_list_view = get_class('oscarapps.dashboard.influencers.views',
-                                 'IndustryListView')
-
-    industry_preference_create_view = get_class('oscarapps.dashboard.influencers.views',
-                                 'IndustryCreateView')
-    industry_preference_manage_view = get_class('oscarapps.dashboard.influencers.views',
-                                 'IndustryManageView')
-    industry_preference_delete_view = get_class('oscarapps.dashboard.influencers.views',
-                                 'IndustryDeleteView')
-
     def get_urls(self):
         urls = [
 
@@ -67,13 +56,6 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
-            url(r'^industry_preference/$', self.industry_preference_list_view.as_view(), name='industry-list'),
-            url(r'^industry_preference/create/$', self.industry_preference_create_view.as_view(),
-                name='industry-create'),
-            url(r'^industry_preference/(?P<pk>\d+)/$', self.industry_preference_manage_view.as_view(),
-                name='industry-manage'),
-            url(r'^industry_preference/(?P<pk>\d+)/delete/$', self.industry_preference_delete_view.as_view(),
-                name='industry-delete'),
 
 
 

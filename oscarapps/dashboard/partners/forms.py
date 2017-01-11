@@ -6,6 +6,9 @@ from oscar.apps.partner.models import PartnerAddress
 from oscarapps.partner.models import Partner
 from django.utils.translation import ugettext_lazy as _
 from oscar.core.compat import existing_user_fields, get_user_model
+from oscar.core.loading import get_model
+from django import forms
+from django.utils.translation import pgettext_lazy
 User = get_user_model()
 
 
@@ -42,3 +45,26 @@ class PartnerAddressForm(CorePartnerAddressForm):
         fields = ('name', 'line1', 'line2', 'line3', 'country',
                   'state', 'line4', 'postcode')
         model = PartnerAddress
+
+
+
+
+BrandStoreType = get_model('partner', 'BrandStoreType')
+
+
+class StoreTypeSearchForm(forms.Form):
+    name = forms.CharField(
+        required=False, label=pgettext_lazy(u"BrandStoreType's name", u"Name"))
+
+
+class StoreTypeCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(StoreTypeCreateForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].required = True
+
+    class Meta:
+        model = BrandStoreType
+        fields = ('name', )
+
