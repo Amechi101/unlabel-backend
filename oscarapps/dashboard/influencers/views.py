@@ -1,25 +1,29 @@
-from .forms import NewUserForm, ExistingUserForm
-from oscar.apps.dashboard.partners.forms import UserEmailForm
 from django.contrib.auth.models import Permission
-from oscar.apps.customer.utils import normalise_email
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404,redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
-from oscar.views import sort_queryset
 from django.core.urlresolvers import reverse, reverse_lazy
+
+
 from oscar.core.compat import get_user_model
-from oscar.core.loading import get_classes, get_model
-User = get_user_model()
+from oscar.core.loading import get_classes
+from oscar.views import sort_queryset
+from oscar.apps.dashboard.partners.forms import UserEmailForm
+from oscar.apps.customer.utils import normalise_email
+
+
+from oscarapps.dashboard.influencers.forms import NewUserForm, ExistingUserForm
+from oscarapps.influencers.models import Influencers
+from oscarapps.influencers.models import InfluencerAccountInfo
+
+User = InfluencerAccountInfo
 
 # ================
 # Influencer views
 # ================
 
-
-
-Influencers = get_model('influencers', 'Influencers')
 (
     InfluencerSearchForm, InfluencerCreateForm
 ) = get_classes(
@@ -63,7 +67,6 @@ class InfluencerListView(generic.ListView):
         return ctx
 
 
-
 class InfluencerCreateView(generic.CreateView):
     model = Influencers
     template_name = 'influencers/influencer_form.html'
@@ -83,7 +86,6 @@ class InfluencerCreateView(generic.CreateView):
 
 
 class InfluencerManageView(generic.UpdateView):
-
     template_name = 'influencers/influencer_manage.html'
     form_class = InfluencerCreateForm
     success_url = reverse_lazy('dashboard:influencer-list')
@@ -93,7 +95,6 @@ class InfluencerManageView(generic.UpdateView):
         return self.influencer
 
     def get_initial(self):
-
         return {'name': self.influencer.name}
 
     def get_context_data(self, **kwargs):
@@ -122,9 +123,9 @@ class InfluencerDeleteView(generic.DeleteView):
         return reverse('dashboard:influencer-list')
 
 
-# =============
+# =================
 # Influencer users
-# =============
+# =================
 
 
 class InfluencerUserCreateView(generic.CreateView):
@@ -190,7 +191,6 @@ class InfluencerUserSelectView(generic.ListView):
 
 
 class InfluencerUserLinkView(generic.View):
-
     def get(self, request, user_pk, influencer_pk):
         # need to allow GET to make Undo link in PartnerUserUnlinkView work
         return self.post(request, user_pk, influencer_pk)
@@ -225,7 +225,6 @@ class InfluencerUserLinkView(generic.View):
 
 
 class InfluencerUserUnlinkView(generic.View):
-
     def unlink_user(self, user, influencer):
         """
         Unlinks a user from a partner, and removes the dashboard permission

@@ -6,7 +6,19 @@ from django.core.validators import RegexValidator
 from oscarapps.address.models import Locations
 from oscar.apps.address.models import Country
 
-class Style(models.Model):
+class BaseApplicationModel(models.Model):
+    """
+    An abstract base class model that common attributes
+    """
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    class Meta:
+        app_label = 'Partners'
+        abstract = True
+
+
+class Style(BaseApplicationModel):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
@@ -20,7 +32,7 @@ class Style(models.Model):
         return "{0}".format( self.name )
 
 
-class BrandStoreType(models.Model):
+class BrandStoreType(BaseApplicationModel):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Store Type'))
 
@@ -33,7 +45,7 @@ class BrandStoreType(models.Model):
         return "{0}".format(self.name)
 
 
-class BrandCategories(models.Model):
+class BrandCategories(BaseApplicationModel):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Category'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
@@ -48,7 +60,7 @@ class BrandCategories(models.Model):
         return "{0}".format(self.name)
 
 
-class BrandStyle(models.Model):
+class BrandStyle(BaseApplicationModel):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
@@ -59,10 +71,10 @@ class BrandStyle(models.Model):
         verbose_name_plural = _('Brand Styles')
 
     def __str__(self):
-        return "{0}".format( self.name )
+        return "{0}".format(self.name)
 
 
-class AvailableDateTime(models.Model):
+class AvailableDateTime(BaseApplicationModel):
     date = models.DateField()
     from_time = models.TimeField()
     to_time = models.TimeField()
@@ -76,7 +88,7 @@ class AvailableDateTime(models.Model):
 
 
 
-class Partner(AbstractPartner):
+class Partner(AbstractPartner, BaseApplicationModel):
     MALE = 'M'
     FEMALE = 'F'
     BOTH = 'B'
@@ -108,7 +120,6 @@ class Partner(AbstractPartner):
     country = models.ForeignKey(Country, default="", verbose_name=_('Country'))
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
     availability = models.ForeignKey('AvailableDateTime', null=True, blank=True, default="", verbose_name=_('Availability'))
-
 
 
 from oscar.apps.partner.models import *

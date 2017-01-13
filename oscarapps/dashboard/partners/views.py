@@ -1,30 +1,30 @@
+from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
+from django.views import generic
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.views.generic import FormView
+
+
+from oscar.core.compat import get_user_model
+from oscar.core.loading import get_classes, get_model
+from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
 from oscar.apps.dashboard.partners.forms import PartnerAddressForm
+
+
 from oscarapps.dashboard.partners.forms import PartnerCreateForm
-from oscar.apps.dashboard.partners.forms import UserEmailForm
-from django.contrib.auth.models import Permission
-from oscar.apps.customer.utils import normalise_email
 from oscarapps.partner.models import Partner
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404,redirect
-from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
-from django.views import generic
-from oscar.views import sort_queryset
-from django.core.urlresolvers import reverse,reverse_lazy
-from django.views.generic import FormView
-from oscar.core.compat import get_user_model
-from oscar.core.loading import get_classes, get_model
+
 User = get_user_model()
 
-#=======
+# =======
 #Partner views
 #=======
 
 class PartnerManageView(CorePartnerManageView, FormView):
-
     form_class = PartnerCreateForm
 
     def get_object(self, queryset=None):
@@ -51,7 +51,6 @@ class PartnerManageView(CorePartnerManageView, FormView):
 
 
 class PartnerAddressManageView(generic.UpdateView):
-
     template_name = 'dashboard/partners/partner_address_manage.html'
     form_class = PartnerAddressForm
 
@@ -84,9 +83,7 @@ class PartnerAddressManageView(generic.UpdateView):
         return super(PartnerAddressManageView, self).form_valid(form)
 
 
-
 class PartnerListView(CorePartnerListView):
-
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
@@ -133,7 +130,6 @@ class PartnerCreateView(generic.CreateView):
                          _("Brand '%s' was created successfully.") %
                          self.object.name)
         return reverse('dashboard:partner-list')
-
 
 
 #=========================
@@ -244,7 +240,6 @@ class StoreTypeDeleteView(generic.DeleteView):
         return reverse('dashboard:store-type-list')
 
 
-
 #=========================
 #Brand Categories Views
 #==========================
@@ -351,9 +346,6 @@ class BrandCategoryDeleteView(generic.DeleteView):
                          _("Brand category '%s' was deleted successfully.") %
                          self.object.name)
         return reverse('dashboard:brand-category-list')
-
-
-
 
 
 #=========================

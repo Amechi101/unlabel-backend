@@ -1,20 +1,23 @@
 from oscar.apps.catalogue.abstract_models import AbstractProduct,AbstractCategory
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-
-
-from applications.models import currencies
+from oscarapps.partner.models import Partner
 from oscarapps.influencers.models import *
 
-class Category(AbstractCategory):
-    pass
+class BaseApplicationModel(models.Model):
+    """
+    An abstract base class model that common attributes
+    """
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
-# class Colors(models.Model):
-#    color = models.CharField(null=True, max_length=10, blank=True, verbose_name=_('Color'))
-#
-#    def __str__(self):
-#         return "{0}".format( self.color )
+    class Meta:
+        app_label = 'Catalogue'
+        abstract = True
+
+
+class Category(AbstractCategory, BaseApplicationModel):
+    pass
 
 
 
@@ -25,7 +28,8 @@ class Category(AbstractCategory):
 #    influencer_note = models.TextField(blank=True, default="", verbose_name=_('Influencer Note'))
 #
 
-class Product(AbstractProduct):
+class Product(AbstractProduct, BaseApplicationModel):
+
    MALE = 'M'
    FEMALE = 'F'
    UNISEX = 'U'
@@ -35,58 +39,65 @@ class Product(AbstractProduct):
         (UNISEX, 'Unisex'),
     )
 
-   UNSELECTED = 'U'
-   SELECTED = 'S'
+   UNRESERVED = 'U'
+   RESERVED = 'R'
    DRAFT = 'D'
    LIVE = 'L'
    status_choice = (
-        (UNSELECTED, 'Unselected'),
-        (SELECTED, 'Selected'),
+        (UNRESERVED, 'Unreserved'),
+        (RESERVED, 'Reserved'),
         (DRAFT, 'Draft'),
         (LIVE, 'Live')
-    )
+   )
 
+   NONE = "NON"
    RENTED = 'REN'
    RETURNED = 'RET'
    rental_status_choice = (
+        (NONE, 'None'),
         (RENTED, 'Rented'),
         (RETURNED, 'Returned'),
-    )
+   )
 
-
+   YES = 'Y'
+   NO = 'N'
+   shipping_choice = (
+        (YES, 'Yes'),
+        (NO, 'No'),
+   )
+   brand = models.ForeignKey(Partner, blank=True, null=True, default="", verbose_name="Brand")
+   asin_id = models.CharField(blank=True, null=True, max_length=50, default="", verbose_name=_('ASIN'))
+   gcid_id = models.CharField(blank=True, null=True, max_length=50,  default="", verbose_name=_('GCID'))
+   gtnn_id = models.CharField(blank=True, null=True, max_length=50, default="", verbose_name=_('GTNN'))
+   ups_id = models.CharField(blank=True, null=True, max_length=50, default="", verbose_name=_('UPS'))
    material_info = models.TextField(blank=True, default="", verbose_name=_('Material Information'))
-   size_and_fit_description = models.TextField(blank=True, default="", verbose_name=_('Size And Fit Information'))
-   size = models.IntegerField(null=True)
+   size = models.IntegerField(null=True, blank=True)
+   wieght = models.IntegerField(null=True, blank=True)
+   likes = models.IntegerField(default=0)
+   on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
    item_sex_type = models.CharField(
         max_length=1,
         choices=item_sex_choice,
         default=UNISEX,
    )
-   likes = models.IntegerField(default=0)
-   created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-   modified = models.DateTimeField(auto_now=True, blank=True, null=True)
    status = models.CharField(
         max_length=1,
         choices=status_choice,
-        default=UNSELECTED,
+        default=UNRESERVED,
+        verbose_name=_("Status")
    )
    rental_status = models.CharField(
         max_length=3,
         choices=rental_status_choice,
-        default=RENTED,
+        default=NONE,
+        verbose_name=_("Rental Status")
    )
-   # color = models.ManyToManyField(Colors, null=True, blank=True, verbose_name=_('Color(s)'))
-
-
-   #old fields
-   # product_url = models.URLField(max_length=100, blank=False,  default="",
-   #      help_text=_('Enter the product url to the particular item on your website'), verbose_name=_('Product Url'))
-   # currency = models.CharField(max_length=100, blank=True, choices=currencies, default="USD", verbose_name=_('Currency'))
-   # isActive = models.BooleanField(default=False, verbose_name=_('Product Active'),
-   #      help_text=_('Check to display your product on the app, uncheck to undisplay your product on the app'))
-
-
-
+   requires_shipping = models.CharField(
+        max_length=1,
+        choices=shipping_choice,
+        default=YES,
+        verbose_name=_('Requires shipping.?')
+   )
 
    #Metadata
    class Meta:
@@ -95,11 +106,5 @@ class Product(AbstractProduct):
 
    def __str__(self):
         return "{0}".format( self.title )
-
-
-
-
-
-
 
 from oscar.apps.catalogue.models import *
