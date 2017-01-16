@@ -1,15 +1,17 @@
 from .models import States
 
-states=States.objects.all()
-stateList=[]
-dict={}
-for state in states:
-    #stateStr="{'key':" + str(state.id) + "," + "value :" + state.state + "}"
-    dict["key"]=state.id
-    dict["value"]=state.state
-    stateList.append(dict)
+try:
+    states=States.objects.all()
+    stateList=[]
     dict={}
-
+    for state in states:
+        #stateStr="{'key':" + str(state.id) + "," + "value :" + state.state + "}"
+        dict["key"]=state.id
+        dict["value"]=state.state
+        stateList.append(dict)
+        dict={}
+except:
+    print("exception in ----> states.py")
 
 
 

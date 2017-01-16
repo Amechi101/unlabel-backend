@@ -11,7 +11,7 @@ from oscar.app import application
 from django.conf.urls.i18n import i18n_patterns
 
 from oscarapi.app import application as api
-from api_v2.app import application as oscar_override_api
+# from api_v2.app import application as oscar_override_api
 
 from oscarapi.views import LoginView
 
@@ -45,7 +45,7 @@ urlpatterns = [
     # api_v2
     url(r'^api/', include(api.urls)),
 
-    url(r'oscar_override_api/',include(oscar_override_api.urls)),
+    # url(r'oscar_override_api/',include(oscar_override_api.urls)),
 
     url(r'^api_v2/',include('api_v2.urls')),
 
