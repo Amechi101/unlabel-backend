@@ -1,11 +1,17 @@
 from django.shortcuts import get_object_or_404
+# from oscar.apps.dashboard.partners.views import PartnerAddressForm
+from oscar.apps.dashboard.partners.forms import UserEmailForm
+from django.contrib.auth.models import Permission
+from oscar.apps.customer.utils import normalise_email
+from oscarapps.partner.models import Partner
+from oscarapps.address.models import Locations
+from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404,redirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import FormView
-
-
 from oscar.core.compat import get_user_model
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
@@ -13,10 +19,10 @@ from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartner
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
 from oscar.apps.dashboard.partners.forms import PartnerAddressForm
-
-
 from oscarapps.dashboard.partners.forms import PartnerCreateForm
 from oscarapps.partner.models import Partner
+
+from oscarapps.address.states import stateList
 
 User = get_user_model()
 
@@ -35,10 +41,12 @@ class PartnerManageView(CorePartnerManageView, FormView):
         return {'name': self.partner.name}
 
     def get_context_data(self, **kwargs):
+
         ctx = super(PartnerManageView, self).get_context_data(**kwargs)
         ctx['partner'] = self.partner
         ctx['title'] = self.partner.name
         ctx['users'] = self.partner.users.all()
+        ctx['states'] = stateList
         return ctx
 
     def form_valid(self, form):
@@ -59,26 +67,30 @@ class PartnerAddressManageView(generic.UpdateView):
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        address = self.partner.primary_address
-        if address is None:
-            address = self.partner.addresses.model(partner=self.partner)
+        address = self.partner.location
+        # if address is None:
+        #     address = self.partner.addresses.model(partner=self.partner)
         return address
 
     def get_initial(self):
         return {'name': self.partner.name}
 
     def get_context_data(self, **kwargs):
+
         ctx = super(PartnerAddressManageView, self).get_context_data(**kwargs)
         ctx['partner'] = self.partner
         ctx['title'] = self.partner.name
         ctx['users'] = self.partner.users.all()
+        # ctx['states'] = stateList
         return ctx
 
     def form_valid(self, form):
         messages.success(
             self.request, _("Address of brand  '%s' was updated successfully.") %
             self.partner.name)
-        self.partner.name = form.cleaned_data['name']
+        locationForm=form.save()
+        locationForm.save()
+        self.partner.location=locationForm
         self.partner.save()
         return super(PartnerAddressManageView, self).form_valid(form)
 

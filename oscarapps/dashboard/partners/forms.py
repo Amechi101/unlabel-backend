@@ -9,6 +9,8 @@ from oscar.core.compat import existing_user_fields, get_user_model
 from oscar.core.loading import get_model
 from django import forms
 from django.utils.translation import pgettext_lazy
+from oscarapps.address.models import Locations,States
+
 User = get_user_model()
 
 
@@ -36,16 +38,6 @@ class ExistingUserForm(CoreExistingUserForm):
         model = User
         fields = existing_user_fields(
             ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']
-
-
-
-class PartnerAddressForm(CorePartnerAddressForm):
-
-     class Meta:
-        fields = ('name', 'line1', 'line2', 'line3', 'country',
-                  'state', 'line4', 'postcode')
-        model = PartnerAddress
-
 
 
 #################
@@ -118,3 +110,11 @@ class BrandStyleCreateForm(forms.ModelForm):
     class Meta:
         model = BrandStyle
         fields = ('name', 'description', 'type')
+        
+class PartnerAddressForm(forms.ModelForm):
+    state=forms.ModelChoiceField( required=False, queryset=States.objects.all() )
+    class Meta:
+        model = Locations
+        fields = ( 'city','country', 'state', )
+        
+        
