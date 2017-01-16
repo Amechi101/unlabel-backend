@@ -88,10 +88,11 @@ class PartnerAddressManageView(generic.UpdateView):
         messages.success(
             self.request, _("Address of brand  '%s' was updated successfully.") %
             self.partner.name)
-        locationForm=form.save()
-        locationForm.save()
-        self.partner.location=locationForm
+
+        self.partner.location=form.save()
         self.partner.save()
+        # locationForm=form.save()
+        # locationForm.save()
         return super(PartnerAddressManageView, self).form_valid(form)
 
 
