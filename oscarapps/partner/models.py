@@ -109,7 +109,7 @@ class Partner(AbstractPartner, BaseApplicationModel):
     style_preferences = models.ManyToManyField('Style', blank=True, verbose_name=_('Style Preference'))
     store_type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Store Type'))
     store_categories = models.ManyToManyField('BrandCategories', blank=True, verbose_name=_('Store Categories'))
-    isActive = models.BooleanField(default=True, verbose_name=_('Store Active'),
+    is_active = models.BooleanField(default=True, verbose_name=_('Store Active'),
         help_text=_('Check|Un check to activate|deactivate store'))
     slug = models.SlugField(max_length=255, verbose_name=_('Brand Slug'), default="", blank=True)
     street_address = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Street Address'))

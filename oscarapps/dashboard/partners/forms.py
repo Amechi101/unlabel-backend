@@ -15,7 +15,7 @@ User = get_user_model()
 class PartnerCreateForm(CorePartnerCreateForm):
 
     class Meta:
-        fields = ('name', 'description', 'sex_type', 'image', 'isActive', 'style_preferences',
+        fields = ('name', 'description', 'sex_type', 'image', 'is_active', 'style_preferences',
                   'store_type', 'store_categories', 'street_address', 'post_box', 'city',
                   'country', 'state_province', 'availability')
         labels = {

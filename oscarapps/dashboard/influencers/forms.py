@@ -26,7 +26,7 @@ class InfluencerCreateForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('auto_id', 'name', 'bio', 'location', 'image', 'height', 'chest_or_bust', 'hips', 'waist', 'shoe_size')
+        fields = ('auto_id', 'name', 'bio', 'location', 'is_active', 'image', 'height', 'chest_or_bust', 'hips', 'waist', 'shoe_size')
 
 
 

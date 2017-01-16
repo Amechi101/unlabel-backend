@@ -21,19 +21,6 @@ class BaseApplicationModel(models.Model):
         abstract = True
 
 
-class Industry(BaseApplicationModel):
-    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Industry Preference'))
-    description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-
-    # Metadata
-    class Meta:
-        verbose_name = _('Industry Preference')
-        verbose_name_plural = _('Industry Preferences')
-
-    def __str__(self):
-        return self.name
-
-
 class InfluencerAccountInfo(User, BaseApplicationModel):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits are allowed.")
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
@@ -54,6 +41,8 @@ class Influencers(BaseApplicationModel):
     users = models.ManyToManyField(
         InfluencerAccountInfo, related_name="influencers",
         blank=True, verbose_name=_("Users"))
+    is_active = models.BooleanField(default=True, verbose_name=_('Activate/Deactivate Influencer'),
+        help_text=_('Check to activate'))
     height = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default="", verbose_name=_('Height'), help_text=_('US Measurements'))
     chest_or_bust = models.DecimalField(max_digits=10, decimal_places=3, null=True,  blank=True, default="", verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
     hips = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True, default="",  verbose_name=_('hips'), help_text=_('US Measurements'))
