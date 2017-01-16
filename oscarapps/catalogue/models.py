@@ -2,8 +2,7 @@ from oscar.apps.catalogue.abstract_models import AbstractProduct,AbstractCategor
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-
-
+from oscarapps.partner.models import Partner
 from applications.models import currencies
 from oscarapps.influencers.models import *
 
@@ -75,6 +74,7 @@ class Product(AbstractProduct):
         choices=rental_status_choice,
         default=RENTED,
    )
+   # brand=models.ForeignKey(Partner, null=False, blank=False, verbose_name=_('Brand Information'))
    # color = models.ManyToManyField(Colors, null=True, blank=True, verbose_name=_('Color(s)'))
 
 
