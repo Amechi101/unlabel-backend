@@ -6,7 +6,19 @@ from django.core.validators import RegexValidator
 from oscarapps.address.models import Locations
 from oscar.apps.address.models import Country
 
-class Style(models.Model):
+class BaseApplicationModel(models.Model):
+    """
+    An abstract base class model that common attributes
+    """
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    class Meta:
+        app_label = 'Partners'
+        abstract = True
+
+
+class Style(BaseApplicationModel):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
@@ -20,9 +32,9 @@ class Style(models.Model):
         return "{0}".format( self.name )
 
 
-class BrandStoreType(models.Model):
+class BrandStoreType(BaseApplicationModel):
 
-    store_type = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Store Type'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Store Type'))
 
     # Metadata
     class Meta:
@@ -30,14 +42,14 @@ class BrandStoreType(models.Model):
         verbose_name_plural = _('Store Types')
 
     def __str__(self):
-        return "{0}".format(self.store_type)
+        return "{0}".format(self.name)
 
 
-class BrandCategories(models.Model):
+class BrandCategories(BaseApplicationModel):
 
-    categories = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Category'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Category'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Store Type'))
+    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Category'))
 
     # Metadata
     class Meta:
@@ -45,24 +57,24 @@ class BrandCategories(models.Model):
         verbose_name_plural = _('Brand Categories')
 
     def __str__(self):
-        return "{0}".format(self.categories)
+        return "{0}".format(self.name)
 
 
-class BrandStyle(models.Model):
+class BrandStyle(BaseApplicationModel):
 
     name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Store Type'))
+    type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Brand Style'))
     # Metadata
     class Meta:
         verbose_name = _('Brand Style')
         verbose_name_plural = _('Brand Styles')
 
     def __str__(self):
-        return "{0}".format( self.name )
+        return "{0}".format(self.name)
 
 
-class AvailableDateTime(models.Model):
+class AvailableDateTime(BaseApplicationModel):
     date = models.DateField()
     from_time = models.TimeField()
     to_time = models.TimeField()
@@ -76,7 +88,7 @@ class AvailableDateTime(models.Model):
 
 
 
-class Partner(AbstractPartner):
+class Partner(AbstractPartner, BaseApplicationModel):
     MALE = 'M'
     FEMALE = 'F'
     BOTH = 'B'
@@ -97,7 +109,7 @@ class Partner(AbstractPartner):
     style_preferences = models.ManyToManyField('Style', blank=True, verbose_name=_('Style Preference'))
     store_type = models.ManyToManyField('BrandStoreType', blank=True, verbose_name=_('Store Type'))
     store_categories = models.ManyToManyField('BrandCategories', blank=True, verbose_name=_('Store Categories'))
-    isActive = models.BooleanField(default=True, verbose_name=_('Store Active'),
+    is_active = models.BooleanField(default=True, verbose_name=_('Store Active'),
         help_text=_('Check|Un check to activate|deactivate store'))
     slug = models.SlugField(max_length=255, verbose_name=_('Brand Slug'), default="", blank=True)
     street_address = models.CharField(max_length=20, blank=True, default="", verbose_name=_('Street Address'))
@@ -108,7 +120,6 @@ class Partner(AbstractPartner):
     country = models.ForeignKey(Country, default="", verbose_name=_('Country'))
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
     availability = models.ForeignKey('AvailableDateTime', null=True, blank=True, default="", verbose_name=_('Availability'))
-
 
 
 from oscar.apps.partner.models import *

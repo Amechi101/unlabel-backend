@@ -2,9 +2,9 @@
 {% load sorting_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page industry{% endblock %}
+{% block body_class %}{{ block.super }} create-page store type{% endblock %}
 {% block title %}
-    {{ industry.name }} | {% trans "Industries" %} | {{ block.super }}
+    {{ store_type.name }} | {% trans "Store Types" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,13 +13,13 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:industry-list' %}">{% trans "Industry Preferences" %}</a>
+            <a href="{% url 'dashboard:store-type-list' %}">{% trans "Store Types" %}</a>
         </li>
-        <li class="active">{{ industry.name }}</li>
+        <li class="active">{{ store_type.name }}</li>
     </ul>
 {% endblock %}
 
-{% block headertext %}{{ industry.name }}{% endblock %}
+{% block headertext %}{{ store_type.name }}{% endblock %}
 
 {% block dashboard_content %}
 

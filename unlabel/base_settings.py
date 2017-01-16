@@ -16,7 +16,7 @@ import dj_database_url
 from oscar.defaults import *
 
 
-
+OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
@@ -48,10 +48,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Low stock alerts'),
                 'url_name': 'dashboard:stock-alert-list',
             },
-            {
-                'label': _('Style Preferences'),
-                'url_name': 'dashboard:style-list',
-            },
+
         ]
     },
     {
@@ -74,10 +71,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Influencers'),
                 'url_name': 'dashboard:influencer-list',
             },
-            {
-                'label': _('Industry Preferences '),
-                'url_name': 'dashboard:industry-list',
-            },
+
 
             # The shipping method dashboard is disabled by default as it might
             # be confusing. Weight-based shipping methods aren't hooked into
@@ -94,7 +88,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-group',
         'children': [
             {
-                'label': _('Usersmers'),
+                'label': _('Users'),
                 'url_name': 'dashboard:users-index',
             },
             {
@@ -148,6 +142,29 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-bar-chart',
         'url_name': 'dashboard:reports-index',
     },
+    {
+        'label': _('CRUD'),
+        'icon': 'icon-edit',
+        'children': [
+            # {
+            #     'label': _('Style Preferences'),
+            #     'url_name': 'dashboard:style-list',
+            # },
+            {
+                'label': _('Brand Styles'),
+                'url_name': 'dashboard:brand-style-list',
+            },
+            {
+                'label': _('Store Types'),
+                'url_name': 'dashboard:store-type-list',
+            },
+            {
+                'label': _('Brand Categories'),
+                'url_name': 'dashboard:brand-category-list',
+            },
+        ],
+    },
+
 ]
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
@@ -212,6 +229,7 @@ INSTALLED_APPS = [
     'tastypie',
     'widget_tweaks',
     'storages',
+
 
     # project
     'unlabel',

@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "Industry Preferences" %} | {{ block.super }}
+    {% trans "Brand Categories" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -11,14 +11,14 @@
         <li>
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
-        <li class="active">{% trans "Industry Preferences" %}</li>
+        <li class="active">{% trans "Brand Categories" %}</li>
     </ul>
 {% endblock %}
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'dashboard:industry-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new industry preference" %}</a>
-        <h1>{% trans "Industry Preferences" %}</h1>
+        <a href="{% url 'dashboard:brand-category-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new brand category" %}</a>
+        <h1>{% trans "Brand Categories" %}</h1>
     </div>
 {% endblock header %}
 
@@ -28,7 +28,7 @@
             {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
             <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
             {% if is_filtered %}
-                <a class="btn btn-default" href="{% url 'dashboard:industry-list' %}" >{% trans "Reset" %}</a>
+                <a class="btn btn-default" href="{% url 'dashboard:brand-category-list' %}" >{% trans "Reset" %}</a>
             {% endif %}
         </form>
     </div>
@@ -39,14 +39,14 @@
             <caption>
                 <i class="icon-briefcase icon-large"></i>{{ queryset_description }}
             </caption>
-            {% if industries %}
+            {% if brand_categories %}
                 <tr>
                     <th>{% anchor 'name' _('Name') %}</th>
                 </tr>
-                {% for industry in industries %}
+                {% for brand_category in brand_categories %}
                     <tr>
                         <td>
-                            <a href="{% url 'dashboard:industry-manage' pk=industry.pk %}">{{ industry.name }}</a>
+                            <a href="{% url 'dashboard:brand-category-manage' pk=brand_category.pk %}">{{ brand_category.name }}</a>
                         </td>
                         <td>
                             <div class="btn-toolbar">
@@ -56,8 +56,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="{% url 'dashboard:industry-manage' pk=industry.pk %}">{% trans "Manage Industry Preference" %}</a></li>
-                                        <li><a href="{% url 'dashboard:industry-delete' pk=industry.pk %}">{% trans "Delete Industry Preference" %}</a></li>
+                                        <li><a href="{% url 'dashboard:brand-category-manage' pk=brand_category.pk %}">{% trans "Manage Brand Category" %}</a></li>
+                                        <li><a href="{% url 'dashboard:brand-category-delete' pk=brand_category.pk %}">{% trans "Delete Brand Category" %}</a></li>
                                    </ul>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr><td>{% trans "No industry preferences found." %}</td></tr>
+                <tr><td>{% trans "No brand category found." %}</td></tr>
             {% endif %}
         </table>
         {% include "dashboard/partials/pagination.html" %}

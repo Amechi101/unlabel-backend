@@ -1,26 +1,14 @@
 from django.contrib import messages
-from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
-from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from oscar.apps.customer.utils import normalise_email
-from oscar.core.compat import get_user_model
+
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 
-
-
-
-
-
-
-
-
-
-#style views
+# style views
 
 Style = get_model('partner', 'Style')
 (
@@ -79,9 +67,9 @@ class StyleCreateView(generic.CreateView):
                          self.object.name)
         return reverse('dashboard:style-list')
 
+
 #
 class StyleManageView(generic.UpdateView):
-
     template_name = 'dashboard/catalogue/style/style_manage.html'
     form_class = StyleCreateForm
     success_url = reverse_lazy('dashboard:style-list')

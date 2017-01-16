@@ -1,0 +1,35 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} create-page brand category{% endblock %}
+{% block title %}
+    {{ brand_category.name }} | {% trans "Brand Categories" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li>
+            <a href="{% url 'dashboard:brand-category-list' %}">{% trans "Brand Categories" %}</a>
+        </li>
+        <li class="active">{{ brand_category.name }}</li>
+    </ul>
+{% endblock %}
+
+{% block headertext %}{{ brand_category.name }}{% endblock %}
+
+{% block dashboard_content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-header">
+                <h2>{{ title }}</h2>
+            </div>
+            {% include "dashboard/partials/form.html" with form=form class="well" %}
+        </div>
+    </div>
+
+{% endblock dashboard_content %}

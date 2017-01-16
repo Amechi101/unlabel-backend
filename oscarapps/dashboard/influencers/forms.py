@@ -7,12 +7,10 @@ from django.contrib.auth.models import Permission
 from oscar.apps.customer.forms import EmailUserCreationForm
 from oscar.core.compat import existing_user_fields, get_user_model
 from oscar.core.validators import password_validators
-from oscar.apps.dashboard.partners.forms import ExistingUserForm as CoreExistingUserForm
-from oscar.apps.dashboard.partners.forms import NewUserForm as CoreNewUserForm
+from oscarapps.influencers.models import Influencers
+from oscarapps.influencers.models import InfluencerAccountInfo
 
-User = get_user_model()
-Influencers = get_model('influencers', 'Influencers')
-
+User = InfluencerAccountInfo
 
 class InfluencerSearchForm(forms.Form):
     name = forms.CharField(
@@ -28,27 +26,8 @@ class InfluencerCreateForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('name', 'bio', 'location', 'image', 'physical_attributes')
+        fields = ('auto_id', 'name', 'bio', 'location', 'is_active', 'image', 'height', 'chest_or_bust', 'hips', 'waist', 'shoe_size')
 
-
-Industry = get_model('influencers', 'Industry')
-
-
-class IndustrySearchForm(forms.Form):
-    name = forms.CharField(
-        required=False, label=pgettext_lazy(u"Industry's name", u"Name"))
-
-
-class IndustryCreateForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(IndustryCreateForm, self).__init__(*args, **kwargs)
-
-        self.fields['name'].required = True
-
-    class Meta:
-        model = Industry
-        fields = ('name', 'description')
 
 
 ROLE_CHOICES = (
@@ -80,7 +59,7 @@ class NewUserForm(EmailUserCreationForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']
+            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']+['contact_number']
 
 
 class ExistingUserForm(forms.ModelForm):
@@ -138,4 +117,4 @@ class ExistingUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            [ 'username', 'first_name', 'last_name']) + ['password1', 'password2']
+            [ 'username', 'first_name', 'last_name']) + ['password1', 'password2']+['contact_number']

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
-from oscarapps.influencers.models import Influencers
+from oscarapps.influencers.models import Influencers,InfluencerAccountInfo
 # from influencers.models import Influencers, City, StateCountry
 
 
@@ -68,7 +68,7 @@ from oscarapps.influencers.models import Influencers
 # admin.site.register(City, CityAdmin)
 # admin.site.register(StateCountry, StateCountryAdmin)
 admin.site.register(Influencers)
-
+admin.site.register(InfluencerAccountInfo)
 
 
 
