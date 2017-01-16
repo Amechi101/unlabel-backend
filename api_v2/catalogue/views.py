@@ -22,7 +22,7 @@ from six.moves import map
 
 from django.contrib import auth
 from oscar.core.loading import get_model, get_class
-from rest_framework import generics
+from rest_framework import generics,serializers
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -30,6 +30,7 @@ from oscarapi import serializers, permissions
 from oscarapi.basket.operations import assign_basket_strategy
 from rest_framework import viewsets
 from oscarapi.views import basic
+from .serializers import PartnerSerializer
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
@@ -58,13 +59,13 @@ Country = get_model('address', 'Country')
 Partner = get_model('partner', 'Partner')
 
 
-class ProductListView(generics.ListAPIView):
-
-    paginate_by=5
-    count=5
-    # pagination_class = pagination.PageNumberPagination
-    queryset = Product.objects.all()
-    serializer_class = serializers.ProductLinkSerializer
+# class ProductListView(generics.ListAPIView):
+#
+#     paginate_by=5
+#     count=5
+#     # pagination_class = pagination.PageNumberPagination
+#     queryset = Product.objects.all()
+#     serializer_class = serializers.ProductLinkSerializer
 
 
 
@@ -105,3 +106,23 @@ class ProductLikeView(APIView):
             return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
+class BrandListView(APIView):
+    # queryset = Partner.objects.all()
+    # serializer_class = serializers.PartnerSerializer
+
+    def get(self, request, *args, **kwargs):
+        test=1
+        if test==1:
+            queryset=Partner.objects.all()
+            serializerData=PartnerSerializer(queryset ,many=True)
+            return Response(serializerData.data)
+
+
+class ProductListView(APIView):
+
+    def get(self,request,*args,**kwargs):
+        param = 1
+        if param == 1:
+            queryset=Product.objects.all()
+            serializerData=serializers.ProductLinkSerializer
+            return Response(serializerData.data)
