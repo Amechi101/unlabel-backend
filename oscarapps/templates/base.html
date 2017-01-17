@@ -79,9 +79,14 @@
                 state_id.prop('disabled',false);
             }
             else{
-//                state_id.prop('disabled',true)    ;
+                state_id.prop('disabled',true)    ;
             }
-            country_id.change(function(e){
+
+        });
+    var country_id = $('#id_country');
+    var state_id = $('#id_state');
+
+    country_id.change(function(e){
                 if(country_id.val()=="US")
                 {
                     state_id.prop('disabled',false);
@@ -119,8 +124,6 @@
 //                     ************till here
                 }
         });
-        });
-
 
 
 </script>

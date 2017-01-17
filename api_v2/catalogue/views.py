@@ -1,41 +1,17 @@
 from __future__ import unicode_literals
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.views.generic import ListView, TemplateView
-import json, ast,os
-from django.core import serializers
 from rest_framework import permissions, authentication
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from django.core.mail.message import EmailMessage
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.utils.encoding import force_bytes
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-import re
-import functools
-import itertools
-from six.moves import map
-from django.core.paginator import QuerySetPaginator
-
 from django.contrib import auth
 from oscar.core.loading import get_model, get_class
 from rest_framework import generics,serializers
-from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-
 from oscarapi import serializers, permissions
-from oscarapi.basket.operations import assign_basket_strategy
-from rest_framework import viewsets
-from oscarapi.views import basic
-from .serializers import PartnerSerializer
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
-from .serializers import PartnerSerializer
+from .serializers import PartnerSerializer,StoreTypeSerializer
+from oscarapps.partner.models import BrandStoreType
 
 Selector = get_class('partner.strategy', 'Selector')
 
@@ -115,14 +91,42 @@ class BrandListView(generics.ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         param = self.request.GET.get('param')
-        if param == "ZA":
-            queryset = Partner.objects.all().order_by('-name')
-        elif param == "DESC":
-            queryset = Partner.objects.all().order_by('created')
-        elif param == "ASC":
-            queryset = Partner.objects.all().order_by('-created')
-        else:
-            queryset = Partner.objects.all().order_by('name')
+        search = self.request.GET.get('search')
+        type = self.request.GET.get('type')
+
+        # ZA - sort by a to z
+        #AZ - sort by z to a
+        #ASC - sort by date ascending
+        #DESC - sort by date descending
+
+        if search == None and type == None :
+            if param == "ZA":
+                queryset = Partner.objects.all().order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.all().order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.all().order_by('-created')
+            else:
+                queryset = Partner.objects.all().order_by('name')
+        elif search == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(store_type = type).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(store_type = type).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(store_type = type).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(store_type = type).order_by('name')
+        elif type == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(name__icontains = search).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(name__icontains = search).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(name__icontains = search).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(name__icontains = search).order_by('name')
+
         return queryset
 
 
@@ -145,3 +149,11 @@ class ProductListView(generics.ListAPIView):
     #         queryset=Product.objects.all()
     #         serializerData=serializers.ProductLinkSerializer
     #         return Response(serializerData.data)
+
+
+
+class StoreListView(generics.ListAPIView):
+
+    queryset = BrandStoreType.objects.all()
+    serializer_class = StoreTypeSerializer
+    paginate_by = None
