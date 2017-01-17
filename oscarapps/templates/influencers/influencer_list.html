@@ -27,9 +27,14 @@
         <form action="" method="get" class="form-inline">
             {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
             <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
-            {% if is_filtered %}
-                <a class="btn btn-default" href="{% url 'dashboard:influencer-list' %}" >{% trans "Reset" %}</a>
-            {% endif %}
+             <a class="btn btn-default" href="{% url 'dashboard:influencer-list' %}" >{% trans "Reset" %}</a>
+        </form>
+    </div>
+    <h2>Filters</h2>
+    <div class="well">
+        <form  method="get" action= "{% url 'dashboard:influencer-filter' %}" class="form-inline">
+         <input type="checkbox" id ="active_influencer" name="active" > Active Influencers<br>
+         <input type="submit" value="Filter" class="btn btn-primary">
         </form>
     </div>
 
@@ -86,9 +91,11 @@
                         </td>
                     </tr>
                 {% endfor %}
+
             {% else %}
                 <tr><td>{% trans "No influencers found." %}</td></tr>
             {% endif %}
+
         </table>
         {% include "dashboard/partials/pagination.html" %}
     </form>

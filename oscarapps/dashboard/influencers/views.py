@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
-
+from django.http import HttpResponse
 
 from oscar.core.compat import get_user_model
 from oscar.core.loading import get_classes
@@ -32,10 +32,17 @@ User = InfluencerAccountInfo
 
 
 class InfluencerListView(generic.ListView):
+
     model = Influencers
     context_object_name = 'influencers'
     template_name = 'influencers/influencer_list.html'
     form_class = InfluencerSearchForm
+
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
 
     def get_queryset(self):
         qs = self.model._default_manager.all()
@@ -292,5 +299,51 @@ class InfluencerUserUpdateView(generic.UpdateView):
         return reverse('dashboard:influencer-list')
 
 
+class InfluencerFilterView(generic.ListView):
+
+    model = Influencers
+    context_object_name = 'influencers'
+    template_name = 'influencers/influencer_list.html'
+    form_class = InfluencerSearchForm
+    active_flag = False
 
 
+    def get(self, request, *args, **kwargs):
+        if request.GET.get('active'):
+            self.active_flag = True
+        else:
+            self.active_flag = False
+        return super(InfluencerFilterView, self).get(request, *args, **kwargs)
+
+
+    def get_queryset(self):
+        if self.active_flag:
+            qs = Influencers.objects.filter(is_active=True)
+        else:
+            qs = Influencers.objects.all()
+
+        self.description = _("All influencers")
+
+        # We track whether the queryset is filtered to determine whether we
+        # show the search form 'reset' button.
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+        if not self.form.is_valid():
+            return qs
+
+        data = self.form.cleaned_data
+        if data['name']:
+            qs = qs.filter(name__icontains=data['name'])
+            self.description = _("Influencers matching '%s'") % data['name']
+            self.is_filtered = True
+        return qs
+
+
+    def get_context_data(self, **kwargs):
+        ctx = super(InfluencerFilterView, self).get_context_data(**kwargs)
+        if self.active_flag:
+         ctx['active'] = True
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx
