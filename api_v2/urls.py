@@ -37,6 +37,8 @@ urlpatterns = [
 
     url(r'^partnerList/',catalogueViews.BrandListView.as_view(),name='brand_List_view'),
 
+    url(r'^storeTypeList/',catalogueViews.StoreListView.as_view(),name='store_list_view')
+
 ]
 
 ##### address urls  #####
