@@ -19,10 +19,11 @@ import re
 import functools
 import itertools
 from six.moves import map
+from django.core.paginator import QuerySetPaginator
 
 from django.contrib import auth
 from oscar.core.loading import get_model, get_class
-from rest_framework import generics
+from rest_framework import generics,serializers
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -30,9 +31,11 @@ from oscarapi import serializers, permissions
 from oscarapi.basket.operations import assign_basket_strategy
 from rest_framework import viewsets
 from oscarapi.views import basic
+from .serializers import PartnerSerializer
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
+from .serializers import PartnerSerializer
 
 Selector = get_class('partner.strategy', 'Selector')
 
@@ -58,13 +61,13 @@ Country = get_model('address', 'Country')
 Partner = get_model('partner', 'Partner')
 
 
-class ProductListView(generics.ListAPIView):
-
-    paginate_by=5
-    count=5
-    # pagination_class = pagination.PageNumberPagination
-    queryset = Product.objects.all()
-    serializer_class = serializers.ProductLinkSerializer
+# class ProductListView(generics.ListAPIView):
+#
+#     paginate_by=5
+#     count=5
+#     # pagination_class = pagination.PageNumberPagination
+#     queryset = Product.objects.all()
+#     serializer_class = serializers.ProductLinkSerializer
 
 
 
@@ -105,3 +108,40 @@ class ProductLikeView(APIView):
             return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
+class BrandListView(generics.ListAPIView):
+
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = PartnerSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        param = self.request.GET.get('param')
+        if param == "ZA":
+            queryset = Partner.objects.all().order_by('-name')
+        elif param == "DESC":
+            queryset = Partner.objects.all().order_by('created')
+        elif param == "ASC":
+            queryset = Partner.objects.all().order_by('-created')
+        else:
+            queryset = Partner.objects.all().order_by('name')
+        return queryset
+
+
+class ProductListView(generics.ListAPIView):
+
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = serializers.ProductSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        param = self.request.GET.get('param')
+        brand_id = self.request.GET.get('brand')
+        # if param == 'ASC':
+        queryset = Product.objects.filter(brand=brand_id)
+        return queryset
+
+
+    # def get(self,request,*args,**kwargs):
+    #     param = 1
+    #     if param == 1:
+    #         queryset=Product.objects.all()
+    #         serializerData=serializers.ProductLinkSerializer
+    #         return Response(serializerData.data)

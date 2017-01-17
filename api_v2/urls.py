@@ -3,7 +3,8 @@ from rest_framework import routers
 from .customer import views as customerViews
 from .address import views as addressViews
 from .catalogue import views as catalogueViews
-# from django.contrib.auth.views import
+from .utils import *
+
 
 #####   customer urls   #####
 urlpatterns = [
@@ -21,15 +22,20 @@ urlpatterns = [
     url(r'customer_profile_update/',
         customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
 
-    url(r'^rest-auth/facebook/$', customerViews.FacebookLogin.as_view(), name='fb_login'),
+    url(r'^rest-auth/facebook/$',
+        customerViews.FacebookLogin.as_view(), name='fb_login'),
 
-    url(r'^customer_profile_deactivate/$',customerViews.CustomerProfileDeleteView,name='customer_profile_delete_view'),
+    url(r'^customer_profile_deactivate/$',
+        customerViews.CustomerProfileDeleteView.as_view(),name='customer_profile_delete_view'),
 
     ###-----product apis
-    url(r'product_list/',catalogueViews.ProductListView.as_view(),name='product_list_view'),
+    url(r'product_list/',
+        catalogueViews.ProductListView.as_view(),name='product_list_view'),
 
-    url(r'^product_like/(?P<prod_id>[0-9]+)/',catalogueViews.ProductLikeView.as_view(),name='Product_like_view')
+    url(r'^product_like/(?P<prod_id>[0-9]+)/',
+        catalogueViews.ProductLikeView.as_view(),name='Product_like_view'),
 
+    url(r'^partnerList/',catalogueViews.BrandListView.as_view(),name='brand_List_view'),
 
 ]
 
@@ -37,8 +43,16 @@ urlpatterns = [
 
 urlpatterns = urlpatterns + [
 
-    # url(r'add_address/',)
+    url(r'add_address/',addressViews.AddAddressView.as_view(),name='add_address_view'),
 ]
+
+
+#### front end requests
+
+urlpatterns = urlpatterns + [
+    url(r'get_states',addressViews.GetStatesView.as_view(),name='get_states')
+]
+
 
 
 urlpatterns = urlpatterns + patterns(

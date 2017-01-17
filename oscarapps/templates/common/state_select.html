@@ -1,0 +1,6 @@
+<select class="select2-container form-control" id="id_state" name="dish">
+    {% for object in states %}
+        <option value="{{ object.id }}"> {{ object.state}}</option>
+    {% endfor %}
+</select>
+

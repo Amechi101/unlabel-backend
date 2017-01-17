@@ -99,6 +99,8 @@ class Product(AbstractProduct, BaseApplicationModel):
         verbose_name=_('Requires shipping.?')
    )
 
+
+
    #Metadata
    class Meta:
         verbose_name = _('Product')

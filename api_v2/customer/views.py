@@ -19,9 +19,9 @@ from django.views.decorators.csrf import csrf_exempt
 import re
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
-from oscar.apps.customer.models import Email
 import datetime
 from api_v2.utils import *
+
 
 
 # from oscarapps.customer.models import EmailConfirmation
@@ -93,16 +93,16 @@ class CustomerPasswordUpdateView(APIView):
             else:
                 content = { "message":"Please login first." }
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            customer.set_password(request.data["password"])
+            customer.save()
+            content = {"message":"password changed successfully. Please login to continue."}
+            request.session.clear()
+            request.session.delete()
+            request.session = None
+            return Response(content,status = status.HTTP_201_CREATED)
         except:
             content = { "message":"given email does not exist." }
             return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        customer.set_password(request.data["password"])
-        customer.save()
-        content = {"message":"password changed successfully. Please login to continue."}
-        request.session.clear()
-        request.session.delete()
-        request.session = None
-        return Response(content,status = status.HTTP_201_CREATED)
 
 
 class CustomerForgotPassword(APIView):
