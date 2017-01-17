@@ -18,7 +18,7 @@ from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
-from oscar.apps.dashboard.partners.forms import PartnerAddressForm
+from oscar.apps.dashboard.partners.forms import PartnerAddressForm,PartnerSearchForm
 from oscarapps.dashboard.partners.forms import PartnerCreateForm
 from oscarapps.partner.models import Partner
 
@@ -467,3 +467,62 @@ class BrandStyleDeleteView(generic.DeleteView):
                          _("Brand style '%s' was deleted successfully.") %
                          self.object.name)
         return reverse('dashboard:brand-style-list')
+
+
+
+class PartnerFilterView(generic.ListView):
+
+    model = Partner
+    context_object_name = 'partners'
+    template_name = 'dashboard/partners/partner_list.html'
+    form_class = PartnerSearchForm
+
+    def get(self, request, *args, **kwargs):
+        return super(PartnerFilterView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+
+        is_active = self.request.GET.get('active')
+        created_date = self.request.GET.get('created_date')
+        modified_date = self.request.GET.get('modified_date')
+
+        if is_active:
+            queryset = queryset.filter(is_active=True)
+
+        if created_date:
+            queryset = queryset.filter(created__regex=created_date)
+
+        if modified_date:
+            queryset = queryset.filter(modified__regex=modified_date)
+
+        self.description = _("All brands")
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+
+        if not self.form.is_valid():
+            return queryset
+        data = self.form.cleaned_data
+
+        if data['name']:
+            queryset = queryset.filter(name__icontains=data['name'])
+            self.description = _("Brands matching '%s'") % data['name']
+            self.is_filtered = True
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PartnerFilterView, self).get_context_data(**kwargs)
+        is_active = self.request.GET.get('active')
+        created_date = self.request.GET.get('created_date')
+        modified_date = self.request.GET.get('modified_date')
+        if is_active:
+            ctx['active'] = True
+        if created_date:
+            ctx['created_date'] = created_date
+        if modified_date:
+            ctx['modified_date'] = modified_date
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx

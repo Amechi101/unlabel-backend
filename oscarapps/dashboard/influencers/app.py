@@ -57,7 +57,7 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
                 self.user_update_view.as_view(),
                 name='influencer-user-update'),
 
-            url(r'^is_active/$', self.influencer_filter_view.as_view(), name='influencer-filter'),
+            url(r'^filter/$', self.influencer_filter_view.as_view(), name='influencer-filter'),
         ]
         return self.post_process_urls(urls)
 application = InfluencersDashboardApplication()

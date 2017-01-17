@@ -305,22 +305,23 @@ class InfluencerFilterView(generic.ListView):
     context_object_name = 'influencers'
     template_name = 'influencers/influencer_list.html'
     form_class = InfluencerSearchForm
-    active_flag = False
 
 
     def get(self, request, *args, **kwargs):
-        if request.GET.get('active'):
-            self.active_flag = True
-        else:
-            self.active_flag = False
+        # if request.GET.get('active'):
+        #     self.active_flag = True
+        # else:
+        #     self.active_flag = False
         return super(InfluencerFilterView, self).get(request, *args, **kwargs)
 
 
     def get_queryset(self):
-        if self.active_flag:
-            qs = Influencers.objects.filter(is_active=True)
-        else:
-            qs = Influencers.objects.all()
+
+        queryset = self.model.objects.all()
+        is_active = self.request.GET.get('active')
+
+        if is_active:
+            queryset = queryset.filter(is_active=True)
 
         self.description = _("All influencers")
 
@@ -329,20 +330,20 @@ class InfluencerFilterView(generic.ListView):
         self.is_filtered = False
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
-            return qs
+            return queryset
 
         data = self.form.cleaned_data
         if data['name']:
-            qs = qs.filter(name__icontains=data['name'])
+            queryset = queryset.filter(name__icontains=data['name'])
             self.description = _("Influencers matching '%s'") % data['name']
             self.is_filtered = True
-        return qs
+        return queryset
 
 
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerFilterView, self).get_context_data(**kwargs)
-        if self.active_flag:
-         ctx['active'] = True
+        if self.request.GET.get('active'):
+           ctx['active'] = True
         ctx['queryset_description'] = self.description
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered

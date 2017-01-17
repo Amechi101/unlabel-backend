@@ -23,7 +23,8 @@ class InfluencerCreateForm(forms.ModelForm):
         super(InfluencerCreateForm, self).__init__(*args, **kwargs)
 
         self.fields['name'].required = True
-
+        self.fields['auto_id'].required = False
+    auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly':'True'}))
     class Meta:
         model = Influencers
         fields = ('auto_id', 'name', 'bio', 'location', 'is_active', 'image', 'height', 'chest_or_bust', 'hips', 'waist', 'shoe_size')

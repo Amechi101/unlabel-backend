@@ -6,6 +6,8 @@ from oscar.core.loading import get_class
 class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerAddressManageView')
+    partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
+
 
     store_type_list_view = get_class('oscarapps.dashboard.partners.views',
                                  'StoreTypeListView')
@@ -94,6 +96,9 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='brand-style-manage'),
             url(r'^brand_style/(?P<pk>\d+)/delete/$', self.brand_style_delete_view.as_view(),
                 name='brand-style-delete'),
+
+
+            url(r'^filter/$', self.partner_filter_view.as_view(), name='partner-filter'),
 
 
         ]

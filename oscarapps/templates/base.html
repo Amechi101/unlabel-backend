@@ -67,7 +67,22 @@
     </body>
 </html>
 
+{% if active  %}
+          <script>
+          $('#active_id').prop('checked', true);
+          </script>
+      {% else %}
+        <script>
+          $('#active_id').prop('checked', false);
+          </script>
+      {% endif %}
+{% if modified_date  %}
+          <script>
+          $('#modified_date').datepicker().datepicker("setDate", new Date());
 
+          </script>
+
+      {% endif %}
 
 <script>
     $(document).ready(function(){

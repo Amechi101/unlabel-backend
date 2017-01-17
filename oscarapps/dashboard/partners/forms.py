@@ -18,8 +18,7 @@ class PartnerCreateForm(CorePartnerCreateForm):
 
     class Meta:
         fields = ('name', 'description', 'sex_type', 'image', 'is_active', 'style_preferences',
-                  'store_type', 'store_categories', 'street_address', 'post_box', 'city',
-                  'country', 'state_province', 'availability')
+                  'store_type', 'store_categories', 'street_address', 'post_box', 'city', 'country', 'state', 'zipcode', 'availability')
         labels = {
             'name': _('Store Name'),
         }
@@ -111,10 +110,11 @@ class BrandStyleCreateForm(forms.ModelForm):
         model = BrandStyle
         fields = ('name', 'description', 'type')
         
+
+
 class PartnerAddressForm(forms.ModelForm):
-    state=forms.ModelChoiceField( required=False, queryset=States.objects.all() )
+    state = forms.ModelChoiceField( required=False, queryset=States.objects.all() )
     class Meta:
         model = Locations
-        fields = ( 'city','country', 'state', )
-        
-        
+        fields = ('city', 'country', 'state', )
+
