@@ -35,9 +35,14 @@ urlpatterns = [
     url(r'^product_like/(?P<prod_id>[0-9]+)/',
         catalogueViews.ProductLikeView.as_view(),name='Product_like_view'),
 
+    url(r'^partner_follow/(?P<partner_id>[0-9]+)/',
+        catalogueViews.PartnerFollowView.as_view(),name='Partner_follow_view'),
+
     url(r'^partnerList/',catalogueViews.BrandListView.as_view(),name='brand_List_view'),
 
-    url(r'^storeTypeList/',catalogueViews.StoreListView.as_view(),name='store_list_view')
+    url(r'^storeTypeList/',catalogueViews.StoreListView.as_view(),name='store_list_view'),
+
+
 
 ]
 
