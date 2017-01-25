@@ -14,6 +14,9 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
     influencer_delete_view = get_class('oscarapps.dashboard.influencers.views',
                                  'InfluencerDeleteView')
 
+    influencer_filter_view = get_class('oscarapps.dashboard.influencers.views',
+                                 'InfluencerFilterView')
+
 
     user_link_view = get_class('dashboard.influencers.views',
                                'InfluencerUserLinkView')
@@ -54,11 +57,7 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
                 self.user_update_view.as_view(),
                 name='influencer-user-update'),
 
-
-
-
-
-
+            url(r'^filter/$', self.influencer_filter_view.as_view(), name='influencer-filter'),
         ]
         return self.post_process_urls(urls)
 application = InfluencersDashboardApplication()
