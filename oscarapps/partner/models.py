@@ -5,7 +5,8 @@ from oscar.apps.partner.abstract_models import AbstractPartner
 from django.core.validators import RegexValidator
 from oscarapps.address.models import Locations,States
 from oscar.apps.address.models import Country
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.conf import settings
 
 class BaseApplicationModel(models.Model):
     """
@@ -127,7 +128,7 @@ class Partner(AbstractPartner, BaseApplicationModel):
         verbose_name = _('Brands Detail')
 
 class PartnerFollow(models.Model):
-    customer = models.ForeignKey( User )
+    customer = models.ForeignKey( settings.AUTH_USER_MODEL )
     partner = models.ForeignKey( Partner )
 
     class Meta:

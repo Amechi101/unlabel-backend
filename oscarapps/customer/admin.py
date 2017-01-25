@@ -1,4 +1,4 @@
 from oscar.apps.customer.admin import *  # noqa
-# from .models import EmailConfirmation
+# from .models import User
 
-# admin.site.register(EmailConfirmation)
+# admin.site.register(User)

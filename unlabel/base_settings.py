@@ -16,6 +16,16 @@ import dj_database_url
 from oscar.defaults import *
 
 
+OSCAR_SHOP_NAME = 'Unlabel'
+# AUTH_USER_MODEL = "customer.User"
+AUTH_USER_MODEL = "users.User"
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+
 OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_DASHBOARD_NAVIGATION = [
     {
@@ -253,14 +263,18 @@ INSTALLED_APPS = [
 
     ###for oscar-api over ride
     'api_v2',
+
+    ### for user
+    'users',
 ]
 
 from oscar import get_core_apps
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
     [
-        'oscarapps.partner',
         'oscarapps.customer',
+        'oscarapps.partner',
+
         'oscarapps.catalogue',
         'oscarapps.address',
         'oscarapps.dashboard',
@@ -467,5 +481,3 @@ SOCIALACCOUNT_PROVIDERS = \
         'LOCALE_FUNC': 'path.to.callable',
         'VERIFIED_EMAIL': False,
         'VERSION': 'v2.4'}}
-
-OSCAR_SHOP_NAME = 'Unlabel'
