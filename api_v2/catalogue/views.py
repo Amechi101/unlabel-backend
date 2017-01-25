@@ -1,41 +1,18 @@
 from __future__ import unicode_literals
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.views.generic import ListView, TemplateView
-import json, ast,os
-from django.core import serializers
 from rest_framework import permissions, authentication
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
-from django.core.mail.message import EmailMessage
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.utils.encoding import force_bytes
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-import re
-import functools
-import itertools
-from six.moves import map
-from django.core.paginator import QuerySetPaginator
-
 from django.contrib import auth
 from oscar.core.loading import get_model, get_class
 from rest_framework import generics,serializers
-from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-
 from oscarapi import serializers, permissions
-from oscarapi.basket.operations import assign_basket_strategy
-from rest_framework import viewsets
-from oscarapi.views import basic
-from .serializers import PartnerSerializer
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
-from .serializers import PartnerSerializer
+from .serializers import PartnerSerializer,StoreTypeSerializer
+from oscarapps.partner.models import BrandStoreType,PartnerFollow
+from oscar.apps.partner.models import StockRecord
 
 Selector = get_class('partner.strategy', 'Selector')
 
@@ -92,9 +69,9 @@ class ProductLikeView(APIView):
                 content = { "message":"Invalid Product id." }
                 return Response(content,status = status.HTTP_200_OK)
             try :
-                prodlike_exists = UserProductLike.objects.get(user = customer,product_like = prod)
+                prodlike_exists = UserProductLike.objects.get(user = customer,product_like = Prod)
             except :
-                prodlike = UserProductLike.objects.create(user = customer,product_like = prod)
+                prodlike = UserProductLike.objects.create(user = customer,product_like = Prod)
                 prodlike.save()
                 Prod.likes = Prod.likes + 1
                 content = { "message":"Product Liked" }
@@ -112,17 +89,48 @@ class BrandListView(generics.ListAPIView):
 
     pagination_class = pagination.LimitOffsetPagination
     serializer_class = PartnerSerializer
+    http_method_names = ('get',)
 
+    # ZA - sort by a to z
+    #AZ - sort by z to a
+    #ASC - sort by date ascending
+    #DESC - sort by date descending
+    # get the queryset for pagination based on the parameter given from ios
     def get_queryset(self, *args, **kwargs):
         param = self.request.GET.get('param')
-        if param == "ZA":
-            queryset = Partner.objects.all().order_by('-name')
-        elif param == "DESC":
-            queryset = Partner.objects.all().order_by('created')
-        elif param == "ASC":
-            queryset = Partner.objects.all().order_by('-created')
-        else:
-            queryset = Partner.objects.all().order_by('name')
+        search = self.request.GET.get('search')
+        type = self.request.GET.get('type')
+
+        live_brand_id = Product.objects.filter(status = 'L' ).values_list('brand',flat = True)
+
+        if search == None and type == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('name')
+        elif search == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(store_type = type,pk__in = live_brand_id).order_by('name')
+        elif type == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('name')
+
         return queryset
 
 
@@ -130,18 +138,70 @@ class ProductListView(generics.ListAPIView):
 
     pagination_class = pagination.LimitOffsetPagination
     serializer_class = serializers.ProductSerializer
+    http_method_names = ('get',)
 
+    # HL - price high to low
+    # LH - price low to high
+    # NEW - date newest to old
+    # OLD - date oldest to new
     def get_queryset(self, *args, **kwargs):
-        param = self.request.GET.get('param')
         brand_id = self.request.GET.get('brand')
-        # if param == 'ASC':
-        queryset = Product.objects.filter(brand=brand_id)
+        param = self.request.GET.get('param')
+        if brand_id == None:
+            queryset = Product.objects.filter(status = 'L').order_by('created')
+        elif param == None :
+            queryset = Product.objects.filter(brand = brand_id, status = 'L').order_by('created')
+        elif param == 'New':
+            queryset = Product.objects.filter(brand = brand_id, status = 'L' ).order_by('-created')
+        elif param == 'OLD':
+            queryset = Product.objects.filter(brand = brand_id, status = 'L' ).order_by('created')
+        elif param == 'HL':
+            prod_id_List = Product.objects.filter(brand = brand_id, status = 'L' ).values_list('id',flat = True)
+            prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('price_retail').values_list('product',flat = True)
+            queryset = Product.objects.filter(pk__in = prod_Sort_List)
+        elif param == "LH":
+            prod_id_List = Product.objects.filter(brand = brand_id, status = 'L' ).values_list('id',flat = True)
+            prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('-price_retail').values_list('product',flat = True)
+            queryset = Product.objects.filter(pk__in = prod_Sort_List)
+
         return queryset
 
 
-    # def get(self,request,*args,**kwargs):
-    #     param = 1
-    #     if param == 1:
-    #         queryset=Product.objects.all()
-    #         serializerData=serializers.ProductLinkSerializer
-    #         return Response(serializerData.data)
+
+class StoreListView(generics.ListAPIView):
+
+    queryset = BrandStoreType.objects.all()
+    serializer_class = StoreTypeSerializer
+    paginate_by = None
+
+
+
+class PartnerFollowView(APIView):
+    authentication = authentication.SessionAuthentication
+    http_method_names = ('get',)
+
+    def get(self,request,partner_id,*args,**kwargs):
+        try :
+            if request.user.is_authenticated():
+                customer = request.user
+            else :
+                content = { "message":"Please login first." }
+                return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            try :
+                partner = Partner.objects.get(id = partner_id)
+            except :
+                content = { "message":"Invalid Brand id." }
+                return Response(content,status = status.HTTP_200_OK)
+            try :
+                follow_exists = PartnerFollow.objects.get(customer = customer,partner = partner)
+            except :
+                follow_exists = PartnerFollow.objects.create(customer = customer,partner = partner)
+                follow_exists.save()
+                content = { "message":"Brand Liked" }
+                return Response(content,status = status.HTTP_200_OK)
+            follow_exists.delete()
+            content = { "message":"Brand unfollowed" }
+            return Response(content,status = status.HTTP_200_OK)
+        except :
+            content = { "message":"Some error occured. Please try again later" }
+            return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

@@ -5,6 +5,7 @@ from oscar.apps.partner.abstract_models import AbstractPartner
 from django.core.validators import RegexValidator
 from oscarapps.address.models import Locations,States
 from oscar.apps.address.models import Country
+from django.contrib.auth.models import User
 
 class BaseApplicationModel(models.Model):
     """
@@ -121,6 +122,21 @@ class Partner(AbstractPartner, BaseApplicationModel):
     country = models.ForeignKey(Country, default="", verbose_name=_('Country'))
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
     availability = models.ForeignKey('AvailableDateTime', null=True, blank=True, default="", verbose_name=_('Availability'))
+
+    class Meta:
+        verbose_name = _('Brands Detail')
+
+class PartnerFollow(models.Model):
+    customer = models.ForeignKey( User )
+    partner = models.ForeignKey( Partner )
+
+    class Meta:
+        verbose_name = _('Brand Follows')
+        verbose_name_plural = _('Brand Follows')
+
+    def __str__(self):
+        return self.customer.email+" --> "+self.partner.name
+
 
 
 from oscar.apps.partner.models import *

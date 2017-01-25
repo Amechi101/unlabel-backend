@@ -11,8 +11,10 @@ Style = get_model('partner', 'Style')
 class ProductForm(CoreProductForm):
     class Meta(CoreProductForm.Meta):
         fields = [
+
             'title', 'upc', 'asin_id', 'gcid_id', 'ups_id', 'description', 'material_info', 'size', 'item_sex_type', 'status',
             'rental_status', 'brand', 'wieght', 'on_sale', 'requires_shipping']
+
         labels = {
             'title': _('Name'),
         }
