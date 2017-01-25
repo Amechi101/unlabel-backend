@@ -39,11 +39,7 @@ class StyleListView(generic.ListView):
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
-
         self.description = _("All Styles")
-
-        # We track whether the queryset is filtered to determine whether we
-        # show the search form 'reset' button.
         self.is_filtered = False
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
@@ -85,10 +81,7 @@ class StyleCreateView(generic.CreateView):
 
 #
 class StyleManageView(generic.UpdateView):
-    """
-    This multi-purpose view renders out a form to edit the partner's details,
-    the associated address and a list of all associated users.
-    """
+
     template_name = 'dashboard/catalogue/style/style_manage.html'
     form_class = StyleCreateForm
     success_url = reverse_lazy('dashboard:style-list')

@@ -2,7 +2,7 @@ from django.conf.urls import include, url,patterns
 from rest_framework import routers
 from .customer import views as customerViews
 from .address import views as addressViews
-from catalogue import views as catalogueViews
+from .catalogue import views as catalogueViews
 # from django.contrib.auth.views import
 
 #####   customer urls   #####
@@ -23,8 +23,12 @@ urlpatterns = [
 
     url(r'^rest-auth/facebook/$', customerViews.FacebookLogin.as_view(), name='fb_login'),
 
+    url(r'^customer_profile_deactivate/$',customerViews.CustomerProfileDeleteView,name='customer_profile_delete_view'),
+
     ###-----product apis
     url(r'product_list/',catalogueViews.ProductListView.as_view(),name='product_list_view'),
+
+    url(r'^product_like/(?P<prod_id>[0-9]+)/',catalogueViews.ProductLikeView.as_view(),name='Product_like_view')
 
 
 ]

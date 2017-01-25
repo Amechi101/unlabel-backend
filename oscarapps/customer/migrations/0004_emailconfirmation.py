@@ -12,14 +12,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='EmailConfirmation',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=250, verbose_name=b'Email')),
-                ('key', models.CharField(max_length=255, verbose_name=b'Hash Key')),
-                ('created_time', models.DateTimeField(auto_now_add=True, verbose_name=b'Created Date')),
-                ('link_expired', models.BooleanField(default=False, verbose_name=b'Link Expired')),
-            ],
-        ),
+
     ]

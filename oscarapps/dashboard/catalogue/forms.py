@@ -11,9 +11,11 @@ Style = get_model('partner', 'Style')
 class ProductForm(CoreProductForm):
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'care_info_description',
-            'size_and_fit_description', 'color', 'size', 'item_sex_type']
-
+            'title', 'upc', 'description', 'material_info',
+            'size_and_fit_description', 'size', 'item_sex_type', 'status', 'rental_status']
+        labels = {
+            'title': _('Name'),
+        }
 
 class StyleSearchForm(forms.Form):
     name = forms.CharField(
@@ -24,16 +26,9 @@ class StyleCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(StyleCreateForm, self).__init__(*args, **kwargs)
-        # Partner.name is optional and that is okay. But if creating through
-        # the dashboard, it seems sensible to enforce as it's the only field
-        # in the form.
+
         self.fields['name'].required = True
 
     class Meta:
         model = Style
         fields = ('name', 'description')
-
-# ROLE_CHOICES = (
-#     ('staff', _('Full dashboard access')),
-#     ('limited', _('Limited dashboard access')),
-# )
