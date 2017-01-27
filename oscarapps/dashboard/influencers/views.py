@@ -5,14 +5,11 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponse
 
-from oscar.core.compat import get_user_model
 from oscar.core.loading import get_classes
 from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.forms import UserEmailForm
 from oscar.apps.customer.utils import normalise_email
-
 
 from oscarapps.dashboard.influencers.forms import NewUserForm, ExistingUserForm
 from oscarapps.influencers.models import Influencers
@@ -24,15 +21,14 @@ User = InfluencerAccountInfo
 # Influencer views
 # ================
 
-(
-    InfluencerSearchForm, InfluencerCreateForm
-) = get_classes(
-    'dashboard.influencers.forms',
-    ['InfluencerSearchForm', 'InfluencerCreateForm'], 'oscarapps')
-
+(InfluencerSearchForm, InfluencerCreateForm) = get_classes('dashboard.influencers.forms',
+                                                            ['InfluencerSearchForm', 'InfluencerCreateForm'],
+                                                             'oscarapps')
 
 class InfluencerListView(generic.ListView):
-
+    """
+    List all existing influencers
+    """
     model = Influencers
     context_object_name = 'influencers'
     template_name = 'influencers/influencer_list.html'
@@ -41,7 +37,6 @@ class InfluencerListView(generic.ListView):
 
     def post(self, request, *args, **kwargs):
         pass
-
 
 
     def get_queryset(self):
@@ -73,8 +68,10 @@ class InfluencerListView(generic.ListView):
         ctx['is_filtered'] = self.is_filtered
         return ctx
 
-
 class InfluencerCreateView(generic.CreateView):
+    """
+    Create an influencer
+    """
     model = Influencers
     template_name = 'influencers/influencer_form.html'
     form_class = InfluencerCreateForm
@@ -93,6 +90,9 @@ class InfluencerCreateView(generic.CreateView):
 
 
 class InfluencerManageView(generic.UpdateView):
+    """
+    Edit and update an influencer
+    """
     template_name = 'influencers/influencer_manage.html'
     form_class = InfluencerCreateForm
     success_url = reverse_lazy('dashboard:influencer-list')
@@ -120,6 +120,9 @@ class InfluencerManageView(generic.UpdateView):
 
 
 class InfluencerDeleteView(generic.DeleteView):
+    """
+    Delete an influencer from db
+    """
     model = Influencers
     template_name = 'influencers/influencer_delete.html'
 
@@ -130,12 +133,66 @@ class InfluencerDeleteView(generic.DeleteView):
         return reverse('dashboard:influencer-list')
 
 
-# =================
-# Influencer users
-# =================
+
+class InfluencerFilterView(generic.ListView):
+    """
+    View for filtering influencer models based on active influencer parameter
+    """
+    model = Influencers
+    context_object_name = 'influencers'
+    template_name = 'influencers/influencer_list.html'
+    form_class = InfluencerSearchForm
+
+
+    def get(self, request, *args, **kwargs):
+
+        return super(InfluencerFilterView, self).get(request, *args, **kwargs)
+
+
+    def get_queryset(self):
+
+        queryset = self.model.objects.all()
+        is_active = self.request.GET.get('active')
+
+        if is_active:
+            queryset = queryset.filter(is_active=True)
+
+        self.description = _("All influencers")
+
+        # We track whether the queryset is filtered to determine whether we
+        # show the search form 'reset' button.
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+        if not self.form.is_valid():
+            return queryset
+
+        data = self.form.cleaned_data
+        if data['name']:
+            queryset = queryset.filter(name__icontains=data['name'])
+            self.description = _("Influencers matching '%s'") % data['name']
+            self.is_filtered = True
+        return queryset
+
+
+    def get_context_data(self, **kwargs):
+        ctx = super(InfluencerFilterView, self).get_context_data(**kwargs)
+        if self.request.GET.get('active'):
+            ctx['active'] = True
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx
+
+
+# ===============================
+# Influencer user related views
+# ===============================
 
 
 class InfluencerUserCreateView(generic.CreateView):
+    """
+    Create a new user to link an influencer
+    """
     model = User
     template_name = 'influencers/influencer_user_form.html'
     form_class = NewUserForm
@@ -165,6 +222,9 @@ class InfluencerUserCreateView(generic.CreateView):
 
 
 class InfluencerUserSelectView(generic.ListView):
+    """
+    Select a user to link to influencer
+    """
     template_name = 'influencers/influencer_user_select.html'
     form_class = UserEmailForm
     context_object_name = 'users'
@@ -198,6 +258,9 @@ class InfluencerUserSelectView(generic.ListView):
 
 
 class InfluencerUserLinkView(generic.View):
+    """
+      Link a user to an influencer
+    """
     def get(self, request, user_pk, influencer_pk):
         # need to allow GET to make Undo link in PartnerUserUnlinkView work
         return self.post(request, user_pk, influencer_pk)
@@ -234,10 +297,10 @@ class InfluencerUserLinkView(generic.View):
 class InfluencerUserUnlinkView(generic.View):
     def unlink_user(self, user, influencer):
         """
-        Unlinks a user from a partner, and removes the dashboard permission
+        Unlinks a user from a influencer, and removes the dashboard permission
         if they are not linked to any other partners.
 
-        Returns False if the user was not linked to the partner; True
+        Returns False if the user was not linked to the influencer; True
         otherwise.
         """
         if not influencer.users.filter(pk=user.pk).exists():
@@ -270,12 +333,10 @@ class InfluencerUserUnlinkView(generic.View):
         return redirect('dashboard:influencer-manage', pk=influencer_pk)
 
 
-# =====
-# Users
-# =====
-
-
 class InfluencerUserUpdateView(generic.UpdateView):
+    """
+    Update influencer linked user details
+    """
     template_name = 'influencers/influencer_user_form.html'
     form_class = ExistingUserForm
 
@@ -297,54 +358,3 @@ class InfluencerUserUpdateView(generic.UpdateView):
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
         return reverse('dashboard:influencer-list')
-
-
-class InfluencerFilterView(generic.ListView):
-
-    model = Influencers
-    context_object_name = 'influencers'
-    template_name = 'influencers/influencer_list.html'
-    form_class = InfluencerSearchForm
-
-
-    def get(self, request, *args, **kwargs):
-        # if request.GET.get('active'):
-        #     self.active_flag = True
-        # else:
-        #     self.active_flag = False
-        return super(InfluencerFilterView, self).get(request, *args, **kwargs)
-
-
-    def get_queryset(self):
-
-        queryset = self.model.objects.all()
-        is_active = self.request.GET.get('active')
-
-        if is_active:
-            queryset = queryset.filter(is_active=True)
-
-        self.description = _("All influencers")
-
-        # We track whether the queryset is filtered to determine whether we
-        # show the search form 'reset' button.
-        self.is_filtered = False
-        self.form = self.form_class(self.request.GET)
-        if not self.form.is_valid():
-            return queryset
-
-        data = self.form.cleaned_data
-        if data['name']:
-            queryset = queryset.filter(name__icontains=data['name'])
-            self.description = _("Influencers matching '%s'") % data['name']
-            self.is_filtered = True
-        return queryset
-
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerFilterView, self).get_context_data(**kwargs)
-        if self.request.GET.get('active'):
-           ctx['active'] = True
-        ctx['queryset_description'] = self.description
-        ctx['form'] = self.form
-        ctx['is_filtered'] = self.is_filtered
-        return ctx

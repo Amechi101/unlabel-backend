@@ -17,7 +17,6 @@ class States(models.Model):
 
 
 class Locations(models.Model):
-
     city = models.CharField(max_length=200, default="", blank=False, null=False, verbose_name=_('City'))
     state = models.ForeignKey(States, null=True, blank=True, default='', verbose_name=_('State'))
     country = models.ForeignKey(Country, null=False, blank=False, default="", verbose_name=_('Country'))

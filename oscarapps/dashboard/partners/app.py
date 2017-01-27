@@ -9,15 +9,15 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
     partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
 
 
-    store_type_list_view = get_class('oscarapps.dashboard.partners.views',
-                                 'StoreTypeListView')
-
-    store_type_create_view = get_class('oscarapps.dashboard.partners.views',
-                                 'StoreTypeCreateView')
-    store_type_manage_view = get_class('oscarapps.dashboard.partners.views',
-                                 'StoreTypeManageView')
-    store_type_delete_view = get_class('oscarapps.dashboard.partners.views',
-                                 'StoreTypeDeleteView')
+    # store_type_list_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeListView')
+    #
+    # store_type_create_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeCreateView')
+    # store_type_manage_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeManageView')
+    # store_type_delete_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeDeleteView')
 
 
 
@@ -70,13 +70,13 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
-            url(r'^store_type/$', self.store_type_list_view.as_view(), name='store-type-list'),
-            url(r'^store_type/create/$', self.store_type_create_view.as_view(),
-                name='store-type-create'),
-            url(r'^store_type/(?P<pk>\d+)/$', self.store_type_manage_view.as_view(),
-                name='store-type-manage'),
-            url(r'^store_type/(?P<pk>\d+)/delete/$', self.store_type_delete_view.as_view(),
-                name='store-type-delete'),
+            # url(r'^store_type/$', self.store_type_list_view.as_view(), name='store-type-list'),
+            # url(r'^store_type/create/$', self.store_type_create_view.as_view(),
+            #     name='store-type-create'),
+            # url(r'^store_type/(?P<pk>\d+)/$', self.store_type_manage_view.as_view(),
+            #     name='store-type-manage'),
+            # url(r'^store_type/(?P<pk>\d+)/delete/$', self.store_type_delete_view.as_view(),
+            #     name='store-type-delete'),
 
 
 

@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+import random
+import string
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
-from oscarapps.address.models import Locations
-import random
-import string
+
 from oscar.core.compat import get_user_model
+
+from oscarapps.address.models import Locations
+
 User = get_user_model()
 
 class BaseApplicationModel(models.Model):

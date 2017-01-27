@@ -1,16 +1,17 @@
-from oscarapps.partner.models import Partner
 from django import forms
 from django.utils.translation import pgettext_lazy
-from oscar.core.loading import get_model
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Permission
+
 from oscar.apps.customer.forms import EmailUserCreationForm
-from oscar.core.compat import existing_user_fields, get_user_model
+from oscar.core.compat import existing_user_fields
 from oscar.core.validators import password_validators
+
 from oscarapps.influencers.models import Influencers
 from oscarapps.influencers.models import InfluencerAccountInfo
 
 User = InfluencerAccountInfo
+
 
 class InfluencerSearchForm(forms.Form):
     name = forms.CharField(
@@ -18,17 +19,18 @@ class InfluencerSearchForm(forms.Form):
 
 
 class InfluencerCreateForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super(InfluencerCreateForm, self).__init__(*args, **kwargs)
 
         self.fields['name'].required = True
         self.fields['auto_id'].required = False
-    auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly':'True'}))
+
+    auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+
     class Meta:
         model = Influencers
-        fields = ('auto_id', 'name', 'bio', 'location', 'is_active', 'image', 'height', 'chest_or_bust', 'hips', 'waist', 'shoe_size')
-
+        fields = ('auto_id', 'name', 'bio', 'location', 'is_active', 'image',
+                  'height', 'chest_or_bust', 'hips', 'waist', 'shoe_size')
 
 
 ROLE_CHOICES = (
@@ -60,7 +62,7 @@ class NewUserForm(EmailUserCreationForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']+['contact_number']
+            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2'] + ['contact_number']
 
 
 class ExistingUserForm(forms.ModelForm):
@@ -118,4 +120,4 @@ class ExistingUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            [ 'username', 'first_name', 'last_name']) + ['password1', 'password2']+['contact_number']
+            ['username', 'first_name', 'last_name']) + ['password1', 'password2'] + ['contact_number']

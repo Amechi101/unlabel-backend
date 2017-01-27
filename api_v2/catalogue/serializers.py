@@ -5,7 +5,7 @@ from oscarapi.utils import (
     overridable,
     OscarHyperlinkedModelSerializer
 )
-from oscarapps.partner.models import Partner,BrandStoreType
+from oscarapps.partner.models import Partner, Style
 from oscarapps.address.models import Locations
 from oscarapps.catalogue.models import Product
 from oscar.core.loading import get_model
@@ -96,5 +96,5 @@ class ProductSerializer(OscarModelSerializer):
 class StoreTypeSerializer(OscarModelSerializer):
 
     class Meta:
-        model = BrandStoreType
+        model = Style
         fields='__all__'
