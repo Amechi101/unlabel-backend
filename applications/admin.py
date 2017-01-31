@@ -144,8 +144,8 @@ admin.site.register(Brand, BrandAdmin)
 admin.site.register(Style, StyleAdmin)
 admin.site.register(Category, CategoryAdmin)
 # admin.site.register(Product, ProductAdmin)
-admin.site.register(City, CityAdmin)
-admin.site.register(Location, LocationAdmin)
+# admin.site.register(City, CityAdmin)
+# admin.site.register(Location, LocationAdmin)
 
 
 

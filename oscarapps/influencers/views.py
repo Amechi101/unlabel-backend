@@ -6,41 +6,38 @@ from django.views.generic.detail import SingleObjectMixin
 
 from oscarapps.influencers.models import Influencers
 
+
 class InfluencerListView(ListView):
+    template_name = 'pages/_influencers.html'
 
-	template_name = 'pages/_influencers.html'
+    model = Influencers
 
-	model = Influencers
+    def get_context_data(self, **kwargs):
+        ctx = super(InfluencerListView, self).get_context_data(**kwargs)
+        ctx['influencer_list'] = Influencers.objects.filter(influencer_isActive=True).order_by('-created')
 
-	def get_context_data(self, **kwargs):
-
-		ctx = super(InfluencerListView, self).get_context_data(**kwargs)
-		ctx['influencer_list'] = Influencers.objects.filter( influencer_isActive=True ).order_by('-created')
-
-		return ctx
+        return ctx
 
 
 class InfluencerDetailView(SingleObjectMixin, ListView):
+    model = Influencers
 
-	model = Influencers
+    template_name = 'pages/_influencer_detail.html'
 
-	template_name = 'pages/_influencer_detail.html'
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Influencers.objects.all())
 
-	def get(self, request, *args, **kwargs):
-		self.object = self.get_object(queryset=Influencers.objects.all())
+        return super(InfluencerDetailView, self).get(request, *args, **kwargs)
 
-		return super(InfluencerDetailView, self).get(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        ctx = super(InfluencerDetailView, self).get_context_data(**kwargs)
 
-	def get_context_data(self, **kwargs):
+        ctx['influencer'] = self.object
 
-		ctx = super(InfluencerDetailView, self).get_context_data(**kwargs)
+        return ctx
 
-		ctx['influencer'] = self.object
-
-		return ctx
-
-	def get_queryset(self,  **kwargs):
-		return self.object
+    def get_queryset(self, **kwargs):
+        return self.object
 
 
 

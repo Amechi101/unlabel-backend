@@ -46,7 +46,7 @@ class Locations(models.Model):
         address = str(self.city) + ","
         if self.state:
             address += str(self.state.name) + ","
-        address += str(self.country.name) + ","
+        address += str(self.country.name)
         self.latitude, self.longitude = self.get_coordinates(address)
         super(Locations, self).save(*args, **kwargs)
 
