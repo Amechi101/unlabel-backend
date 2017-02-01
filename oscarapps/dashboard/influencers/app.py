@@ -18,17 +18,6 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
                                  'InfluencerFilterView')
 
 
-    user_link_view = get_class('dashboard.influencers.views',
-                               'InfluencerUserLinkView')
-    user_unlink_view = get_class('dashboard.influencers.views',
-                                 'InfluencerUserUnlinkView')
-    user_create_view = get_class('dashboard.influencers.views',
-                                 'InfluencerUserCreateView')
-    user_select_view = get_class('dashboard.influencers.views',
-                                 'InfluencerUserSelectView')
-    user_update_view = get_class('dashboard.influencers.views',
-                                 'InfluencerUserUpdateView')
-
 
 
     def get_urls(self):
@@ -42,20 +31,6 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
             url(r'^(?P<pk>\d+)/delete/$', self.influencer_delete_view.as_view(),
                 name='influencer-delete'),
 
-
-            url(r'^(?P<influencer_pk>\d+)/users/add/$',
-                self.user_create_view.as_view(),
-                name='influencer-user-create'),
-            url(r'^(?P<influencer_pk>\d+)/users/select/$',
-                self.user_select_view.as_view(),
-                name='influencer-user-select'),
-            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/link/$',
-                self.user_link_view.as_view(), name='influencer-user-link'),
-            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/unlink/$',
-                self.user_unlink_view.as_view(), name='influencer-user-unlink'),
-            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/update/$',
-                self.user_update_view.as_view(),
-                name='influencer-user-update'),
 
             url(r'^filter/$', self.influencer_filter_view.as_view(), name='influencer-filter'),
         ]

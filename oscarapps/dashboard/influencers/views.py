@@ -1,38 +1,41 @@
+import uuid
 from django.contrib.auth.models import Permission
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import Site
+from django.core.mail import EmailMessage
+from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponse
 
-from oscar.core.compat import get_user_model
 from oscar.core.loading import get_classes
 from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.forms import UserEmailForm
 from oscar.apps.customer.utils import normalise_email
+from users.models import User
+from oscarapps.influencers.models import Influencers,InfluencerInvite
 
 
-from oscarapps.dashboard.influencers.forms import NewUserForm, ExistingUserForm
-from oscarapps.influencers.models import Influencers
-from oscarapps.influencers.models import InfluencerAccountInfo
 
-User = InfluencerAccountInfo
 
 # ================
 # Influencer views
 # ================
 
-(
-    InfluencerSearchForm, InfluencerCreateForm
-) = get_classes(
-    'dashboard.influencers.forms',
-    ['InfluencerSearchForm', 'InfluencerCreateForm'], 'oscarapps')
+(InfluencerSearchForm, InfluencerCreateForm) = get_classes('dashboard.influencers.forms',
+                                                           ['InfluencerSearchForm', 'InfluencerCreateForm'],
+                                                           'oscarapps')
 
 
 class InfluencerListView(generic.ListView):
-
+    """
+    List all existing influencers
+    """
     model = Influencers
     context_object_name = 'influencers'
     template_name = 'influencers/influencer_list.html'
@@ -40,8 +43,46 @@ class InfluencerListView(generic.ListView):
 
 
     def post(self, request, *args, **kwargs):
-        pass
+        invite_email = request.POST.get("invite_email")
+        print("=======================", invite_email)
+        current_site = Site.objects.get_current()
+        domain = current_site.domain
+        verify_code = str(uuid.uuid1()).replace('-','').upper()[0:10]
+        context = {
+            'domain': domain,
+            'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
+            'user': invite_email,
+            'protocol': 'http',
+        }
+        invite_sent = InfluencerInvite()
+        invite_sent.email = context['user']
+        invite_sent.code = context['verify_code']
 
+        tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
+        email = EmailMessage()
+        email.subject = "Influencer inviattion from Unlabel"
+        email.content_subtype = "html"
+        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                        <body>
+                        <br><br>
+                        You're being invited as influencer at unlabel
+                        <br><br>
+                        Please fill the form provided at the link :
+                        <br><br>
+                        """ + tosend + """
+                        <br><br>
+                        Thank you for using our site!
+                        <br/>
+                        <br/>
+                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                        </body>
+                        </head>
+                        </html>"""
+        email.from_email = "Unlabel App"
+        email.to = [invite_email]
+        email.send()
+        invite_sent.save()
+        return HttpResponseRedirect("/oscar/dashboard/influencers/")
 
 
     def get_queryset(self):
@@ -74,11 +115,44 @@ class InfluencerListView(generic.ListView):
         return ctx
 
 
-class InfluencerCreateView(generic.CreateView):
+class InfluencerCreateView(generic.View):
+    """
+    Create an influencer
+    """
     model = Influencers
     template_name = 'influencers/influencer_form.html'
     form_class = InfluencerCreateForm
     success_url = reverse_lazy('dashboard:influencer-list')
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'influencers/influencer_form.html', {'form': InfluencerCreateForm})
+
+    def post(self, request, *args, **kwargs):
+        influencer_form = InfluencerCreateForm(data=request.POST)
+        if influencer_form.is_valid():
+            influencer_user = User.objects.create(email=influencer_form['email'].value(),
+                                                  first_name=influencer_form['first_name'].value(),
+                                                  last_name=influencer_form['last_name'].value())
+            influencer_user.save()
+            influencer_user.set_password(influencer_form['password'].value())
+            influencer_user.save()
+            influencer_profile = Influencers.objects.create(bio=influencer_form['bio'].value(),
+                                                            height=influencer_form['height'].value(),
+                                                            chest_or_bust=influencer_form['chest_or_bust'].value(),
+                                                            hips=influencer_form['hips'].value(),
+                                                            waist=influencer_form['waist'].value(),
+                                                            users=influencer_user
+            )
+            if 'image' in request.FILES:
+                influencer_profile.image = request.FILES['image']
+
+            influencer_profile.save()
+
+            return HttpResponseRedirect("/oscar/dashboard/influencers/")
+
+        else:
+            return render(request, 'influencers/influencer_form.html', {'form': influencer_form})
+
 
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerCreateView, self).get_context_data(**kwargs)
@@ -86,40 +160,48 @@ class InfluencerCreateView(generic.CreateView):
         return ctx
 
     def get_success_url(self):
+        print("------------------inside get success url")
         messages.success(self.request,
                          _("Influencer '%s' was created successfully.") %
                          self.object.name)
         return reverse('dashboard:influencer-list')
 
 
-class InfluencerManageView(generic.UpdateView):
+class InfluencerManageView(generic.DetailView):
+    """
+    Edit and update an influencer
+    """
     template_name = 'influencers/influencer_manage.html'
-    form_class = InfluencerCreateForm
+    # form_class = InfluencerCreateForm
     success_url = reverse_lazy('dashboard:influencer-list')
 
     def get_object(self, queryset=None):
         self.influencer = get_object_or_404(Influencers, pk=self.kwargs['pk'])
         return self.influencer
+        #
+        # def get_initial(self):
+        # return {'name': self.influencer.users.first_name}
 
-    def get_initial(self):
-        return {'name': self.influencer.name}
+        # def get_context_data(self, **kwargs):
+        #     ctx = super(InfluencerManageView, self).get_context_data(**kwargs)
+        #     ctx['influencer'] = self.influencer
+        #     ctx['title'] = self.influencer.users.first_name
+        #     ctx['form'] = self.form_class
+        #     return ctx
 
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerManageView, self).get_context_data(**kwargs)
-        ctx['influencer'] = self.influencer
-        ctx['title'] = self.influencer.name
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Influencer '%s' was updated successfully.") %
-            self.influencer.name)
-        self.influencer.name = form.cleaned_data['name']
-        self.influencer.save()
-        return super(InfluencerManageView, self).form_valid(form)
+        # def form_valid(self, form):
+        #     messages.success(
+        #         self.request, _("Influencer '%s' was updated successfully.") %
+        #         self.influencer.name)
+        #     self.influencer.name = form.cleaned_data['name']
+        #     self.influencer.save()
+        #     return super(InfluencerManageView, self).form_valid(form)
 
 
 class InfluencerDeleteView(generic.DeleteView):
+    """
+    Delete an influencer from db
+    """
     model = Influencers
     template_name = 'influencers/influencer_delete.html'
 
@@ -130,177 +212,10 @@ class InfluencerDeleteView(generic.DeleteView):
         return reverse('dashboard:influencer-list')
 
 
-# =================
-# Influencer users
-# =================
-
-
-class InfluencerUserCreateView(generic.CreateView):
-    model = User
-    template_name = 'influencers/influencer_user_form.html'
-    form_class = NewUserForm
-
-    def dispatch(self, request, *args, **kwargs):
-        self.influencer = get_object_or_404(
-            Influencers, pk=kwargs.get('influencer_pk', None))
-        return super(InfluencerUserCreateView, self).dispatch(
-            request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerUserCreateView, self).get_context_data(**kwargs)
-        ctx['influencer'] = self.influencer
-        ctx['title'] = _('Create user')
-        return ctx
-
-    def get_form_kwargs(self):
-        kwargs = super(InfluencerUserCreateView, self).get_form_kwargs()
-        kwargs['influencer'] = self.influencer
-        return kwargs
-
-    def get_success_url(self):
-        name = self.object.get_full_name() or self.object.email
-        messages.success(self.request,
-                         _("User '%s' was created successfully.") % name)
-        return reverse('dashboard:influencer-list')
-
-
-class InfluencerUserSelectView(generic.ListView):
-    template_name = 'influencers/influencer_user_select.html'
-    form_class = UserEmailForm
-    context_object_name = 'users'
-
-    def dispatch(self, request, *args, **kwargs):
-
-        self.influencer = get_object_or_404(
-            Influencers, pk=kwargs.get('influencer_pk', None))
-        return super(InfluencerUserSelectView, self).dispatch(
-            request, *args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        data = None
-        if 'email' in request.GET:
-            data = request.GET
-        self.form = self.form_class(data)
-        return super(InfluencerUserSelectView, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerUserSelectView, self).get_context_data(**kwargs)
-        ctx['influencer'] = self.influencer
-        ctx['form'] = self.form
-        return ctx
-
-    def get_queryset(self):
-        if self.form.is_valid():
-            email = normalise_email(self.form.cleaned_data['email'])
-            return User.objects.filter(email__icontains=email)
-        else:
-            return User.objects.none()
-
-
-class InfluencerUserLinkView(generic.View):
-    def get(self, request, user_pk, influencer_pk):
-        # need to allow GET to make Undo link in PartnerUserUnlinkView work
-        return self.post(request, user_pk, influencer_pk)
-
-    def post(self, request, user_pk, influencer_pk):
-        user = get_object_or_404(User, pk=user_pk)
-        name = user.get_full_name() or user.email
-        influencer = get_object_or_404(Influencers, pk=influencer_pk)
-        if self.link_user(user, influencer):
-            messages.success(
-                request,
-                _("User '%(name)s' was linked to '%(influencer_name)s'")
-                % {'name': name, 'influencer_name': influencer.name})
-        else:
-            messages.info(
-                request,
-                _("User '%(name)s' is already linked to '%(influencer_name)s'")
-                % {'name': name, 'influencer_name': influencer.name})
-        return redirect('dashboard:influencer-manage', pk=influencer_pk)
-
-    def link_user(self, user, influencer):
-
-        if influencer.users.filter(pk=user.pk).exists():
-            return False
-        influencer.users.add(user)
-        if not user.is_staff:
-            dashboard_access_perm = Permission.objects.get(
-                codename='dashboard_access',
-                content_type__app_label='influencer')
-            user.user_permissions.add(dashboard_access_perm)
-        return True
-
-
-class InfluencerUserUnlinkView(generic.View):
-    def unlink_user(self, user, influencer):
-        """
-        Unlinks a user from a partner, and removes the dashboard permission
-        if they are not linked to any other partners.
-
-        Returns False if the user was not linked to the partner; True
-        otherwise.
-        """
-        if not influencer.users.filter(pk=user.pk).exists():
-            return False
-        influencer.users.remove(user)
-        if not user.is_staff and not user.influencers.exists():
-            dashboard_access_perm = Permission.objects.get(
-                codename='dashboard_access',
-                content_type__app_label='influencer')
-            user.user_permissions.remove(dashboard_access_perm)
-        return True
-
-    def post(self, request, user_pk, influencer_pk):
-        user = get_object_or_404(User, pk=user_pk)
-        name = user.get_full_name() or user.email
-        influencer = get_object_or_404(Influencers, pk=influencer_pk)
-        if self.unlink_user(user, influencer):
-            msg = render_to_string(
-                'influencers/influencer_user_unlinked.html',
-                {'user_name': name,
-                 'influencer_name': influencer.name,
-                 'user_pk': user_pk,
-                 'influencer_pk': influencer_pk})
-            messages.success(self.request, msg, extra_tags='safe noicon')
-        else:
-            messages.error(
-                request,
-                _("User '%(name)s' is not linked to '%(influencer_name)s'") %
-                {'name': name, 'influencer_name': influencer.name})
-        return redirect('dashboard:influencer-manage', pk=influencer_pk)
-
-
-# =====
-# Users
-# =====
-
-
-class InfluencerUserUpdateView(generic.UpdateView):
-    template_name = 'influencers/influencer_user_form.html'
-    form_class = ExistingUserForm
-
-    def get_object(self, queryset=None):
-        self.influencer = get_object_or_404(Influencers, pk=self.kwargs['influencer_pk'])
-        return get_object_or_404(User,
-                                 pk=self.kwargs['user_pk'],
-                                 influencers__pk=self.kwargs['influencer_pk'])
-
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerUserUpdateView, self).get_context_data(**kwargs)
-        name = self.object.get_full_name() or self.object.email
-        ctx['influencer'] = self.influencer
-        ctx['title'] = _("Edit user '%s'") % name
-        return ctx
-
-    def get_success_url(self):
-        name = self.object.get_full_name() or self.object.email
-        messages.success(self.request,
-                         _("User '%s' was updated successfully.") % name)
-        return reverse('dashboard:influencer-list')
-
-
 class InfluencerFilterView(generic.ListView):
-
+    """
+    View for filtering influencer models based on active influencer parameter
+    """
     model = Influencers
     context_object_name = 'influencers'
     template_name = 'influencers/influencer_list.html'
@@ -308,10 +223,7 @@ class InfluencerFilterView(generic.ListView):
 
 
     def get(self, request, *args, **kwargs):
-        # if request.GET.get('active'):
-        #     self.active_flag = True
-        # else:
-        #     self.active_flag = False
+
         return super(InfluencerFilterView, self).get(request, *args, **kwargs)
 
 
@@ -343,7 +255,7 @@ class InfluencerFilterView(generic.ListView):
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerFilterView, self).get_context_data(**kwargs)
         if self.request.GET.get('active'):
-           ctx['active'] = True
+            ctx['active'] = True
         ctx['queryset_description'] = self.description
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered

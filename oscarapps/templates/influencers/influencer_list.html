@@ -23,6 +23,15 @@
 {% endblock header %}
 
 {% block dashboard_content %}
+        <h2>Invite via email</h2>
+        <div class="well">
+        <form action="" method="POST" class="form-inline">
+            {%csrf_token%}
+            <input type="email" id="invite_email" name="invite_email">
+            <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Sending...' %}">{% trans "Send Influencer Invite Email" %}</button>
+        </form>
+    </div>
+        <h2>Search</h2>
     <div class="well">
         <form action="" method="get" class="form-inline">
             {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
@@ -54,24 +63,24 @@
                 {% for influencer in influencers %}
                     <tr>
                         <td>
-                            <a href="{% url 'dashboard:influencer-manage' pk=influencer.pk %}">{{ influencer.name }}</a>
+                            <a href="{% url 'dashboard:influencer-manage' pk=influencer.pk %}">{{ influencer.users.first_name }}</a>
                         </td>
                         <td>
-                            {% with users=influencer.users.all %}
-                                {% if users %}
+
+                                {% if influencer.users %}
                                     <ul>
-                                        {% for user in users %}
+
                                             <li>
-                                                <a href="{% url 'dashboard:influencer-user-update' influencer_pk=influencer.pk user_pk=user.id %}" title="{% trans "Edit the user's details" %}">
-                                                    {{ user.get_full_name|default:user.email }}
+                                                <a href="{% url 'dashboard:influencer-user-update' influencer_pk=influencer.pk user_pk=influencer.users.pk %}" title="{% trans "Edit the user's details" %}">
+                                                    {{ influencer.users.email }}
                                                 </a>
                                             </li>
-                                        {% endfor %}
+
                                     </ul>
                                 {% else %}
                                     {% trans 'No users associated.' %}
                                 {% endif %}
-                            {% endwith %}
+
                         </td>
 {#            pa#}
                         <td>
@@ -84,8 +93,7 @@
                                     <ul class="dropdown-menu pull-right">
                                         <li><a href="{% url 'dashboard:influencer-manage' pk=influencer.pk %}">{% trans "Manage influencer and users" %}</a></li>
                                         <li><a href="{% url 'dashboard:influencer-delete' pk=influencer.pk %}">{% trans "Delete influencer" %}</a></li>
-                                        <li><a href="{% url 'dashboard:influencer-user-select' influencer_pk=influencer.pk %}">{% trans "Link an existing user" %}</a></li>
-                                        <li><a href="{% url 'dashboard:influencer-user-create' influencer_pk=influencer.pk %}">{% trans "Link a new user" %}</a></li>
+
                                     </ul>
                                 </div>
                             </div>
