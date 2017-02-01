@@ -12,7 +12,7 @@ from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
 
 from .serializers import PartnerSerializer,StoreTypeSerializer,ProductSerializer
-from oscarapps.partner.models import BrandStoreType,PartnerFollow
+from oscarapps.partner.models import PartnerFollow,Style
 
 from oscar.apps.partner.models import StockRecord
 # from oscar.apps.basket.models import
