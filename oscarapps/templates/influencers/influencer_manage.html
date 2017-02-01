@@ -63,10 +63,7 @@
         {% else %}
             <p>{% trans "No users linked." %}</p>
         {% endif %}
-        <div class="form-group">
-            <a class="btn btn-info" href="{% url 'dashboard:influencer-user-create' influencer_pk=influencer.pk %}" >{% trans "Link a new user" %}</a>
-            <a class="btn btn-info" href="{% url 'dashboard:influencer-user-select' influencer_pk=influencer.pk %}" >{% trans "Link an existing user" %}</a>
-        </div>
+
     </div>
 
 {% endblock dashboard_content %}

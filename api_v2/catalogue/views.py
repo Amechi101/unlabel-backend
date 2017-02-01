@@ -10,8 +10,10 @@ from oscarapi import serializers, permissions
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
+
 from .serializers import PartnerSerializer,StoreTypeSerializer,ProductSerializer
 from oscarapps.partner.models import BrandStoreType,PartnerFollow
+
 from oscar.apps.partner.models import StockRecord
 # from oscar.apps.basket.models import
 
@@ -171,7 +173,7 @@ class ProductListView(generics.ListAPIView):
 
 class StoreListView(generics.ListAPIView):
 
-    queryset = BrandStoreType.objects.all()
+    queryset = Style.objects.all()
     serializer_class = StoreTypeSerializer
     paginate_by = None
 

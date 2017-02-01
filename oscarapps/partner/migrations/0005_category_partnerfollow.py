@@ -3,35 +3,37 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+import multiselectfield.db.fields
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('customer', '0003_update_email_length'),
+        ('partner', '0004_auto_20160107_1755'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='UserProductLike',
+            name='Category',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', models.DateTimeField(auto_now_add=True, null=True)),
+                ('modified', models.DateTimeField(auto_now=True, null=True)),
+                ('category', multiselectfield.db.fields.MultiSelectField(choices=[('M', 'Menswear'), ('W', 'Womenswear')], max_length=3)),
             ],
             options={
-                'verbose_name_plural': 'Product_Likes',
-                'verbose_name': 'Product_Like',
+                'verbose_name_plural': 'Categories',
+                'verbose_name': 'Category',
             },
         ),
         migrations.CreateModel(
-            name='UserVerify',
+            name='PartnerFollow',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('verification_code', models.TextField(max_length=11)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('is_verified', models.BooleanField(default=False)),
             ],
             options={
-                'verbose_name': 'User Verification',
+                'verbose_name_plural': 'Brand Follows',
+                'verbose_name': 'Brand Follows',
             },
         ),
     ]

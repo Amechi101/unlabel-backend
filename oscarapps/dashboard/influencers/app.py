@@ -19,6 +19,13 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
+    user_update_view = get_class('dashboard.influencers.views',
+                                 'InfluencerUserUpdateView')
+
+
+
+
+
 
     def get_urls(self):
         urls = [
@@ -32,7 +39,15 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
                 name='influencer-delete'),
 
 
+
+
             url(r'^filter/$', self.influencer_filter_view.as_view(), name='influencer-filter'),
+
+
+            url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/update/$',
+                self.user_update_view.as_view(),
+                name='influencer-user-update'),
+
         ]
         return self.post_process_urls(urls)
 application = InfluencersDashboardApplication()
