@@ -6,7 +6,7 @@ from oscar.apps.customer.utils import normalise_email
 from oscarapps.partner.models import Partner
 from oscarapps.address.models import Locations
 from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404,redirect
+from django.shortcuts import get_object_or_404,redirect,render
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
@@ -21,10 +21,13 @@ from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartner
 from oscar.apps.dashboard.partners.forms import PartnerAddressForm,PartnerSearchForm
 from oscarapps.dashboard.partners.forms import PartnerCreateForm
 from oscarapps.partner.models import Partner
+from oscarapps.address.models import States,Country,Locations
+from oscarapps.partner.models import Style, SubCategory, Category
+from django.http import HttpResponseRedirect
 
 from oscarapps.address.states import stateList
-
-User = get_user_model()
+from django.core.exceptions import ObjectDoesNotExist
+from users.models import User
 
 # =======
 #Partner views
@@ -127,22 +130,60 @@ class PartnerDeleteView(CorePartnerDeleteView):
         return reverse('dashboard:partner-list')
 
 
-class PartnerCreateView(generic.CreateView):
+class PartnerCreateView(generic.View):
     model = Partner
     template_name = 'dashboard/partners/partner_form.html'
     form_class = PartnerCreateForm
     success_url = reverse_lazy('dashboard:partner-list')
 
-    def get_context_data(self, **kwargs):
-        ctx = super(PartnerCreateView, self).get_context_data(**kwargs)
-        ctx['title'] = _('Create new brand')
-        return ctx
+    def get(self, request, *args, **kwargs):
+        return render(request, 'dashboard/partners/partner_form.html', {'form': PartnerCreateForm})
 
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Brand '%s' was created successfully.") %
-                         self.object.name)
-        return reverse('dashboard:partner-list')
+
+    def post(self, request, *args, **kwargs):
+        partner_form = PartnerCreateForm(data=request.POST)
+        if partner_form.is_valid():
+            a=Style.objects.filter(pk__in=partner_form['style'].value())
+            b=Category.objects.filter(pk__in=partner_form['category'].value())
+            c=SubCategory.objects.filter(pk__in=partner_form['sub_category'].value())
+            for i in a:
+                print(i.pk , i.name)
+
+            partner_user = User.objects.create(email=partner_form['email'].value(),
+                                                 password=partner_form['password1'].value(),
+                                                 first_name=partner_form['first_name'].value(),
+                                                 last_name=partner_form['last_name'].value(),
+                                                 )
+            partner_user.save()
+            partner_user.set_password(partner_form['password1'].value())
+            partner_user.save()
+
+            try:
+                state = States.objects.get(pk=partner_form['state'].value())
+            except :
+                state = None
+            partner_location = Locations.objects.create(city=partner_form['city'].value(),
+                                                        state=state,
+                                                        country=Country.objects.get(pk=partner_form['country'].value()),
+                                                        )
+            partner_location.save()
+            partner_profile = Partner.objects.create(name=partner_form['name'].value(),
+                                                    description=partner_form['description'].value(),
+                                                    )
+            partner_profile.users.add(partner_user)
+            partner_profile.location = partner_location
+            partner_profile.style.add(*list(Style.objects.filter(pk__in=partner_form['style'].value())))
+            partner_profile.category.add(*list(Category.objects.filter(pk__in=partner_form['category'].value())))
+            partner_profile.sub_category.add(*list(SubCategory.objects.filter(pk__in=partner_form['sub_category'].value())))
+            if 'image' in request.FILES:
+                partner_profile.image = request.FILES['image']
+
+            partner_profile.save()
+
+            return HttpResponseRedirect("/oscar/dashboard/partners/")
+
+        else:
+            return render(request, 'dashboard/partners/partner_form.html', {'form': partner_form})
 
 
 #=========================

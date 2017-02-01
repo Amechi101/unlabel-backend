@@ -13,7 +13,7 @@ from django.core.validators import RegexValidator
 from django.conf import settings
 
 from oscarapps.address.models import Locations
-from users.models import User
+
 
 
 
@@ -38,8 +38,8 @@ class Influencers(BaseApplicationModel):
     image = models.ImageField(upload_to='Influencers', null=True, blank=True)
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
-    users = models.OneToOneField(
-        User, related_name="influencers",
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, related_name="influencers",
         blank=True, verbose_name=_("Users"))
     height = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default="", verbose_name=_('Height'), help_text=_('US Measurements'))
     chest_or_bust = models.DecimalField(max_digits=10, decimal_places=3, null=True,  blank=True, default="", verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
@@ -63,7 +63,6 @@ class Influencers(BaseApplicationModel):
     def __str__(self):
 
         return self.users.first_name
-
 
 
 class InfluencerInvite(models.Model):
