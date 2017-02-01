@@ -239,6 +239,7 @@ INSTALLED_APPS = [
     'tastypie',
     'widget_tweaks',
     'storages',
+    'multiselectfield',
 
 
     # project

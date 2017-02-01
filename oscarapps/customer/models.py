@@ -1,4 +1,3 @@
-# from django.contrib.auth.models import User
 # from oscar.apps.customer.abstract_models import AbstractUser
 from django.db import models
 # from oscarapps.catalogue.models import *

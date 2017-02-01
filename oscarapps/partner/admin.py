@@ -1,21 +1,20 @@
 from django.contrib import admin
 from oscar.core.loading import get_model
 
-Style = get_model('partner', 'Style')
-BrandStoreType = get_model('partner', 'BrandStoreType')
-BrandCategories = get_model('partner', 'BrandCategories')
-AvailableDateTime = get_model('partner', 'AvailableDateTime')
-PartnerFollow = get_model('partner','PartnerFollow')
+BrandStyle = get_model('partner', 'Style')
+BrandCategories = get_model('partner', 'Category')
+BrandSubCategories = get_model('partner', 'SubCategory')
+RentalAddress = get_model('partner', 'RentalAddress')
+RentalTime = get_model('partner', 'RentalTime')
+BrandFollow = get_model('partner', 'PartnerFollow')
 
-class StyleAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description',)
-
-
-admin.site.register(Style, StyleAdmin)
-admin.site.register(BrandStoreType)
+admin.site.register(BrandStyle)
 admin.site.register(BrandCategories)
-admin.site.register(AvailableDateTime)
-admin.site.register(PartnerFollow)
+admin.site.register(BrandSubCategories)
+admin.site.register(RentalAddress)
+admin.site.register(RentalTime)
+admin.site.register(BrandFollow)
+
 
 
 from oscar.apps.partner.admin import *

@@ -11,6 +11,7 @@ from django.core.validators import RegexValidator
 from oscar.core.compat import get_user_model
 from django.core.validators import RegexValidator
 from django.conf import settings
+
 from oscarapps.address.models import Locations
 from users.models import User
 
@@ -60,7 +61,9 @@ class Influencers(BaseApplicationModel):
             self.save()
 
     def __str__(self):
-        return self.users.email
+
+        return self.users.first_name
+
 
 
 class InfluencerInvite(models.Model):
@@ -71,3 +74,4 @@ class InfluencerInvite(models.Model):
 
     def  __str__(self):
         return self.user.email
+

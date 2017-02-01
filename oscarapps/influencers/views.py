@@ -46,6 +46,7 @@ class InfluencerDetailView(SingleObjectMixin, ListView):
         return self.object
 
 
+
 class InfluencerSignUpView(View):
     def get(self, request, code, *args, **kwargs):
         return render(request, 'pages/influencer_register.html', {'user_form': InfluencerSignUpForm})
@@ -92,6 +93,7 @@ class InfluencerSignUpView(View):
 
         else:
             return render(request, 'pages/influencer_register.html', {'user_form': influencer_form})
+
 
 
 

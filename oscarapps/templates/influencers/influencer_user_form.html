@@ -5,7 +5,7 @@
 {% block body_class %}{{ block.super }} create-page influencer{% endblock %}
 
 {% block title %}
-    {{ title }} | {{ influencer.name }} | {% trans "Influencers" %} | {{ block.super }}
+    {{ title }} | {{ influencer.users.first_name }} | {% trans "Influencers" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -18,7 +18,7 @@
         </li>
         {% if influencer %}
             <li>
-                <a href="{% url 'dashboard:influencer-manage' pk=influencer.id %}">{{ influencer.name }}</a>
+                <a href="{% url 'dashboard:influencer-manage' pk=influencer.id %}">{{ influencer.users.first_name }}</a>
             </li>
         {% endif %}
         <li class="active">{{ title }}</li>

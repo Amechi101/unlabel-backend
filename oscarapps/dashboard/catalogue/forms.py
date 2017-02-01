@@ -33,4 +33,4 @@ class StyleCreateForm(forms.ModelForm):
 
     class Meta:
         model = Style
-        fields = ('name', 'description')
+        fields = ('style', 'description')
