@@ -91,15 +91,16 @@ class InfluencerCreateView(generic.View):
         influencer_form = InfluencerCreateForm(data=request.POST)
         if influencer_form.is_valid():
             influencer_user = User.objects.create(email=influencer_form['email'].value(),
-                                                 password=influencer_form['password'].value(),
+                                                 password=influencer_form['password1'].value(),
                                                  first_name=influencer_form['first_name'].value(),
                                                  last_name=influencer_form['last_name'].value(),
                                                  contact_number=influencer_form['contact_number'].value(),
                                                  is_influencer=True,
                                                  gender=influencer_form.cleaned_data['gender'],
+                                                 is_active =influencer_form['is_active'].value(),
                                                  )
             influencer_user.save()
-            influencer_user.set_password(influencer_form['password'].value())
+            influencer_user.set_password(influencer_form['password1'].value())
             influencer_user.save()
             from django.core.exceptions import ObjectDoesNotExist
             try:
@@ -153,7 +154,7 @@ class InfluencerManageView(generic.UpdateView):
                 'password': self.influencer.users.password,
                 'first_name': self.influencer.users.first_name,
                 'last_name': self.influencer.users.last_name,
-               }
+                'is_active': self.influencer.users.is_active}
 
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerManageView, self).get_context_data(**kwargs)
@@ -192,7 +193,6 @@ class InfluencerFilterView(generic.ListView):
     template_name = 'influencers/influencer_list.html'
     form_class = InfluencerSearchForm
 
-
     def get(self, request, *args, **kwargs):
 
         return super(InfluencerFilterView, self).get(request, *args, **kwargs)
@@ -204,7 +204,7 @@ class InfluencerFilterView(generic.ListView):
         is_active = self.request.GET.get('active')
 
         if is_active:
-            queryset = queryset.filter(is_active=True)
+            queryset = queryset.filter(users__is_active=True)
 
         self.description = _("All influencers")
 
