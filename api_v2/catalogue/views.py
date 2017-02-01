@@ -10,9 +10,10 @@ from oscarapi import serializers, permissions
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
-from .serializers import PartnerSerializer,StoreTypeSerializer
+from .serializers import PartnerSerializer,StoreTypeSerializer,ProductSerializer
 from oscarapps.partner.models import BrandStoreType,PartnerFollow
 from oscar.apps.partner.models import StockRecord
+# from oscar.apps.basket.models import
 
 Selector = get_class('partner.strategy', 'Selector')
 
@@ -101,42 +102,6 @@ class BrandListView(generics.ListAPIView):
         search = self.request.GET.get('search')
         type = self.request.GET.get('type')
 
-        if search == None and type == None :
-            if param == "ZA":
-                queryset = Partner.objects.all().order_by('-name')
-            elif param == "DESC":
-                queryset = Partner.objects.all().order_by('created')
-            elif param == "ASC":
-                queryset = Partner.objects.all().order_by('-created')
-            else:
-                queryset = Partner.objects.all().order_by('name')
-        elif search == None :
-            if param == "ZA":
-                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-name')
-            elif param == "DESC":
-                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('created')
-            elif param == "ASC":
-                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-created')
-            else:
-                queryset = Partner.objects.filter(store_type = type,pk__in = live_brand_id).order_by('name')
-
-
-class BrandListView(generics.ListAPIView):
-
-    pagination_class = pagination.LimitOffsetPagination
-    serializer_class = PartnerSerializer
-    http_method_names = ('get',)
-
-    # ZA - sort by a to z
-    #AZ - sort by z to a
-    #ASC - sort by date ascending
-    #DESC - sort by date descending
-    # get the queryset for pagination based on the parameter given from ios
-    def get_queryset(self, *args, **kwargs):
-        param = self.request.GET.get('param')
-        search = self.request.GET.get('search')
-        type = self.request.GET.get('type')
-
         live_brand_id = Product.objects.filter(status = 'L' ).values_list('brand',flat = True)
 
         if search == None and type == None :
@@ -173,7 +138,7 @@ class BrandListView(generics.ListAPIView):
 class ProductListView(generics.ListAPIView):
 
     pagination_class = pagination.LimitOffsetPagination
-    serializer_class = serializers.ProductSerializer
+    serializer_class = ProductSerializer
     http_method_names = ('get',)
 
     # HL - price high to low
@@ -241,3 +206,52 @@ class PartnerFollowView(APIView):
         except :
             content = { "message":"Some error occured. Please try again later" }
             return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+
+class InfluencerBrandListView(generics.ListAPIView):
+
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = PartnerSerializer
+    http_method_names = ('get',)
+
+    # ZA - sort by a to z
+    #AZ - sort by z to a
+    #ASC - sort by date ascending
+    #DESC - sort by date descending
+    # get the queryset for pagination based on the parameter given from ios
+    def get_queryset(self, *args, **kwargs):
+        param = self.request.GET.get('param')
+        search = self.request.GET.get('search')
+        type = self.request.GET.get('type')
+
+        live_brand_id = Product.objects.all().values_list('brand',flat = True)
+
+        if search == None and type == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('name')
+        elif search == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(store_type = type,pk__in = live_brand_id).order_by('name')
+        elif type == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('name')
+
+        return queryset
