@@ -65,7 +65,6 @@ SQLAlchemy==0.9.9
 static3==0.5.1
 tzlocal==1.2.2
 Unidecode==0.4.19
-Unidecode==0.04.19
 django-activity-stream==0.6.3
 django-betterforms==1.1.4
 django-form-utils==1.0.3
