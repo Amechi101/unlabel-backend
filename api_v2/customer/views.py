@@ -16,6 +16,7 @@ from django.contrib.sites.models import Site
 from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
 import re
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
