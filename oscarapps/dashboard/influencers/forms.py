@@ -79,10 +79,10 @@ class InfluencerCreateForm(forms.Form):
     password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput,
-        required=False,
+        required=True,
         validators=password_validators)
     password2 = forms.CharField(
-        required=False,
+        required=True,
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
 

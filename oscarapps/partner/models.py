@@ -5,11 +5,10 @@ from django.conf import settings
 
 from multiselectfield import MultiSelectField
 from oscar.apps.partner.abstract_models import AbstractPartner
-from oscar.core.compat import get_user_model
+from users.models import User
 
 from oscarapps.address.models import Locations
 
-User = get_user_model()
 
 
 class BaseApplicationModel(models.Model):
@@ -26,7 +25,7 @@ class BaseApplicationModel(models.Model):
 
 class Style(BaseApplicationModel):
 
-    style = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
     class Meta:
@@ -45,18 +44,18 @@ class Category(BaseApplicationModel):
         (MENSWEAR, 'Menswear'),
         (WOMENSWEAR, 'Womenswear'),
     )
-    category = MultiSelectField(choices=category_choice)
+    name = MultiSelectField(choices=category_choice)
 
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        return "{0}".format(self.category)
+        return "{0}".format(self.name)
 
 
 class SubCategory(BaseApplicationModel):
-    sub_category = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Sub Category'))
+    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Sub Category'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
     class Meta:

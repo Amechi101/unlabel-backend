@@ -59,7 +59,7 @@ class BrandStyleCreateForm(forms.ModelForm):
 
     class Meta:
         model = BrandStyle
-        fields = ('style', 'description')
+        fields = ('name', 'description')
 
 
 
@@ -87,7 +87,7 @@ class BrandCategoryCreateForm(forms.ModelForm):
 
     class Meta:
         model = BrandCategories
-        fields = ('category',)
+        fields = ('name',)
 
 
 
@@ -96,7 +96,7 @@ class BrandCategoryCreateForm(forms.ModelForm):
 
 
 class PartnerAddressForm(forms.ModelForm):
-    state = forms.ModelChoiceField( required=False, queryset=States.objects.all() )
+    state = forms.ModelChoiceField(required=False, queryset=States.objects.all())
     class Meta:
         model = Locations
         fields = ('city', 'country', 'state', )
