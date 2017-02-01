@@ -1,8 +1,16 @@
+import uuid
 from django.contrib.auth.models import Permission
+
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import Site
+from django.core.mail import EmailMessage
+
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -12,7 +20,8 @@ from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.forms import UserEmailForm
 from oscar.apps.customer.utils import normalise_email
 from users.models import User
-from oscarapps.influencers.models import Influencers
+
+
 
 
 from oscarapps.address.models import Locations, States, Country
@@ -21,14 +30,19 @@ from oscarapps.dashboard.influencers.forms import ExistingUserForm
 from oscarapps.influencers.models import Influencers
 
 
+from oscarapps.influencers.models import Influencers,InfluencerInvite
+
+
 
 # ================
 # Influencer views
 # ================
 
+
 (InfluencerSearchForm, InfluencerCreateForm, InfluencerCreateForm1) = get_classes('dashboard.influencers.forms',
                                                             ['InfluencerSearchForm', 'InfluencerCreateForm', 'InfluencerCreateForm1'],
                                                              'oscarapps')
+
 
 
 
@@ -42,7 +56,49 @@ class InfluencerListView(generic.ListView):
     form_class = InfluencerSearchForm
 
     def post(self, request, *args, **kwargs):
-        pass
+
+        invite_email = request.POST.get("invite_email")
+        print("=======================", invite_email)
+        current_site = Site.objects.get_current()
+        domain = current_site.domain
+        verify_code = str(uuid.uuid1()).replace('-','').upper()[0:10]
+        context = {
+            'domain': domain,
+            'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
+            'user': invite_email,
+            'protocol': 'http',
+        }
+        invite_sent = InfluencerInvite()
+        invite_sent.email = context['user']
+        invite_sent.code = context['verify_code']
+
+        tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
+        email = EmailMessage()
+        email.subject = "Influencer inviattion from Unlabel"
+        email.content_subtype = "html"
+        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                        <body>
+                        <br><br>
+                        You're being invited as influencer at unlabel
+                        <br><br>
+                        Please fill the form provided at the link :
+                        <br><br>
+                        """ + tosend + """
+                        <br><br>
+                        Thank you for using our site!
+                        <br/>
+                        <br/>
+                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                        </body>
+                        </head>
+                        </html>"""
+        email.from_email = "Unlabel App"
+        email.to = [invite_email]
+        email.send()
+        invite_sent.save()
+        return HttpResponseRedirect("/oscar/dashboard/influencers/")
+
+
 
     def get_queryset(self):
         qs = self.model._default_manager.all()
@@ -86,6 +142,7 @@ class InfluencerCreateView(generic.View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'influencers/influencer_form.html', {'form': InfluencerCreateForm})
+
 
     def post(self, request, *args, **kwargs):
         influencer_form = InfluencerCreateForm(data=request.POST)
@@ -131,20 +188,23 @@ class InfluencerCreateView(generic.View):
             return render(request, 'influencers/influencer_form.html', {'form': influencer_form})
 
 
-from django.shortcuts import render_to_response
 
 
-class InfluencerManageView(generic.UpdateView):
+class InfluencerManageView(generic.DetailView):
+
     """
     Edit and update an influencer
     """
     template_name = 'influencers/influencer_manage.html'
+
     form_class = InfluencerCreateForm1
+
     success_url = reverse_lazy('dashboard:influencer-list')
 
     def get_object(self, queryset=None):
         self.influencer = get_object_or_404(Influencers, pk=self.kwargs['pk'])
         return self.influencer
+
 
     def get_initial(self):
         return {'city': self.influencer.location.city,
@@ -179,6 +239,7 @@ class InfluencerDeleteView(generic.DeleteView):
     def get_success_url(self):
         messages.success(self.request,
                          _("Influencer '%s' was deleted successfully.") %
+
                          self.object.users.first_name)
         return reverse('dashboard:influencer-list')
 
@@ -230,6 +291,7 @@ class InfluencerFilterView(generic.ListView):
         ctx['queryset_description'] = self.description
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered
+
         return ctx
 
 
@@ -259,4 +321,6 @@ class InfluencerUserUpdateView(generic.UpdateView):
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
         return reverse('dashboard:influencer-list')
+
+
 
