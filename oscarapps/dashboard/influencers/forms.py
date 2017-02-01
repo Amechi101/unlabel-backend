@@ -119,8 +119,7 @@ class InfluencerCreateForm(forms.Form):
         waist = cleaned_data.get("waist")
         contact_number = cleaned_data.get("contact_number")
         email = cleaned_data.get("email")
-
-        password = cleaned_data.get("password")
+        password = self.clean_password2()
         if height is not None and len(str(height)) > 2:
             raise forms.ValidationError("Please enter valid height in Inches")
         if chest_or_bust is not None and len(str(chest_or_bust)) > 2:
@@ -137,7 +136,8 @@ class InfluencerCreateForm(forms.Form):
 
         password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
         if password is None or password_pattern.match(password) is None:
-            raise forms.ValidationError("Password should have at least 8 characters and one uppercase,"
+
+            raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
                                         "lowercase,digit,special character")
 
         return cleaned_data

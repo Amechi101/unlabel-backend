@@ -189,7 +189,6 @@ class InfluencerCreateView(generic.View):
 
 
 
-
 class InfluencerManageView(generic.DetailView):
 
     """
