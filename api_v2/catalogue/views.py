@@ -101,6 +101,42 @@ class BrandListView(generics.ListAPIView):
         search = self.request.GET.get('search')
         type = self.request.GET.get('type')
 
+        if search == None and type == None :
+            if param == "ZA":
+                queryset = Partner.objects.all().order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.all().order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.all().order_by('-created')
+            else:
+                queryset = Partner.objects.all().order_by('name')
+        elif search == None :
+            if param == "ZA":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-name')
+            elif param == "DESC":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('created')
+            elif param == "ASC":
+                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-created')
+            else:
+                queryset = Partner.objects.filter(store_type = type,pk__in = live_brand_id).order_by('name')
+
+
+class BrandListView(generics.ListAPIView):
+
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = PartnerSerializer
+    http_method_names = ('get',)
+
+    # ZA - sort by a to z
+    #AZ - sort by z to a
+    #ASC - sort by date ascending
+    #DESC - sort by date descending
+    # get the queryset for pagination based on the parameter given from ios
+    def get_queryset(self, *args, **kwargs):
+        param = self.request.GET.get('param')
+        search = self.request.GET.get('search')
+        type = self.request.GET.get('type')
+
         live_brand_id = Product.objects.filter(status = 'L' ).values_list('brand',flat = True)
 
         if search == None and type == None :

@@ -8,16 +8,17 @@ from django.utils.translation import ugettext_lazy as _
 
 from oscar.core.compat import existing_user_fields
 from oscar.core.validators import password_validators
+
 from oscarapps.influencers.models import Influencers
 
 from oscarapps.address.models import Country, States
 from users.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class InfluencerSearchForm(forms.Form):
     name = forms.CharField(
         required=False, label=pgettext_lazy(u"Influencers's name", u"Name"))
-
 
 class InfluencerCreateForm1(forms.ModelForm):
 
@@ -63,6 +64,7 @@ class InfluencerCreateForm1(forms.ModelForm):
         return instance
 
 
+
 class InfluencerCreateForm(forms.Form):
 
     MALE = 'M'
@@ -73,6 +75,7 @@ class InfluencerCreateForm(forms.Form):
     )
 
     email = forms.CharField(label='Email', required=True)
+
     password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput,
@@ -82,6 +85,7 @@ class InfluencerCreateForm(forms.Form):
         required=False,
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
+
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
     contact_number = forms.CharField(required=True, label="Contact number")
@@ -116,7 +120,6 @@ class InfluencerCreateForm(forms.Form):
         contact_number = cleaned_data.get("contact_number")
         email = cleaned_data.get("email")
         password = self.clean_password2()
-
         if height is not None and len(str(height)) > 2:
             raise forms.ValidationError("Please enter valid height in Inches")
         if chest_or_bust is not None and len(str(chest_or_bust)) > 2:
@@ -130,10 +133,13 @@ class InfluencerCreateForm(forms.Form):
             raise forms.ValidationError("Please enter valid contact number")
         if User.objects.filter(email=email):
             raise forms.ValidationError("Email already taken")
+
         password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
         if password is None or password_pattern.match(password) is None:
+
             raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
                                         "lowercase,digit,special character")
+
         return cleaned_data
 
 
