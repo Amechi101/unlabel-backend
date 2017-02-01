@@ -131,8 +131,6 @@ class InfluencerCreateView(generic.View):
             return render(request, 'influencers/influencer_form.html', {'form': influencer_form})
 
 
-from django.shortcuts import render_to_response
-
 
 class InfluencerManageView(generic.UpdateView):
     """
