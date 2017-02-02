@@ -7,12 +7,11 @@ import string
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
-
-from oscar.core.compat import get_user_model
 from django.core.validators import RegexValidator
 from django.conf import settings
 
 from oscarapps.address.models import Locations
+from oscarapps.catalogue.models import Product
 from users.models import User
 
 
@@ -39,7 +38,7 @@ class Influencers(BaseApplicationModel):
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
     users = models.OneToOneField(
-        User, related_name="influencers",
+        settings.AUTH_USER_MODEL, related_name="influencers",
         blank=True, verbose_name=_("Users"))
     height = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default="", verbose_name=_('Height'), help_text=_('US Measurements'))
     chest_or_bust = models.DecimalField(max_digits=10, decimal_places=3, null=True,  blank=True, default="", verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
@@ -74,4 +73,15 @@ class InfluencerInvite(models.Model):
 
     def  __str__(self):
         return self.user.email
+
+
+
+class InfluencerProductReserve(models.Model):
+
+    influencer = models.ForeignKey(Influencers, blank=False, null=False,verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product,blank=False,null=False,verbose_name=_('Product'))
+    date_reserved = models.DateTimeField(auto_now_add=True,verbose_name=_('Product Reserved Date'))
+
+    class Meta:
+        verbose_name_plural = _('Influencer Product Reservations')
 

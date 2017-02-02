@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.template.defaultfilters import slugify
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 from cloudinary.models import CloudinaryField
@@ -30,7 +29,7 @@ class Brand(BaseApplicationModel):
     """
     Information for each brand
     """
-    
+
     # Primary Key
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
@@ -39,12 +38,12 @@ class Brand(BaseApplicationModel):
     brand_description = models.TextField(blank=True, default="", verbose_name=_('Description'))
     brand_feature_image = CloudinaryField('Featured Brand Image', null=True, blank=True)
     brand_website_url = models.URLField(max_length=100, default="", blank=True, verbose_name=_('Website'))
-    
+
     # location
     brand_city = models.ForeignKey('City', null=True, blank=True, default="")
 
     # activation
-    brand_isActive = models.BooleanField(default=False, verbose_name=_('Brand Active'), 
+    brand_isActive = models.BooleanField(default=False, verbose_name=_('Brand Active'),
         help_text=_('Check to activate brand'))
 
     # sex
@@ -62,7 +61,7 @@ class Brand(BaseApplicationModel):
 
 
     # Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('Brand')
         verbose_name_plural = _('Brands')
 
@@ -76,11 +75,11 @@ class Brand(BaseApplicationModel):
         for field in self._meta.fields:
 
             value = getattr(self, field.name)
-            
+
             if field.name == 'brand_name':
                 try:
                     setattr(self, field.name, value.strip())
-                    
+
                     setattr(self, field.name, value.lower())
 
                 except Exception:
@@ -88,9 +87,9 @@ class Brand(BaseApplicationModel):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.brand_name)
-        
+
         self.full_clean()
-        
+
         super(Brand, self).save(*args, **kwargs)
 
 class Category(ValidateModelMixin, BaseApplicationModel):
@@ -102,7 +101,7 @@ class Category(ValidateModelMixin, BaseApplicationModel):
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
     # Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
@@ -118,7 +117,7 @@ class Style(ValidateModelMixin, BaseApplicationModel):
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
 
     # Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('Style')
         verbose_name_plural = _('Styles')
 
@@ -136,14 +135,14 @@ class Location(ValidateModelMixin, BaseApplicationModel):
         (STATE, "U.S.A"),
         (COUNTRY, "International")
     )
-    
-    state_or_country = models.CharField(unique=True, max_length=200, blank=True, default="", verbose_name=_('Location'), 
+
+    state_or_country = models.CharField(unique=True, max_length=200, blank=True, default="", verbose_name=_('Location'),
         help_text=_('Enter your State (USA only) or Country (International only)'))
-    
+
     location_choices = models.CharField(max_length=100, blank=True, choices=LOCATION_CHOICES, verbose_name=_('U.S.A or International'))
 
     # Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('Location')
         verbose_name_plural = _('Locations')
 
@@ -158,7 +157,7 @@ class City(ValidateModelMixin, BaseApplicationModel):
 
     latitude = models.DecimalField(max_digits=8, decimal_places=5,
         null=True, blank=True)
-    
+
     longitude = models.DecimalField(max_digits=8, decimal_places=5,
         null=True, blank=True)
 
@@ -166,7 +165,7 @@ class City(ValidateModelMixin, BaseApplicationModel):
     location = models.ForeignKey('Location', null=True, blank=True, help_text=_('Select your State or Country'), verbose_name=_('Location'))
 
     # Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('City')
         verbose_name_plural = _('Cities')
 
@@ -193,19 +192,19 @@ class Product(BaseApplicationModel):
     brand = models.ForeignKey('Brand', null=True, help_text=_('Select Your Brand'), verbose_name=_('Label Name'))
 
     product_isMale = models.BooleanField(default=False, verbose_name=_('Product isMale'),
-        help_text=_('''Check to denote this product is for men. This is 
+        help_text=_('''Check to denote this product is for men. This is
             an advance option and only meant if your label sells men & women products'''))
-    
+
     product_isFemale = models.BooleanField(default=False, verbose_name=_('Product isFemale'),
-        help_text=_('''Check to denote this product is for women. This is 
+        help_text=_('''Check to denote this product is for women. This is
             an advance option and only meant if your label sells men & women products'''))
 
     product_isUnisex = models.BooleanField(default=False, verbose_name=_('Product isUnisex'),
-        help_text=_('''Check to denote this product is for men & women. This is 
+        help_text=_('''Check to denote this product is for men & women. This is
             an advance option and only meant if your label sells men & women products'''))
 
     #Metadata
-    class Meta: 
+    class Meta:
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
