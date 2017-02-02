@@ -276,14 +276,11 @@ class InfluencerProductListView(generics.ListAPIView):
     def get_queryset(self,*args,**kwargs):
         brand_id = self.request.GET.get('brand')
         param = self.request.GET.get('param')
+        print("+++++++++++++++++++++++",param)
         if brand_id == None:
             queryset = Product.objects.filter(status = 'U').order_by('created')
         if brand_id != None:
-            if param == None :
-                queryset = Product.objects.filter(brand = brand_id, status = 'U').order_by('created')
-            elif param == 'New':
-                queryset = Product.objects.filter(brand = brand_id, status = 'U' ).order_by('-created')
-            elif param == 'OLD':
+            if param == 'OLD':
                 queryset = Product.objects.filter(brand = brand_id, status = 'U' ).order_by('created')
             elif param == 'HL':
                 prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
@@ -293,6 +290,9 @@ class InfluencerProductListView(generics.ListAPIView):
                 prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
                 prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('-price_retail').values_list('product',flat = True)
                 queryset = Product.objects.filter(pk__in = prod_Sort_List)
+            else:
+                queryset = Product.objects.filter(brand = brand_id, status = 'U' ).order_by('-created')
+
         return queryset
 
 class InfluencerReserveProduct(APIView):
