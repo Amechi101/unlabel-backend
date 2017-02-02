@@ -1,53 +1,115 @@
-from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
-from oscarapps.partner.models import Partner
-
-class PartnerCreateForm(CorePartnerCreateForm):
-    class Meta:
-        fields = ('name', 'brand_website_url', 'brand_description', 'sex_type', 'brand_feature_image', 'brand_isActive', 'brand_style', 'category')
-        model = Partner
-
+from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.utils.translation import pgettext_lazy
-from oscar.core.loading import get_classes, get_model
 
-Influencers = get_model('influencers', 'Influencers')
+from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
+from oscarapps.partner.models import Partner
+from oscar.core.compat import get_user_model
+from oscar.core.loading import get_model
+from oscarapps.address.models import Locations, States
 
-class InfluencerSearchForm(forms.Form):
+
+User = get_user_model()
+
+
+class PartnerCreateForm(CorePartnerCreateForm):
+
+    class Meta:
+        fields = ('name', 'image', 'description', 'location', 'style',
+                  'category', 'sub_category', 'profile_info', 'is_active', 'rental_time', 'rental_address')
+        labels = {
+            'name': _('Store Name'),
+        }
+        model = Partner
+
+
+
+
+
+
+#################
+#Brand Styles
+#################
+
+BrandStyle = get_model('partner', 'Style')
+
+
+class BrandStyleSearchForm(forms.Form):
     name = forms.CharField(
-        required=False, label=pgettext_lazy(u"Influencers's name", u"Name"))
+        required=False, label=pgettext_lazy(u"BrandStyle's name", u"Name"))
 
 
-class InfluencerCreateForm(forms.ModelForm):
+class BrandStyleCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(InfluencerCreateForm, self).__init__(*args, **kwargs)
-        # Partner.name is optional and that is okay. But if creating through
-        # the dashboard, it seems sensible to enforce as it's the only field
-        # in the form.
+        super(BrandStyleCreateForm, self).__init__(*args, **kwargs)
+
         self.fields['name'].required = True
 
     class Meta:
-        model = Influencers
-        fields = ('name', 'instagram_url', 'website_url', 'influencer_isActive', 'style_Preference', 'industry_choice' , 'bio')
+        model = BrandStyle
+        fields = ('style', 'description')
 
 
 
-Industry = get_model('influencers', 'Industry')
 
-class IndustrySearchForm(forms.Form):
+
+
+#################
+#Brand categories
+#################
+
+BrandCategories = get_model('partner', 'Category')
+
+
+class BrandCategorySearchForm(forms.Form):
     name = forms.CharField(
-        required=False, label=pgettext_lazy(u"Industry's name", u"Name"))
+        required=False, label=pgettext_lazy(u"BrandCategories's name", u"Name"))
 
 
-class IndustryCreateForm(forms.ModelForm):
+class BrandCategoryCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(IndustryCreateForm, self).__init__(*args, **kwargs)
-        # Partner.name is optional and that is okay. But if creating through
-        # the dashboard, it seems sensible to enforce as it's the only field
-        # in the form.
+        super(BrandCategoryCreateForm, self).__init__(*args, **kwargs)
+
         self.fields['name'].required = True
 
     class Meta:
-        model = Industry
-        fields = ('name', 'description')
+        model = BrandCategories
+        fields = ('category',)
+
+
+
+
+
+
+
+class PartnerAddressForm(forms.ModelForm):
+    state = forms.ModelChoiceField( required=False, queryset=States.objects.all() )
+    class Meta:
+        model = Locations
+        fields = ('city', 'country', 'state', )
+
+
+#################
+#Brand store type
+#################
+
+# BrandStoreType = get_model('partner', 'BrandStoreType')
+#
+#
+# class StoreTypeSearchForm(forms.Form):
+#     name = forms.CharField(
+#         required=False, label=pgettext_lazy(u"BrandStoreType's name", u"Name"))
+#
+#
+# class StoreTypeCreateForm(forms.ModelForm):
+#
+#     def __init__(self, *args, **kwargs):
+#         super(StoreTypeCreateForm, self).__init__(*args, **kwargs)
+#
+#         self.fields['name'].required = True
+#
+#     class Meta:
+#         model = BrandStoreType
+#         fields = ('name', )

@@ -5,17 +5,19 @@ from oscar.core.loading import get_class
 
 
 class CatalogueApplication(CoreCatalogueApplication):
-
+    permissions_map = {
+        'catalogue-product-list': (['is_staff'], ['partner.other_permission']),
+    }
 
     style_list_view = get_class('oscarapps.dashboard.catalogue.views',
-                                 'StyleListView')
+                                'StyleListView')
 
     style_create_view = get_class('oscarapps.dashboard.catalogue.views',
-                                 'StyleCreateView')
+                                  'StyleCreateView')
     style_manage_view = get_class('oscarapps.dashboard.catalogue.views',
-                                 'StyleManageView')
+                                  'StyleManageView')
     style_delete_view = get_class('oscarapps.dashboard.catalogue.views',
-                                 'StyleDeleteView')
+                                  'StyleDeleteView')
 
     def get_urls(self):
         urls = [

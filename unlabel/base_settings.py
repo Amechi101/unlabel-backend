@@ -16,7 +16,16 @@ import dj_database_url
 from oscar.defaults import *
 
 
+OSCAR_SHOP_NAME = 'Unlabel'
+AUTH_USER_MODEL = "users.User"
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+
+OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_DASHBOARD_NAVIGATION = [
     {
         'label': _('Dashboard'),
@@ -48,10 +57,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Low stock alerts'),
                 'url_name': 'dashboard:stock-alert-list',
             },
-            {
-                'label': _('Style Preferences'),
-                'url_name': 'dashboard:style-list',
-            },
+
         ]
     },
     {
@@ -74,10 +80,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Influencers'),
                 'url_name': 'dashboard:influencer-list',
             },
-            {
-                'label': _('Industry Preferences '),
-                'url_name': 'dashboard:industry-list',
-            },
+
 
             # The shipping method dashboard is disabled by default as it might
             # be confusing. Weight-based shipping methods aren't hooked into
@@ -94,7 +97,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-group',
         'children': [
             {
-                'label': _('Customers'),
+                'label': _('Users'),
                 'url_name': 'dashboard:users-index',
             },
             {
@@ -148,6 +151,29 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-bar-chart',
         'url_name': 'dashboard:reports-index',
     },
+    {
+        'label': _('CRUD'),
+        'icon': 'icon-edit',
+        'children': [
+            # {
+            #     'label': _('Style Preferences'),
+            #     'url_name': 'dashboard:style-list',
+            # },
+            {
+                'label': _('Brand Styles'),
+                'url_name': 'dashboard:brand-style-list',
+            },
+            {
+                'label': _('Store Types'),
+                'url_name': 'dashboard:store-type-list',
+            },
+            {
+                'label': _('Brand Categories'),
+                'url_name': 'dashboard:brand-category-list',
+            },
+        ],
+    },
+
 ]
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
@@ -170,6 +196,7 @@ AWS_STORAGE_BUCKET_NAME = 'unlabel'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 MEDIA_URL = 'https://%s/media/' % AWS_S3_CUSTOM_DOMAIN
 MEDIA_ROOT = '%s.s3.amazonaws.com/media/' % AWS_STORAGE_BUCKET_NAME
+OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
 
 
@@ -211,6 +238,8 @@ INSTALLED_APPS = [
     'tastypie',
     'widget_tweaks',
     'storages',
+    'multiselectfield',
+
 
     # project
     'unlabel',
@@ -234,19 +263,23 @@ INSTALLED_APPS = [
 
     ###for oscar-api over ride
     'api_v2',
+
+    ### for user
+    'users',
 ]
 
 from oscar import get_core_apps
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
     [
-        'oscarapps.partner',
         'oscarapps.customer',
+        'oscarapps.partner',
         'oscarapps.catalogue',
         'oscarapps.address',
         'oscarapps.dashboard',
         'oscarapps.dashboard.partners',
-        'oscarapps.dashboard.catalogue'
+        'oscarapps.dashboard.catalogue',
+        'oscarapps.dashboard.users',
     ])
 
 MIDDLEWARE_CLASSES = (
@@ -393,8 +426,6 @@ REST_FRAMEWORK = {
     # 'MAX_PAGINATE_BY': 100,
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'MAX_PAGINATE_BY': 10,
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.AllowAny',

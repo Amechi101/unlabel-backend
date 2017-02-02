@@ -16,9 +16,13 @@ from django.contrib.sites.models import Site
 from django.utils.encoding import force_bytes
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
 import re
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from rest_auth.registration.views import SocialLoginView
+import datetime
+from api_v2.utils import *
+
 
 
 # from oscarapps.customer.models import EmailConfirmation
@@ -36,11 +40,11 @@ class CustomerRegisterView(APIView):
                     # email_exist = User.objects.filter(email=request.data["email"])
                     email_exist = User.objects.filter(email__iexact = request.data["email"])
                     if not email_exist:
-                        serializer = CustomerRegisterSerializer(data=request.data)
+                        serializer = CustomerRegisterSerializer(data = request.data)
                         if serializer.is_valid():
                             serializer.save()
 
-                            mailid=request.data["email"]
+                            mailid = request.data["email"]
                             email = EmailMessage()
                             email.subject = "Registration succesful at unlabel"
                             email.content_subtype = "html"
@@ -58,22 +62,23 @@ class CustomerRegisterView(APIView):
                                             </head>
                                             </html>"""
                             email.from_email = "Unlabel App"
-                            email.to=[mailid]
+                            email.to = [mailid]
                             email.send()
-
-                            return Response(serializer.data, status=status.HTTP_201_CREATED)
-                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                            newUser = User.objects.get(email = request.data["email"])
+                            SaveSendMail(newUser,email.subject,email.body)
+                            return Response(serializer.data, status = status.HTTP_201_CREATED)
+                        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
                     else:
-                        content={"message":"email already registered"}
+                        content = { "message" : "email already registered" }
                         return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
-                    content={"invalid email"}
+                    content = { "invalid email" }
                     return Response(content,status=status.HTTP_400_BAD_REQUEST)
             else :
-                content={"invalid name. name should be less than 30 characters"}
+                content = { "invalid name. name should be less than 30 characters" }
                 return Response(content,status=status.HTTP_400_BAD_REQUEST)
         except:
-            content={"message":"Please validate the data and try again."}
+            content = { "message":"Please validate the data and try again." }
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
@@ -87,18 +92,18 @@ class CustomerPasswordUpdateView(APIView):
                 customer=request.user
             # customer=User.objects.get(email=request.data["email"])
             else:
-                content={"message":"Please login first."}
+                content = { "message":"Please login first." }
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            customer.set_password(request.data["password"])
+            customer.save()
+            content = {"message":"password changed successfully. Please login to continue."}
+            request.session.clear()
+            request.session.delete()
+            request.session = None
+            return Response(content,status = status.HTTP_201_CREATED)
         except:
-            content={"message":"given email does not exist."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        customer.set_password(request.data["password"])
-        customer.save()
-        content={"message":"password changed successfully. Please login to continue."}
-        request.session.clear()
-        request.session.delete()
-        request.session = None
-        return Response(content,status=status.HTTP_201_CREATED)
+            content = { "message":"given email does not exist." }
+            return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class CustomerForgotPassword(APIView):
@@ -106,12 +111,12 @@ class CustomerForgotPassword(APIView):
     http_method_names = ('post',)
 
     def post(self,request,*args,**kwargs):
-        if request.data["email"]:
+        # if request.data["email"]:
             try:
-                if User.objects.filter(email__iexact=request.data["email"]).exists():
+                if User.objects.filter(email__iexact = request.data["email"]).exists():
                     current_site = Site.objects.get_current()
                     domain = current_site.domain
-                    user = User.objects.get(email__iexact=request.data["email"])
+                    user = User.objects.get(email__iexact = request.data["email"])
                     context = {
                         'domain': domain,
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -120,8 +125,8 @@ class CustomerForgotPassword(APIView):
                         'protocol': 'http',
                     }
                     try:
-                        tosend= context['protocol']+'://'+context['domain']+'/api_v2/reset/'+context['uid']+'/'+context['token']
-                        mailid=request.data["email"]
+                        tosend = context['protocol']+'://'+context['domain']+'/api_v2/reset/'+context['uid'].decode("utf-8")+'/'+context['token']
+                        mailid = request.data["email"]
                         email = EmailMessage()
                         email.subject = "Password Reset at unlabel"
                         email.content_subtype = "html"
@@ -142,14 +147,15 @@ class CustomerForgotPassword(APIView):
                                         </head>
                                         </html>"""
                         email.from_email = "Unlabel App"
-                        email.to=[mailid]
+                        email.to = [mailid]
                         email.send()
+                        SaveSendMail(user,email.subject,email.body)
                         return Response({'code':'OK'}, status.HTTP_200_OK)
                     except:
-                        return Response({'code':'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({'code':'Please try again later'}, status = status.HTTP_400_BAD_REQUEST)
             except:
-                content={"message":"email does not exist"}
-                return Response(content,status=status.HTTP_404_NOT_FOUND)
+                content = { "message":"email does not exist" }
+                return Response(content,status = status.HTTP_404_NOT_FOUND)
 
 class CustomerProfileUpdateView(APIView):
     authentication = (authentication.SessionAuthentication,)
@@ -158,21 +164,40 @@ class CustomerProfileUpdateView(APIView):
     def post(self,request,*args,**kwargs):
         try:
             if request.user.is_authenticated():
-                customer=request.user
-            # customer=User.objects.get(email=request.data["email"])
+                customer = request.user
+            # customer = User.objects.get(email = request.data["email"])
             else:
-                content={"message":"Please login first."}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = { "message":"Please login first." }
+                return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         except:
-            content={"message":"given email not authenticated."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        customer.first_name=request.data["first_name"]
+            content = { "message":"given email not authenticated." }
+            return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        customer.first_name = request.data["first_name"]
         customer.save()
-        content={"message":"name changed successfully"}
-        return Response(content,status=status.HTTP_200_OK)
+        content = { "message":"name changed successfully" }
+        return Response(content,status = status.HTTP_200_OK)
 
 
 class FacebookLogin(SocialLoginView):
     adapter_class = FacebookOAuth2Adapter
 
+
+class CustomerProfileDeleteView(APIView):
+    authentication = authentication.SessionAuthentication
+    http_method_names = ('post',)
+
+    def post(self,request,*args,**kwargs):
+        try :
+            if request.user.is_authenticated():
+                customer = request.user
+            else :
+                content = { "message":"Please login first." }
+                return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        except :
+            content = { "message":"given email not authenticated." }
+            return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        customer.is_active = False
+        customer.save()
+        content = { "message":"Account deleted Successfully" }
+        return Response(content,status = status.HTTP_200_OK)
 

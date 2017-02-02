@@ -32,7 +32,16 @@
             {% endif %}
         </form>
     </div>
-
+    <h2>Filters</h2>
+    <div class="well">
+        <form  method="get" action= "{% url 'dashboard:partner-filter' %}" class="form-inline">
+         <input type="checkbox" id ="active_id" name="active" > Active Brands
+         <input class="datetimepicker" style="margin-left: 100px" type="date" id ="created_date_id" name="created_date" value="{{ created_date }}" > : Created Date
+         <input class="datetimepicker" style="margin-left: 100px" type="date" id ="modified_date_id" value="{{ modified_date }}"  name="modified_date" >  :Modified Date
+         <input type="submit" style="margin-left: 100px" value="Filter" class="btn btn-primary">
+         <a class="btn btn-default" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
+        </form>
+    </div>
     <form action="" method="post" class="order_table">
         {% csrf_token %}
         <table class="table table-striped table-bordered">

@@ -1,26 +1,14 @@
 from django.contrib import messages
-from django.contrib.auth.models import Permission
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
-from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-from oscar.apps.customer.utils import normalise_email
-from oscar.core.compat import get_user_model
+
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 
-
-
-
-
-
-
-
-
-
-#style views
+# style views
 
 Style = get_model('partner', 'Style')
 (
@@ -39,11 +27,7 @@ class StyleListView(generic.ListView):
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
-
         self.description = _("All Styles")
-
-        # We track whether the queryset is filtered to determine whether we
-        # show the search form 'reset' button.
         self.is_filtered = False
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
@@ -83,12 +67,9 @@ class StyleCreateView(generic.CreateView):
                          self.object.name)
         return reverse('dashboard:style-list')
 
+
 #
 class StyleManageView(generic.UpdateView):
-    """
-    This multi-purpose view renders out a form to edit the partner's details,
-    the associated address and a list of all associated users.
-    """
     template_name = 'dashboard/catalogue/style/style_manage.html'
     form_class = StyleCreateForm
     success_url = reverse_lazy('dashboard:style-list')

@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.template.defaultfilters import slugify
+import random
+import string
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator
+from django.conf import settings
 
-from oscarapps.influencers.mixins import ValidateModelMixin
+from oscarapps.address.models import Locations
+from oscarapps.catalogue.models import Product
+from users.models import User
 
-from cloudinary.models import CloudinaryField
 
-from applications.models import Brand
-from oscarapps.partner.models import Style
+
 class BaseApplicationModel(models.Model):
     """
     An abstract base class model that common attributes
@@ -20,157 +24,64 @@ class BaseApplicationModel(models.Model):
     modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     class Meta:
-        app_label = 'Influencers'
+        app_label = 'influencers'
         abstract = True
 
-
-class Industry(models.Model):
-    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Industry Preference'))
-
-    description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-
-    # Metadata
-    class Meta:
-        verbose_name = _('Industry')
-        verbose_name_plural = _('Industries')
-
-    def __str__(self):
-        return self.name
 
 class Influencers(BaseApplicationModel):
     """
     Information for each influencer
     """
 
-    #new fields
-    style_Preference = models.ManyToManyField(Style, blank=True, verbose_name=_('Style Preference'))
+    auto_id = models.CharField(unique=True, max_length=16, blank=True, null=True, default="", verbose_name=_('Influencer ID'))
+    image = models.ImageField(upload_to='Influencers', null=True, blank=True)
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
-    industry_choice = models.ManyToManyField(Industry, blank=True, verbose_name='Industry Preferences')
+    location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
+    users = models.OneToOneField(
+        settings.AUTH_USER_MODEL, related_name="influencers",
+        blank=True, verbose_name=_("Users"))
+    height = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default="", verbose_name=_('Height'), help_text=_('US Measurements'))
+    chest_or_bust = models.DecimalField(max_digits=10, decimal_places=3, null=True,  blank=True, default="", verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
+    hips = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True, default="",  verbose_name=_('hips'), help_text=_('US Measurements'))
+    waist = models.DecimalField(max_digits=10, decimal_places=3, blank=True, null=True, default="",  verbose_name=_('waist'), help_text=_('US Measurements'))
 
-
-    #old fields
-    #General info
-    name = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Influencer name'))
-
-    instagram_handle = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Instagram handle'))
-
-    instagram_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Instagram url'))
-
-    # hometown = models.ForeignKey('City', null=True, blank=True, default="", verbose_name=_('Hometown'))
-
-    website_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Website url'))
-
-    website_name = models.CharField(max_length=100, blank=True, default="", verbose_name=_('Website name'))
-
-    website_isActive = models.BooleanField(default=False, verbose_name=_('Website active'),
-        help_text=_('Check to activate website'))
-
-    image = CloudinaryField('Influencer Image', null=True, blank=True)
-
-    photographer_credit = models.CharField(max_length=255, blank=True, default="", verbose_name=_('Photographer credit'),
-        help_text=_('To give credit for photographer for image'))
-
-    photographer_credit_isActive = models.BooleanField(default=False, verbose_name=_('Photographer credit active'),
-        help_text=_('Check to activate photographer credit'))
-
-    #brand
-    # brands = models.ForeignKey(Brand, null=True, blank=True, default="", help_text=_('Please select your brand'), verbose_name=_('Brand name'),
-    #     related_name='brands')
-    question_brand_attraction = models.TextField(blank=True, default="", verbose_name=_('Brand attraction'))
-
-    #product
-    question_product_favorite_name = models.CharField(max_length=255, blank=True, default="", verbose_name=_('Favorite product name'))
-    question_product_favorite_explanation = models.TextField(blank=True, default="", verbose_name=_('Favorite product explanation'))
-    question_product_favorite_url = models.URLField(max_length=255, blank=True, default="", verbose_name=_('Favorite product url'))
-    question_product_favorite_product_pairing = models.TextField(blank=True, default="", verbose_name=_('Product pairing explanation'))
-
-    #personal style
-    question_personal_style_one = models.CharField(max_length=255, blank=True, default="", verbose_name=_('Personal style 1'))
-
-    # other questions
-    question_fashion_advice = models.TextField(blank=True, default="", verbose_name=_('Fashion advice'))
-    question_favorite_season = models.TextField(blank=True, default="", verbose_name=_('Favorite season'))
-
-    #slug
-    slug = models.SlugField(max_length=255, verbose_name=_('Influencer Slug'), default="", blank=True)
-
-    # active
-    influencer_isActive = models.BooleanField(default=False, verbose_name=_('Influencer active'), 
-        help_text=_('Check to activate influencer'))
-
-    # Metadata
-    class Meta: 
-        verbose_name = _('Influencer')
-        verbose_name_plural = _('Influencers')
-
-    def __str__(self):
-        return "{0}".format( self.name )
-
-    def get_absolute_url(self):
-        return reverse('influencer_detail', args=[self.slug])
-
-    def clean(self):
-        for field in self._meta.fields:
-
-            value = getattr(self, field.name)
-
-            if field.name == 'name' or field.name == 'instagram_handle' or field.name == 'website_name':
-                try:
-                    setattr(self, field.name, value.strip())
-
-                    setattr(self, field.name, value.lower())
-
-                except Exception:
-                    pass
+    def id_generator(self, size=10, chars=string.ascii_uppercase + string.digits):
+        auto_id = ''.join(random.choice(chars) for _ in range(size))
+        if auto_id not in Influencers.objects.values_list('auto_id', flat=True):
+            return auto_id
+        else:
+            self.id_generator()
 
     def save(self, *args, **kwargs):
-
-        self.slug = slugify(self.name)
-        
-        self.full_clean()
-        
         super(Influencers, self).save(*args, **kwargs)
-
-
-class City(ValidateModelMixin, BaseApplicationModel):
-    """
-    List of cities
-    """
-    city = models.CharField(unique=True, max_length=200, blank=True, default="", verbose_name=_('City') )
-
-    # Foreign Key
-    state_or_country = models.ForeignKey('StateCountry', null=True, blank=True, help_text=_('Select your state or country'), verbose_name=_('State or Country'))
-
-    # Metadata
-    class Meta: 
-        verbose_name = _('City')
-        verbose_name_plural = _('Cities')
+        if not self.auto_id:
+            self.auto_id = self.id_generator()
+            print(self.auto_id)
+            self.save()
 
     def __str__(self):
-        return "{0}, {1}".format( self.city, self.state_or_country )
 
-class StateCountry(ValidateModelMixin, BaseApplicationModel):
-    """
-    List of Locations
-    """
-    STATE = "State"
-    COUNTRY = "Country"
+        return self.users.first_name
 
-    LOCATION_CHOICES = (
-        (STATE, "U.S.A"),
-        (COUNTRY, "International")
-    )
-    
-    name = models.CharField(unique=True, max_length=200, blank=True, default="", verbose_name=_('Location'), 
-        help_text=_('Enter your State (USA only) or Country (International only)'))
-    
-    location_choice = models.CharField(max_length=100, blank=True, choices=LOCATION_CHOICES, verbose_name=_('U.S.A or International'))
 
-    # Metadata
-    class Meta: 
-        verbose_name = _('State or Country')
-        verbose_name_plural = _('State or Country')
 
-    def __str__(self):
-        return "{0}".format( self.name )
+class InfluencerInvite(models.Model):
+    email = models.EmailField(blank=True,null=True)
+    code = models.CharField(max_length=20, blank=False,null=False)
+    date_sent = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def  __str__(self):
+        return self.user.email
+
+
+
+class InfluencerProductReserve(models.Model):
+
+    influencer = models.ForeignKey(Influencers, blank=False, null=False,verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product,blank=False,null=False,verbose_name=_('Product'))
+    date_reserved = models.DateTimeField(auto_now_add=True,verbose_name=_('Product Reserved Date'))
+
+    class Meta:
+        verbose_name_plural = _('Influencer Product Reservations')
 

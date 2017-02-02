@@ -1,32 +1,44 @@
 from oscar.apps.dashboard.partners.app import PartnersDashboardApplication as CorePartnersDashboardApplication
 from django.conf.urls import url
 from oscar.core.loading import get_class
+
+
 class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerAddressManageView')
-
-    influencer_list_view = get_class('oscarapps.dashboard.partners.views',
-                                 'InfluencerListView')
-
-    influencer_create_view = get_class('oscarapps.dashboard.partners.views',
-                                 'InfluencerCreateView')
-    influencer_manage_view = get_class('oscarapps.dashboard.partners.views',
-                                 'InfluencerManageView')
-    influencer_delete_view = get_class('oscarapps.dashboard.partners.views',
-                                 'InfluencerDeleteView')
+    partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
 
 
+    # store_type_list_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeListView')
+    #
+    # store_type_create_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeCreateView')
+    # store_type_manage_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeManageView')
+    # store_type_delete_view = get_class('oscarapps.dashboard.partners.views',
+    #                              'StoreTypeDeleteView')
 
 
-    industry_preference_list_view = get_class('oscarapps.dashboard.partners.views',
-                                 'IndustryListView')
 
-    industry_preference_create_view = get_class('oscarapps.dashboard.partners.views',
-                                 'IndustryCreateView')
-    industry_preference_manage_view = get_class('oscarapps.dashboard.partners.views',
-                                 'IndustryManageView')
-    industry_preference_delete_view = get_class('oscarapps.dashboard.partners.views',
-                                 'IndustryDeleteView')
+    brand_category_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryListView')
+    brand_category_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryCreateView')
+    brand_category_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryManageView')
+    brand_category_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandCategoryDeleteView')
+
+    brand_style_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleListView')
+    brand_style_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleCreateView')
+    brand_style_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleManageView')
+    brand_style_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandStyleDeleteView')
+
 
     def get_urls(self):
         urls = [
@@ -58,23 +70,37 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
-            url(r'^influencer/$', self.influencer_list_view.as_view(), name='influencer-list'),
-            url(r'^influencer/create/$', self.influencer_create_view.as_view(),
-                name='influencer-create'),
-            url(r'^influencer/(?P<pk>\d+)/$', self.influencer_manage_view.as_view(),
-                name='influencer-manage'),
-            url(r'^influencer/(?P<pk>\d+)/delete/$', self.influencer_delete_view.as_view(),
-                name='influencer-delete'),
+            # url(r'^store_type/$', self.store_type_list_view.as_view(), name='store-type-list'),
+            # url(r'^store_type/create/$', self.store_type_create_view.as_view(),
+            #     name='store-type-create'),
+            # url(r'^store_type/(?P<pk>\d+)/$', self.store_type_manage_view.as_view(),
+            #     name='store-type-manage'),
+            # url(r'^store_type/(?P<pk>\d+)/delete/$', self.store_type_delete_view.as_view(),
+            #     name='store-type-delete'),
 
 
 
-            url(r'^industry_preference/$', self.industry_preference_list_view.as_view(), name='industry-list'),
-            url(r'^industry_preference/create/$', self.industry_preference_create_view.as_view(),
-                name='industry-create'),
-            url(r'^industry_preference/(?P<pk>\d+)/$', self.industry_preference_manage_view.as_view(),
-                name='industry-manage'),
-            url(r'^industry_preference/(?P<pk>\d+)/delete/$', self.industry_preference_delete_view.as_view(),
-                name='industry-delete'),
+            url(r'^brand_category/$', self.brand_category_list_view.as_view(), name='brand-category-list'),
+            url(r'^brand_category/create/$', self.brand_category_create_view.as_view(),
+                name='brand-category-create'),
+            url(r'^brand_category/(?P<pk>\d+)/$', self.brand_category_manage_view.as_view(),
+                name='brand-category-manage'),
+            url(r'^brand_category/(?P<pk>\d+)/delete/$', self.brand_category_delete_view.as_view(),
+                name='brand-category-delete'),
+
+
+            url(r'^brand_style/$', self.brand_style_list_view.as_view(), name='brand-style-list'),
+            url(r'^brand_style/create/$', self.brand_style_create_view.as_view(),
+                name='brand-style-create'),
+            url(r'^brand_style/(?P<pk>\d+)/$', self.brand_style_manage_view.as_view(),
+                name='brand-style-manage'),
+            url(r'^brand_style/(?P<pk>\d+)/delete/$', self.brand_style_delete_view.as_view(),
+                name='brand-style-delete'),
+
+
+            url(r'^filter/$', self.partner_filter_view.as_view(), name='partner-filter'),
+
+
         ]
         return self.post_process_urls(urls)
 application = PartnersDashboardApplication()
