@@ -1,13 +1,13 @@
-from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
-from oscar.apps.dashboard.partners.forms import NewUserForm as CoreNewUserForm
-from oscar.apps.dashboard.partners.forms import ExistingUserForm as CoreExistingUserForm
-from oscarapps.partner.models import Partner
 from django.utils.translation import ugettext_lazy as _
-from oscar.core.compat import existing_user_fields, get_user_model
-from oscar.core.loading import get_model
 from django import forms
 from django.utils.translation import pgettext_lazy
+
+from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
+from oscarapps.partner.models import Partner
+from oscar.core.compat import get_user_model
+from oscar.core.loading import get_model
 from oscarapps.address.models import Locations, States
+
 
 User = get_user_model()
 
@@ -23,18 +23,7 @@ class PartnerCreateForm(CorePartnerCreateForm):
         model = Partner
 
 
-class NewUserForm(CoreNewUserForm):
-    class Meta:
-        model = User
-        fields = existing_user_fields(
-            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']
 
-
-class ExistingUserForm(CoreExistingUserForm):
-    class Meta:
-        model = User
-        fields = existing_user_fields(
-            ['username', 'first_name', 'last_name', 'email']) + ['password1', 'password2']
 
 
 
