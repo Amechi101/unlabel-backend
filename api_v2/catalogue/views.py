@@ -216,47 +216,53 @@ class InfluencerBrandListView(generics.ListAPIView):
     serializer_class = PartnerSerializer
     http_method_names = ('get',)
 
-    # ZA - sort by a to z
+    #ZA - sort by a to z
     #AZ - sort by z to a
     #ASC - sort by date ascending
     #DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
     def get_queryset(self, *args, **kwargs):
+        print("-------------1--")
         param = self.request.GET.get('param')
         search = self.request.GET.get('search')
         type = self.request.GET.get('type')
-
-        live_brand_id = Product.objects.all().values_list('brand',flat = True)
+        print("-------------1--2")
+        live_brand_id = Product.objects.filter()#.values_list('brand',flat = True)
+        print("++++++++++++++",live_brand_id)
 
         if search == None and type == None :
+            print("-------------1--3")
             if param == "ZA":
-                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('-name')
+                queryset = Partner.objects.all().order_by('-name')
             elif param == "DESC":
-                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('created')
+                queryset = Partner.objects.all().order_by('created')
             elif param == "ASC":
-                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('-created')
+                queryset = Partner.objects.all().order_by('-created')
             else:
-                queryset = Partner.objects.filter(pk__in = live_brand_id).order_by('name')
+                queryset = Partner.objects.all().order_by('name')
         elif search == None :
+            print("-------------1--4")
             if param == "ZA":
-                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-name')
+                queryset = Partner.objects.filter(store_type = type).order_by('-name')
             elif param == "DESC":
-                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('created')
+                queryset = Partner.objects.filter(store_type = type).order_by('created')
             elif param == "ASC":
-                queryset = Partner.objects.filter(store_type = type, pk__in = live_brand_id).order_by('-created')
+                queryset = Partner.objects.filter(store_type = type).order_by('-created')
             else:
-                queryset = Partner.objects.filter(store_type = type,pk__in = live_brand_id).order_by('name')
+                queryset = Partner.objects.filter(store_type = type).order_by('name')
         elif type == None :
+            print("-------------1--5")
             if param == "ZA":
-                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('-name')
+                queryset = Partner.objects.filter(name__icontains = search).order_by('-name')
             elif param == "DESC":
-                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('created')
+                queryset = Partner.objects.filter(name__icontains = search).order_by('created')
             elif param == "ASC":
-                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('-created')
+                queryset = Partner.objects.filter(name__icontains = search).order_by('-created')
             else:
-                queryset = Partner.objects.filter(pk__in = live_brand_id, name__icontains = search).order_by('name')
-
+                queryset = Partner.objects.filter(name__icontains = search).order_by('name')
+        print("-----------------666")
         return queryset
+
 
 class InfluencerProductListView(generics.ListAPIView):
     pagination_class = pagination.LimitOffsetPagination
@@ -287,7 +293,6 @@ class InfluencerProductListView(generics.ListAPIView):
                 prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
                 prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('-price_retail').values_list('product',flat = True)
                 queryset = Product.objects.filter(pk__in = prod_Sort_List)
-
         return queryset
 
 class InfluencerReserveProduct(APIView):
