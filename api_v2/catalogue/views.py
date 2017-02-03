@@ -290,18 +290,19 @@ class InfluencerProductListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
-        if request.user.is_authenticated():
-            influencer_user = request.user
+        influencer_user = request.user
+        if influencer_user.is_anonymous() == False:
             try:
-                influencer = Influencers.objects.get(users=influencer_user)
-                print("++++++++++++++++++++++++++++++++",influencer.hips)
-                if influencer.bio == "" or influencer.location == "" or influencer.height == "" or influencer.hips == "" or influencer.waist == "":
-                    profile = "NO"
+                influencer = Influencers.objects.filter(users=influencer_user).count()
+                if influencer != 0:
+                    profile = True
                 else:
-                    profile = "YES"
+                    profile = False
             except ObjectDoesNotExist:
                 influencer = None
-                profile = "NO"
+                profile = False
+        elif influencer_user.is_anonymous() == True:
+            profile = False
 
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)

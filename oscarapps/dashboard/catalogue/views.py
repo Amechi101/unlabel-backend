@@ -4,11 +4,12 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 
-
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 
+# ############
 # style views
+#############
 
 Style = get_model('partner', 'Style')
 (
@@ -19,6 +20,9 @@ Style = get_model('partner', 'Style')
 
 
 class StyleListView(generic.ListView):
+    """
+    List all styles
+    """
     model = Style
     context_object_name = 'styles'
     template_name = 'dashboard/catalogue/style/style_list.html'
@@ -32,9 +36,7 @@ class StyleListView(generic.ListView):
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
             return qs
-
         data = self.form.cleaned_data
-
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
             self.description = _("Styles matching '%s'") % data['name']
@@ -51,6 +53,9 @@ class StyleListView(generic.ListView):
 
 
 class StyleCreateView(generic.CreateView):
+    """
+    Create new style
+    """
     model = Style
     template_name = 'dashboard/catalogue/style/style_form.html'
     form_class = StyleCreateForm
@@ -68,8 +73,10 @@ class StyleCreateView(generic.CreateView):
         return reverse('dashboard:style-list')
 
 
-#
 class StyleManageView(generic.UpdateView):
+    """
+    Edit/update existing styles
+    """
     template_name = 'dashboard/catalogue/style/style_manage.html'
     form_class = StyleCreateForm
     success_url = reverse_lazy('dashboard:style-list')
@@ -98,6 +105,9 @@ class StyleManageView(generic.UpdateView):
 
 
 class StyleDeleteView(generic.DeleteView):
+    """
+    Delete a style
+    """
     model = Style
     template_name = 'dashboard/catalogue/style/style_delete.html'
 

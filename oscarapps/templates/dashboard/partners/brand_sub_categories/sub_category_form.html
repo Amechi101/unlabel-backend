@@ -2,10 +2,10 @@
 {% load category_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page influencer{% endblock %}
+{% block body_class %}{{ block.super }} create-page brand sub category{% endblock %}
 
 {% block title %}
-    {{ title }} | {% trans "Influencers" %} | {{ block.super }}
+    {{ title }} | {% trans "Brand Sub Category" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -14,7 +14,7 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:influencer-list' %}">{% trans "Influencer" %}</a>
+            <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Sub Category" %}</a>
         </li>
         <li class="active">{{ title }}</li>
     </ul>

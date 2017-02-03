@@ -12,7 +12,6 @@ Country = get_model('address', 'Country')
 class Command(BaseCommand):
     help = "Populates the list of countries with data from pycountry."
 
-
     option_list = BaseCommand.option_list + (
         make_option(
             '--no-shipping',

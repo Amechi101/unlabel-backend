@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponseRedirect
 from django.utils.http import urlsafe_base64_encode
+from api_v2.catalogue.serializers import PartnerSerializer
 from rest_framework import permissions,authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,6 +15,7 @@ from django.conf import settings
 from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
+from rest_framework import pagination,generics,serializers
 from rest_framework.views import APIView
 
 from oscarapi import serializers
@@ -21,6 +23,8 @@ from oscarapi.utils import login_and_upgrade_session
 from oscarapi.basket import operations
 
 from .serializers import LoginSerializer
+
+from oscarapps.partner.models import PartnerFollow,Partner
 
 
 
@@ -137,8 +141,7 @@ class InfluencerForgotPassword(APIView):
                     'protocol': 'http',
                 }
                 try:
-                    tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode(
-                        "utf-8") + '/' + context['token']
+                    tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode("utf-8") + '/' + context['token']
                     mailid = request.data["email"]
                     email = EmailMessage()
                     email.subject = "Password Reset at unlabel"
@@ -168,3 +171,18 @@ class InfluencerForgotPassword(APIView):
         except:
             content = {"message": "email does not exist"}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+class InfluencerFollowedBrands(generics.ListAPIView):
+    authentication = authentication.SessionAuthentication
+    http_method_names = ('get',)
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = PartnerSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        if self.request.user.is_authenticated() and self.request.user.is_anonymous() == False:
+            influencer = self.request.user
+            follow_list = PartnerFollow.objects.filter(customer=influencer).values_list('partner',flat = True)
+            queryset = Partner.objects.filter(pk__in=follow_list)
+            return queryset
+
+
