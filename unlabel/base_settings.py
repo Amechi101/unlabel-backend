@@ -17,7 +17,6 @@ from oscar.defaults import *
 
 
 OSCAR_SHOP_NAME = 'Unlabel'
-# AUTH_USER_MODEL = "customer.User"
 AUTH_USER_MODEL = "users.User"
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None

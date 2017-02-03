@@ -17,9 +17,6 @@ from oscarapps.dashboard.partners.forms import PartnerCreateForm, PartnerManageF
 from oscarapps.partner.models import Partner
 from oscarapps.address.models import States, Country, Locations
 from oscarapps.partner.models import Style, Category, SubCategory
-
-
-from django.core.exceptions import ObjectDoesNotExist
 from users.models import User
 
 # =======
@@ -44,7 +41,6 @@ class PartnerListView(CorePartnerListView):
             self.is_filtered = True
 
         return qs
-
 
 
 class PartnerCreateView(generic.View):
@@ -140,8 +136,6 @@ class PartnerRentalInfoManageView(generic.UpdateView):
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
         address = self.partner.rental_info
-        # if address is None:
-        #     address = self.partner.addresses.model(partner=self.partner)
         return address
 
     def get_initial(self):
@@ -238,10 +232,6 @@ class PartnerFilterView(generic.ListView):
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered
         return ctx
-
-
-
-
 
 
 #=========================

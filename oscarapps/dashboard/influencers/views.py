@@ -58,7 +58,6 @@ class InfluencerListView(generic.ListView):
         invite_email = request.POST.get("invite_email")
         current_site = Site.objects.get_current()
         domain = current_site.domain
-        verify_code = str(uuid.uuid1()).replace('-','').upper()[0:10]
         context = {
             'domain': domain,
             'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],

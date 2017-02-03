@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 from django.contrib.auth.forms import (
@@ -44,3 +46,5 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Permission)
+admin.site.register(ContentType)

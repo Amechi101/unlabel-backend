@@ -18,37 +18,37 @@ from users.models import User
 class InfluencerSignUpForm(forms.Form):
 
 
-    MALE = 'M'
-    FEMALE = 'F'
-    sex_choice = (
-        (MALE, 'Male'),
-        (FEMALE, 'Female'),
-    )
+    # MALE = 'M'
+    # FEMALE = 'F'
+    # sex_choice = (
+    #     (MALE, 'Male'),
+    #     (FEMALE, 'Female'),
+    # )
 
-    email = forms.CharField(label='Email', required=True)
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput)
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
     contact_number = forms.CharField(required=True, label="Contact number")
-    image = forms.ImageField(required=False, label="Profile image")
-    bio = forms.CharField(widget=forms.Textarea, label="Few words about yourself")
-    city = forms.CharField(label="City", required=True)
-    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
-    gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
-    height = forms.IntegerField(required=True, label="Height in Inches")
-    chest_or_bust = forms.IntegerField(required=True, label="Chest/Bust in Inches")
-    hips = forms.IntegerField(required=True, label="Hip size in Inches")
-    waist = forms.IntegerField(required=True, label="Waist size in Inches")
+    email = forms.CharField(label='Email', required=True)
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
+    # image = forms.ImageField(required=False, label="Profile image")
+    # bio = forms.CharField(widget=forms.Textarea, label="Few words about yourself")
+    # city = forms.CharField(label="City", required=True)
+    # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
+    # state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
+    # gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
+    # height = forms.IntegerField(required=True, label="Height in Inches")
+    # chest_or_bust = forms.IntegerField(required=True, label="Chest/Bust in Inches")
+    # hips = forms.IntegerField(required=True, label="Hip size in Inches")
+    # waist = forms.IntegerField(required=True, label="Waist size in Inches")
 
     def clean(self):
         cleaned_data = super(InfluencerSignUpForm, self).clean()
 
-        height = cleaned_data.get("height")
-        chest_or_bust = cleaned_data.get("chest_or_bust")
-        hips = cleaned_data.get("hips")
-        waist = cleaned_data.get("waist")
+        # height = cleaned_data.get("height")
+        # chest_or_bust = cleaned_data.get("chest_or_bust")
+        # hips = cleaned_data.get("hips")
+        # waist = cleaned_data.get("waist")
         contact_number = cleaned_data.get("contact_number")
         email = cleaned_data.get("email")
         password1 = self.cleaned_data.get('password1', '')
@@ -58,14 +58,14 @@ class InfluencerSignUpForm(forms.Form):
             raise forms.ValidationError(
                 _("The two password fields didn't match."))
 
-        if height is not None and len(str(height)) > 2:
-            raise forms.ValidationError("Please enter valid height in Inches")
-        if chest_or_bust is not None and len(str(chest_or_bust)) > 2:
-            raise forms.ValidationError("Please enter valid Chest/Bust size in Inches")
-        if hips is not None and len(str(hips)) > 2:
-            raise forms.ValidationError("Please enter valid hip size in Inches")
-        if waist is not None and len(str(waist)) > 2:
-            raise forms.ValidationError("Please enter valid waist size in Inches")
+        # if height is not None and len(str(height)) > 2:
+        #     raise forms.ValidationError("Please enter valid height in Inches")
+        # if chest_or_bust is not None and len(str(chest_or_bust)) > 2:
+        #     raise forms.ValidationError("Please enter valid Chest/Bust size in Inches")
+        # if hips is not None and len(str(hips)) > 2:
+        #     raise forms.ValidationError("Please enter valid hip size in Inches")
+        # if waist is not None and len(str(waist)) > 2:
+        #     raise forms.ValidationError("Please enter valid waist size in Inches")
         contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
         if contact_number is None or contact_number_pattern.match(contact_number) is None:
             raise forms.ValidationError("Please enter valid contact number")
