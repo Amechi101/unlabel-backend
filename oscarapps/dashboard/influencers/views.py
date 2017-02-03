@@ -58,43 +58,46 @@ class InfluencerListView(generic.ListView):
     def post(self, request, *args, **kwargs):
 
         invite_email = request.POST.get("invite_email")
-        current_site = Site.objects.get_current()
-        domain = current_site.domain
-        context = {
-            'domain': domain,
-            'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
-            'user': invite_email,
-            'protocol': 'http',
-        }
-        invite_sent = InfluencerInvite()
-        invite_sent.email = context['user']
-        invite_sent.code = context['verify_code']
+        if invite_email is not None and invite_email!="":
+            current_site = Site.objects.get_current()
+            domain = current_site.domain
+            context = {
+                'domain': domain,
+                'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
+                'user': invite_email,
+                'protocol': 'http',
+            }
+            invite_sent = InfluencerInvite()
+            invite_sent.email = context['user']
+            invite_sent.code = context['verify_code']
 
-        tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
-        email = EmailMessage()
-        email.subject = "Influencer invitation from Unlabel"
-        email.content_subtype = "html"
-        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                        <body>
-                        <br><br>
-                        You're being invited as influencer at unlabel
-                        <br><br>
-                        Please fill the form provided at the link :
-                        <br><br>
-                        """ + tosend + """
-                        <br><br>
-                        Thank you for using our site!
-                        <br/>
-                        <br/>
-                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                        </body>
-                        </head>
-                        </html>"""
-        email.from_email = "Unlabel App"
-        email.to = [invite_email]
-        email.send()
-        invite_sent.save()
-        return HttpResponseRedirect("/oscar/dashboard/influencers/")
+            tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
+            email = EmailMessage()
+            email.subject = "Influencer invitation from Unlabel"
+            email.content_subtype = "html"
+            email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                            <body>
+                            <br><br>
+                            You're being invited as influencer at unlabel
+                            <br><br>
+                            Please fill the form provided at the link :
+                            <br><br>
+                            """ + tosend + """
+                            <br><br>
+                            Thank you for using our site!
+                            <br/>
+                            <br/>
+                            <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                            </body>
+                            </head>
+                            </html>"""
+            email.from_email = "Unlabel App"
+            email.to = [invite_email]
+            email.send()
+            invite_sent.save()
+            return HttpResponseRedirect("/oscar/dashboard/influencers/")
+        else:
+            return HttpResponseRedirect("/oscar/dashboard/influencers/")
 
 
 

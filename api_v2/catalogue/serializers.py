@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from oscarapps.partner.models import PartnerFollow
 
@@ -9,6 +10,8 @@ from oscarapi.utils import (
 from oscarapps.partner.models import Partner, Style
 from oscarapps.address.models import Locations
 from oscarapps.catalogue.models import Product
+from oscar.apps.partner.models import StockRecord
+from users.models import User
 from oscar.core.loading import get_model
 
 Product = get_model('catalogue', 'Product')
@@ -31,17 +34,19 @@ class PartnerSerializer(OscarModelSerializer):
     followed = serializers.SerializerMethodField(source='get_followed')
 
     def get_followed(self,obj):
-        ser = None
         request = self.context.get("request")
         if request and hasattr(request, "user"):
             inf_user = request.user
-        influencer_user = serializers.CurrentUserDefault()
-        brand_follow = PartnerFollow.objects.filter(customer=inf_user,partner=obj)
-        if len(brand_follow) >0:
-            return True
+            if request.user.is_anonymous() == True:
+                return False
+            elif request.user.is_anonymous() == False:
+                brand_follow = PartnerFollow.objects.filter(customer=inf_user,partner=obj)
+                if len(brand_follow) > 0:
+                    return True
+                else:
+                    return False
         else:
             return False
-
 
     class Meta:
         model = Partner
@@ -98,6 +103,14 @@ class ProductSerializer(OscarModelSerializer):
     options = OptionSerializer(many=True, required=False)
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
+    sku = serializers.SerializerMethodField(source='get_sku')
+
+    def get_sku(self,obj):
+        try:
+            stock_record = StockRecord.objects.get(product = obj)
+        except ObjectDoesNotExist:
+            return False
+        return stock_record.partner_sku
 
     class Meta:
         model = Product
@@ -107,7 +120,7 @@ class ProductSerializer(OscarModelSerializer):
                 'url', 'id', 'title', 'description',
                 'date_created', 'date_updated', 'recommended_products',
                 'attributes', 'categories', 'product_class',
-                'stockrecords', 'images', 'price', 'availability', 'options'))
+                'stockrecords', 'images', 'price', 'availability', 'options', 'sku'))
 
 class StoreTypeSerializer(OscarModelSerializer):
 
