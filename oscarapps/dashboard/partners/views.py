@@ -1,103 +1,30 @@
-from django.shortcuts import get_object_or_404
-# from oscar.apps.dashboard.partners.views import PartnerAddressForm
-from oscar.apps.dashboard.partners.forms import UserEmailForm
-from django.contrib.auth.models import Permission
-from oscar.apps.customer.utils import normalise_email
-from oscarapps.partner.models import Partner
-from oscarapps.address.models import Locations
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404,redirect,render
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import FormView
-from oscar.core.compat import get_user_model
+
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
-from oscar.apps.dashboard.partners.forms import PartnerAddressForm,PartnerSearchForm
-from oscarapps.dashboard.partners.forms import PartnerCreateForm
-from oscarapps.partner.models import Partner
-from oscarapps.address.models import States,Country,Locations
-from oscarapps.partner.models import Style, SubCategory, Category
-from django.http import HttpResponseRedirect
+from oscar.apps.dashboard.partners.forms import PartnerSearchForm
 
-from oscarapps.address.states import stateList
+from oscarapps.dashboard.partners.forms import PartnerCreateForm, PartnerManageForm, PartnerRentalInfoForm
+from oscarapps.partner.models import Partner
+from oscarapps.address.models import States, Country, Locations
+from oscarapps.partner.models import Style, SubCategory, Category
+
+
 from django.core.exceptions import ObjectDoesNotExist
 from users.models import User
 
 # =======
 #Partner views
 #=======
-
-class PartnerManageView(CorePartnerManageView, FormView):
-    form_class = PartnerCreateForm
-
-    def get_object(self, queryset=None):
-        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        return self.partner
-
-    def get_initial(self):
-        return {'name': self.partner.name}
-
-    def get_context_data(self, **kwargs):
-
-        ctx = super(PartnerManageView, self).get_context_data(**kwargs)
-        ctx['partner'] = self.partner
-        ctx['title'] = self.partner.name
-        ctx['users'] = self.partner.users.all()
-        ctx['states'] = stateList
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Brand '%s' was updated successfully.") %
-            self.partner.name)
-        self.partner.name = form.cleaned_data['name']
-        self.partner.save()
-        return super(FormView, self).form_valid(form)
-
-
-class PartnerAddressManageView(generic.UpdateView):
-    template_name = 'dashboard/partners/partner_address_manage.html'
-    form_class = PartnerAddressForm
-
-    def get_success_url(self):
-        return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})
-
-    def get_object(self, queryset=None):
-        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        address = self.partner.location
-        # if address is None:
-        #     address = self.partner.addresses.model(partner=self.partner)
-        return address
-
-    def get_initial(self):
-        return {'name': self.partner.name}
-
-    def get_context_data(self, **kwargs):
-
-        ctx = super(PartnerAddressManageView, self).get_context_data(**kwargs)
-        ctx['partner'] = self.partner
-        ctx['title'] = self.partner.name
-        ctx['users'] = self.partner.users.all()
-        # ctx['states'] = stateList
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Address of brand  '%s' was updated successfully.") %
-            self.partner.name)
-
-        self.partner.location=form.save()
-        self.partner.save()
-        # locationForm=form.save()
-        # locationForm.save()
-        return super(PartnerAddressManageView, self).form_valid(form)
-
 
 class PartnerListView(CorePartnerListView):
     def get_queryset(self):
@@ -119,16 +46,6 @@ class PartnerListView(CorePartnerListView):
         return qs
 
 
-class PartnerDeleteView(CorePartnerDeleteView):
-    model = Partner
-    template_name = 'dashboard/partners/partner_delete.html'
-
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Brand '%s' was deleted successfully.") %
-                         self.object.name)
-        return reverse('dashboard:partner-list')
-
 
 class PartnerCreateView(generic.View):
     model = Partner
@@ -143,12 +60,6 @@ class PartnerCreateView(generic.View):
     def post(self, request, *args, **kwargs):
         partner_form = PartnerCreateForm(data=request.POST)
         if partner_form.is_valid():
-            a=Style.objects.filter(pk__in=partner_form['style'].value())
-            b=Category.objects.filter(pk__in=partner_form['category'].value())
-            c=SubCategory.objects.filter(pk__in=partner_form['sub_category'].value())
-            for i in a:
-                print(i.pk , i.name)
-
             partner_user = User.objects.create(email=partner_form['email'].value(),
                                                  password=partner_form['password1'].value(),
                                                  first_name=partner_form['first_name'].value(),
@@ -160,7 +71,7 @@ class PartnerCreateView(generic.View):
 
             try:
                 state = States.objects.get(pk=partner_form['state'].value())
-            except :
+            except:
                 state = None
             partner_location = Locations.objects.create(city=partner_form['city'].value(),
                                                         state=state,
@@ -184,6 +95,93 @@ class PartnerCreateView(generic.View):
 
         else:
             return render(request, 'dashboard/partners/partner_form.html', {'form': partner_form})
+
+
+class PartnerManageView(CorePartnerManageView, FormView):
+    form_class = PartnerManageForm
+
+    def get_object(self, queryset=None):
+        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
+        return self.partner
+
+    def get_initial(self):
+      return {'city': self.partner.location.city,
+            'state': self.partner.location.state,
+            'country': self.partner.location.country,
+            'email': self.partner.users.all().first().email,
+            'password': self.partner.users.all().first().password,
+            'first_name': self.partner.users.all().first().first_name,
+            'last_name': self.partner.users.all().first().last_name,
+            'is_active': self.partner.users.all().first().is_active
+      }
+
+    def get_context_data(self, **kwargs):
+
+        ctx = super(PartnerManageView, self).get_context_data(**kwargs)
+        ctx['partner'] = self.partner
+        ctx['title'] = self.partner.name
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Brand '%s' was updated successfully.") %
+            self.partner.name)
+        return super(PartnerManageView, self).form_valid(form)
+
+
+
+class PartnerRentalInfoManageView(generic.UpdateView):
+    template_name = 'dashboard/partners/partner_rental_info_manage.html'
+    form_class = PartnerRentalInfoForm
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})
+
+    def get_object(self, queryset=None):
+        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
+        address = self.partner.rental_info
+        # if address is None:
+        #     address = self.partner.addresses.model(partner=self.partner)
+        return address
+
+    def get_initial(self):
+        return {'name': self.partner.name,
+        }
+
+    def get_context_data(self, **kwargs):
+
+        ctx = super(PartnerRentalInfoManageView, self).get_context_data(**kwargs)
+        ctx['partner'] = self.partner
+        ctx['title'] = self.partner.name
+        ctx['users'] = self.partner.users.all()
+        # ctx['states'] = stateList
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Address of brand  '%s' was updated successfully.") %
+            self.partner.name)
+
+        self.partner.rental_info = form.save()
+        self.partner.save()
+        # locationForm=form.save()
+        # locationForm.save()
+        return super(PartnerRentalInfoManageView, self).form_valid(form)
+
+
+
+
+class PartnerDeleteView(CorePartnerDeleteView):
+    model = Partner
+    template_name = 'dashboard/partners/partner_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Brand '%s' was deleted successfully.") %
+                         self.object.name)
+        return reverse('dashboard:partner-list')
+
+
 
 
 #=========================

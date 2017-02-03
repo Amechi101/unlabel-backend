@@ -1,11 +1,7 @@
 import re
-
 from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
-
 from oscarapps.partner.models import Partner
 from django.utils.translation import ugettext_lazy as _
-from oscar.core.compat import existing_user_fields, get_user_model
-from oscar.core.loading import get_model
 from django import forms
 from django.utils.translation import pgettext_lazy
 from oscarapps.address.models import Locations, States, Country
@@ -13,6 +9,12 @@ from django.core.exceptions import ObjectDoesNotExist,ValidationError
 from oscar.core.validators import password_validators
 from django.core.validators import validate_email
 from oscarapps.partner.models import Category, Style, SubCategory
+from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
+from oscarapps.partner.models import Partner
+from oscar.core.compat import get_user_model
+from oscar.core.loading import get_model
+from oscarapps.address.models import Locations, States
+
 
 
 User = get_user_model()
@@ -33,24 +35,17 @@ class PartnerCreateForm(forms.Form):
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
 
-
     name = forms.CharField(label="Store name", required=True)
     image = forms.ImageField(required=False, label="Store image")
     description = forms.CharField(widget=forms.Textarea, label=" Store description")
-
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
-
-
     style = forms.ModelMultipleChoiceField(label="style", queryset=Style.objects.all(), required=True)
     category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all(), required=True)
     sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
                                                   required=True)
     is_active = forms.BooleanField(initial=True)
-
-
-
 
     # class Meta:
     #     fields = ('name', 'image', 'description',
@@ -91,7 +86,7 @@ class PartnerCreateForm(forms.Form):
                                         "lowercase,digit,special character")
 
         return cleaned_data
-
+      
 
 #################
 #Brand Styles

@@ -7,14 +7,12 @@ import string
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
-
-from oscar.core.compat import get_user_model
 from django.core.validators import RegexValidator
 from django.conf import settings
 
 from oscarapps.address.models import Locations
-
-
+from oscarapps.catalogue.models import Product
+from users.models import User
 
 
 class BaseApplicationModel(models.Model):
@@ -38,7 +36,7 @@ class Influencers(BaseApplicationModel):
     image = models.ImageField(upload_to='Influencers', null=True, blank=True)
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
-    user = models.OneToOneField(
+    users = models.OneToOneField(
         settings.AUTH_USER_MODEL, related_name="influencers",
         blank=True, verbose_name=_("Users"))
     height = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default="", verbose_name=_('Height'), help_text=_('US Measurements'))
@@ -57,7 +55,6 @@ class Influencers(BaseApplicationModel):
         super(Influencers, self).save(*args, **kwargs)
         if not self.auto_id:
             self.auto_id = self.id_generator()
-            print(self.auto_id)
             self.save()
 
     def __str__(self):
@@ -72,5 +69,16 @@ class InfluencerInvite(models.Model):
     is_used = models.BooleanField(default=False)
 
     def  __str__(self):
-        return self.user.email
+        return self.email
+
+
+
+class InfluencerProductReserve(models.Model):
+
+    influencer = models.ForeignKey(Influencers, blank=False, null=False,verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product,blank=False,null=False,verbose_name=_('Product'))
+    date_reserved = models.DateTimeField(auto_now_add=True,verbose_name=_('Product Reserved Date'))
+
+    class Meta:
+        verbose_name_plural = _('Influencer Product Reservations')
 

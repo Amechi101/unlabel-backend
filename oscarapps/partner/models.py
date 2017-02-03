@@ -120,7 +120,8 @@ class Partner(AbstractPartner, BaseApplicationModel):
                                        verbose_name=_('Rental Address'))
 
     class Meta:
-        verbose_name = _('Brands Detail')
+        verbose_name = _('Partner')
+        app_label = 'partner'
 
 
 class PartnerFollow(models.Model):

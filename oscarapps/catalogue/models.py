@@ -74,6 +74,9 @@ class Product(AbstractProduct, BaseApplicationModel):
    size = models.IntegerField(null=True, blank=True)
    wieght = models.IntegerField(null=True, blank=True)
    likes = models.IntegerField(default=0)
+   influencer_description = models.TextField(max_length=200,blank=True,null=True, verbose_name=_('Influencer Product Description'))
+   information = models.TextField(max_length=200,blank=True,null=True, verbose_name=_('Material care Information'))
+   weight = models.CharField(max_length=10,blank=True,null=True,verbose_name=_('Product weight information'))
    on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
    item_sex_type = models.CharField(
         max_length=1,
@@ -99,8 +102,6 @@ class Product(AbstractProduct, BaseApplicationModel):
         verbose_name=_('Requires shipping.?')
    )
 
-
-
    #Metadata
    class Meta:
         verbose_name = _('Product')
@@ -108,5 +109,7 @@ class Product(AbstractProduct, BaseApplicationModel):
 
    def __str__(self):
         return "{0}".format( self.title )
+
+
 
 from oscar.apps.catalogue.models import *
