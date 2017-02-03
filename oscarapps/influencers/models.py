@@ -15,7 +15,6 @@ from oscarapps.catalogue.models import Product
 from users.models import User
 
 
-
 class BaseApplicationModel(models.Model):
     """
     An abstract base class model that common attributes
@@ -56,13 +55,11 @@ class Influencers(BaseApplicationModel):
         super(Influencers, self).save(*args, **kwargs)
         if not self.auto_id:
             self.auto_id = self.id_generator()
-            print("------------------------save inf",self.auto_id)
             self.save()
 
     def __str__(self):
 
         return self.users.first_name
-
 
 
 class InfluencerInvite(models.Model):

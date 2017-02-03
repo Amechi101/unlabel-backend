@@ -39,12 +39,10 @@ from oscarapps.influencers.models import Influencers,InfluencerInvite
 # ================
 
 
-(InfluencerSearchForm, InfluencerCreateForm, InfluencerCreateForm1) = get_classes('dashboard.influencers.forms',
-                                                            ['InfluencerSearchForm', 'InfluencerCreateForm', 'InfluencerCreateForm1'],
+(InfluencerSearchForm, InfluencerCreateForm, InfluencerManageForm) = get_classes('dashboard.influencers.forms',
+                                                            ['InfluencerSearchForm', 'InfluencerCreateForm',
+                                                             'InfluencerManageForm'],
                                                              'oscarapps')
-
-
-
 
 class InfluencerListView(generic.ListView):
     """
@@ -190,19 +188,20 @@ class InfluencerCreateView(generic.View):
 
 
 
-class InfluencerManageView(generic.DetailView):
+class InfluencerManageView(generic.UpdateView):
 
     """
     Edit and update an influencer
     """
     template_name = 'influencers/influencer_manage.html'
 
-    form_class = InfluencerCreateForm1
+    form_class = InfluencerManageForm
 
     success_url = reverse_lazy('dashboard:influencer-list')
 
     def get_object(self, queryset=None):
         self.influencer = get_object_or_404(Influencers, pk=self.kwargs['pk'])
+
         return self.influencer
 
 
@@ -214,7 +213,8 @@ class InfluencerManageView(generic.DetailView):
                 'password': self.influencer.users.password,
                 'first_name': self.influencer.users.first_name,
                 'last_name': self.influencer.users.last_name,
-                'is_active': self.influencer.users.is_active}
+                'is_active': self.influencer.users.is_active
+        }
 
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerManageView, self).get_context_data(**kwargs)
