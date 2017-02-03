@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from oscarapps.partner.models import PartnerFollow
 
 from oscarapi.utils import (
     OscarModelSerializer,
@@ -27,6 +28,21 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class PartnerSerializer(OscarModelSerializer):
     location = LocationSerializer()
+    followed = serializers.SerializerMethodField(source='get_followed')
+
+    def get_followed(self,obj):
+        ser = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            inf_user = request.user
+        influencer_user = serializers.CurrentUserDefault()
+        brand_follow = PartnerFollow.objects.filter(customer=inf_user,partner=obj)
+        if len(brand_follow) >0:
+            return True
+        else:
+            return False
+
+
     class Meta:
         model = Partner
         fields = '__all__'
