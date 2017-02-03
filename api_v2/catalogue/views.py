@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+from collections import OrderedDict, namedtuple
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework import status
@@ -10,7 +12,7 @@ from oscarapi import serializers, permissions
 from rest_framework import pagination
 from oscarapps.customer.models import UserProductLike
 from oscarapps.catalogue.models import Product
-
+from .pagination import CustomPagination
 from .serializers import PartnerSerializer,StoreTypeSerializer,ProductSerializer
 from oscarapps.partner.models import PartnerFollow,Style
 from oscarapps.influencers.models import Influencers,InfluencerProductReserve
@@ -222,16 +224,12 @@ class InfluencerBrandListView(generics.ListAPIView):
     #DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
     def get_queryset(self, *args, **kwargs):
-        print("-------------1--")
         param = self.request.GET.get('param')
         search = self.request.GET.get('search')
         type = self.request.GET.get('type')
-        print("-------------1--2")
         live_brand_id = Product.objects.filter()#.values_list('brand',flat = True)
-        print("++++++++++++++",live_brand_id)
 
         if search == None and type == None :
-            print("-------------1--3")
             if param == "ZA":
                 queryset = Partner.objects.all().order_by('-name')
             elif param == "DESC":
@@ -241,7 +239,6 @@ class InfluencerBrandListView(generics.ListAPIView):
             else:
                 queryset = Partner.objects.all().order_by('name')
         elif search == None :
-            print("-------------1--4")
             if param == "ZA":
                 queryset = Partner.objects.filter(store_type = type).order_by('-name')
             elif param == "DESC":
@@ -251,7 +248,6 @@ class InfluencerBrandListView(generics.ListAPIView):
             else:
                 queryset = Partner.objects.filter(store_type = type).order_by('name')
         elif type == None :
-            print("-------------1--5")
             if param == "ZA":
                 queryset = Partner.objects.filter(name__icontains = search).order_by('-name')
             elif param == "DESC":
@@ -260,12 +256,11 @@ class InfluencerBrandListView(generics.ListAPIView):
                 queryset = Partner.objects.filter(name__icontains = search).order_by('-created')
             else:
                 queryset = Partner.objects.filter(name__icontains = search).order_by('name')
-        print("-----------------666")
         return queryset
 
 
 class InfluencerProductListView(generics.ListAPIView):
-    pagination_class = pagination.LimitOffsetPagination
+    pagination_class = CustomPagination
     serializer_class = ProductSerializer
     http_method_names = ('get',)
 
@@ -276,7 +271,6 @@ class InfluencerProductListView(generics.ListAPIView):
     def get_queryset(self,*args,**kwargs):
         brand_id = self.request.GET.get('brand')
         param = self.request.GET.get('param')
-        print("+++++++++++++++++++++++",param)
         if brand_id == None:
             queryset = Product.objects.filter(status = 'U').order_by('created')
         if brand_id != None:
@@ -292,8 +286,33 @@ class InfluencerProductListView(generics.ListAPIView):
                 queryset = Product.objects.filter(pk__in = prod_Sort_List)
             else:
                 queryset = Product.objects.filter(brand = brand_id, status = 'U' ).order_by('-created')
-
         return queryset
+
+    def list(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated():
+            influencer_user = request.user
+            try:
+                influencer = Influencers.objects.get(users=influencer_user)
+                print("++++++++++++++++++++++++++++++++",influencer.hips)
+                if influencer.bio == "" or influencer.location == "" or influencer.height == "" or influencer.hips == "" or influencer.waist == "":
+                    profile = "NO"
+                else:
+                    profile = "YES"
+            except ObjectDoesNotExist:
+                influencer = None
+                profile = "NO"
+
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            data = {'profile':profile, 'data':serializer.data}
+            return self.get_paginated_response(data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class InfluencerReserveProduct(APIView):
     authentication = authentication.SessionAuthentication

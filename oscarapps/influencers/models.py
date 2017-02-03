@@ -56,7 +56,7 @@ class Influencers(BaseApplicationModel):
         super(Influencers, self).save(*args, **kwargs)
         if not self.auto_id:
             self.auto_id = self.id_generator()
-            print(self.auto_id)
+            print("------------------------save inf",self.auto_id)
             self.save()
 
     def __str__(self):
@@ -72,7 +72,7 @@ class InfluencerInvite(models.Model):
     is_used = models.BooleanField(default=False)
 
     def  __str__(self):
-        return self.user.email
+        return self.email
 
 
 

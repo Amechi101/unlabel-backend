@@ -58,10 +58,8 @@ class InfluencerListView(generic.ListView):
     def post(self, request, *args, **kwargs):
 
         invite_email = request.POST.get("invite_email")
-        print("=======================", invite_email)
         current_site = Site.objects.get_current()
         domain = current_site.domain
-        verify_code = str(uuid.uuid1()).replace('-','').upper()[0:10]
         context = {
             'domain': domain,
             'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
@@ -74,7 +72,7 @@ class InfluencerListView(generic.ListView):
 
         tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
         email = EmailMessage()
-        email.subject = "Influencer inviattion from Unlabel"
+        email.subject = "Influencer invitation from Unlabel"
         email.content_subtype = "html"
         email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
                         <body>

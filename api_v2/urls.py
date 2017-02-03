@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^influencer_product_list/',
         catalogueViews.InfluencerProductListView.as_view(),name='influencer_product_list_view'),
 
+    url(r'^login/$', influencerViews.LoginView.as_view(), name='influencer-login'),
 
 
 ]
