@@ -1,25 +1,10 @@
 import re
-<<<<<<< HEAD
 
-=======
-from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
-from oscarapps.partner.models import Partner
->>>>>>> 92e099c823eaf94dc314451125982c59cf8adbd0
 from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.utils.translation import pgettext_lazy
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-<<<<<<< HEAD
-=======
-from oscarapps.partner.models import Category, Style, SubCategory
-from oscar.apps.dashboard.partners.forms import PartnerCreateForm as CorePartnerCreateForm
-from oscarapps.partner.models import Partner
-from oscar.core.compat import get_user_model
-from oscar.core.loading import get_model
-from oscarapps.address.models import Locations, States
-
->>>>>>> 92e099c823eaf94dc314451125982c59cf8adbd0
 
 from oscar.core.loading import get_model
 from oscar.core.validators import password_validators
@@ -49,16 +34,11 @@ class PartnerCreateForm(forms.Form):
                   "lowercase,digit,special character",
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
-<<<<<<< HEAD
-=======
-
->>>>>>> 92e099c823eaf94dc314451125982c59cf8adbd0
     name = forms.CharField(label="Store name", required=True)
     image = forms.ImageField(required=False, label="Store image")
     description = forms.CharField(widget=forms.Textarea, label=" Store description")
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-<<<<<<< HEAD
     state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
     style = forms.ModelMultipleChoiceField(label="style", queryset=Style.objects.all(), required=True,)
@@ -66,25 +46,6 @@ class PartnerCreateForm(forms.Form):
     sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
                                                   required=True)
     is_active = forms.BooleanField(initial=True, help_text="Uncheck if you want to deactivate store")
-=======
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
-    style = forms.ModelMultipleChoiceField(label="style", queryset=Style.objects.all(), required=True)
-    category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all(), required=True)
-    sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
-                                                  required=True)
-    is_active = forms.BooleanField(initial=True)
-
-    # class Meta:
-    #     fields = ('name', 'image', 'description',
-    #               'email', 'password1', 'password2', 'first_name', 'last_name',
-    #               'city', 'state', 'country',
-    #               'style', 'category', 'sub_category', 'is_active'
-    #              )
-    #     labels = {
-    #         'name': _('Store Name'),
-    #     }
-    #     model = Partner
->>>>>>> 92e099c823eaf94dc314451125982c59cf8adbd0
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1', '')
@@ -112,7 +73,6 @@ class PartnerCreateForm(forms.Form):
 
 class PartnerManageForm(forms.ModelForm):
 
-<<<<<<< HEAD
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
@@ -216,10 +176,6 @@ class PartnerRentalInfoForm(forms.ModelForm):
         fields = ('day', 'start_time', 'end_time', 'contact_number',
                   'post_box', 'zipcode', 'city', 'country', 'state',)
 
-=======
-        return cleaned_data
-      
->>>>>>> 92e099c823eaf94dc314451125982c59cf8adbd0
 
 #################
 #Brand Styles
