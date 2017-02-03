@@ -20,49 +20,6 @@ class InfluencerSearchForm(forms.Form):
     name = forms.CharField(
         required=False, label=pgettext_lazy(u"Influencers's name", u"Name"))
 
-class InfluencerCreateFormExtended(forms.ModelForm):
-
-    auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
-    city = forms.CharField(label="City", required=True)
-    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
-    email = forms.CharField(label='Email', required=True)
-    password = forms.CharField(label='Password')
-    first_name = forms.CharField(label="First Name", required=True)
-    last_name = forms.CharField(label="Last Name", required=True)
-    is_active = forms.BooleanField()
-
-    class Meta:
-        model = Influencers
-        fields = ('auto_id', 'email', 'password', 'first_name', 'last_name', 'is_active',
-                  'bio', 'image',
-                  'height', 'chest_or_bust', 'hips', 'waist',
-                  'city', 'country', 'state',
-                  )
-
-
-    def save(self, commit=True):
-        instance = super(InfluencerCreateFormExtended, self).save(commit=False)
-        instance.location.city = self.cleaned_data['city']
-        try:
-            state = States.objects.get(name=self.cleaned_data['state'])
-        except ObjectDoesNotExist:
-
-            state = None
-        instance.location.state = state
-        instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
-
-        instance.users.email = self.cleaned_data['email']
-        instance.users.password = self.cleaned_data['password']
-        instance.users.first_name = self.cleaned_data['first_name']
-        instance.users.last_name = self.cleaned_data['last_name']
-        instance.users.is_active = self.cleaned_data['is_active']
-        if commit:
-            instance.location.save()
-            instance.users.save()
-            instance.save()
-        return instance
-
 
 
 class InfluencerCreateForm(forms.Form):
@@ -73,9 +30,7 @@ class InfluencerCreateForm(forms.Form):
         (MALE, 'Male'),
         (FEMALE, 'Female'),
     )
-
     email = forms.CharField(label='Email', required=True)
-
     password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput,
@@ -85,7 +40,6 @@ class InfluencerCreateForm(forms.Form):
         required=True,
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
-
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
     contact_number = forms.CharField(required=True, label="Contact number")
@@ -93,7 +47,8 @@ class InfluencerCreateForm(forms.Form):
     bio = forms.CharField(widget=forms.Textarea, label="Few words about yourself")
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
+    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
+                                   help_text="Only select state if your country is USA else leave it unselected")
     gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
     height = forms.IntegerField(required=True, label="Height in Inches")
     chest_or_bust = forms.IntegerField(required=True, label="Chest/Bust in Inches")
@@ -101,13 +56,19 @@ class InfluencerCreateForm(forms.Form):
     waist = forms.IntegerField(required=True, label="Waist size in Inches")
     is_active = forms.BooleanField(initial=True)
 
+
+
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1', '')
         password2 = self.cleaned_data.get('password2', '')
+        password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
 
         if password1 != password2:
             raise forms.ValidationError(
                 _("The two password fields didn't match."))
+        if password_pattern.match(password2) is None:
+                raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
+                                        "lowercase,digit,special character")
         return password2
 
     def clean(self):
@@ -119,7 +80,6 @@ class InfluencerCreateForm(forms.Form):
         waist = cleaned_data.get("waist")
         contact_number = cleaned_data.get("contact_number")
         email = cleaned_data.get("email")
-        password = self.clean_password2()
         if height is not None and len(str(height)) > 2:
             raise forms.ValidationError("Please enter valid height in Inches")
         if chest_or_bust is not None and len(str(chest_or_bust)) > 2:
@@ -133,14 +93,69 @@ class InfluencerCreateForm(forms.Form):
             raise forms.ValidationError("Please enter valid contact number")
         if User.objects.filter(email=email):
             raise forms.ValidationError("Email already taken")
-
-        password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
-        if password is None or password_pattern.match(password) is None:
-
-            raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
-                                        "lowercase,digit,special character")
-
         return cleaned_data
+
+
+class InfluencerManageForm(forms.ModelForm):
+
+    auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    city = forms.CharField(label="City", required=True)
+    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
+    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
+                                   help_text="Only select state if your country is USA else leave it unselected")
+    email = forms.CharField(label='Email', required=True)
+    first_name = forms.CharField(label="First Name", required=True)
+    last_name = forms.CharField(label="Last Name", required=True)
+    is_active = forms.BooleanField(required=False)
+    # password1 = forms.CharField(
+    #     label=_('Password'),
+    #     widget=forms.PasswordInput,
+    #     required=True,
+    #     validators=password_validators)
+    # password2 = forms.CharField(
+    #     required=True,
+    #     label=_('Confirm Password'),
+    #     widget=forms.PasswordInput)
+
+    class Meta:
+        model = Influencers
+        fields = ('auto_id', 'email', 'first_name', 'last_name', 'is_active',
+                  'bio', 'image',
+                  'height', 'chest_or_bust', 'hips', 'waist',
+                  'city', 'country', 'state',
+                  )
+
+    # def clean_password2(self):
+    #     password1 = self.cleaned_data.get('password1', '')
+    #     password2 = self.cleaned_data.get('password2', '')
+    #     password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
+    #
+    #     if password1 != password2:
+    #         raise forms.ValidationError(
+    #             _("The two password fields didn't match."))
+    #     if password_pattern.match(password2) is None:
+    #             raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
+    #                                     "lowercase,digit,special character")
+    #     return password2
+
+    def save(self, commit=True):
+        instance = super(InfluencerManageForm, self).save(commit=False)
+        instance.location.city = self.cleaned_data['city']
+        try:
+            state = States.objects.get(name=self.cleaned_data['state'])
+        except ObjectDoesNotExist:
+            state = None
+        instance.location.state = state
+        instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        instance.users.email = self.cleaned_data['email']
+        instance.users.first_name = self.cleaned_data['first_name']
+        instance.users.last_name = self.cleaned_data['last_name']
+        instance.users.is_active = self.cleaned_data['is_active']
+        if commit:
+            instance.location.save()
+            instance.users.save()
+            instance.save()
+        return instance
 
 
 
@@ -205,4 +220,5 @@ class ExistingUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['username', 'first_name', 'last_name']) + ['password', 'contact_number', 'gender']
+            ['username', 'first_name', 'last_name']) + ['contact_number', 'gender']
+        exclude = ('password1',)

@@ -1,103 +1,30 @@
-from django.shortcuts import get_object_or_404
-# from oscar.apps.dashboard.partners.views import PartnerAddressForm
-from oscar.apps.dashboard.partners.forms import UserEmailForm
-from django.contrib.auth.models import Permission
-from oscar.apps.customer.utils import normalise_email
-from oscarapps.partner.models import Partner
-from oscarapps.address.models import Locations
-from django.template.loader import render_to_string
-from django.shortcuts import get_object_or_404,redirect,render
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import FormView
-from oscar.core.compat import get_user_model
+
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
-from oscar.apps.dashboard.partners.forms import PartnerAddressForm,PartnerSearchForm
-from oscarapps.dashboard.partners.forms import PartnerCreateForm
-from oscarapps.partner.models import Partner
-from oscarapps.address.models import States,Country,Locations
-from oscarapps.partner.models import Style, SubCategory, Category
-from django.http import HttpResponseRedirect
+from oscar.apps.dashboard.partners.forms import PartnerSearchForm
 
-from oscarapps.address.states import stateList
+from oscarapps.dashboard.partners.forms import PartnerCreateForm, PartnerManageForm, PartnerRentalInfoForm
+from oscarapps.partner.models import Partner
+from oscarapps.address.models import States, Country, Locations
+from oscarapps.partner.models import Style, Category, SubCategory
+
+
 from django.core.exceptions import ObjectDoesNotExist
 from users.models import User
 
 # =======
 #Partner views
 #=======
-
-class PartnerManageView(CorePartnerManageView, FormView):
-    form_class = PartnerCreateForm
-
-    def get_object(self, queryset=None):
-        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        return self.partner
-
-    def get_initial(self):
-        return {'name': self.partner.name}
-
-    def get_context_data(self, **kwargs):
-
-        ctx = super(PartnerManageView, self).get_context_data(**kwargs)
-        ctx['partner'] = self.partner
-        ctx['title'] = self.partner.name
-        ctx['users'] = self.partner.users.all()
-        ctx['states'] = stateList
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Brand '%s' was updated successfully.") %
-            self.partner.name)
-        self.partner.name = form.cleaned_data['name']
-        self.partner.save()
-        return super(FormView, self).form_valid(form)
-
-
-class PartnerAddressManageView(generic.UpdateView):
-    template_name = 'dashboard/partners/partner_address_manage.html'
-    form_class = PartnerAddressForm
-
-    def get_success_url(self):
-        return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})
-
-    def get_object(self, queryset=None):
-        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        address = self.partner.location
-        # if address is None:
-        #     address = self.partner.addresses.model(partner=self.partner)
-        return address
-
-    def get_initial(self):
-        return {'name': self.partner.name}
-
-    def get_context_data(self, **kwargs):
-
-        ctx = super(PartnerAddressManageView, self).get_context_data(**kwargs)
-        ctx['partner'] = self.partner
-        ctx['title'] = self.partner.name
-        ctx['users'] = self.partner.users.all()
-        # ctx['states'] = stateList
-        return ctx
-
-    def form_valid(self, form):
-        messages.success(
-            self.request, _("Address of brand  '%s' was updated successfully.") %
-            self.partner.name)
-
-        self.partner.location=form.save()
-        self.partner.save()
-        # locationForm=form.save()
-        # locationForm.save()
-        return super(PartnerAddressManageView, self).form_valid(form)
-
 
 class PartnerListView(CorePartnerListView):
     def get_queryset(self):
@@ -119,16 +46,6 @@ class PartnerListView(CorePartnerListView):
         return qs
 
 
-class PartnerDeleteView(CorePartnerDeleteView):
-    model = Partner
-    template_name = 'dashboard/partners/partner_delete.html'
-
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Brand '%s' was deleted successfully.") %
-                         self.object.name)
-        return reverse('dashboard:partner-list')
-
 
 class PartnerCreateView(generic.View):
     model = Partner
@@ -143,12 +60,6 @@ class PartnerCreateView(generic.View):
     def post(self, request, *args, **kwargs):
         partner_form = PartnerCreateForm(data=request.POST)
         if partner_form.is_valid():
-            a=Style.objects.filter(pk__in=partner_form['style'].value())
-            b=Category.objects.filter(pk__in=partner_form['category'].value())
-            c=SubCategory.objects.filter(pk__in=partner_form['sub_category'].value())
-            for i in a:
-                print(i.pk , i.name)
-
             partner_user = User.objects.create(email=partner_form['email'].value(),
                                                  password=partner_form['password1'].value(),
                                                  first_name=partner_form['first_name'].value(),
@@ -160,7 +71,7 @@ class PartnerCreateView(generic.View):
 
             try:
                 state = States.objects.get(pk=partner_form['state'].value())
-            except :
+            except:
                 state = None
             partner_location = Locations.objects.create(city=partner_form['city'].value(),
                                                         state=state,
@@ -186,112 +97,151 @@ class PartnerCreateView(generic.View):
             return render(request, 'dashboard/partners/partner_form.html', {'form': partner_form})
 
 
-#=========================
-#Brand Store TypeViews
-#==========================
+class PartnerManageView(CorePartnerManageView, FormView):
+    form_class = PartnerManageForm
 
-#
-# BrandStoreType = get_model('partner', 'BrandStoreType')
-# (
-#     StoreTypeSearchForm, StoreTypeCreateForm
-# ) = get_classes(
-#     'dashboard.partners.forms',
-#     ['StoreTypeSearchForm', 'StoreTypeCreateForm'], 'oscarapps')
-#
-#
-# class StoreTypeListView(generic.ListView):
-#     model = BrandStoreType
-#     context_object_name = 'store_types'
-#     template_name = 'dashboard/partners/store_types/store_type_list.html'
-#     form_class = StoreTypeSearchForm
-#
-#     def get_queryset(self):
-#         qs = self.model._default_manager.all()
-#         qs = sort_queryset(qs, self.request, ['name'])
-#         self.description = _("All Store Types")
-#
-#         # We track whether the queryset is filtered to determine whether we
-#         # show the search form 'reset' button.
-#         self.is_filtered = False
-#         self.form = self.form_class(self.request.GET)
-#         if not self.form.is_valid():
-#             return qs
-#
-#         data = self.form.cleaned_data
-#
-#         if data['name']:
-#             qs = qs.filter(name__icontains=data['name'])
-#             self.description = _("Store Types matching '%s'") % data['name']
-#             self.is_filtered = True
-#
-#         return qs
-#
-#     def get_context_data(self, **kwargs):
-#         ctx = super(StoreTypeListView, self).get_context_data(**kwargs)
-#         ctx['queryset_description'] = self.description
-#         ctx['form'] = self.form
-#         ctx['is_filtered'] = self.is_filtered
-#         return ctx
-#
-#
-# class StoreTypeCreateView(generic.CreateView):
-#     model = BrandStoreType
-#     template_name = 'dashboard/partners/store_types/store_type_form.html'
-#     form_class = StoreTypeCreateForm
-#     success_url = reverse_lazy('dashboard:store-type-list')
-#
-#     def get_context_data(self, **kwargs):
-#         ctx = super(StoreTypeCreateView, self).get_context_data(**kwargs)
-#         ctx['title'] = _('Create new store type')
-#         return ctx
-#
-#     def get_success_url(self):
-#         messages.success(self.request,
-#                          _("Store type '%s' was created successfully.") %
-#                          self.object.name)
-#         return reverse('dashboard:store-type-list')
-#
-#
-# class StoreTypeManageView(generic.UpdateView):
-#     """
-#     This multi-purpose view renders out a form to edit the partner's details,
-#     the associated address and a list of all associated users.
-#     """
-#     template_name = 'dashboard/partners/store_types/store_type_manage.html'
-#     form_class = StoreTypeCreateForm
-#     success_url = reverse_lazy('dashboard:store-type-list')
-#
-#     def get_object(self, queryset=None):
-#         self.store_type = get_object_or_404(BrandStoreType, pk=self.kwargs['pk'])
-#         return self.store_type
-#
-#     def get_initial(self):
-#         return {'name': self.store_type.name}
-#
-#     def get_context_data(self, **kwargs):
-#         ctx = super(StoreTypeManageView, self).get_context_data(**kwargs)
-#         ctx['store_type'] = self.store_type
-#         ctx['title'] = self.store_type.name
-#         return ctx
-#
-#     def form_valid(self, form):
-#         messages.success(
-#             self.request, _("Store type '%s' was updated successfully.") %
-#             self.store_type.name)
-#         self.store_type.name = form.cleaned_data['name']
-#         self.store_type.save()
-#         return super(StoreTypeManageView, self).form_valid(form)
-#
-#
-# class StoreTypeDeleteView(generic.DeleteView):
-#     model = BrandStoreType
-#     template_name = 'dashboard/partners/store_types/store_type_delete.html'
-#
-#     def get_success_url(self):
-#         messages.success(self.request,
-#                          _("Store type '%s' was deleted successfully.") %
-#                          self.object.name)
-#         return reverse('dashboard:store-type-list')
+    def get_object(self, queryset=None):
+        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
+        return self.partner
+
+    def get_initial(self):
+      return {'city': self.partner.location.city,
+            'state': self.partner.location.state,
+            'country': self.partner.location.country,
+            'email': self.partner.users.all().first().email,
+            'password': self.partner.users.all().first().password,
+            'first_name': self.partner.users.all().first().first_name,
+            'last_name': self.partner.users.all().first().last_name,
+            'is_active': self.partner.users.all().first().is_active
+      }
+
+    def get_context_data(self, **kwargs):
+
+        ctx = super(PartnerManageView, self).get_context_data(**kwargs)
+        ctx['partner'] = self.partner
+        ctx['title'] = self.partner.name
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Brand '%s' was updated successfully.") %
+            self.partner.name)
+        return super(PartnerManageView, self).form_valid(form)
+
+
+
+class PartnerRentalInfoManageView(generic.UpdateView):
+    template_name = 'dashboard/partners/partner_rental_info_manage.html'
+    form_class = PartnerRentalInfoForm
+
+    def get_success_url(self):
+        return reverse_lazy('dashboard:partner-manage', kwargs={'pk': self.kwargs['pk']})
+
+    def get_object(self, queryset=None):
+        self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
+        address = self.partner.rental_info
+        # if address is None:
+        #     address = self.partner.addresses.model(partner=self.partner)
+        return address
+
+    def get_initial(self):
+        return {'name': self.partner.name,
+        }
+
+    def get_context_data(self, **kwargs):
+
+        ctx = super(PartnerRentalInfoManageView, self).get_context_data(**kwargs)
+        ctx['partner'] = self.partner
+        ctx['title'] = self.partner.name
+        ctx['users'] = self.partner.users.all()
+        # ctx['states'] = stateList
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Address of brand  '%s' was updated successfully.") %
+            self.partner.name)
+
+        self.partner.rental_info = form.save()
+        self.partner.save()
+        # locationForm=form.save()
+        # locationForm.save()
+        return super(PartnerRentalInfoManageView, self).form_valid(form)
+
+
+
+
+class PartnerDeleteView(CorePartnerDeleteView):
+    model = Partner
+    template_name = 'dashboard/partners/partner_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Brand '%s' was deleted successfully.") %
+                         self.object.name)
+        return reverse('dashboard:partner-list')
+
+
+class PartnerFilterView(generic.ListView):
+
+    model = Partner
+    context_object_name = 'partners'
+    template_name = 'dashboard/partners/partner_list.html'
+    form_class = PartnerSearchForm
+
+    def get(self, request, *args, **kwargs):
+        return super(PartnerFilterView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+
+        is_active = self.request.GET.get('active')
+        created_date = self.request.GET.get('created_date')
+        modified_date = self.request.GET.get('modified_date')
+
+        if is_active:
+            queryset = queryset.filter(is_active=True)
+
+        if created_date:
+            queryset = queryset.filter(created__regex=created_date)
+
+        if modified_date:
+            queryset = queryset.filter(modified__regex=modified_date)
+
+        self.description = _("All brands")
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+
+        if not self.form.is_valid():
+            return queryset
+        data = self.form.cleaned_data
+
+        if data['name']:
+            queryset = queryset.filter(name__icontains=data['name'])
+            self.description = _("Brands matching '%s'") % data['name']
+            self.is_filtered = True
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PartnerFilterView, self).get_context_data(**kwargs)
+        is_active = self.request.GET.get('active')
+        created_date = self.request.GET.get('created_date')
+        modified_date = self.request.GET.get('modified_date')
+        if is_active:
+            ctx['active'] = True
+        if created_date:
+            ctx['created_date'] = created_date
+        if modified_date:
+            ctx['modified_date'] = modified_date
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx
+
+
+
+
 
 
 #=========================
@@ -378,7 +328,7 @@ class BrandCategoryManageView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BrandCategoryManageView, self).get_context_data(**kwargs)
-        ctx['store_type'] = self.brand_category
+        ctx['brand_category'] = self.brand_category
         ctx['title'] = self.brand_category.name
         return ctx
 
@@ -486,7 +436,7 @@ class BrandStyleManageView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BrandStyleManageView, self).get_context_data(**kwargs)
-        ctx['store_type'] = self.brand_style
+        ctx['brand_style'] = self.brand_style
         ctx['title'] = self.brand_style.name
         return ctx
 
@@ -511,59 +461,109 @@ class BrandStyleDeleteView(generic.DeleteView):
 
 
 
-class PartnerFilterView(generic.ListView):
+#=========================
+#Brand SubCategory Views
+#==========================
 
-    model = Partner
-    context_object_name = 'partners'
-    template_name = 'dashboard/partners/partner_list.html'
-    form_class = PartnerSearchForm
 
-    def get(self, request, *args, **kwargs):
-        return super(PartnerFilterView, self).get(request, *args, **kwargs)
+BrandSubCategory = get_model('partner', 'SubCategory')
+(
+    SubCategorySearchForm, SubCategoryCreateForm
+) = get_classes(
+    'dashboard.partners.forms',
+    ['SubCategorySearchForm', 'SubCategoryCreateForm'], 'oscarapps')
+
+
+class BrandSubCategoryListView(generic.ListView):
+    model = BrandSubCategory
+    context_object_name = 'brand_sub_categories'
+    template_name = 'dashboard/partners/brand_sub_categories/sub_category_list.html'
+    form_class = SubCategorySearchForm
 
     def get_queryset(self):
-        queryset = self.model.objects.all()
+        qs = self.model._default_manager.all()
+        qs = sort_queryset(qs, self.request, ['name'])
+        self.description = _("All Sub Categories")
 
-        is_active = self.request.GET.get('active')
-        created_date = self.request.GET.get('created_date')
-        modified_date = self.request.GET.get('modified_date')
-
-        if is_active:
-            queryset = queryset.filter(is_active=True)
-
-        if created_date:
-            queryset = queryset.filter(created__regex=created_date)
-
-        if modified_date:
-            queryset = queryset.filter(modified__regex=modified_date)
-
-        self.description = _("All brands")
+        # We track whether the queryset is filtered to determine whether we
+        # show the search form 'reset' button.
         self.is_filtered = False
         self.form = self.form_class(self.request.GET)
-
         if not self.form.is_valid():
-            return queryset
+            return qs
+
         data = self.form.cleaned_data
 
         if data['name']:
-            queryset = queryset.filter(name__icontains=data['name'])
-            self.description = _("Brands matching '%s'") % data['name']
+            qs = qs.filter(name__icontains=data['name'])
+            self.description = _("Sub categories matching '%s'") % data['name']
             self.is_filtered = True
 
-        return queryset
+        return qs
 
     def get_context_data(self, **kwargs):
-        ctx = super(PartnerFilterView, self).get_context_data(**kwargs)
-        is_active = self.request.GET.get('active')
-        created_date = self.request.GET.get('created_date')
-        modified_date = self.request.GET.get('modified_date')
-        if is_active:
-            ctx['active'] = True
-        if created_date:
-            ctx['created_date'] = created_date
-        if modified_date:
-            ctx['modified_date'] = modified_date
+        ctx = super(BrandSubCategoryListView, self).get_context_data(**kwargs)
         ctx['queryset_description'] = self.description
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered
         return ctx
+
+
+class BrandSubCategoryCreateView(generic.CreateView):
+    model = BrandSubCategory
+    template_name = 'dashboard/partners/brand_sub_categories/sub_category_form.html'
+    form_class = SubCategoryCreateForm
+    success_url = reverse_lazy('dashboard:brand-sub-category-list')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BrandSubCategoryCreateView, self).get_context_data(**kwargs)
+        ctx['title'] = _('Create new sub category')
+        return ctx
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Sub category '%s' was created successfully.") %
+                         self.object.name)
+        return reverse('dashboard:brand-sub-category-list')
+
+
+class BrandSubCategoryManageView(generic.UpdateView):
+    """
+    This multi-purpose view renders out a form to edit the partner's details,
+    the associated address and a list of all associated users.
+    """
+    template_name = 'dashboard/partners/brand_sub_categories/sub_category_manage.html'
+    form_class = SubCategoryCreateForm
+    success_url = reverse_lazy('dashboard:brand-sub-category-list')
+
+    def get_object(self, queryset=None):
+        self.sub_category = get_object_or_404(BrandSubCategory, pk=self.kwargs['pk'])
+        return self.sub_category
+
+    def get_initial(self):
+        return {'name': self.sub_category.name}
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BrandSubCategoryManageView, self).get_context_data(**kwargs)
+        ctx['sub_category'] = self.sub_category
+        ctx['title'] = self.sub_category.name
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Sub category '%s' was updated successfully.") %
+            self.sub_category.name)
+        self.sub_category.name = form.cleaned_data['name']
+        self.sub_category.save()
+        return super(BrandSubCategoryManageView, self).form_valid(form)
+
+
+class BrandSubCategoryDeleteView(generic.DeleteView):
+    model = BrandSubCategory
+    template_name = 'dashboard/partners/brand_sub_categories/sub_category_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Sub category '%s' was deleted successfully.") %
+                         self.object.name)
+        return reverse('dashboard:brand-sub-category-list')

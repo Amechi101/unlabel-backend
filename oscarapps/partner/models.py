@@ -50,7 +50,6 @@ class Category(BaseApplicationModel):
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        print ("{0}".format(self.name), '=========')
         return "{0}".format(self.name)
 
 
@@ -66,7 +65,7 @@ class SubCategory(BaseApplicationModel):
         return "{0}".format(self.name)
 
 
-class RentalTime(BaseApplicationModel):
+class RentalInformation(Locations):
     MONDAY = 'Monday'
     TUESDAY = 'Tuesday'
     WEDNESDAY = 'Wednesday'
@@ -83,25 +82,21 @@ class RentalTime(BaseApplicationModel):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
     )
-    day = MultiSelectField(choices=day_choice)
-    start_time = models.TimeField(blank=True, null=True, verbose_name=_("Start Time"))
-    end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
-
-    class Meta:
-        verbose_name = _('Rental Time')
-
-    def __str__(self):
-
-        return "{0}".format(self.day)
-
-
-class RentalAddress(Locations):
     post_box = models.CharField(max_length=20, blank=True, null=True, default="", verbose_name=_('Apartment/P.O.Box'))
     zipcode = models.CharField(max_length=10, blank=True, null=True, default="", verbose_name=_('Zip code'))
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: "
                                                                    "'+999999999'. Up to 15 digits are allowed.")
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
+    day = MultiSelectField(choices=day_choice)
+    start_time = models.TimeField(blank=True, null=True, verbose_name=_("Start Time"))
+    end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
 
+    class Meta:
+        verbose_name = _('Rental Information')
+
+    def __str__(self):
+
+        return "{0}".format(self.day)
 
 class Partner(AbstractPartner, BaseApplicationModel):
     slug = models.SlugField(max_length=255, default="", blank=True, null=True, verbose_name=_('Brand Slug'))
@@ -114,10 +109,8 @@ class Partner(AbstractPartner, BaseApplicationModel):
     sub_category = models.ManyToManyField('SubCategory', blank=True, verbose_name=_('Sub category'))
     is_active = models.BooleanField(default=True, verbose_name=_('Store Active'),
                                     help_text=_('Check|Un check to activate|deactivate store'))
-    rental_time = models.ForeignKey('RentalTime', null=True, blank=True, default="",
-                                     verbose_name=_('Rental Time'))
-    rental_address = models.ForeignKey('RentalAddress', null=True, blank=True, default="",
-                                       verbose_name=_('Rental Address'))
+    rental_info = models.ForeignKey('RentalInformation', null=True, blank=True, default="",
+                                     verbose_name=_('Rental Informaton'))
 
     class Meta:
         verbose_name = _('Brands Detail')

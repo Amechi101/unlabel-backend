@@ -39,12 +39,10 @@ from oscarapps.influencers.models import Influencers,InfluencerInvite
 # ================
 
 
-(InfluencerSearchForm, InfluencerCreateForm, InfluencerCreateFormExtended) = get_classes('dashboard.influencers.forms',
-                                                            ['InfluencerSearchForm', 'InfluencerCreateForm', 'InfluencerCreateFormExtended'],
+(InfluencerSearchForm, InfluencerCreateForm, InfluencerManageForm) = get_classes('dashboard.influencers.forms',
+                                                            ['InfluencerSearchForm', 'InfluencerCreateForm',
+                                                             'InfluencerManageForm'],
                                                              'oscarapps')
-
-
-
 
 class InfluencerListView(generic.ListView):
     """
@@ -58,7 +56,6 @@ class InfluencerListView(generic.ListView):
     def post(self, request, *args, **kwargs):
 
         invite_email = request.POST.get("invite_email")
-        print("=======================", invite_email)
         current_site = Site.objects.get_current()
         domain = current_site.domain
         verify_code = str(uuid.uuid1()).replace('-','').upper()[0:10]
@@ -74,7 +71,7 @@ class InfluencerListView(generic.ListView):
 
         tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
         email = EmailMessage()
-        email.subject = "Influencer inviattion from Unlabel"
+        email.subject = "Influencer invitation from Unlabel"
         email.content_subtype = "html"
         email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
                         <body>
@@ -96,6 +93,8 @@ class InfluencerListView(generic.ListView):
         email.to = [invite_email]
         email.send()
         invite_sent.save()
+        messages.success(self.request,
+                         _("Invitation Email was successfully sent "))
         return HttpResponseRedirect("/oscar/dashboard/influencers/")
 
 
@@ -189,19 +188,20 @@ class InfluencerCreateView(generic.View):
 
 
 
-class InfluencerManageView(generic.DetailView):
+class InfluencerManageView(generic.UpdateView):
 
     """
     Edit and update an influencer
     """
     template_name = 'influencers/influencer_manage.html'
 
-    form_class = InfluencerCreateFormExtended
+    form_class = InfluencerManageForm
 
     success_url = reverse_lazy('dashboard:influencer-list')
 
     def get_object(self, queryset=None):
         self.influencer = get_object_or_404(Influencers, pk=self.kwargs['pk'])
+
         return self.influencer
 
 
@@ -213,7 +213,8 @@ class InfluencerManageView(generic.DetailView):
                 'password': self.influencer.users.password,
                 'first_name': self.influencer.users.first_name,
                 'last_name': self.influencer.users.last_name,
-                'is_active': self.influencer.users.is_active}
+                'is_active': self.influencer.users.is_active
+        }
 
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerManageView, self).get_context_data(**kwargs)

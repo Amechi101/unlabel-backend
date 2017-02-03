@@ -2,9 +2,9 @@
 {% load sorting_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page brands{% endblock %}
+{% block body_class %}{{ block.super }} create-page brand sub category{% endblock %}
 {% block title %}
-    {{ partner.name }} | {% trans "Brands" %} | {{ block.super }}
+    {{ brand_category.name }} | {% trans "Brand Sub Categories" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,17 +13,13 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:partner-list' %}">{% trans "Brands" %}</a>
+            <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Sub Category" %}</a>
         </li>
-        <li class="active">{{ partner.name }}</li>
+        <li class="active">{{ brand_category.name }}</li>
     </ul>
 {% endblock %}
 
-{% block headertext %}{{ partner.name }}
-
-    <a class="btn btn-primary" style="float: right" href="{% url 'dashboard:partner-address-manage' pk=partner.pk  %}"> Add/Edit Rental Information</a>
-{% endblock %}
-
+{% block headertext %}{{ brand_category.name }}{% endblock %}
 
 {% block dashboard_content %}
 
@@ -33,7 +29,6 @@
                 <h2>{{ title }}</h2>
             </div>
             {% include "dashboard/partials/form.html" with form=form class="well" %}
-
         </div>
     </div>
 
