@@ -113,8 +113,11 @@ class Partner(AbstractPartner, BaseApplicationModel):
                                      verbose_name=_('Rental Informaton'))
 
     class Meta:
-        verbose_name = _('Partner')
         app_label = 'partner'
+        ordering = ('name', 'code')
+        permissions = (('dashboard_access', 'Can access dashboard'), )
+        verbose_name = _('Fulfillment partner')
+        verbose_name_plural = _('Fulfillment partners')
 
 
 class PartnerFollow(models.Model):
