@@ -5,9 +5,6 @@ from oscar.core.loading import get_class
 
 
 class CatalogueApplication(CoreCatalogueApplication):
-    permissions_map = {
-        'catalogue-product-list': (['is_staff'], ['partner.other_permission']),
-    }
 
     style_list_view = get_class('oscarapps.dashboard.catalogue.views',
                                 'StyleListView')
