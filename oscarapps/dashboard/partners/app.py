@@ -5,19 +5,19 @@ from oscar.core.loading import get_class
 
 class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
-    partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerAddressManageView')
+    partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerRentalInfoManageView')
     partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
 
 
-    # store_type_list_view = get_class('oscarapps.dashboard.partners.views',
-    #                              'StoreTypeListView')
-    #
-    # store_type_create_view = get_class('oscarapps.dashboard.partners.views',
-    #                              'StoreTypeCreateView')
-    # store_type_manage_view = get_class('oscarapps.dashboard.partners.views',
-    #                              'StoreTypeManageView')
-    # store_type_delete_view = get_class('oscarapps.dashboard.partners.views',
-    #                              'StoreTypeDeleteView')
+    sub_category_list_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandSubCategoryListView')
+
+    sub_category_create_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandSubCategoryCreateView')
+    sub_category_manage_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandSubCategoryManageView')
+    sub_category_delete_view = get_class('oscarapps.dashboard.partners.views',
+                                 'BrandSubCategoryDeleteView')
 
 
 
@@ -70,13 +70,13 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
 
 
 
-            # url(r'^store_type/$', self.store_type_list_view.as_view(), name='store-type-list'),
-            # url(r'^store_type/create/$', self.store_type_create_view.as_view(),
-            #     name='store-type-create'),
-            # url(r'^store_type/(?P<pk>\d+)/$', self.store_type_manage_view.as_view(),
-            #     name='store-type-manage'),
-            # url(r'^store_type/(?P<pk>\d+)/delete/$', self.store_type_delete_view.as_view(),
-            #     name='store-type-delete'),
+            url(r'^sub_category/$', self.sub_category_list_view.as_view(), name='brand-sub-category-list'),
+            url(r'^sub_category/create/$', self.sub_category_create_view.as_view(),
+                name='brand-sub-category-create'),
+            url(r'^sub_category/(?P<pk>\d+)/$', self.sub_category_manage_view.as_view(),
+                name='brand-sub-category-manage'),
+            url(r'^sub_category/(?P<pk>\d+)/delete/$', self.sub_category_delete_view.as_view(),
+                name='brand-sub-category-delete'),
 
 
 

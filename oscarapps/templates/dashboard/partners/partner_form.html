@@ -18,12 +18,16 @@
         </li>
         <li class="active">{{ title }}</li>
     </ul>
+
+
 {% endblock %}
 
 {% block headertext %}{{ title }}{% endblock %}
+
 
 {% block dashboard_content %}
     <div class="well">
         {% include 'dashboard/partials/form.html' with form=form %}
     </div>
+
 {% endblock dashboard_content %}
