@@ -2,8 +2,10 @@ from django.conf.urls import include, url,patterns
 from rest_framework import routers
 from .customer import views as customerViews
 from .address import views as addressViews
-from catalogue import views as catalogueViews
-# from django.contrib.auth.views import
+from .catalogue import views as catalogueViews
+from .influencer import views as influencerViews
+from .utils import *
+
 
 #####   customer urls   #####
 urlpatterns = [
@@ -21,10 +23,41 @@ urlpatterns = [
     url(r'customer_profile_update/',
         customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
 
-    url(r'^rest-auth/facebook/$', customerViews.FacebookLogin.as_view(), name='fb_login'),
+    # url(r'^rest-auth/facebook/$',
+    #     customerViews.FacebookLogin.as_view(), name='fb_login'),
+
+    url(r'^customer_profile_deactivate/$',
+        customerViews.CustomerProfileDeleteView.as_view(),name='customer_profile_delete_view'),
 
     ###-----product apis
-    url(r'product_list/',catalogueViews.ProductListView.as_view(),name='product_list_view'),
+    url(r'^product_list/',
+        catalogueViews.ProductListView.as_view(),name='product_list_view'),
+
+    url(r'^product_like/(?P<prod_id>[0-9]+)/',
+        catalogueViews.ProductLikeView.as_view(),name='Product_like_view'),
+
+
+
+    url(r'^partnerList/',catalogueViews.BrandListView.as_view(),name='brand_List_view'),
+
+    url(r'^storeTypeList/',catalogueViews.StoreListView.as_view(),name='store_list_view'),
+
+
+    ###-----Influencer APIS
+    url(r'^influencer_forgot_password/',
+        influencerViews.InfluencerForgotPassword.as_view(),name='influencer_forgot_password_view'),
+
+    url(r'^Influencer_partnerList/',catalogueViews.InfluencerBrandListView.as_view(),name='influencer_brand_list_view'),
+
+
+    url(r'^partner_follow/(?P<partner_id>[0-9]+)/', catalogueViews.PartnerFollowView.as_view(),name='Partner_follow_view'),
+
+    url(r'^influencer_reserve_product/(?P<product_id>[0-9]+)/',catalogueViews.InfluencerReserveProduct.as_view(), name='influencer_product_reserve'),
+
+    url(r'^influencer_product_list/',
+        catalogueViews.InfluencerProductListView.as_view(),name='influencer_product_list_view'),
+
+    url(r'^login/$', influencerViews.LoginView.as_view(), name='influencer-login'),
 
 
 ]
@@ -33,8 +66,16 @@ urlpatterns = [
 
 urlpatterns = urlpatterns + [
 
-    # url(r'add_address/',)
+    url(r'add_address/',addressViews.AddAddressView.as_view(),name='add_address_view'),
 ]
+
+
+#### front end requests
+
+urlpatterns = urlpatterns + [
+    url(r'get_states',addressViews.GetStatesView.as_view(),name='get_states')
+]
+
 
 
 urlpatterns = urlpatterns + patterns(

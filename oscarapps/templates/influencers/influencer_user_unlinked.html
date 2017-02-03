@@ -1,0 +1,5 @@
+{% load i18n %}
+{% blocktrans %}
+User {{ user_name }} was unlinked from {{ influencer_name }}.
+{% endblocktrans %}
+<a href="{% url 'dashboard:influencer-user-link' influencer_pk=influencer_pk user_pk=user_pk %}">{% trans 'Undo' %}.</a>

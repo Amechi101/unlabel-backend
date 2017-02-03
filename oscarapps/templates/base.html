@@ -1,0 +1,144 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="{{ LANGUAGE_CODE|default:"en-gb" }}" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="{{ LANGUAGE_CODE|default:"en-gb" }}" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="{{ LANGUAGE_CODE|default:"en-gb" }}" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="{{ LANGUAGE_CODE|default:"en-gb" }}" class="no-js"> <!--<![endif]-->
+    <head>
+        <title>{% if display_version %}[{% trans "Build" %} {{ version }}] {% endif %}{% block title %}{{ shop_name }} - {{ shop_tagline }}{% endblock %}</title>
+
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="created" content="{% now "jS M Y h:i" %}" />
+        <meta name="description" content="{% block description %}{% endblock %}" />
+        <meta name="viewport" content="{% block viewport %}width=device-width{% endblock %}" />
+        <meta name="robots" content="NOARCHIVE,NOCACHE" />
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        {% block favicon %}
+            <link rel="shortcut icon" href="{% static "oscar/favicon.ico" %}" />
+        {% endblock %}
+
+        {# Block where global CSS will go. #}
+        {% block styles %}{% endblock %}
+
+        {# Additional CSS - specific to certain pages #}
+        {% block extrastyles %}{% endblock %}
+
+        {% block extrahead %}{% endblock %}
+
+        {% block tracking %}
+            {# Default to using Google analytics #}
+            {% include "partials/google_analytics.html" %}
+        {% endblock %}
+    </head>
+
+    <body id="{% block body_id %}default{% endblock %}" class="{% block body_class %}default{% endblock %}">
+        {# Main content goes in this 'layout' block #}
+        {% block layout %}{% endblock %}
+
+        {# Scripts loaded from a CDN. #}
+        {% block cdn_scripts %}
+            <!-- jQuery -->
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+            <script>window.jQuery || document.write('<script src="{% static "oscar/js/jquery/jquery-1.9.1.min.js" %}"><\/script>')</script>
+        {% endblock %}
+
+        {# Local scripts #}
+        {% block scripts %}
+        {% endblock %}
+
+        {# Additional JS scripts #}
+        {% block extrascripts %}{% endblock %}
+
+        {# Block for body onload functions #}
+        <script type="text/javascript">
+            $(function() {
+                {% block onbodyload %}{% endblock %}
+            });
+        </script>
+
+        {# Page meta-data - this is populated by the 'metadata' template context processor #}
+        <!-- {% trans "Version:" %} {{ version }} -->
+    </body>
+</html>
+
+{% if active  %}
+          <script>
+          $('#active_id').prop('checked', true);
+          </script>
+      {% else %}
+        <script>
+          $('#active_id').prop('checked', false);
+          </script>
+      {% endif %}
+{% if modified_date  %}
+          <script>
+          $('#modified_date').datepicker().datepicker("setDate", new Date());
+
+          </script>
+
+      {% endif %}
+
+<script>
+    $(document).ready(function(){
+
+            var country_id = $('#id_country');
+            var state_id = $('#id_state');
+
+            if(country_id.val()=='US'){
+                state_id.prop('disabled',false);
+            }
+            else{
+                state_id.prop('disabled',true)    ;
+            }
+
+        });
+    var country_id = $('#id_country');
+    var state_id = $('#id_state');
+
+    country_id.change(function(e){
+                if(country_id.val()=="US")
+                {
+                    state_id.prop('disabled',false);
+//                     ********** Required
+//                      $.ajax({
+//                    type:'GET',
+//                    url: '/api_v2/get_states?country=US',
+//
+//                    success: function (data) { //Array of data returned from server side function
+//
+//                     $('#id_state').replaceWith(data.html);
+//
+//                 }
+//                });
+//                     ************till here
+
+                }
+                else
+                {
+//                    state_id.prop('disabled',true)    ;
+//                     ********** Required
+//                    $.ajax({
+//                    type:'GET',
+//                    url: '/api_v2/get_states?country=nil',
+//
+//                    success: function (data) {
+//                        console.log(data);
+//                        var i=0;
+//                        for(i=0;i<data.length;i++){
+//
+//                            $('#id_state').replaceWith('<option value=' + data[i]["key"] + '>' + data[i]["value"] + '</option>' )
+//                        }
+//                    }
+//                });
+//                     ************till here
+                }
+        });
+
+
+</script>

@@ -1,65 +1,139 @@
-from oscar.apps.partner.abstract_models import AbstractPartner
-from oscarapps.catalogue.models import Category
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import pgettext_lazy
-from applications.models import City
-from applications.mixins import ValidateModelMixin
+from django.core.validators import RegexValidator
+from django.conf import settings
 
+from multiselectfield import MultiSelectField
+from oscar.apps.partner.abstract_models import AbstractPartner
 
-class Partner(AbstractPartner):
-    MALE = 'M'
-    FEMALE = 'F'
-    BOTH = 'B'
-    sex_type_choice = (
-        (MALE, 'Male'),
-        (FEMALE, 'Female'),
-        (BOTH, 'Both'),
-    )
-    brand_website_url = models.URLField(max_length=100, default="", blank=True, verbose_name=_('Website'))
-    brand_description = models.TextField(blank=True, default="", verbose_name=_('Description'))
-    brand_feature_image = models.ImageField(_('Image'), upload_to='uploads', blank=True,
-                              null=True, max_length=255)
-    brand_isActive = models.BooleanField(default=False, verbose_name=_('Brand Active'),
-        help_text=_('Check to activate brand'))
-    sex_type = models.CharField(
-        max_length=1,
-        choices=sex_type_choice,
-        default=BOTH,
-        verbose_name=_('Sex Type')
-    )
-    brand_style = models.ManyToManyField('Style', blank=True, verbose_name=_('Style Preference'))
-    category = models.ManyToManyField(Category, blank=True, verbose_name=_('Category'))
-    slug = models.SlugField(max_length=255, verbose_name=_('Brand Slug'), default="", blank=True)
+from oscarapps.address.models import Locations
 
 
 
-
-
-    #old fields
-
-    # location
-
-    # brand_city = models.ForeignKey('City', null=True, blank=True, default="")
-
-
-#old models
-
-class Style(ValidateModelMixin, models.Model):
+class BaseApplicationModel(models.Model):
     """
-    List of Styles
+    An abstract base class model that common attributes
     """
-    name = models.CharField(unique=True, max_length=100, blank=True, verbose_name=_('Style'))
+    created = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    modified = models.DateTimeField(auto_now=True, blank=True, null=True)
 
-    description = models.TextField(blank=True, default="", verbose_name=_('Description'))
+    class Meta:
+        app_label = 'Partners'
+        abstract = True
 
-    # Metadata
+
+class Style(BaseApplicationModel):
+
+    name = models.CharField(unique=True, max_length=100, verbose_name=_('Name'))
+    description = models.TextField(blank=True, null=True, default="", verbose_name=_('Description'))
+
     class Meta:
         verbose_name = _('Style')
         verbose_name_plural = _('Styles')
 
     def __str__(self):
-        return "{0}".format( self.name )
+        return "{0}".format(self.name)
+
+
+class Category(BaseApplicationModel):
+
+    MENSWEAR = 'Menswear'
+    WOMENSWEAR = 'Womenswear'
+    category_choice = (
+        (MENSWEAR, 'Menswear'),
+        (WOMENSWEAR, 'Womenswear'),
+    )
+    name = MultiSelectField(choices=category_choice)
+
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+
+    def __str__(self):
+        print ("{0}".format(self.name), '=========')
+        return "{0}".format(self.name)
+
+
+class SubCategory(BaseApplicationModel):
+    name = models.CharField(unique=True, max_length=100, verbose_name=_('Name'))
+    description = models.TextField(blank=True, null=True, default="", verbose_name=_('Description'))
+
+    class Meta:
+        verbose_name = _('Sub Category')
+        verbose_name_plural = _('Sub Categories')
+
+    def __str__(self):
+        return "{0}".format(self.name)
+
+
+class RentalTime(BaseApplicationModel):
+    MONDAY = 'Monday'
+    TUESDAY = 'Tuesday'
+    WEDNESDAY = 'Wednesday'
+    THURSDAY = 'Thursday'
+    FRIDAY = 'Friday'
+    SATURDAY = 'Saturday'
+    SUNDAY = 'Sunday'
+    day_choice = (
+        (MONDAY, 'Monday'),
+        (TUESDAY, 'Tuesday'),
+        (WEDNESDAY, 'Wednesday'),
+        (THURSDAY, 'Thursday'),
+        (FRIDAY, 'Friday'),
+        (SATURDAY, 'Saturday'),
+        (SUNDAY, 'Sunday'),
+    )
+    day = MultiSelectField(choices=day_choice)
+    start_time = models.TimeField(blank=True, null=True, verbose_name=_("Start Time"))
+    end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
+
+    class Meta:
+        verbose_name = _('Rental Time')
+
+    def __str__(self):
+
+        return "{0}".format(self.day)
+
+
+class RentalAddress(Locations):
+    post_box = models.CharField(max_length=20, blank=True, null=True, default="", verbose_name=_('Apartment/P.O.Box'))
+    zipcode = models.CharField(max_length=10, blank=True, null=True, default="", verbose_name=_('Zip code'))
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: "
+                                                                   "'+999999999'. Up to 15 digits are allowed.")
+    contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
+
+
+class Partner(AbstractPartner, BaseApplicationModel):
+    slug = models.SlugField(max_length=255, default="", blank=True, null=True, verbose_name=_('Brand Slug'))
+    image = models.ImageField(_('Image'), upload_to=_('Brands'), blank=True, null=True, max_length=255)
+    location = models.ForeignKey(Locations, null=True, blank=True, default="", related_name=_('get_partner'),
+                                 verbose_name=_('Location'))
+    description = models.TextField(blank=True, default="", verbose_name=_('Description'))
+    style = models.ManyToManyField('Style', blank=True, verbose_name=_('Style'))
+    category = models.ManyToManyField('Category', blank=True, verbose_name=_('Category'))
+    sub_category = models.ManyToManyField('SubCategory', blank=True, verbose_name=_('Sub category'))
+    is_active = models.BooleanField(default=True, verbose_name=_('Store Active'),
+                                    help_text=_('Check|Un check to activate|deactivate store'))
+    rental_time = models.ForeignKey('RentalTime', null=True, blank=True, default="",
+                                     verbose_name=_('Rental Time'))
+    rental_address = models.ForeignKey('RentalAddress', null=True, blank=True, default="",
+                                       verbose_name=_('Rental Address'))
+
+    class Meta:
+        verbose_name = _('Partner')
+        app_label = 'partner'
+
+
+class PartnerFollow(models.Model):
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name="Customer")
+    partner = models.ForeignKey(Partner, blank=True, null=True, verbose_name="Partner")
+
+    class Meta:
+        verbose_name = _('Brand Follows')
+        verbose_name_plural = _('Brand Follows')
+
+    def __str__(self):
+        return self.customer.email+" --> "+self.partner.name
 
 
 
