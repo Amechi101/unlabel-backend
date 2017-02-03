@@ -39,8 +39,8 @@ from oscarapps.influencers.models import Influencers,InfluencerInvite
 # ================
 
 
-(InfluencerSearchForm, InfluencerCreateForm, InfluencerCreateForm1) = get_classes('dashboard.influencers.forms',
-                                                            ['InfluencerSearchForm', 'InfluencerCreateForm', 'InfluencerCreateForm1'],
+(InfluencerSearchForm, InfluencerCreateForm, InfluencerCreateFormExtended) = get_classes('dashboard.influencers.forms',
+                                                            ['InfluencerSearchForm', 'InfluencerCreateForm', 'InfluencerCreateFormExtended'],
                                                              'oscarapps')
 
 
@@ -194,7 +194,7 @@ class InfluencerManageView(generic.DetailView):
     """
     template_name = 'influencers/influencer_manage.html'
 
-    form_class = InfluencerCreateForm1
+    form_class = InfluencerCreateFormExtended
 
     success_url = reverse_lazy('dashboard:influencer-list')
 

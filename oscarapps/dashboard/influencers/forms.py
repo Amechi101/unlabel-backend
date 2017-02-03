@@ -20,7 +20,7 @@ class InfluencerSearchForm(forms.Form):
     name = forms.CharField(
         required=False, label=pgettext_lazy(u"Influencers's name", u"Name"))
 
-class InfluencerCreateForm1(forms.ModelForm):
+class InfluencerCreateFormExtended(forms.ModelForm):
 
     auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
     city = forms.CharField(label="City", required=True)
@@ -42,11 +42,11 @@ class InfluencerCreateForm1(forms.ModelForm):
 
 
     def save(self, commit=True):
-        instance = super(InfluencerCreateForm1, self).save(commit=False)
+        instance = super(InfluencerCreateFormExtended, self).save(commit=False)
         instance.location.city = self.cleaned_data['city']
         try:
             state = States.objects.get(name=self.cleaned_data['state'])
-        except:
+        except ObjectDoesNotExist:
 
             state = None
         instance.location.state = state
@@ -79,10 +79,10 @@ class InfluencerCreateForm(forms.Form):
     password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput,
-        required=False,
+        required=True,
         validators=password_validators)
     password2 = forms.CharField(
-        required=False,
+        required=True,
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
 
