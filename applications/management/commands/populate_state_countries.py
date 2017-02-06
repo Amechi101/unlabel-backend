@@ -7,7 +7,66 @@ from django.core.management.base import BaseCommand, CommandError
 from oscar.core.loading import get_model
 
 Country = get_model('address', 'Country')
-
+States = get_model('address', 'States')
+statesList = [
+      'Alaska',
+      'Alabama',
+      'Arkansas',
+      'American Samoa',
+      'Arizona',
+      'California',
+      'Colorado',
+      'Connecticut',
+      'District of Columbia',
+      'Delaware',
+      'Florida',
+      'Georgia',
+      'Guam',
+      'Hawaii',
+      'Iowa',
+      'Idaho',
+      'Illinois',
+      'Indiana',
+      'Kansas',
+      'Kentucky',
+      'Louisiana',
+      'Massachusetts',
+      'Maryland',
+      'Maine',
+      'Michigan',
+      'Minnesota',
+      'Missouri',
+      'Northern Mariana Islands',
+      'Mississippi',
+      'Montana',
+      'National',
+      'North Carolina',
+      'North Dakota',
+      'Nebraska',
+      'New Hampshire',
+      'New Jersey',
+      'New Mexico',
+      'Nevada',
+      'New York',
+      'Ohio',
+      'Oklahoma',
+      'Oregon',
+      'Pennsylvania',
+      'Puerto Rico',
+      'Rhode Island',
+      'South Carolina',
+      'South Dakota',
+      'Tennessee',
+      'Texas',
+      'Utah',
+      'Virginia',
+      'Virgin Islands',
+      'Vermont',
+      'Washington',
+      'Wisconsin',
+      'West Virginia',
+      'Wyoming'
+]
 
 class Command(BaseCommand):
     help = "Populates the list of countries with data from pycountry."
@@ -28,6 +87,16 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
+        try:
+            states = [
+                States(
+                    name=state
+                )
+                for state in statesList]
+            States.objects.bulk_create(states)
+
+        except:
+            print ("Your db is already populated with states in USA")
         try:
             import pycountry
         except ImportError:
