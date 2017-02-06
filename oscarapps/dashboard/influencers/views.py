@@ -92,6 +92,8 @@ class InfluencerListView(generic.ListView):
             email.from_email = "Unlabel App"
             email.to = [invite_email]
             email.send()
+            messages.success(
+            self.request, "An invitation email was successfully sent to '%s' " %invite_sent.email)
             invite_sent.save()
             return HttpResponseRedirect("/oscar/dashboard/influencers/")
         else:
@@ -241,6 +243,8 @@ class InfluencerDeleteView(generic.DeleteView):
                          _("Influencer '%s' was deleted successfully.") %
 
                          self.object.users.first_name)
+        self.object.users.is_active = False
+        self.object.users.save()
         return reverse('dashboard:influencer-list')
 
 
