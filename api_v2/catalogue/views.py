@@ -280,10 +280,23 @@ class InfluencerProductListView(generics.ListAPIView):
                 prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
                 prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('price_retail').values_list('product',flat = True)
                 queryset = Product.objects.filter(pk__in = prod_Sort_List)
+                ###sorting the queryset
+                item_list=[]
+                for item in prod_Sort_List:
+                    obj =queryset.get(id=item)
+                    item_list.append(obj)
+                return item_list
+
             elif param == "LH":
                 prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
                 prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('-price_retail').values_list('product',flat = True)
                 queryset = Product.objects.filter(pk__in = prod_Sort_List)
+                ###sorting the queryset
+                item_list=[]
+                for item in prod_Sort_List:
+                    obj =queryset.get(id=item)
+                    item_list.append(obj)
+                return item_list
             else:
                 queryset = Product.objects.filter(brand = brand_id, status = 'U' ).order_by('-created')
         return queryset
