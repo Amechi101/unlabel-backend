@@ -115,7 +115,7 @@ class InfluencerListView(generic.ListView):
         data = self.form.cleaned_data
 
         if data['name']:
-            qs = Influencers.objects.filter(users__first_name__contains=data['name'])
+            qs = Influencers.objects.filter(users__first_name__icontains=data['name'])
             self.description = _("Influencers matching '%s'") % data['name']
             self.is_filtered = True
         return qs
