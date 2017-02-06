@@ -17,10 +17,11 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework import pagination,generics,serializers
 from rest_framework.views import APIView
-
+from django.core.validators import validate_email
 from oscarapi import serializers
 from oscarapi.utils import login_and_upgrade_session
 from oscarapi.basket import operations
+from django.core.exceptions import ValidationError,ObjectDoesNotExist
 
 from .serializers import LoginSerializer
 
@@ -127,7 +128,11 @@ class InfluencerForgotPassword(APIView):
     http_method_names = ('post',)
 
     def post(self, request, *args, **kwargs):
-        # if request.data["email"]:
+        try:
+            validate_email(request.data['email'])
+        except ValidationError:
+            content = {"message": "invalid email"}
+            return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
         try:
             if User.objects.filter(email__iexact=request.data["email"]).exists():
                 current_site = Site.objects.get_current()
@@ -140,37 +145,37 @@ class InfluencerForgotPassword(APIView):
                     'token': default_token_generator.make_token(user),
                     'protocol': 'http',
                 }
-                try:
-                    tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode("utf-8") + '/' + context['token']
-                    mailid = request.data["email"]
-                    email = EmailMessage()
-                    email.subject = "Password Reset at unlabel"
-                    email.content_subtype = "html"
-                    email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                                        <body>
-                                        <br><br>
-                                        You're receiving this email because you requested a password reset for your Influencer account in the Unlabel App.
-                                        <br><br>
-                                        Please go to the following page and choose a new password:
-                                        <br><br>
-                                        """ + tosend + """
-                                        <br><br>
-                                        Thanks for using our site!
-                                        <br/>
-                                        <br/>
-                                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                                        </body>
-                                        </head>
-                                        </html>"""
-                    email.from_email = "Unlabel App"
-                    email.to = [mailid]
-                    email.send()
-                    return Response({'code': 'OK'}, status.HTTP_200_OK)
-                except:
-                    return Response({'code': 'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
+                tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode("utf-8") + '/' + context['token']
+                mailid = request.data["email"]
+                email = EmailMessage()
+                email.subject = "Password Reset at unlabel"
+                email.content_subtype = "html"
+                email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                                    <body>
+                                    <br><br>
+                                    You're receiving this email because you requested a password reset for your Influencer account in the Unlabel App.
+                                    <br><br>
+                                    Please go to the following page and choose a new password:
+                                    <br><br>
+                                    """ + tosend + """
+                                    <br><br>
+                                    Thanks for using our site!
+                                    <br/>
+                                    <br/>
+                                    <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                                    </body>
+                                    </head>
+                                    </html>"""
+                email.from_email = "Unlabel App"
+                email.to = [mailid]
+                email.send()
+                return Response({'code': 'OK'}, status.HTTP_200_OK)
+            else :
+                content = {'message : Not a registered email.'}
+                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         except:
-            content = {"message": "email does not exist"}
-            return Response(content, status=status.HTTP_404_NOT_FOUND)
+            return Response({'code': 'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class InfluencerFollowedBrands(generics.ListAPIView):
     authentication = authentication.SessionAuthentication
