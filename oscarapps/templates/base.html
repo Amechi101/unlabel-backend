@@ -121,7 +121,9 @@
                 }
                 else
                 {
-                    state_id.prop('disabled',true)    ;
+                    state_id.prop('disabled',true);
+                    state_id.select2("val",null);
+                    console.log(state_id.text());
 //                     ********** Required
 //                    $.ajax({
 //                    type:'GET',
