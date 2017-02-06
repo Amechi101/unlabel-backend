@@ -104,6 +104,7 @@ class ProductSerializer(OscarModelSerializer):
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
     sku = serializers.SerializerMethodField(source='get_sku')
+    retail_price = serializers.SerializerMethodField(source='get_retail_price')
 
     def get_sku(self,obj):
         try:
@@ -112,15 +113,22 @@ class ProductSerializer(OscarModelSerializer):
             return False
         return stock_record.partner_sku
 
+    def get_retail_price(self,obj):
+        try:
+            stock_record = StockRecord.objects.get(product = obj)
+        except ObjectDoesNotExist:
+            return "0.00"
+        return stock_record.price_retail
+
     class Meta:
         model = Product
         fields = overridable(
             'OSCARAPI_PRODUCTDETAIL_FIELDS',
             default=(
-                'url', 'id', 'title', 'description',
+                'url', 'id', 'title', 'description','information',
                 'date_created', 'date_updated', 'recommended_products',
                 'attributes', 'categories', 'product_class',
-                'stockrecords', 'images', 'price', 'availability', 'options', 'sku'))
+                'stockrecords', 'images', 'price', 'availability', 'options', 'sku','retail_price'))
 
 class StoreTypeSerializer(OscarModelSerializer):
 
