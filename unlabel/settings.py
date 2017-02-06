@@ -1,6 +1,6 @@
 from unlabel.base_settings import *
 
-PRODUCTION = True
+PRODUCTION = False
 
 if PRODUCTION == True:
     from unlabel.production_settings import *
