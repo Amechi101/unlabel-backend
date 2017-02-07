@@ -4,7 +4,7 @@
 
 {% block body_class %}{{ block.super }} create-page brand sub category{% endblock %}
 {% block title %}
-    {{ brand_category.name }} | {% trans "Brand Sub Categories" %} | {{ block.super }}
+    {{ sub_category.name }} | {% trans "Brand Sub Categories" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -15,11 +15,11 @@
         <li>
             <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Sub Category" %}</a>
         </li>
-        <li class="active">{{ brand_category.name }}</li>
+        <li class="active">{{ sub_category.name }}</li>
     </ul>
 {% endblock %}
 
-{% block headertext %}{{ brand_category.name }}{% endblock %}
+{% block headertext %}{{ sub_category.name }}{% endblock %}
 
 {% block dashboard_content %}
 
