@@ -34,14 +34,14 @@ class PartnerCreateForm(forms.Form):
                   "lowercase,digit,special character",
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
-    name = forms.CharField(label="Store name", required=True)
-    image = forms.ImageField(required=False, label="Store image")
-    description = forms.CharField(widget=forms.Textarea, label=" Store description")
+    name = forms.CharField(label="Store Name", required=True)
+    image = forms.ImageField(required=False, label="Store Image")
+    description = forms.CharField(widget=forms.Textarea, label=" Store Description")
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
+    state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
-    style = forms.ModelMultipleChoiceField(label="style", queryset=Style.objects.all(), required=True,)
+    style = forms.ModelMultipleChoiceField(label="Style", queryset=Style.objects.all(), required=True,)
     category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all(), required=True)
     sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
                                                   required=True)
@@ -66,7 +66,7 @@ class PartnerCreateForm(forms.Form):
             validate_email(email)
         except ValidationError:
             raise forms.ValidationError("Please enter a valid email")
-        if User.objects.filter(email=email):
+        if User.objects.filter(email__iexact=email):
             raise forms.ValidationError("Email already taken")
         return cleaned_data
 
@@ -75,7 +75,7 @@ class PartnerManageForm(forms.ModelForm):
 
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
+    state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
     email = forms.CharField(label='Email', required=True)
     first_name = forms.CharField(label="First Name", required=True)
@@ -106,8 +106,8 @@ class PartnerManageForm(forms.ModelForm):
         labels = {
             'name': 'Store Name',
             'style': 'Selected Styles',
-            'category': 'Selected categories',
-            'sub_category': 'Selected sub categories'
+            'category': 'Selected Categories',
+            'sub_category': 'Selected Sub Categories'
         }
 
 
@@ -168,15 +168,16 @@ class PartnerRentalInfoForm(forms.ModelForm):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
     )
-    start_time = forms.TimeField(help_text="Enter time in 24 hours format")
-    end_time = forms.TimeField(help_text="Enter time in 24 hours format")
-    day = forms.MultipleChoiceField(choices=day_choice)
+    start_time = forms.TimeField(label="Start Time", help_text="Enter time in 24 hours format")
+    end_time = forms.TimeField(label="End Time", help_text="Enter time in 24 hours format")
+    day = forms.MultipleChoiceField(label="Days", choices=day_choice)
+    contact_number = forms.CharField(required=True, label="Contact Number")
     class Meta:
         model = RentalInformation
         fields = ('day', 'start_time', 'end_time', 'contact_number',
                   'post_box', 'zipcode', 'city', 'country', 'state',)
 
-
+        labels = {'zipcode': 'Zip Code'}
 #################
 #Brand Styles
 #################

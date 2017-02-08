@@ -42,18 +42,18 @@ class InfluencerCreateForm(forms.Form):
         widget=forms.PasswordInput)
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
-    contact_number = forms.CharField(required=True, label="Contact number")
-    image = forms.ImageField(required=False, label="Profile image")
-    bio = forms.CharField(widget=forms.Textarea, label="Few words about yourself")
+    contact_number = forms.CharField(required=True, label="Contact Number")
+    image = forms.ImageField(label="Profile Image", required=True)
+    bio = forms.CharField(widget=forms.Textarea, label="Bio", help_text="Few words about yourself")
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
+    state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
     gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
-    height = forms.IntegerField(required=True, label="Height in Inches")
-    chest_or_bust = forms.IntegerField(required=True, label="Chest/Bust in Inches")
-    hips = forms.IntegerField(required=True, label="Hip size in Inches")
-    waist = forms.IntegerField(required=True, label="Waist size in Inches")
+    height = forms.IntegerField(required=True, min_value=0, label="Height", help_text="Enter size in inches")
+    chest_or_bust = forms.IntegerField(required=True, min_value=0, label="Chest / Bust", help_text="Enter size in inches")
+    hips = forms.IntegerField(required=True, min_value=0, label="Hip", help_text="Enter size in inches")
+    waist = forms.IntegerField(required=True, min_value=0, label="Waist", help_text="Enter size in inches")
     is_active = forms.BooleanField(initial=True)
 
 
@@ -91,8 +91,9 @@ class InfluencerCreateForm(forms.Form):
         contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
         if contact_number is None or contact_number_pattern.match(contact_number) is None:
             raise forms.ValidationError("Please enter valid contact number")
-        if User.objects.filter(email=email):
+        if User.objects.filter(email__iexact=email):
             raise forms.ValidationError("Email already taken")
+
         return cleaned_data
 
 
