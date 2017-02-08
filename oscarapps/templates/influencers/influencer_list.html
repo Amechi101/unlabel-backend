@@ -27,7 +27,7 @@
         <div class="well">
         <form action="" method="POST" class="form-inline">
             {%csrf_token%}
-            <input type="email" id="invite_email" name="invite_email">
+            <input type="email" id="invite_email" name="invite_email" >
             <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Sending...' %}">{% trans "Send Influencer Invite Email" %}</button>
         </form>
     </div>
