@@ -3,23 +3,20 @@ import re
 from django import forms
 from django.utils.translation import pgettext_lazy
 from django.utils.translation import ugettext_lazy as _
-#from django.contrib.auth.models import Permission
-
+from django.core.exceptions import ObjectDoesNotExist
 
 from oscar.core.compat import existing_user_fields
 from oscar.core.validators import password_validators
+from oscar.forms.widgets import ImageInput
 
 from oscarapps.influencers.models import Influencers
-
 from oscarapps.address.models import Country, States
 from users.models import User
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class InfluencerSearchForm(forms.Form):
     name = forms.CharField(
         required=False, label=pgettext_lazy(u"Influencers's name", u"Name"))
-
 
 
 class InfluencerCreateForm(forms.Form):
@@ -35,15 +32,19 @@ class InfluencerCreateForm(forms.Form):
         label=_('Password'),
         widget=forms.PasswordInput,
         required=True,
+        help_text="Password should have at least 8 characters with one uppercase,"
+                  "lowercase,digit,special character",
         validators=password_validators)
     password2 = forms.CharField(
         required=True,
+        help_text="Password should have at least 8 characters with one uppercase,"
+                  "lowercase,digit,special character",
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
     contact_number = forms.CharField(required=True, label="Contact Number")
-    image = forms.ImageField(label="Profile Image", required=True)
+    image = forms.ImageField(label="Profile Image", required=False)
     bio = forms.CharField(widget=forms.Textarea, label="Bio", help_text="Few words about yourself")
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
@@ -56,24 +57,21 @@ class InfluencerCreateForm(forms.Form):
     waist = forms.IntegerField(required=True, min_value=0, label="Waist", help_text="Enter size in inches")
     is_active = forms.BooleanField(initial=True)
 
-
-
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1', '')
         password2 = self.cleaned_data.get('password2', '')
-        password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
+        password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
 
         if password1 != password2:
             raise forms.ValidationError(
                 _("The two password fields didn't match."))
         if password_pattern.match(password2) is None:
-                raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
+                raise forms.ValidationError("Password should have at least 8 characters and one uppercase,"
                                         "lowercase,digit,special character")
         return password2
 
     def clean(self):
         cleaned_data = super(InfluencerCreateForm, self).clean()
-
         height = cleaned_data.get("height")
         chest_or_bust = cleaned_data.get("chest_or_bust")
         hips = cleaned_data.get("hips")
@@ -108,6 +106,7 @@ class InfluencerManageForm(forms.ModelForm):
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
     is_active = forms.BooleanField(required=False)
+    image = forms.ImageField(widget=ImageInput)
     # password1 = forms.CharField(
     #     label=_('Password'),
     #     widget=forms.PasswordInput,
@@ -118,6 +117,8 @@ class InfluencerManageForm(forms.ModelForm):
     #     label=_('Confirm Password'),
     #     widget=forms.PasswordInput)
 
+
+
     class Meta:
         model = Influencers
         fields = ('auto_id', 'email', 'first_name', 'last_name', 'is_active',
@@ -125,6 +126,8 @@ class InfluencerManageForm(forms.ModelForm):
                   'height', 'chest_or_bust', 'hips', 'waist',
                   'city', 'country', 'state',
                   )
+
+
 
     # def clean_password2(self):
     #     password1 = self.cleaned_data.get('password1', '')
@@ -158,13 +161,6 @@ class InfluencerManageForm(forms.ModelForm):
             instance.save()
         return instance
 
-
-
-
-# ROLE_CHOICES = (
-#     ('staff', _('Full dashboard access')),
-#     ('limited', _('Limited dashboard access')),
-# )
 
 class ExistingUserForm(forms.ModelForm):
     """

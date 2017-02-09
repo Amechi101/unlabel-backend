@@ -52,7 +52,6 @@ class PartnerCreateView(generic.View):
     def get(self, request, *args, **kwargs):
         return render(request, 'dashboard/partners/partner_form.html', {'form': PartnerCreateForm})
 
-
     def post(self, request, *args, **kwargs):
         partner_form = PartnerCreateForm(data=request.POST)
         if partner_form.is_valid():
@@ -101,6 +100,7 @@ class PartnerManageView(CorePartnerManageView, FormView):
         return self.partner
 
     def get_initial(self):
+
       return {'city': self.partner.location.city,
             'state': self.partner.location.state,
             'country': self.partner.location.country,
@@ -108,11 +108,9 @@ class PartnerManageView(CorePartnerManageView, FormView):
             'password': self.partner.users.all().first().password,
             'first_name': self.partner.users.all().first().first_name,
             'last_name': self.partner.users.all().first().last_name,
-            'is_active': self.partner.users.all().first().is_active
-      }
+            'is_active': self.partner.is_active}
 
     def get_context_data(self, **kwargs):
-
         ctx = super(PartnerManageView, self).get_context_data(**kwargs)
         ctx['partner'] = self.partner
         ctx['title'] = self.partner.name
@@ -139,8 +137,7 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         return address
 
     def get_initial(self):
-        return {'name': self.partner.name,
-        }
+        return {'name': self.partner.name,}
 
     def get_context_data(self, **kwargs):
 
@@ -161,8 +158,6 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         # locationForm=form.save()
         # locationForm.save()
         return super(PartnerRentalInfoManageView, self).form_valid(form)
-
-
 
 
 class PartnerDeleteView(CorePartnerDeleteView):
@@ -372,9 +367,7 @@ class BrandStyleListView(generic.ListView):
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
             return qs
-
         data = self.form.cleaned_data
-
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
             self.description = _("Brand style matching '%s'") % data['name']
@@ -474,16 +467,13 @@ class BrandSubCategoryListView(generic.ListView):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
         self.description = _("All Sub Categories")
-
         # We track whether the queryset is filtered to determine whether we
         # show the search form 'reset' button.
         self.is_filtered = False
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
             return qs
-
         data = self.form.cleaned_data
-
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
             self.description = _("Sub categories matching '%s'") % data['name']
