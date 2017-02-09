@@ -43,7 +43,7 @@ class InfluencerCreateForm(forms.Form):
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
     contact_number = forms.CharField(required=True, label="Contact Number")
-    image = forms.ImageField(label="Profile Image", required=True)
+    image = forms.ImageField(label="Profile Image", required=False)
     bio = forms.CharField(widget=forms.Textarea, label="Bio", help_text="Few words about yourself")
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
