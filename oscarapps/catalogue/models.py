@@ -1,6 +1,7 @@
 from oscar.apps.catalogue.abstract_models import AbstractProduct,AbstractCategory
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import strip_tags
 from oscarapps.partner.models import Partner
 from oscarapps.influencers.models import *
 
@@ -109,6 +110,15 @@ class Product(AbstractProduct, BaseApplicationModel):
 
    def __str__(self):
         return "{0}".format( self.title )
+
+   def save(self, *args, **kwargs):
+       if self.description:
+         self.description = strip_tags(self.description)
+       if self.material_info:
+           self.material_info = strip_tags(self.material_info)
+       if self.influencer_description:
+           self.influencer_description = strip_tags(self.influencer_description)
+       super(Product, self).save(*args, **kwargs)
 
 
 
