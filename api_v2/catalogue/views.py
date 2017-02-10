@@ -283,7 +283,7 @@ class InfluencerProductListView(generics.ListAPIView):
                 ###sorting the queryset
                 item_list=[]
                 for item in prod_Sort_List:
-                    obj =queryset.get(id=item)
+                    obj = queryset.get(id=item)
                     item_list.append(obj)
                 return item_list
 
@@ -294,7 +294,7 @@ class InfluencerProductListView(generics.ListAPIView):
                 ###sorting the queryset
                 item_list=[]
                 for item in prod_Sort_List:
-                    obj =queryset.get(id=item)
+                    obj = queryset.get(id=item)
                     item_list.append(obj)
                 return item_list
             else:
@@ -356,3 +356,10 @@ class InfluencerReserveProduct(APIView):
             content = {"message":"Please try again after some time"}
             return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
+
+class InfluencerLiveProducts(APIView):
+    authentication = authentication.SessionAuthentication
+    http_method_names = ('post',)
+
+    def post(self,request,*args,**kwargs):
+        print("---------------sdfsdfs")

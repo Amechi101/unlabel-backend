@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
 from oscarapi.utils import overridable
+from users.models import User
+
 
 
 User = get_user_model()
@@ -45,3 +47,10 @@ class LoginSerializer(serializers.Serializer):
         # set instance to the user so we can use this in the view
         self.instance = user
         return attrs
+
+class InfluencerProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields=['contact_number','email','first_name','last_name']
+
