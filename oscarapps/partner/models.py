@@ -98,6 +98,7 @@ class RentalInformation(Locations):
 
         return "{0}".format(self.day)
 
+
 class Partner(AbstractPartner, BaseApplicationModel):
     slug = models.SlugField(max_length=255, default="", blank=True, null=True, verbose_name=_('Brand Slug'))
     image = models.ImageField(_('Image'), upload_to=_('Brands'), blank=True, null=True, max_length=255)

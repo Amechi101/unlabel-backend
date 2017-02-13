@@ -12,6 +12,7 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
 from rest_framework import pagination, generics
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from django.core.validators import validate_email
 from oscarapi import serializers
 from oscarapi.utils import login_and_upgrade_session
@@ -20,8 +21,9 @@ from django.core.exceptions import ValidationError
 
 from api_v2.catalogue.serializers import PartnerSerializer
 from users.models import User
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, InfluencerProfileSerializer
 from oscarapps.partner.models import PartnerFollow, Partner
+from oscarapps.influencers.models import Influencers
 
 
 class LoginView(APIView):
@@ -129,7 +131,7 @@ class InfluencerForgotPassword(APIView):
             content = {"message": "invalid email"}
             return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
         try:
-            if User.objects.filter(email__iexact=request.data["email"]).exists():
+            if User.objects.filter(email__iexact=request.data["email"],is_influencer=True,is_active=True).exists():
                 current_site = Site.objects.get_current()
                 domain = current_site.domain
                 user = User.objects.get(email__iexact=request.data["email"])
@@ -167,7 +169,7 @@ class InfluencerForgotPassword(APIView):
                 email.send()
                 return Response({'code': 'OK'}, status.HTTP_200_OK)
             else:
-                content = {'message : Not a registered email.'}
+                content = {'message : Not a valid Influencer email.'}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         except:
             return Response({'code': 'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
@@ -185,5 +187,37 @@ class InfluencerFollowedBrands(generics.ListAPIView):
             follow_list = PartnerFollow.objects.filter(customer=influencer).values_list('partner', flat=True)
             queryset = Partner.objects.filter(pk__in=follow_list)
             return queryset
+
+class InfluencerProfileUpdate(ModelViewSet):
+    # authentication = authentication.SessionAuthentication
+    # permission_classes = (permissions.IsAuthenticated,)
+    # http_method_names = ('get','post')
+    # serializer_class = InfluencerProfileSerializer
+    model = User
+
+    # def get(self,request,*args,**kwargs):
+    #     if request.user.is_authenticated():
+    #         ser = self.serializer_class(request.user, many=False)
+    #         return Response(ser.data)
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    #
+    #
+    # def post(self,request,*args,**kwargs):
+    #     if request.user.is_authenticated():
+    #         try:
+    #             influencer_user = request.user
+    #         except :
+    #             content = {"message": "Please login and try again"}
+    #             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+    #         if request.data['email']:
+    #             try:
+    #                 validate_email(request.data['email'])
+    #             except ValidationError:
+    #                 content = {"message": "invalid email"}
+    #                 return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+    #             influencer_user.email = request.data['email']
+    #         if request.data['contact_number']:
+    #              contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
+    #             if contact_number is not None and contact_number_pattern.match(contact_number) is None:
 
 

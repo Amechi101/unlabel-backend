@@ -72,12 +72,11 @@ class InfluencerInvite(models.Model):
         return self.email
 
 
-
 class InfluencerProductReserve(models.Model):
 
-    influencer = models.ForeignKey(Influencers, blank=False, null=False,verbose_name=_('Influencer'))
-    product = models.ForeignKey(Product,blank=False,null=False,verbose_name=_('Product'))
-    date_reserved = models.DateTimeField(auto_now_add=True,verbose_name=_('Product Reserved Date'))
+    influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
+    date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
 
     class Meta:
         verbose_name_plural = _('Influencer Product Reservations')
