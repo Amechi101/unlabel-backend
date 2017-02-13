@@ -31,7 +31,8 @@ from oscarapps.influencers.models import Influencers
 
 
 from oscarapps.influencers.models import Influencers,InfluencerInvite
-
+from django.template import Context
+from django.template import loader
 
 
 # ================
@@ -73,22 +74,10 @@ class InfluencerListView(generic.ListView):
             email = EmailMessage()
             email.subject = "Influencer invitation from Unlabel"
             email.content_subtype = "html"
-            email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                            <body>
-                            <br><br>
-                            You're being invited as influencer at unlabel
-                            <br><br>
-                            Please fill the form provided at the link :
-                            <br><br>
-                            """ + tosend + """
-                            <br><br>
-                            Thank you for using our site!
-                            <br/>
-                            <br/>
-                            <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                            </body>
-                            </head>
-                            </html>"""
+            tem = loader.get_template('influencers/influencer_email_body.html')
+            context = Context({'tosend':tosend})
+            body = tem.render(context)
+            email.body = body
             email.from_email = "Unlabel App"
             email.to = [invite_email]
             email.send()
