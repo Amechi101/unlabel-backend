@@ -3,10 +3,7 @@ from rest_framework import serializers
 
 from oscarapi.utils import overridable
 from users.models import User
-
-
-
-User = get_user_model()
+from oscarapps.influencers.models import Influencers
 
 
 def field_length(fieldname):
@@ -53,4 +50,10 @@ class InfluencerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields=['contact_number','email','first_name','last_name']
+
+class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Influencers
+        fields = '__all__'
 
