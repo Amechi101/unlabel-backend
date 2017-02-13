@@ -1,29 +1,73 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
-from django.views import generic
-from django.core.urlresolvers import reverse, reverse_lazy
-from django.views.generic import FormView
+import uuid
 
-from oscar.core.loading import get_classes, get_model
-from oscar.views import sort_queryset
-from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
-from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
-from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
-from oscar.apps.dashboard.partners.forms import PartnerSearchForm
-
+from oscarapps.address.models import States, Country, Locations
 from oscarapps.dashboard.partners.forms import PartnerCreateForm, PartnerManageForm, PartnerRentalInfoForm
 from oscarapps.partner.models import Partner
-from oscarapps.address.models import States, Country, Locations
+from oscarapps.partner.models import PartnerInvite
 from oscarapps.partner.models import Style, Category, SubCategory
 from users.models import User
+
+from django.contrib import messages
+from django.contrib.sites.models import Site
+from django.core.mail import EmailMessage
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.template import Context
+from django.template import loader
+from django.utils.translation import ugettext_lazy as _
+from django.views import generic
+from django.views.generic import FormView
+from oscar.apps.dashboard.partners.forms import PartnerSearchForm
+from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
+from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
+from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
+from oscar.core.loading import get_classes, get_model
+from oscar.views import sort_queryset
+
 
 # =======
 #Partner views
 #=======
 
 class PartnerListView(CorePartnerListView):
+
+
+    def post(self, request, *args, **kwargs):
+
+        invite_email = request.POST.get("invite_email")
+        if invite_email is not None and invite_email!="":
+            current_site = Site.objects.get_current()
+            domain = current_site.domain
+            context = {
+                'domain': domain,
+                'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
+                'user': invite_email,
+                'protocol': 'http',
+            }
+            invite_sent = PartnerInvite()
+            invite_sent.email = context['user']
+            invite_sent.code = context['verify_code']
+            tosend = context['protocol'] + '://' + context['domain'] + '/partners/partner-sign-up/' + context['verify_code'] + '/'
+            email = EmailMessage()
+            email.subject = "Partner invitation from Unlabel"
+            email.content_subtype = "html"
+            tem = loader.get_template('dashboard/partners/partner_email_body.html')
+            context = Context({'tosend':tosend})
+            body = tem.render(context)
+            email.body = body
+            email.from_email = "Unlabel App"
+            email.to = [invite_email]
+            email.send()
+
+            messages.success(
+            self.request, "An invitation email was successfully sent to '%s' " %invite_sent.email)
+            invite_sent.save()
+            return HttpResponseRedirect("/oscar/dashboard/partners/")
+        else:
+            return HttpResponseRedirect("/oscar/dashboard/partners/")
+
+
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])

@@ -133,5 +133,14 @@ class PartnerFollow(models.Model):
         return self.customer.email+" --> "+self.partner.name
 
 
+class PartnerInvite(models.Model):
+    email = models.EmailField(blank=True,null=True)
+    code = models.CharField(max_length=20, blank=False,null=False)
+    date_sent = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def  __str__(self):
+        return self.email
+
 
 from oscar.apps.partner.models import *
