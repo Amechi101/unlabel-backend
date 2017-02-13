@@ -103,7 +103,7 @@ class Product(AbstractProduct, BaseApplicationModel):
     likes = models.PositiveIntegerField(default=0)
     influencer_description = models.TextField(max_length=200, blank=True, null=True,
                                               verbose_name=_('Influencer Product Description'))
-    weight = models.PositiveIntegerField(max_length=10, blank=True, null=True, verbose_name=_('Product weight information'))
+    weight = models.PositiveIntegerField(blank=True, null=True, verbose_name=_('Product weight information'))
     on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
     item_sex_type = models.CharField(
         max_length=1,
