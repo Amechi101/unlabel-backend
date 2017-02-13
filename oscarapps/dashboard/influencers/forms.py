@@ -87,7 +87,7 @@ class InfluencerCreateForm(forms.Form):
         if waist is not None and len(str(waist)) > 2:
             raise forms.ValidationError("Please enter valid waist size in Inches")
         contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
-        if contact_number is None or contact_number_pattern.match(contact_number) is None:
+        if contact_number is None or contact_number_pattern.match(contact_number) is not None:
             raise forms.ValidationError("Please enter valid contact number")
         if User.objects.filter(email__iexact=email):
             raise forms.ValidationError("Email already taken")
