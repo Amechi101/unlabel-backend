@@ -1,14 +1,15 @@
 import datetime
 
+from oscarapps.address.models import Locations
 from oscarapps.partner.forms import PartnerSignUpForm
 from oscarapps.partner.models import PartnerInvite, Partner
 from users.models import User
-from oscarapps.address.models import Locations
+
+from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import utc
 from django.views.generic import View
-
 
 
 class PartnerSignUpView(View):
@@ -40,6 +41,10 @@ class PartnerSignUpView(View):
                         partner_user.save()
                         partner_invite.is_used = True
                         partner_invite.save()
+                        dashboard_access_perm = Permission.objects.get(
+                            codename='dashboard_access', content_type__app_label='partner')
+                        partner_user.user_permissions.add(dashboard_access_perm)
+                        partner_user.save()
 
                         partner_location = Locations()
                         partner_location.city = partner_form.cleaned_data['city']
