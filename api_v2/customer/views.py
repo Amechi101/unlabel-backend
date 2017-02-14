@@ -26,10 +26,7 @@ from rest_auth.registration.views import SocialLoginView
 import datetime
 from api_v2.utils import *
 
-
-
 # from oscarapps.customer.models import EmailConfirmation
-
 
 #######################################push testing
 
@@ -73,9 +70,6 @@ class PushNotificationView(View):
 
         return HttpResponse("Partner successfully registered.")
 
-
-
-
 #######################################push testing ends
 
 
@@ -117,7 +111,6 @@ class CustomerRegisterView(APIView):
                             email.to = [mailid]
                             email.send()
                             newUser = User.objects.get(email = request.data["email"])
-                            SaveSendMail(newUser,email.subject,email.body)
                             return Response(serializer.data, status = status.HTTP_201_CREATED)
                         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
                     else:
