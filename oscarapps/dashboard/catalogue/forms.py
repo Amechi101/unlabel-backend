@@ -5,18 +5,20 @@ from django.utils.translation import pgettext_lazy
 from django.forms.models import inlineformset_factory
 
 from oscar.core.loading import get_model
+from oscar.forms.widgets import ImageInput
 from oscar.apps.dashboard.catalogue.forms import ProductForm as CoreProductForm
 from oscar.apps.dashboard.catalogue.forms import StockRecordForm as CoreStockRecordForm
 
 Product = get_model('catalogue', 'Product')
 StockRecord = get_model('partner', 'StockRecord')
+InfluencerProductImage = get_model('catalogue', 'InfluencerProductImage')
 
 class ProductForm(CoreProductForm):
 
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'size', 'item_sex_type', 'status',
-            'rental_status', 'brand', 'wieght', 'on_sale', 'requires_shipping']
+            'title', 'upc', 'description', 'material_info', 'item_sex_type', 'status',
+            'rental_status', 'brand', 'weight', 'on_sale', 'requires_shipping']
         labels = {
             'title': _('Name'),
         }
@@ -98,3 +100,37 @@ class StockRecordFormSet(BaseStockRecordFormSet):
                 raise exceptions.ValidationError(
                     _("At least one stock record must be set to a partner that"
                       " you're associated with."))
+
+class InfluencerProductImageForm(forms.ModelForm):
+
+    class Meta:
+        model = InfluencerProductImage
+        fields = ['product', 'original', 'caption']
+        # use ImageInput widget to create HTML displaying the
+        # actual uploaded image and providing the upload dialog
+        # when clicking on the actual image.
+        widgets = {
+            'original': ImageInput(),
+        }
+
+    def save(self, *args, **kwargs):
+        # We infer the display order of the image based on the order of the
+        # image fields within the formset.
+        kwargs['commit'] = False
+        obj = super(InfluencerProductImageForm, self).save(*args, **kwargs)
+        obj.display_order = self.get_display_order()
+        obj.save()
+        return obj
+
+    def get_display_order(self):
+        return self.prefix.split('-').pop()
+
+
+BaseInfluencerProductImageFormSet = inlineformset_factory(
+    Product, InfluencerProductImage, form=InfluencerProductImageForm, extra=5)
+
+
+class InfluencerProductImageFormSet(BaseInfluencerProductImageFormSet):
+
+    def __init__(self, product_class, user, *args, **kwargs):
+        super(InfluencerProductImageFormSet, self).__init__(*args, **kwargs)

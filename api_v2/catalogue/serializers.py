@@ -8,7 +8,7 @@ from oscarapi.utils import (
 
 from oscarapps.partner.models import PartnerFollow
 from oscarapps.partner.models import Partner, Style
-from oscarapps.address.models import Locations
+from oscarapps.address.models import Locations,States
 from oscarapps.catalogue.models import Product
 from oscar.apps.partner.models import StockRecord
 from oscar.core.loading import get_model, get_class
@@ -26,9 +26,14 @@ Partner = get_model('partner', 'Partner')
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    state = serializers.SerializerMethodField(source='get_state')
+
+    def get_state(self,obj):
+        return obj.state.name
+
     class Meta:
         model = Locations
-        fields = '__all__'
+        fields = ('city','state','country','latitude','longitude')
 
 
 class PartnerSerializer(OscarModelSerializer):
@@ -111,16 +116,15 @@ class ProductSerializer(OscarModelSerializer):
     product_class = serializers.StringRelatedField(required=False)
     images = ProductImageSerializer(many=True, required=False)
     price = serializers.HyperlinkedIdentityField(view_name='product-price')
-    # availability = serializers.HyperlinkedIdentityField(
-    #     view_name='product-availability')
-
     availability = serializers.SerializerMethodField(source='get_availability')
-
     options = OptionSerializer(many=True, required=False)
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
     sku = serializers.SerializerMethodField(source='get_sku')
     retail_price = serializers.SerializerMethodField(source='get_retail_price')
+
+
+
 
     def get_sku(self, obj):
         try:

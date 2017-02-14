@@ -201,7 +201,6 @@ class CustomerForgotPassword(APIView):
                         email.from_email = "Unlabel App"
                         email.to = [mailid]
                         email.send()
-                        SaveSendMail(user,email.subject,email.body)
                         return Response({'code':'OK'}, status.HTTP_200_OK)
                     except:
                         return Response({'code':'Please try again later'}, status = status.HTTP_400_BAD_REQUEST)

@@ -10,10 +10,8 @@ from oscar.core.loading import get_model
 from oscar.core.validators import password_validators
 
 from oscarapps.address.models import Locations, States, Country
-from oscarapps.partner.models import Category, Style, SubCategory, RentalInformation
+from oscarapps.partner.models import Partner, Category, Style, SubCategory, RentalInformation
 from users.models import User
-
-from oscarapps.partner.models import Partner
 
 
 class PartnerCreateForm(forms.Form):
@@ -25,12 +23,12 @@ class PartnerCreateForm(forms.Form):
         label=_('Password'),
         widget=forms.PasswordInput,
         required=True,
-        help_text="Password should have at least 6 characters with one uppercase,"
+        help_text="Password should have at least 8 characters with one uppercase,"
                   "lowercase,digit,special character",
         validators=password_validators)
     password2 = forms.CharField(
         required=True,
-        help_text="Password should have at least 6 characters with one uppercase,"
+        help_text="Password should have at least  characters with one uppercase,"
                   "lowercase,digit,special character",
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
@@ -50,12 +48,12 @@ class PartnerCreateForm(forms.Form):
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1', '')
         password2 = self.cleaned_data.get('password2', '')
-        password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$')
+        password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
         if password1 != password2:
             raise forms.ValidationError(
                 _("The two password fields didn't match."))
         if password_pattern.match(password2) is None:
-                raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
+                raise forms.ValidationError("Password should have at least 8 characters and one uppercase,"
                                         "lowercase,digit,special character")
         return password2
 
@@ -80,7 +78,7 @@ class PartnerManageForm(forms.ModelForm):
     email = forms.CharField(label='Email', required=True)
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
-    is_active = forms.BooleanField(required=False)
+    is_active = forms.BooleanField(required=False, help_text="Check|Un check to activate|deactivate store")
 
     # password1 = forms.CharField(
     #     label=_('Change Password'),
@@ -124,11 +122,11 @@ class PartnerManageForm(forms.ModelForm):
     #                                         "lowercase,digit,special character")
     #         return password2
 
-
     def save(self, commit=True):
         instance = super(PartnerManageForm, self).save(commit=False)
         instance.location.city = self.cleaned_data['city']
         instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        instance.is_active = self.cleaned_data['is_active']
 
         if str(self.cleaned_data['country']) == "United States":
             try:

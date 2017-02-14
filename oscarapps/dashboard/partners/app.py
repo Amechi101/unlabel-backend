@@ -8,7 +8,6 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerRentalInfoManageView')
     partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
 
-
     sub_category_list_view = get_class('oscarapps.dashboard.partners.views',
                                  'BrandSubCategoryListView')
 
@@ -18,8 +17,6 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                                  'BrandSubCategoryManageView')
     sub_category_delete_view = get_class('oscarapps.dashboard.partners.views',
                                  'BrandSubCategoryDeleteView')
-
-
 
     brand_category_list_view = get_class('oscarapps.dashboard.partners.views',
                                  'BrandCategoryListView')
@@ -49,10 +46,10 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='partner-manage'),
             url(r'^(?P<pk>\d+)/delete/$', self.delete_view.as_view(),
                 name='partner-delete'),
-
             url(r'^(?P<pk>\d+)/address/$',
                 self.partner_address_manage_view.as_view(),
                 name='partner-address-manage'),
+            url(r'^filter/$', self.partner_filter_view.as_view(), name='partner-filter'),
 
             url(r'^(?P<partner_pk>\d+)/users/add/$',
                 self.user_create_view.as_view(),
@@ -68,8 +65,6 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 self.user_update_view.as_view(),
                 name='partner-user-update'),
 
-
-
             url(r'^sub_category/$', self.sub_category_list_view.as_view(), name='brand-sub-category-list'),
             url(r'^sub_category/create/$', self.sub_category_create_view.as_view(),
                 name='brand-sub-category-create'),
@@ -77,8 +72,6 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='brand-sub-category-manage'),
             url(r'^sub_category/(?P<pk>\d+)/delete/$', self.sub_category_delete_view.as_view(),
                 name='brand-sub-category-delete'),
-
-
 
             url(r'^brand_category/$', self.brand_category_list_view.as_view(), name='brand-category-list'),
             url(r'^brand_category/create/$', self.brand_category_create_view.as_view(),
@@ -88,7 +81,6 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
             url(r'^brand_category/(?P<pk>\d+)/delete/$', self.brand_category_delete_view.as_view(),
                 name='brand-category-delete'),
 
-
             url(r'^brand_style/$', self.brand_style_list_view.as_view(), name='brand-style-list'),
             url(r'^brand_style/create/$', self.brand_style_create_view.as_view(),
                 name='brand-style-create'),
@@ -96,11 +88,6 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 name='brand-style-manage'),
             url(r'^brand_style/(?P<pk>\d+)/delete/$', self.brand_style_delete_view.as_view(),
                 name='brand-style-delete'),
-
-
-            url(r'^filter/$', self.partner_filter_view.as_view(), name='partner-filter'),
-
-
         ]
         return self.post_process_urls(urls)
 application = PartnersDashboardApplication()
