@@ -82,6 +82,13 @@ class RentalInformation(Locations):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
     )
+
+    AM = 'AM'
+    PM = 'PM'
+    time_period_choice = (
+        (AM, 'AM'),
+        (PM, 'PM'),
+    )
     post_box = models.CharField(max_length=20, blank=True, null=True, default="", verbose_name=_('Apartment/P.O.Box'))
     zipcode = models.CharField(max_length=10, blank=True, null=True, default="", verbose_name=_('Zip code'))
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: "
@@ -89,7 +96,9 @@ class RentalInformation(Locations):
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
     day = MultiSelectField(choices=day_choice)
     start_time = models.TimeField(blank=True, null=True, verbose_name=_("Start Time"))
+    start_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
     end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
+    end_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
 
     class Meta:
         verbose_name = _('Rental Information')

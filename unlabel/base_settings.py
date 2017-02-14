@@ -240,6 +240,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'storages',
     'multiselectfield',
+    'datetimewidget',
 
 
     # project

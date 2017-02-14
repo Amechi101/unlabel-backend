@@ -9,7 +9,7 @@ from oscarapi.utils import (
 )
 from oscarapps.partner.models import Partner, Style
 from oscarapps.address.models import Locations
-from oscarapps.catalogue.models import Product
+from oscarapps.catalogue.models import Product,Size
 from oscar.apps.partner.models import StockRecord
 from users.models import User
 from oscar.core.loading import get_model
@@ -127,3 +127,9 @@ class StoreTypeSerializer(OscarModelSerializer):
     class Meta:
         model = Style
         fields='__all__'
+
+class SizeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Size
+        fields = '__all__'

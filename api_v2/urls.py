@@ -59,7 +59,9 @@ urlpatterns = [
 
     url(r'^login/$', influencerViews.LoginView.as_view(), name='influencer-login'),
 
-    url(r'^influencer_followed_partners/$',influencerViews.InfluencerFollowedBrands.as_view(),name='influencer_followed_brands')
+    url(r'^influencer_followed_partners/$',influencerViews.InfluencerFollowedBrands.as_view(),name='influencer_followed_brands'),
+
+    url(r'^get_size/$',catalogueViews.GetSize.as_view(),name='get_size')
 
 
 ]
