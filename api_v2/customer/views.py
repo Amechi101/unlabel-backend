@@ -33,13 +33,13 @@ from api_v2.utils import *
 
 #######################################push testing
 
-class PartnerSignUpView(View):
+class PushNotificationView(View):
     """
-        View for Partner Signup
+        View for Push notifications
     """
     def get(self, request, *args, **kwargs):
 
-        app = Application.objects.create(name='tester_application7')
+        app = Application.objects.create(name='tester_application9')
 
         apns_platform = Platform.objects.create(
             platform='APNS_SANDBOX',
@@ -66,7 +66,7 @@ class PartnerSignUpView(View):
             context='url_alert',
             context_id='none',
             has_new_content=True,
-            message="sorry chetta... njn engane parayaan paadillarnu",
+            message="Unlabel Welcomes you",
             sound="default"
         )
         apple_device.send(message)

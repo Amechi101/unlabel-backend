@@ -11,7 +11,7 @@ from .utils import *
 urlpatterns = [
 
     url(r'testing_pushnotes/',
-        customerViews.PartnerSignUpView.as_view(), name='partner_sign'),
+        customerViews.PushNotificationView.as_view(), name='push_notes'),
 
     ###-------customer apis
     url(r'customer_register/',

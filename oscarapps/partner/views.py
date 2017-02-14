@@ -1,16 +1,15 @@
 import datetime
 
-from django.contrib.auth.models import Permission
+from oscarapps.address.models import Locations
 from oscarapps.partner.forms import PartnerSignUpForm
 from oscarapps.partner.models import PartnerInvite, Partner
 from users.models import User
-from oscarapps.address.models import Locations
+
+from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import utc
 from django.views.generic import View
-from scarface.models import Application, Platform, Device, Topic, PushMessage
-from scarface.tests import TEST_ARN_TOKEN_APNS
 
 
 class PartnerSignUpView(View):
@@ -68,53 +67,6 @@ class PartnerSignUpView(View):
                         partner_brand.category = partner_form.cleaned_data['category']
                         partner_brand.sub_category = partner_form.cleaned_data['sub_category']
                         partner_brand.save()
-
-
-
-
-
-                        app = Application.objects.create(name='test_application')
-
-                        apns_platform = Platform.objects.create(
-                            platform='APNS',
-                            application=app,
-                            arn=TEST_ARN_TOKEN_APNS
-                        )
-
-                        apple_device = Device.objects.create(device_id= 'ec04b7235df4a21183f062f51ffa2b975c1eb82e',
-                                       push_token = '9F74C3B1E23CF6DAFD0ECC77D2BAFA4B620F75D13B1A98F89ED8C3F9A147A2B2', platform = apns_platform)
-
-                        apple_device.register()
-
-                        topic = Topic.objects.create(
-                            name='test_topic',
-                            application=app,
-                        )
-
-                        print("almost topic")
-
-                        topic.register()
-
-                        print("almost topic  registered ")
-                        topic.register_device(apple_device)
-
-
-                        print("before a message")
-
-                        message = PushMessage(
-                            badge_count=1,
-                            context='url_alert',
-                            context_id='none',
-                            has_new_content=True,
-                            message="Hello world!",
-                            sound="default"
-                        )
-                        apple_device.send(message)
-                        print("hoiiiiiii, success")
-
-
-
-
 
 
                         return HttpResponse("Partner successfully registered.")
