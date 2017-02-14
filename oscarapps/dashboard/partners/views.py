@@ -24,7 +24,7 @@ from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerLi
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
-
+from django.contrib.auth.models import Permission
 
 # =======
 #Partner views
@@ -107,6 +107,11 @@ class PartnerCreateView(generic.View):
                                                  )
             partner_user.save()
             partner_user.set_password(partner_form['password1'].value())
+            partner_user.save()
+
+            dashboard_access_perm = Permission.objects.get(
+                codename='dashboard_access', content_type__app_label='partner')
+            partner_user.user_permissions.add(dashboard_access_perm)
             partner_user.save()
 
             try:

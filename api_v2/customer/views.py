@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponse
 from django.utils.http import urlsafe_base64_encode
 from django.views.generic import ListView, TemplateView
 import json, ast,os
@@ -9,6 +10,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from scarface.models import Application, Platform, Device, Topic, PushMessage
+from scarface.tests import TEST_ARN_TOKEN_APNS
 from .serializers import CustomerRegisterSerializer
 from django.core.mail.message import EmailMessage
 from django.contrib.auth.models import User
@@ -26,6 +29,55 @@ from api_v2.utils import *
 
 
 # from oscarapps.customer.models import EmailConfirmation
+
+
+#######################################push testing
+
+class PartnerSignUpView(View):
+    """
+        View for Partner Signup
+    """
+    def get(self, request, *args, **kwargs):
+
+        app = Application.objects.create(name='tester_application7')
+
+        apns_platform = Platform.objects.create(
+            platform='APNS_SANDBOX',
+            application=app,
+            arn="arn:aws:sns:ap-south-1:275431664439:app/APNS_SANDBOX/unlabel_-7"
+        )
+
+        apple_device = Device.objects.create(device_id= "ec04b7235df4a21183f062f51ffa2b975c1eb82e",
+                       push_token = "9F74C3B1E23CF6DAFD0ECC77D2BAFA4B620F75D13B1A98F89ED8C3F9A147A2B2",platform = apns_platform
+        )
+
+        apple_device.register()
+
+        topic = Topic.objects.create(
+            name='test_topic',
+            application=app,
+        )
+
+        topic.register()
+        #topic.register_device(arn_device)
+
+        message = PushMessage(
+            badge_count=1,
+            context='url_alert',
+            context_id='none',
+            has_new_content=True,
+            message="sorry chetta... njn engane parayaan paadillarnu",
+            sound="default"
+        )
+        apple_device.send(message)
+
+        return HttpResponse("Partner successfully registered.")
+
+
+
+
+#######################################push testing ends
+
 
 
 class CustomerRegisterView(APIView):
