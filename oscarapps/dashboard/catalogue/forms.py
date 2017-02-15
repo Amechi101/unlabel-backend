@@ -21,19 +21,27 @@ Size = get_model('catalogue', 'Size')
 
 
 class ProductForm(CoreProductForm):
-    size_class = forms.ModelChoiceField(queryset=SizeClass.objects.all())
-    size = forms.ModelMultipleChoiceField(queryset=Size.objects.all())
+    # size_class = forms.ModelChoiceField(queryset=SizeClass.objects.all())
+    # size = forms.ModelMultipleChoiceField(queryset=Size.objects.all())
+
+    def __init__(self, user, *args, **kwargs):
+        # The user kwarg is not used by stock StockRecordForm. We pass it
+        # anyway in case one wishes to customise the partner queryset
+        self.user = user
+        super(ProductForm, self).__init__(*args, **kwargs)
+
+        # Restrict accessible partners for non-staff users
+        if not self.user.is_staff:
+            self.fields['brand'].queryset = self.user.partners.all()
 
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'item_sex_type', 'size_class',
-            'size',
+            'title', 'upc', 'description', 'material_info', 'item_sex_type',
             'status', 'rental_status', 'brand',
             'weight', 'on_sale', 'requires_shipping']
         labels = {
             'title': _('Name'),
         }
-
 
 
 
@@ -96,21 +104,7 @@ class StockRecordFormSet(BaseStockRecordFormSet):
             i, **kwargs)
 
     def clean(self):
-        """
-        If the user isn't a staff user, this validation ensures that at least
-        one stock record's partner is associated with a users partners.
-        """
-        if any(self.errors):
-            return
-        if self.require_user_stockrecord:
-            stockrecord_partners = set([form.cleaned_data.get('partner', None)
-                                        for form in self.forms])
-            user_partners = set(self.user.partners.all())
-            if not user_partners & stockrecord_partners:
-                raise exceptions.ValidationError(
-                    _("At least one stock record must be set to a partner that"
-                      " you're associated with."))
-
+        pass
 
 BaseProductImageFormSet = inlineformset_factory(
     Product, ProductImage, form=ProductImageForm, extra=5)
