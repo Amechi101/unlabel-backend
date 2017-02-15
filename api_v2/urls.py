@@ -10,6 +10,9 @@ from .utils import *
 #####   customer urls   #####
 urlpatterns = [
 
+    url(r'testing_pushnotes/',
+        customerViews.PushNotificationView.as_view(), name='push_notes'),
+
     ###-------customer apis
     url(r'customer_register/',
         customerViews.CustomerRegisterView.as_view(),name='register_view'),

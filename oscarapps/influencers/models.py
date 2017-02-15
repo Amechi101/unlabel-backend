@@ -5,10 +5,12 @@ import random
 import string
 from decimal import Decimal
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
 from django.core.validators import RegexValidator
 from django.conf import settings
+from django.db.models.signals import pre_save
 
 from oscarapps.address.models import Locations
 from oscarapps.catalogue.models import Product
@@ -78,4 +80,19 @@ class InfluencerProductReserve(models.Model):
 
     class Meta:
         verbose_name_plural = _('Influencer Product Reservations')
+
+class InfluencerProductedRentedDetails(models.Model):
+    influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
+    date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
+
+    class Meta:
+        verbose_name_plural = _('Influencer Product Reservations')
+
+@receiver(pre_save, sender=Product, dispatch_uid="update_rental_date")
+def update_suggestion_model_with_dish(sender, instance, **kwargs):
+    print("--------------------",instance)
+
+pre_save.connect(update_suggestion_model_with_dish, sender=Product, dispatch_uid="update_rental_date")
+
 

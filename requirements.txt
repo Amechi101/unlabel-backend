@@ -70,3 +70,4 @@ six==1.10.0
 sorl-thumbnail==12.4a1
 static3==0.5.1
 tzlocal==1.2.2
+django-scarface==3.0.1
