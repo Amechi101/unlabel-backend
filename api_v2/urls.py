@@ -63,8 +63,13 @@ urlpatterns = [
 
     url(r'^influencer_profile_update/$',influencerViews.InfluencerProfileUpdate.as_view(),name='influencer_profile_update'),
 
-    url(r'^influencer_image_bio/',influencerViews.InfluencerPicAndBio.as_view(),name='influencer_image_bio')
+    url(r'^influencer_image_bio/',influencerViews.InfluencerPicAndBio.as_view(),name='influencer_image_bio'),
 
+    url(r'^influencer_reserved_products/$',catalogueViews.InfluencerReservedProducts.as_view(), name='influencer_reserved_products'),
+
+    url(r'^influencer_rented_products/$',catalogueViews.InfluencerRentedProducts.as_view(), name='influencer_reserved_products'),
+
+    url(r'^influencer_live_products/$',catalogueViews.InfluencerLiveProducts.as_view(), name='influencer_reserved_products'),
 
 ]
 

@@ -241,7 +241,6 @@ INSTALLED_APPS = [
     'storages',
     'multiselectfield',
 
-
     # project
     'unlabel',
     'unlabel_api',
