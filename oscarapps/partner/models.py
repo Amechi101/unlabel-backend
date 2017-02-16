@@ -37,13 +37,8 @@ class Style(BaseApplicationModel):
 
 class Category(BaseApplicationModel):
 
-    MENSWEAR = 'Menswear'
-    WOMENSWEAR = 'Womenswear'
-    category_choice = (
-        (MENSWEAR, 'Menswear'),
-        (WOMENSWEAR, 'Womenswear'),
-    )
-    name = MultiSelectField(choices=category_choice)
+    name = models.CharField(unique=True, max_length=100, verbose_name=_('Name'))
+    description = models.TextField(blank=True, null=True, default="", verbose_name=_('Description'))
 
     class Meta:
         verbose_name = _('Category')

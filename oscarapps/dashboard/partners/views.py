@@ -300,7 +300,7 @@ class BrandCategoryListView(generic.ListView):
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
-        self.description = _("All Brand Categories")
+        self.description = _("All Store Types")
 
         # We track whether the queryset is filtered to determine whether we
         # show the search form 'reset' button.
@@ -313,7 +313,7 @@ class BrandCategoryListView(generic.ListView):
 
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
-            self.description = _("Brand categories matching '%s'") % data['name']
+            self.description = _("Store Types matching '%s'") % data['name']
             self.is_filtered = True
 
         return qs
@@ -334,12 +334,12 @@ class BrandCategoryCreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BrandCategoryCreateView, self).get_context_data(**kwargs)
-        ctx['title'] = _('Create new brand category')
+        ctx['title'] = _('Create new Store Type')
         return ctx
 
     def get_success_url(self):
         messages.success(self.request,
-                         _("Brand category '%s' was created successfully.") %
+                         _("Store Type '%s' was created successfully.") %
                          self.object.name)
         return reverse('dashboard:brand-category-list')
 
@@ -368,7 +368,7 @@ class BrandCategoryManageView(generic.UpdateView):
 
     def form_valid(self, form):
         messages.success(
-            self.request, _("Brand category '%s' was updated successfully.") %
+            self.request, _("Store Type '%s' was updated successfully.") %
             self.brand_category.name)
         self.brand_category.name = form.cleaned_data['name']
         self.brand_category.save()
@@ -381,7 +381,7 @@ class BrandCategoryDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         messages.success(self.request,
-                         _("Brand category '%s' was deleted successfully.") %
+                         _("Store Type '%s' was deleted successfully.") %
                          self.object.name)
         return reverse('dashboard:brand-category-list')
 
@@ -515,7 +515,7 @@ class BrandSubCategoryListView(generic.ListView):
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
-        self.description = _("All Sub Categories")
+        self.description = _("All Brand Specializations")
         # We track whether the queryset is filtered to determine whether we
         # show the search form 'reset' button.
         self.is_filtered = False
@@ -525,7 +525,7 @@ class BrandSubCategoryListView(generic.ListView):
         data = self.form.cleaned_data
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
-            self.description = _("Sub categories matching '%s'") % data['name']
+            self.description = _("Brand Specializations matching '%s'") % data['name']
             self.is_filtered = True
 
         return qs
@@ -546,12 +546,12 @@ class BrandSubCategoryCreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BrandSubCategoryCreateView, self).get_context_data(**kwargs)
-        ctx['title'] = _('Create new sub category')
+        ctx['title'] = _('Create new brand specialization')
         return ctx
 
     def get_success_url(self):
         messages.success(self.request,
-                         _("Sub category '%s' was created successfully.") %
+                         _("Brand specialization '%s' was created successfully.") %
                          self.object.name)
         return reverse('dashboard:brand-sub-category-list')
 
@@ -580,7 +580,7 @@ class BrandSubCategoryManageView(generic.UpdateView):
 
     def form_valid(self, form):
         messages.success(
-            self.request, _("Sub category '%s' was updated successfully.") %
+            self.request, _("Brand specialization '%s' was updated successfully.") %
             self.sub_category.name)
         self.sub_category.name = form.cleaned_data['name']
         self.sub_category.save()
@@ -593,6 +593,6 @@ class BrandSubCategoryDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         messages.success(self.request,
-                         _("Sub category '%s' was deleted successfully.") %
+                         _("Brand specialization '%s' was deleted successfully.") %
                          self.object.name)
         return reverse('dashboard:brand-sub-category-list')

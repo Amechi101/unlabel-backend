@@ -4,7 +4,7 @@
 {% block body_class %}{{ block.super }} delete-page{% endblock %}
 
 {% block title %}
-    {% trans "Delete Sub Category" %} | {% trans "Brand Sub Category" %} | {{ block.super }}
+    {% trans "Delete Brand Specialization" %} | {% trans "Brand Specialization" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -13,7 +13,7 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Sub Category" %}</a>
+            <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Brand Specialization" %}</a>
         </li>
         <li class="active">{% trans "Delete?" %}</li>
     </ul>
@@ -26,7 +26,7 @@
 {% block dashboard_content %}
     <form action="" method="post">
         {% csrf_token %}
-        <p>{% trans "Are you sure you want to delete this brand sub category?"  %}</p>
+        <p>{% trans "Are you sure you want to delete this brand brand specialization?"  %}</p>
         <div class="form-actions">
             <button class="btn btn-lg btn-danger" type="submit" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button> {% trans "or" %}
             <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "cancel" %}</a>

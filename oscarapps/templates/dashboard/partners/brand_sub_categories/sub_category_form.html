@@ -2,10 +2,10 @@
 {% load category_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page brand sub category{% endblock %}
+{% block body_class %}{{ block.super }} create-page brand specialization{% endblock %}
 
 {% block title %}
-    {{ title }} | {% trans "Create Sub Category" %} | {% trans "Brand Sub Category" %} | {{ block.super }}
+    {{ title }} | {% trans "Create Brand Specialization" %} | {% trans "Brand Specialization" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -14,7 +14,7 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Sub Category" %}</a>
+            <a href="{% url 'dashboard:brand-sub-category-list' %}">{% trans "Brand Specialization" %}</a>
         </li>
         <li class="active">{{ title }}</li>
     </ul>

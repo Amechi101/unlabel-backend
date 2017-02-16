@@ -37,7 +37,7 @@ class DashboardApplication(DashboardApplication):
             url(r'^users/', include(self.users_app.urls)),
             url(r'^content-blocks/', include(self.promotions_app.urls)),
             url(r'^pages/', include(self.pages_app.urls)),
-            url(r'^partners/', include(self.partners_app.urls)),
+            url(r'^brands/', include(self.partners_app.urls)),
             url(r'^influencers/', include(self.influencers_app.urls)),
             url(r'^offers/', include(self.offers_app.urls)),
             url(r'^ranges/', include(self.ranges_app.urls)),
