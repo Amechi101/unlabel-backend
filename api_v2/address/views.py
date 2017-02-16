@@ -13,9 +13,9 @@ from rest_framework import status
 from django.core.mail.message import EmailMessage
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from .serializers import UserAddressSerializer #,StatesSerializer
+from .serializers import UserAddressSerializer, CountrySerializer, StateSerializer
 from oscar.apps.address.models import Country
-from oscarapps.address.models import States,Locations
+from oscarapps.address.models import States, Locations
 from django.http import HttpResponse
 
 
@@ -37,24 +37,41 @@ class AddAddressView(APIView):
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
+# class GetStatesView(APIView):
+#
+#     def get(self,request,*args,**kwargs):
+#         stateList=[]
+#         dict={}
+#         states=States.objects.all()
+#         values = render_to_string("common/state_select.html", {"states": states})
+#         return HttpResponse(json.dumps({'html': values}), content_type="application/json")
+#
+#         #
+#         #     states=States.objects.all()
+#         #     for state in states:
+#         #         dict["key"]=state.id
+#         #         dict["value"]=state.state
+#         #         stateList.append(dict)
+#         #         dict={}
+#         # return Response(stateList,status=status.HTTP_200_OK)
+
+
+class GetCountriesView(APIView):
+
+
+    def get(self,request,*args,**kwargs):
+        country = Country.objects.all()
+        country_serializer = CountrySerializer(country,many=True)
+        return Response(country_serializer.data)
+
 class GetStatesView(APIView):
 
     def get(self,request,*args,**kwargs):
-        country=request.GET.get('country')
-        stateList=[]
-        dict={}
-        if country == 'US':
-            states=States.objects.all()
-            values = render_to_string("common/state_select.html", {"states": states})
-            return HttpResponse(json.dumps({'html': values}), content_type="application/json")
+        states = States.objects.all()
+        states_serializer = StateSerializer(states, many=True)
+        return Response(states_serializer.data)
 
-        #
-        #     states=States.objects.all()
-        #     for state in states:
-        #         dict["key"]=state.id
-        #         dict["value"]=state.state
-        #         stateList.append(dict)
-        #         dict={}
-        # return Response(stateList,status=status.HTTP_200_OK)
+
+
 
 

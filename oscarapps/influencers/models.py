@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import random
 import string
 from decimal import Decimal
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -93,21 +94,18 @@ class InfluencerProductRentedDetails(models.Model):
 
 @receiver(pre_save, sender=Product, dispatch_uid="update_rental_date")
 def update_influencer_product_rental_info(sender, instance, **kwargs):
-    print("--------------------",instance.rental_status)
-    print("=================", (Product.objects.get(pk=instance.pk)).rental_status)
-    # try:
-    current_obj = Product.objects.get(pk=instance.pk)
-    influencer_product_reserve = InfluencerProductReserve.objects.filter(product=current_obj).values_list('influencer', flat=True)
-    if len(influencer_product_reserve) > 0 :
-        influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
-
-        if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
-            influencer_producted_rented_details = InfluencerProductRentedDetails()
-            influencer_producted_rented_details.influencer = influencer_user
-            influencer_producted_rented_details.product = current_obj
-            influencer_producted_rented_details.save()
-    # except:
-    #     print("influencer product rental details updation error--->",instance)
+    try:
+        current_obj = Product.objects.get(pk=instance.pk)
+        influencer_product_reserve = InfluencerProductReserve.objects.get(product=current_obj).values_list('influencer', flat=True)
+        if len(influencer_product_reserve) > 0 :
+                influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
+                if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
+                    influencer_producted_rented_details = InfluencerProductRentedDetails()
+                    influencer_producted_rented_details.influencer = influencer_user
+                    influencer_producted_rented_details.product = current_obj
+                    influencer_producted_rented_details.save()
+    except:
+        pass
 
 pre_save.connect(update_influencer_product_rental_info, sender=Product, dispatch_uid="update_rental_date")
 
