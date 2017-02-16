@@ -18,12 +18,12 @@ from users.models import User
 class InfluencerSignUpForm(forms.Form):
 
 
-    # MALE = 'M'
-    # FEMALE = 'F'
-    # sex_choice = (
-    #     (MALE, 'Male'),
-    #     (FEMALE, 'Female'),
-    # )
+    MALE = 'M'
+    FEMALE = 'F'
+    sex_choice = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+    )
 
     first_name = forms.CharField(label="First Name", required=True)
     last_name = forms.CharField(label="Last Name", required=True)
@@ -36,7 +36,7 @@ class InfluencerSignUpForm(forms.Form):
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
-    # gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
+    gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
     # height = forms.IntegerField(required=True, label="Height in Inches")
     # chest_or_bust = forms.IntegerField(required=True, label="Chest/Bust in Inches")
     # hips = forms.IntegerField(required=True, label="Hip size in Inches")
@@ -67,10 +67,10 @@ class InfluencerSignUpForm(forms.Form):
         # if waist is not None and len(str(waist)) > 2:
         #     raise forms.ValidationError("Please enter valid waist size in Inches")
         contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
-        if contact_number is None or contact_number_pattern.match(contact_number) is None:
+        if contact_number is not None and contact_number_pattern.match(contact_number) is None:
             raise forms.ValidationError("Please enter valid contact number")
         if User.objects.filter(email=email):
-            raise forms.ValidationError("Email already taken")
+            raise forms.ValidationError("Email already in use")
         password_pattern = re.compile(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
         if password1 is None or password_pattern.match(password1) is None:
             raise forms.ValidationError("Password should have at least 8 characters and one uppercase,"

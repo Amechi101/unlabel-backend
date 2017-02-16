@@ -1,31 +1,30 @@
 from __future__ import unicode_literals
+
 from django.contrib.auth.tokens import default_token_generator
-from django.http import HttpResponseRedirect
 from django.utils.http import urlsafe_base64_encode
-from api_v2.catalogue.serializers import PartnerSerializer
-from rest_framework import permissions,authentication
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+import re
+from rest_framework import permissions, authentication
 from django.core.mail.message import EmailMessage
-from users.models import User
 from django.contrib.sites.models import Site
 from django.utils.encoding import force_bytes
 from django.conf import settings
 from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.response import Response
-from rest_framework import pagination,generics,serializers
+from rest_framework import pagination, generics
 from rest_framework.views import APIView
-
+from rest_framework.viewsets import ModelViewSet
+from django.core.validators import validate_email
 from oscarapi import serializers
 from oscarapi.utils import login_and_upgrade_session
 from oscarapi.basket import operations
+from django.core.exceptions import ValidationError
 
-from .serializers import LoginSerializer
-
-from oscarapps.partner.models import PartnerFollow,Partner
-
+from api_v2.catalogue.serializers import PartnerSerializer
+from users.models import User
+from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer
+from oscarapps.partner.models import PartnerFollow, Partner
+from oscarapps.influencers.models import Influencers
 
 
 class LoginView(APIView):
@@ -127,9 +126,13 @@ class InfluencerForgotPassword(APIView):
     http_method_names = ('post',)
 
     def post(self, request, *args, **kwargs):
-        # if request.data["email"]:
         try:
-            if User.objects.filter(email__iexact=request.data["email"]).exists():
+            validate_email(request.data['email'])
+        except ValidationError:
+            content = {"message": "invalid email"}
+            return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+        try:
+            if User.objects.filter(email__iexact=request.data["email"],is_influencer=True,is_active=True).exists():
                 current_site = Site.objects.get_current()
                 domain = current_site.domain
                 user = User.objects.get(email__iexact=request.data["email"])
@@ -139,38 +142,39 @@ class InfluencerForgotPassword(APIView):
                     'user': user,
                     'token': default_token_generator.make_token(user),
                     'protocol': 'http',
-                }
-                try:
-                    tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode("utf-8") + '/' + context['token']
-                    mailid = request.data["email"]
-                    email = EmailMessage()
-                    email.subject = "Password Reset at unlabel"
-                    email.content_subtype = "html"
-                    email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                                        <body>
-                                        <br><br>
-                                        You're receiving this email because you requested a password reset for your Influencer account in the Unlabel App.
-                                        <br><br>
-                                        Please go to the following page and choose a new password:
-                                        <br><br>
-                                        """ + tosend + """
-                                        <br><br>
-                                        Thanks for using our site!
-                                        <br/>
-                                        <br/>
-                                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                                        </body>
-                                        </head>
-                                        </html>"""
-                    email.from_email = "Unlabel App"
-                    email.to = [mailid]
-                    email.send()
-                    return Response({'code': 'OK'}, status.HTTP_200_OK)
-                except:
-                    return Response({'code': 'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
+                    }
+                tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode(
+                    "utf-8") + '/' + context['token']
+                mailid = request.data["email"]
+                email = EmailMessage()
+                email.subject = "Password Reset at unlabel"
+                email.content_subtype = "html"
+                email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                                    <body>
+                                    <br><br>
+                                    You're receiving this email because you requested a password reset for your Influencer account in the Unlabel App.
+                                    <br><br>
+                                    Please go to the following page and choose a new password:
+                                    <br><br>
+                                    """ + tosend + """
+                                    <br><br>
+                                    Thanks for using our site!
+                                    <br/>
+                                    <br/>
+                                    <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                                    </body>
+                                    </head>
+                                    </html>"""
+                email.from_email = "Unlabel App"
+                email.to = [mailid]
+                email.send()
+                return Response({'code': 'OK'}, status.HTTP_200_OK)
+            else:
+                content = {'message : Not a valid Influencer email.'}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         except:
-            content = {"message": "email does not exist"}
-            return Response(content, status=status.HTTP_404_NOT_FOUND)
+            return Response({'code': 'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class InfluencerFollowedBrands(generics.ListAPIView):
     authentication = authentication.SessionAuthentication
@@ -181,8 +185,105 @@ class InfluencerFollowedBrands(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         if self.request.user.is_authenticated() and self.request.user.is_anonymous() == False:
             influencer = self.request.user
-            follow_list = PartnerFollow.objects.filter(customer=influencer).values_list('partner',flat = True)
+            follow_list = PartnerFollow.objects.filter(customer=influencer).values_list('partner', flat=True)
             queryset = Partner.objects.filter(pk__in=follow_list)
             return queryset
 
+class InfluencerProfileUpdate(APIView):
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get','post')
+    serializer_class = InfluencerProfileSerializer
+
+    def get(self,request,*args,**kwargs):
+        if request.user.is_authenticated():
+            if request.user.is_influencer == True:
+                ser = self.serializer_class(request.user, many=False)
+                return Response(ser.data)
+            else:
+                content = {"message":"user is not an influencer."}
+                return Response(content,status=status.HTTP_204_NO_CONTENT)
+        content = {"message":"user is not authenticated."}
+        return Response(content,status=status.HTTP_204_NO_CONTENT)
+
+
+    def post(self,request,*args,**kwargs):
+        contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
+        name_pattern = re.compile(r'^[A-Za-z.]+$')
+
+        if request.user.is_authenticated():
+            try:
+                influencer_user = request.user
+            except :
+                content = {"message": "Please login and try again"}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            if influencer_user.is_influencer == True:
+                if request.data['email']:
+                    try:
+                        validate_email(request.data['email'])
+                        email_exists = User.objects.filter(email=request.data["email"])
+                        if len(email_exists) != 0:
+                            content = {"message": "email already in use."}
+                            return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+                    except ValidationError:
+                        content = {"message": "invalid email"}
+                        return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+
+                if request.data["contact_number"] is None or \
+                                contact_number_pattern.match(request.data["contact_number"]) is None:
+                    content = {"message": "Please enter valid contact number"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                if request.data["first_name"] is None or name_pattern.match(request.data["first_name"]) is None :
+                    content = {"message": "Please enter valid firt name"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                if request.data["last_name"] is None or name_pattern.match(request.data["first_name"]) is None :
+                    content = {"message": "Please enter valid last name"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+                influencer_user.contact_number = request.data["contact_number"]
+                influencer_user.first_name = request.data["first_name"]
+                influencer_user.last_name = request.data["last_name"]
+                influencer_user.email = request.data['email']
+                influencer_user.save();
+
+                content = {"message" : "Influencer profile has been successfully updated."}
+                return Response(content,status = status.HTTP_200_OK)
+            else:
+                content = {"message" : "user is not an influencer"}
+                return Response(content,status = status.HTTP_200_OK)
+
+class InfluencerPicAndBio(APIView):
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get','post')
+    serializer_class = InfluencerPicAndBioSerializer
+
+    def get(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            try:
+                influencer = Influencers.objects.get(users=request.user)
+            except:
+                influencer = Influencers()
+                influencer.users = request.user
+                influencer.save()
+            ser = self.serializer_class(influencer, many=False)
+            return Response(ser.data)
+        content = {"message":"user not authenticated"}
+        return Response(content,status=status.HTTP_204_NO_CONTENT)
+
+    def post(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            influencer_user = request.user
+            influencer = Influencers.objects.get(users=request.user)
+            if request.data["bio"] is None:
+                content = {"message": "Please enter valid a valid bio."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            if request.data["image"] is None:
+                content = {"message": "Please select a valid profile image."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            influencer.bio = request.data["bio"]
+            influencer.image = request.data["image"]
+            influencer.save()
+            content = {"message":"successfully updated."}
+            return Response(content,status=status.HTTP_200_OK)
 

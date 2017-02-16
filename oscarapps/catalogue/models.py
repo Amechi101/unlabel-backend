@@ -139,6 +139,7 @@ class Product(AbstractProduct, BaseApplicationModel):
     influencer_product_note = models.TextField(blank=True, null=True,
                                               verbose_name=_('Influencer product Note'))
     weight = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True, verbose_name=_('Weight information'))
+
     on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
     size = models.ManyToManyField(Size, blank=True, null=True, verbose_name="Size")
     size_class = models.ForeignKey(SizeClass, blank=True, null=True, verbose_name="Size class")

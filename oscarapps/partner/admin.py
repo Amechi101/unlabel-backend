@@ -6,12 +6,14 @@ BrandCategories = get_model('partner', 'Category')
 BrandSubCategories = get_model('partner', 'SubCategory')
 BrandFollow = get_model('partner', 'PartnerFollow')
 RentalInformation = get_model('partner', 'RentalInformation')
+PartnerInvite = get_model('partner', 'PartnerInvite')
 
 admin.site.register(BrandStyle)
 admin.site.register(BrandCategories)
 admin.site.register(BrandSubCategories)
 admin.site.register(BrandFollow)
 admin.site.register(RentalInformation)
+admin.site.register(PartnerInvite)
 
 
 

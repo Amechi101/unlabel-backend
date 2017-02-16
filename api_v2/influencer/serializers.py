@@ -2,9 +2,8 @@ from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
 from oscarapi.utils import overridable
-
-
-User = get_user_model()
+from users.models import User
+from oscarapps.influencers.models import Influencers
 
 
 def field_length(fieldname):
@@ -45,3 +44,16 @@ class LoginSerializer(serializers.Serializer):
         # set instance to the user so we can use this in the view
         self.instance = user
         return attrs
+
+class InfluencerProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields=['contact_number','email','first_name','last_name']
+
+class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Influencers
+        fields = '__all__'
+
