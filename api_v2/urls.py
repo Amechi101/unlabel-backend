@@ -76,7 +76,6 @@ urlpatterns = [
 
 
 
-
 ]
 
 ##### address urls  #####

@@ -1,3 +1,5 @@
+
+
 from oscar.apps.catalogue.abstract_models import AbstractProduct, AbstractCategory, AbstractProductImage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -17,13 +19,12 @@ class BaseApplicationModel(models.Model):
         app_label = 'Catalogue'
         abstract = True
 
-
 class InfluencerProductImage(models.Model):
 
     product = models.ForeignKey(
         'catalogue.Product', related_name='influencer_product_images', verbose_name=_("Product"))
     original = models.ImageField(
-        _("Original"), upload_to=settings.OSCAR_IMAGE_FOLDER, max_length=255)
+        _("Original"), upload_to='Influencer Product Images', max_length=255)
     caption = models.CharField(_("Caption"), max_length=200, blank=True)
 
     #: Use display_order to determine which is the "primary" image
@@ -62,6 +63,40 @@ class InfluencerProductImage(models.Model):
             image.save()
 
 
+class SizeClass(BaseApplicationModel):
+    name = models.CharField(max_length=100, blank=True, null=True, verbose_name=_('Size Class'))
+
+    class Meta:
+        verbose_name = _('Size Class')
+        verbose_name_plural = _('Size Classes')
+
+    def __str__(self):
+        return "{0}".format(self.name)
+
+
+class Size(BaseApplicationModel):
+    MALE = 'M'
+    FEMALE = 'F'
+    UNISEX = 'U'
+    sex_choice = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+        (UNISEX, 'Unisex'),
+    )
+
+    #Size class example 'footwear','jeans' etc
+    size_class = models.ForeignKey(SizeClass, null=True, blank=True, verbose_name=_('Size class'))
+    size_sex_type = models.CharField(max_length=1, blank=True, null=True, choices=sex_choice, verbose_name=_('Size sex type'))
+    size = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('Size'))
+
+    class Meta:
+        verbose_name = _('Size')
+        verbose_name_plural = _('Sizes')
+
+    def __str__(self):
+        return "{0}".format(self.size_sex_type+" "+self.size)
+
+
 class Product(AbstractProduct, BaseApplicationModel):
     MALE = 'M'
     FEMALE = 'F'
@@ -98,13 +133,16 @@ class Product(AbstractProduct, BaseApplicationModel):
         (YES, 'Yes'),
         (NO, 'No'),
     )
-    brand = models.ForeignKey(Partner, blank=True, null=True, default="", verbose_name="Brand")
-    material_info = models.TextField(blank=True, default="", verbose_name=_('Material & Care Information'))
+    brand = models.ForeignKey(Partner, blank=True, null=True, verbose_name="Brand")
+    material_info = models.TextField(blank=True, default="", verbose_name=_('Material & care information'))
     likes = models.PositiveIntegerField(default=0)
-    influencer_description = models.TextField(max_length=200, blank=True, null=True,
-                                              verbose_name=_('Influencer Product Description'))
-    weight = models.PositiveIntegerField(blank=True, null=True, verbose_name=_('Product weight information'))
+    influencer_product_note = models.TextField(blank=True, null=True,
+                                              verbose_name=_('Influencer product Note'))
+    weight = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True, verbose_name=_('Weight information'))
+
     on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
+    size = models.ManyToManyField(Size, blank=True, null=True, verbose_name="Size")
+    size_class = models.ForeignKey(SizeClass, blank=True, null=True, verbose_name="Size class")
     item_sex_type = models.CharField(
         max_length=1,
         choices=item_sex_choice,
@@ -120,7 +158,7 @@ class Product(AbstractProduct, BaseApplicationModel):
         max_length=3,
         choices=rental_status_choice,
         default=NONE,
-        verbose_name=_("Rental Status")
+        verbose_name=_("Rental status")
     )
     requires_shipping = models.CharField(
         max_length=1,
@@ -142,8 +180,8 @@ class Product(AbstractProduct, BaseApplicationModel):
             self.description = strip_tags(self.description)
         if self.material_info:
             self.material_info = strip_tags(self.material_info)
-        if self.influencer_description:
-            self.influencer_description = strip_tags(self.influencer_description)
+        if self.influencer_product_note:
+            self.influencer_product_note = strip_tags(self.influencer_product_note)
         super(Product, self).save(*args, **kwargs)
 
 
