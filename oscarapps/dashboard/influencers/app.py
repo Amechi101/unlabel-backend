@@ -5,6 +5,9 @@ from oscar.core.loading import get_class
 
 
 class InfluencersDashboardApplication(CorePartnersDashboardApplication):
+    permissions_map = {
+        'index': (['is_staff'], ['partner.dashboard_access']),
+    }
 
     influencer_list_view = get_class('oscarapps.dashboard.influencers.views',
                                  'InfluencerListView')

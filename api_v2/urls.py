@@ -74,6 +74,8 @@ urlpatterns = [
 
     url(r'^influencer_live_products/$',catalogueViews.InfluencerLiveProducts.as_view(), name='influencer_reserved_products'),
 
+
+
 ]
 
 ##### address urls  #####

@@ -7,51 +7,74 @@ from django.forms.models import inlineformset_factory
 from oscar.core.loading import get_model
 from oscar.forms.widgets import ImageInput
 from oscar.apps.dashboard.catalogue.forms import ProductForm as CoreProductForm
-from oscar.apps.dashboard.catalogue.forms import StockRecordForm as CoreStockRecordForm
+from oscar.apps.dashboard.catalogue.forms import StockRecordForm as \
+    CoreStockRecordForm
+from oscar.apps.dashboard.catalogue.forms import ProductImageForm
+
 
 Product = get_model('catalogue', 'Product')
 StockRecord = get_model('partner', 'StockRecord')
 InfluencerProductImage = get_model('catalogue', 'InfluencerProductImage')
+ProductImage = get_model('catalogue', 'ProductImage')
+SizeClass = get_model('catalogue', 'SizeClass')
+Size = get_model('catalogue', 'Size')
+
 
 class ProductForm(CoreProductForm):
+    # size_class = forms.ModelChoiceField(queryset=SizeClass.objects.all())
+    # size = forms.ModelMultipleChoiceField(queryset=Size.objects.all())
+
+    def __init__(self, user, *args, **kwargs):
+        # The user kwarg is not used by stock StockRecordForm. We pass it
+        # anyway in case one wishes to customise the partner queryset
+        self.user = user
+        super(ProductForm, self).__init__(*args, **kwargs)
+
+        # Restrict accessible partners for non-staff users
+        if not self.user.is_staff:
+            self.fields['brand'].queryset = self.user.partners.all()
 
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'item_sex_type', 'status',
-            'rental_status', 'brand', 'weight', 'on_sale', 'requires_shipping']
+            'title', 'upc', 'description', 'material_info', 'item_sex_type',
+            'status', 'rental_status', 'brand',
+            'weight', 'on_sale', 'requires_shipping']
         labels = {
             'title': _('Name'),
         }
+
+
 
 
 class StockRecordForm(CoreStockRecordForm):
     price_retail = forms.IntegerField(min_value=0)
     price_excl_tax = forms.IntegerField(min_value=0)
     cost_price = forms.IntegerField(min_value=0)
-    class Meta(CoreStockRecordForm.Meta):
 
+    class Meta(CoreStockRecordForm.Meta):
         fields = [
             'partner', 'partner_sku',
             'price_currency', 'price_excl_tax', 'price_retail', 'cost_price',
             'num_in_stock', 'low_stock_threshold',
         ]
 
+
 BaseStockRecordFormSet = inlineformset_factory(
     Product, StockRecord, form=StockRecordForm, extra=1)
 
-class StockRecordFormSet(BaseStockRecordFormSet):
 
+class StockRecordFormSet(BaseStockRecordFormSet):
     def __init__(self, product_class, user, *args, **kwargs):
         self.user = user
         self.require_user_stockrecord = not user.is_staff
         self.product_class = product_class
 
-        if not user.is_staff and \
-           'instance' in kwargs and \
-           'queryset' not in kwargs:
+        if not user.is_staff and 'instance' in kwargs \
+                and 'queryset' not in kwargs:
             kwargs.update({
-                'queryset': StockRecord.objects.filter(product=kwargs['instance'],
-                                                       partner__in=user.partners.all())
+                'queryset': StockRecord.objects.filter(
+                    product=kwargs['instance'],
+                    partner__in=user.partners.all())
             })
 
         super(StockRecordFormSet, self).__init__(*args, **kwargs)
@@ -62,11 +85,6 @@ class StockRecordFormSet(BaseStockRecordFormSet):
         If user has only one partner associated, set the first
         stock record's partner to it. Can't pre-select for staff users as
         they're allowed to save a product without a stock record.
-
-        This is intentionally done after calling __init__ as passing initial
-        data to __init__ creates a form for each list item. So depending on
-        whether we can pre-select the partner or not, we'd end up with 1 or 2
-        forms for an unbound form.
         """
         if self.require_user_stockrecord:
             try:
@@ -86,23 +104,18 @@ class StockRecordFormSet(BaseStockRecordFormSet):
             i, **kwargs)
 
     def clean(self):
-        """
-        If the user isn't a staff user, this validation ensures that at least
-        one stock record's partner is associated with a users partners.
-        """
-        if any(self.errors):
-            return
-        if self.require_user_stockrecord:
-            stockrecord_partners = set([form.cleaned_data.get('partner', None)
-                                        for form in self.forms])
-            user_partners = set(self.user.partners.all())
-            if not user_partners & stockrecord_partners:
-                raise exceptions.ValidationError(
-                    _("At least one stock record must be set to a partner that"
-                      " you're associated with."))
+        pass
+
+BaseProductImageFormSet = inlineformset_factory(
+    Product, ProductImage, form=ProductImageForm, extra=5)
+
+
+class ProductImageFormSet(BaseProductImageFormSet):
+    def __init__(self, product_class, user, *args, **kwargs):
+        super(ProductImageFormSet, self).__init__(*args, **kwargs)
+
 
 class InfluencerProductImageForm(forms.ModelForm):
-
     class Meta:
         model = InfluencerProductImage
         fields = ['product', 'original', 'caption']
@@ -131,6 +144,5 @@ BaseInfluencerProductImageFormSet = inlineformset_factory(
 
 
 class InfluencerProductImageFormSet(BaseInfluencerProductImageFormSet):
-
     def __init__(self, product_class, user, *args, **kwargs):
         super(InfluencerProductImageFormSet, self).__init__(*args, **kwargs)

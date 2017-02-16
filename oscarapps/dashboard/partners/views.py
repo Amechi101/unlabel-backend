@@ -186,7 +186,7 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         return address
 
     def get_initial(self):
-        return {'name': self.partner.name,}
+        return {'name': self.partner.name, }
 
     def get_context_data(self, **kwargs):
 

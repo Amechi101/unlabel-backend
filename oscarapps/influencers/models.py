@@ -81,18 +81,34 @@ class InfluencerProductReserve(models.Model):
     class Meta:
         verbose_name_plural = _('Influencer Product Reservations')
 
-class InfluencerProductedRentedDetails(models.Model):
+
+class InfluencerProductRentedDetails(models.Model):
+
     influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
     product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
     date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
 
     class Meta:
-        verbose_name_plural = _('Influencer Product Reservations')
+        verbose_name_plural = _('Influencer Product-Rentals')
 
 @receiver(pre_save, sender=Product, dispatch_uid="update_rental_date")
-def update_suggestion_model_with_dish(sender, instance, **kwargs):
-    print("--------------------",instance)
+def update_influencer_product_rental_info(sender, instance, **kwargs):
+    print("--------------------",instance.rental_status)
+    print("=================", (Product.objects.get(pk=instance.pk)).rental_status)
+    # try:
+    current_obj = Product.objects.get(pk=instance.pk)
+    influencer_product_reserve = InfluencerProductReserve.objects.filter(product=current_obj).values_list('influencer', flat=True)
+    if len(influencer_product_reserve) > 0 :
+        influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
 
-pre_save.connect(update_suggestion_model_with_dish, sender=Product, dispatch_uid="update_rental_date")
+        if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
+            influencer_producted_rented_details = InfluencerProductRentedDetails()
+            influencer_producted_rented_details.influencer = influencer_user
+            influencer_producted_rented_details.product = current_obj
+            influencer_producted_rented_details.save()
+    # except:
+    #     print("influencer product rental details updation error--->",instance)
+
+pre_save.connect(update_influencer_product_rental_info, sender=Product, dispatch_uid="update_rental_date")
 
 

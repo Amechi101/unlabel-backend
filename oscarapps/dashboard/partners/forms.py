@@ -8,6 +8,7 @@ from django.core.validators import validate_email
 
 from oscar.core.loading import get_model
 from oscar.core.validators import password_validators
+from oscar.apps.catalogue.models import ProductClass
 
 from oscarapps.address.models import Locations, States, Country
 from oscarapps.partner.models import Partner, Category, Style, SubCategory, RentalInformation
@@ -28,7 +29,7 @@ class PartnerCreateForm(forms.Form):
         validators=password_validators)
     password2 = forms.CharField(
         required=True,
-        help_text="Password should have at least  characters with one uppercase,"
+        help_text="Password should have at least 8 characters with one uppercase,"
                   "lowercase,digit,special character",
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
@@ -43,7 +44,7 @@ class PartnerCreateForm(forms.Form):
     category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all(), required=True)
     sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
                                                   required=True)
-    is_active = forms.BooleanField(initial=True, help_text="Uncheck if you want to deactivate store")
+    is_active = forms.BooleanField(initial=True, help_text="Uncheck to deactivate store")
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1', '')
@@ -166,13 +167,23 @@ class PartnerRentalInfoForm(forms.ModelForm):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
     )
-    start_time = forms.TimeField(label="Start Time", help_text="Enter time in 24 hours format")
-    end_time = forms.TimeField(label="End Time", help_text="Enter time in 24 hours format")
-    day = forms.MultipleChoiceField(label="Days", choices=day_choice)
+    AM = 'AM'
+    PM = 'PM'
+    time_period_choice = (
+        (AM, 'AM'),
+        (PM, 'PM'),
+    )
+    day = forms.MultipleChoiceField(label="Days", choices=day_choice, help_text='Choose rental days')
+    start_time = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30")
+    start_time_period = forms.ChoiceField(label='Start Time Period', choices=time_period_choice)
+    end_time = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30")
+    end_time_period = forms.ChoiceField(label='End Time Period', choices=time_period_choice)
     contact_number = forms.CharField(required=True, label="Contact Number")
+
     class Meta:
         model = RentalInformation
-        fields = ('day', 'start_time', 'end_time', 'contact_number',
+        fields = ('day', 'start_time', 'start_time_period', 'end_time', 'end_time_period',
+                  'contact_number',
                   'post_box', 'zipcode', 'city', 'country', 'state',)
 
         labels = {'zipcode': 'Zip Code'}
