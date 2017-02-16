@@ -8,7 +8,7 @@ from oscarapi.utils import (
 
 from oscarapps.partner.models import PartnerFollow,RentalInformation
 from oscarapps.partner.models import Partner, Style
-from oscarapps.address.models import Locations
+from oscarapps.address.models import Locations,States
 from oscarapps.catalogue.models import Product,Size
 from oscar.apps.partner.models import StockRecord
 from oscarapps.influencers.models import Influencers,InfluencerProductReserve
