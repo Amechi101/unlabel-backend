@@ -5,10 +5,12 @@ import random
 import string
 from decimal import Decimal
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
 from django.core.validators import RegexValidator
 from django.conf import settings
+from django.db.models.signals import pre_save
 
 from oscarapps.address.models import Locations
 from oscarapps.catalogue.models import Product
@@ -78,4 +80,33 @@ class InfluencerProductReserve(models.Model):
 
     class Meta:
         verbose_name_plural = _('Influencer Product Reservations')
+
+
+class InfluencerProductRentedDetails(models.Model):
+    influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
+    date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
+
+    class Meta:
+        verbose_name_plural = _('Influencer Product-Rentals')
+
+@receiver(pre_save, sender=Product, dispatch_uid="update_rental_date")
+def update_influencer_product_rental_info(sender, instance, **kwargs):
+    print("--------------------",instance.rental_status)
+    print("=================", (Product.objects.get(pk=instance.pk)).rental_status)
+    # try:
+    current_obj = Product.objects.get(pk=instance.pk)
+    influencer_product_reserve = InfluencerProductReserve.objects.filter(product=current_obj).values_list('influencer', flat=True)
+    if len(influencer_product_reserve) > 0 :
+        influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
+
+        if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
+            influencer_producted_rented_details = InfluencerProductRentedDetails()
+            influencer_producted_rented_details.influencer = influencer_user
+            influencer_producted_rented_details.product = current_obj
+            influencer_producted_rented_details.save()
+    # except:
+    #     print("influencer product rental details updation error--->",instance)
+
+pre_save.connect(update_influencer_product_rental_info, sender=Product, dispatch_uid="update_rental_date")
 
