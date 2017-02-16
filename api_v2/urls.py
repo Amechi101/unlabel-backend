@@ -74,6 +74,8 @@ urlpatterns = [
 
     url(r'^influencer_live_products/$',catalogueViews.InfluencerLiveProducts.as_view(), name='influencer_reserved_products'),
 
+    # url(r'^influencer_product_images/$',catalogueViews)
+
 
 
 ]
@@ -89,7 +91,10 @@ urlpatterns = urlpatterns + [
 #### front end requests
 
 urlpatterns = urlpatterns + [
-    url(r'get_states',addressViews.GetStatesView.as_view(),name='get_states')
+    url(r'get_countries',addressViews.GetCountriesView.as_view(), name='get_countries'),
+
+    url(r'get_states',addressViews.GetStatesView.as_view(), name='get_countries'),
+
 ]
 
 
