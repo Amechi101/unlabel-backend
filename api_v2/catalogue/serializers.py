@@ -9,7 +9,7 @@ from oscarapi.utils import (
 from oscarapps.partner.models import PartnerFollow,RentalInformation
 from oscarapps.partner.models import Partner, Style
 from oscarapps.address.models import Locations,States
-from oscarapps.catalogue.models import Product,Size
+from oscarapps.catalogue.models import Product,Size,InfluencerProductImage
 from oscar.apps.partner.models import StockRecord
 from oscarapps.influencers.models import Influencers,InfluencerProductReserve
 from oscar.core.loading import get_model, get_class
@@ -190,35 +190,40 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['material_info','influencer_description','weight', 'item_sex_type', 'rental_status','requires_shipping',
+        fields = ['material_info','influencer_product_note','weight', 'item_sex_type', 'rental_status','requires_shipping',
                   'title', 'description', ]
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
     rental_info = RentalInfoSerializer()
-    # products = BrandProductSerializer()    #serializers.SerializerMethodField(source='get_products')
 
     class Meta:
         model = Partner
         fields = '__all__'
 
-    # def get_products(self,obj):
-    #     request = self.context.get("request")
-    #     if request and hasattr(request, "user") and request.user.is_anonymous() == False:
-        # influencer_profile = Influencers.objects.filter(users=request.user)
-        # prod_reserve_list = InfluencerProductReserve.objects.filter(influencer=influencer_profile)
-        # products = Product.objects.filter(pk__in=prod_reserve_list)
-        # ser = BrandProductSerializer(data=products)
-        # return ser.data
-
-        # else:
-        #     return False
-
 
 class InfluencerBrandProductSerializer(serializers.Serializer):
-    products = InfluencerProductSerializer(many=True)
+    products = ProductSerializer(many=True)
     brand = InfluencerBrandSerializer()
 
     def validate(self, attrs):
         return attrs
+
+
+class InfluencerProductImagesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=InfluencerProductImage
+        fields='__all__'
+
+class InfluencerImageSerializer(serializers.Serializer):
+    image = serializers.ImageField(required=True)
+    product_id = serializers.IntegerField(required=True)
+
+class InfluencerProductNoteSerializer(serializers.Serializer):
+    note = serializers.CharField(required=True,max_length=200)
+
+
+
+
 

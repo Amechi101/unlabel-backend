@@ -228,22 +228,27 @@ class InfluencerProfileUpdate(APIView):
                     except ValidationError:
                         content = {"message": "invalid email"}
                         return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+                    influencer_user.email = request.data['email']
 
                 if request.data["contact_number"] is None or \
-                                contact_number_pattern.match(request.data["contact_number"]) is None:
+                                contact_number_pattern.match(request.data["contact_number"]) is not None:
                     content = {"message": "Please enter valid contact number"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    influencer_user.contact_number = request.data["contact_number"]
+
                 if request.data["first_name"] is None or name_pattern.match(request.data["first_name"]) is None :
                     content = {"message": "Please enter valid firt name"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    influencer_user.first_name = request.data["first_name"]
+
                 if request.data["last_name"] is None or name_pattern.match(request.data["first_name"]) is None :
                     content = {"message": "Please enter valid last name"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    influencer_user.last_name = request.data["last_name"]
 
-                influencer_user.contact_number = request.data["contact_number"]
-                influencer_user.first_name = request.data["first_name"]
-                influencer_user.last_name = request.data["last_name"]
-                influencer_user.email = request.data['email']
                 influencer_user.save();
 
                 content = {"message" : "Influencer profile has been successfully updated."}
