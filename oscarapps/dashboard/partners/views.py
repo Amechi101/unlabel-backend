@@ -1,29 +1,73 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
-from django.views import generic
-from django.core.urlresolvers import reverse, reverse_lazy
-from django.views.generic import FormView
+import uuid
 
-from oscar.core.loading import get_classes, get_model
-from oscar.views import sort_queryset
-from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
-from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
-from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
-from oscar.apps.dashboard.partners.forms import PartnerSearchForm
-
+from oscarapps.address.models import States, Country, Locations
 from oscarapps.dashboard.partners.forms import PartnerCreateForm, PartnerManageForm, PartnerRentalInfoForm
 from oscarapps.partner.models import Partner
-from oscarapps.address.models import States, Country, Locations
+from oscarapps.partner.models import PartnerInvite
 from oscarapps.partner.models import Style, Category, SubCategory
 from users.models import User
+
+from django.contrib import messages
+from django.contrib.sites.models import Site
+from django.core.mail import EmailMessage
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.template import Context
+from django.template import loader
+from django.utils.translation import ugettext_lazy as _
+from django.views import generic
+from django.views.generic import FormView
+from oscar.apps.dashboard.partners.forms import PartnerSearchForm
+from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
+from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
+from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
+from oscar.core.loading import get_classes, get_model
+from oscar.views import sort_queryset
+from django.contrib.auth.models import Permission
 
 # =======
 #Partner views
 #=======
 
 class PartnerListView(CorePartnerListView):
+
+
+    def post(self, request, *args, **kwargs):
+
+        invite_email = request.POST.get("invite_email")
+        if invite_email is not None and invite_email!="":
+            current_site = Site.objects.get_current()
+            domain = current_site.domain
+            context = {
+                'domain': domain,
+                'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
+                'user': invite_email,
+                'protocol': 'http',
+            }
+            invite_sent = PartnerInvite()
+            invite_sent.email = context['user']
+            invite_sent.code = context['verify_code']
+            tosend = context['protocol'] + '://' + context['domain'] + '/partners/partner-sign-up/' + context['verify_code'] + '/'
+            email = EmailMessage()
+            email.subject = "Partner invitation from Unlabel"
+            email.content_subtype = "html"
+            tem = loader.get_template('dashboard/partners/partner_email_body.html')
+            context = Context({'tosend':tosend})
+            body = tem.render(context)
+            email.body = body
+            email.from_email = "Unlabel App"
+            email.to = [invite_email]
+            email.send()
+
+            messages.success(
+            self.request, "An invitation email was successfully sent to '%s' " %invite_sent.email)
+            invite_sent.save()
+            return HttpResponseRedirect("/oscar/dashboard/partners/")
+        else:
+            return HttpResponseRedirect("/oscar/dashboard/partners/")
+
+
     def get_queryset(self):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
@@ -52,7 +96,6 @@ class PartnerCreateView(generic.View):
     def get(self, request, *args, **kwargs):
         return render(request, 'dashboard/partners/partner_form.html', {'form': PartnerCreateForm})
 
-
     def post(self, request, *args, **kwargs):
         partner_form = PartnerCreateForm(data=request.POST)
         if partner_form.is_valid():
@@ -63,6 +106,11 @@ class PartnerCreateView(generic.View):
                                                  )
             partner_user.save()
             partner_user.set_password(partner_form['password1'].value())
+            partner_user.save()
+
+            dashboard_access_perm = Permission.objects.get(
+                codename='dashboard_access', content_type__app_label='partner')
+            partner_user.user_permissions.add(dashboard_access_perm)
             partner_user.save()
 
             try:
@@ -101,6 +149,7 @@ class PartnerManageView(CorePartnerManageView, FormView):
         return self.partner
 
     def get_initial(self):
+
       return {'city': self.partner.location.city,
             'state': self.partner.location.state,
             'country': self.partner.location.country,
@@ -108,11 +157,9 @@ class PartnerManageView(CorePartnerManageView, FormView):
             'password': self.partner.users.all().first().password,
             'first_name': self.partner.users.all().first().first_name,
             'last_name': self.partner.users.all().first().last_name,
-            'is_active': self.partner.users.all().first().is_active
-      }
+            'is_active': self.partner.is_active}
 
     def get_context_data(self, **kwargs):
-
         ctx = super(PartnerManageView, self).get_context_data(**kwargs)
         ctx['partner'] = self.partner
         ctx['title'] = self.partner.name
@@ -139,8 +186,7 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         return address
 
     def get_initial(self):
-        return {'name': self.partner.name,
-        }
+        return {'name': self.partner.name, }
 
     def get_context_data(self, **kwargs):
 
@@ -161,8 +207,6 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         # locationForm=form.save()
         # locationForm.save()
         return super(PartnerRentalInfoManageView, self).form_valid(form)
-
-
 
 
 class PartnerDeleteView(CorePartnerDeleteView):
@@ -372,9 +416,7 @@ class BrandStyleListView(generic.ListView):
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
             return qs
-
         data = self.form.cleaned_data
-
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
             self.description = _("Brand style matching '%s'") % data['name']
@@ -474,16 +516,13 @@ class BrandSubCategoryListView(generic.ListView):
         qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
         self.description = _("All Sub Categories")
-
         # We track whether the queryset is filtered to determine whether we
         # show the search form 'reset' button.
         self.is_filtered = False
         self.form = self.form_class(self.request.GET)
         if not self.form.is_valid():
             return qs
-
         data = self.form.cleaned_data
-
         if data['name']:
             qs = qs.filter(name__icontains=data['name'])
             self.description = _("Sub categories matching '%s'") % data['name']

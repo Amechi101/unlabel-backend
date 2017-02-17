@@ -82,6 +82,13 @@ class RentalInformation(Locations):
         (SATURDAY, 'Saturday'),
         (SUNDAY, 'Sunday'),
     )
+
+    AM = 'AM'
+    PM = 'PM'
+    time_period_choice = (
+        (AM, 'AM'),
+        (PM, 'PM'),
+    )
     post_box = models.CharField(max_length=20, blank=True, null=True, default="", verbose_name=_('Apartment/P.O.Box'))
     zipcode = models.CharField(max_length=10, blank=True, null=True, default="", verbose_name=_('Zip code'))
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: "
@@ -89,7 +96,9 @@ class RentalInformation(Locations):
     contact_number = models.CharField(validators=[phone_regex], max_length=20, blank=True)
     day = MultiSelectField(choices=day_choice)
     start_time = models.TimeField(blank=True, null=True, verbose_name=_("Start Time"))
+    start_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
     end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
+    end_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
 
     class Meta:
         verbose_name = _('Rental Information')
@@ -97,6 +106,7 @@ class RentalInformation(Locations):
     def __str__(self):
 
         return "{0}".format(self.day)
+
 
 class Partner(AbstractPartner, BaseApplicationModel):
     slug = models.SlugField(max_length=255, default="", blank=True, null=True, verbose_name=_('Brand Slug'))
@@ -131,6 +141,15 @@ class PartnerFollow(models.Model):
     def __str__(self):
         return self.customer.email+" --> "+self.partner.name
 
+
+class PartnerInvite(models.Model):
+    email = models.EmailField(blank=True,null=True)
+    code = models.CharField(max_length=20, blank=False,null=False)
+    date_sent = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def  __str__(self):
+        return self.email
 
 
 from oscar.apps.partner.models import *

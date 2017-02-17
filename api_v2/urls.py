@@ -10,6 +10,9 @@ from .utils import *
 #####   customer urls   #####
 urlpatterns = [
 
+    url(r'testing_pushnotes/',
+        customerViews.PushNotificationView.as_view(), name='push_notes'),
+
     ###-------customer apis
     url(r'customer_register/',
         customerViews.CustomerRegisterView.as_view(),name='register_view'),
@@ -50,18 +53,42 @@ urlpatterns = [
     url(r'^Influencer_partnerList/',catalogueViews.InfluencerBrandListView.as_view(),name='influencer_brand_list_view'),
 
 
-    url(r'^partner_follow/(?P<partner_id>[0-9]+)/', catalogueViews.PartnerFollowView.as_view(),name='Partner_follow_view'),
+    url(r'^partner_follow/(?P<partner_id>[0-9]+)/', catalogueViews.PartnerFollowView.as_view(),
+        name='Partner_follow_view'),
 
-    url(r'^influencer_reserve_product/(?P<product_id>[0-9]+)/',catalogueViews.InfluencerReserveProduct.as_view(), name='influencer_product_reserve'),
-
-    url(r'^influencer_product_list/',
-        catalogueViews.InfluencerProductListView.as_view(),name='influencer_product_list_view'),
+    url(r'^influencer_reserve_product/(?P<product_id>[0-9]+)/',catalogueViews.InfluencerReserveProduct.as_view(),
+        name='influencer_product_reserve'),
 
     url(r'^login/$', influencerViews.LoginView.as_view(), name='influencer-login'),
 
-    url(r'^influencer_followed_partners/$',influencerViews.InfluencerFollowedBrands.as_view(),name='influencer_followed_brands'),
+    url(r'^influencer_followed_partners/$',influencerViews.InfluencerFollowedBrands.as_view(),
+        name='influencer_followed_brands'),
 
+    url(r'^influencer_profile_update/$',influencerViews.InfluencerProfileUpdate.as_view(),
+        name='influencer_profile_update'),
 
+    url(r'^influencer_image_bio/',influencerViews.InfluencerPicAndBio.as_view(),name='influencer_image_bio'),
+
+    url(r'^influencer_reserved_products/$',catalogueViews.InfluencerReservedProducts.as_view(),
+        name='influencer_reserved_products'),
+
+    url(r'^influencer_rented_products/$',catalogueViews.InfluencerRentedProducts.as_view(),
+        name='influencer_rented_products'),
+
+    url(r'^influencer_live_products/$',catalogueViews.InfluencerLiveProducts.as_view(),
+        name='influencer_live_products'),
+
+    url(r'^influencer_add_product_images/$',catalogueViews.InfluencerProductImagesView.as_view(),
+        name='influencer_add_product_images'),
+
+    url(r'^influencer_add_product_note/$',catalogueViews.InfluencerProductNote.as_view(),
+        name='influencer_add_product_note'),
+
+    url(r'^influencer_product_list/',
+        catalogueViews.InfluencerBaseProductListView.as_view(),name='influencer_product_list_view'),
+
+    url(r'^influencer_product_variants/$',catalogueViews.InfluencerChildProductsListView.as_view(),
+        name='influencer_product_variants'),
 
 
 ]
@@ -77,7 +104,10 @@ urlpatterns = urlpatterns + [
 #### front end requests
 
 urlpatterns = urlpatterns + [
-    url(r'get_states',addressViews.GetStatesView.as_view(),name='get_states')
+    url(r'get_countries',addressViews.GetCountriesView.as_view(), name='get_countries'),
+
+    url(r'get_states',addressViews.GetStatesView.as_view(), name='get_countries'),
+
 ]
 
 

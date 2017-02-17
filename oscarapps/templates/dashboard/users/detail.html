@@ -91,11 +91,6 @@
                                     {% include 'dashboard/partials/form_fields.html' %}
                                     <button type="submit" class="btn btn-primary btn-lg" data-loading-text="{% trans 'Sending...' %}">{% trans 'Send password reset email' %}</button>
                                 </form>
-                                <form id="influencer_invite_form" action="{% url 'dashboard:influencer-invite' pk=customer.id %}" method="post" class="form-inline">
-                                    {% csrf_token %}
-
-                                    <button type="submit" class="btn btn-primary btn-lg" data-loading-text="{% trans 'Sending...' %}">{% trans 'Send influencer invite email' %}</button>
-                                </form>
                             </td>
 
                         </tr>

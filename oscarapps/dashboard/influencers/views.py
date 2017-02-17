@@ -1,10 +1,9 @@
 import uuid
-from django.contrib.auth.models import Permission
 
+from django.contrib.auth.models import Permission
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
-
 from django.http import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,30 +18,25 @@ from oscar.core.loading import get_classes
 from oscar.views import sort_queryset
 from oscar.apps.dashboard.partners.forms import UserEmailForm
 from oscar.apps.customer.utils import normalise_email
+
 from users.models import User
-
-
-
-
 from oscarapps.address.models import Locations, States, Country
 from users.models import User
 from oscarapps.dashboard.influencers.forms import ExistingUserForm
-from oscarapps.influencers.models import Influencers
-
-
 from oscarapps.influencers.models import Influencers,InfluencerInvite
-
+from django.template import Context
+from django.template import loader
 
 
 # ================
 # Influencer views
 # ================
-
-
 (InfluencerSearchForm, InfluencerCreateForm, InfluencerManageForm) = get_classes('dashboard.influencers.forms',
-                                                            ['InfluencerSearchForm', 'InfluencerCreateForm',
-                                                             'InfluencerManageForm'],
-                                                             'oscarapps')
+                                                                                 ['InfluencerSearchForm',
+                                                                                  'InfluencerCreateForm',
+                                                                                  'InfluencerManageForm'],
+                                                                                 'oscarapps')
+
 
 class InfluencerListView(generic.ListView):
     """
@@ -54,14 +48,13 @@ class InfluencerListView(generic.ListView):
     form_class = InfluencerSearchForm
 
     def post(self, request, *args, **kwargs):
-
         invite_email = request.POST.get("invite_email")
-        if invite_email is not None and invite_email!="":
+        if invite_email is not None and invite_email != "":
             current_site = Site.objects.get_current()
             domain = current_site.domain
             context = {
                 'domain': domain,
-                'verify_code' : str(uuid.uuid1()).replace('-','').upper()[0:10],
+                'verify_code': str(uuid.uuid1()).replace('-', '').upper()[0:10],
                 'user': invite_email,
                 'protocol': 'http',
             }
@@ -69,37 +62,24 @@ class InfluencerListView(generic.ListView):
             invite_sent.email = context['user']
             invite_sent.code = context['verify_code']
 
-            tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context['verify_code'] + '/'
+            tosend = context['protocol'] + '://' + context['domain'] + '/influencers/influencer-sign-up/' + context[
+                'verify_code'] + '/'
             email = EmailMessage()
             email.subject = "Influencer invitation from Unlabel"
             email.content_subtype = "html"
-            email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                            <body>
-                            <br><br>
-                            You're being invited as influencer at unlabel
-                            <br><br>
-                            Please fill the form provided at the link :
-                            <br><br>
-                            """ + tosend + """
-                            <br><br>
-                            Thank you for using our site!
-                            <br/>
-                            <br/>
-                            <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                            </body>
-                            </head>
-                            </html>"""
+            tem = loader.get_template('influencers/influencer_email_body.html')
+            context = Context({'tosend':tosend})
+            body = tem.render(context)
+            email.body = body
             email.from_email = "Unlabel App"
             email.to = [invite_email]
             email.send()
             messages.success(
-            self.request, "An invitation email was successfully sent to '%s' " %invite_sent.email)
+                self.request, "An invitation email was successfully sent to '%s' " % invite_sent.email)
             invite_sent.save()
             return HttpResponseRedirect("/oscar/dashboard/influencers/")
         else:
             return HttpResponseRedirect("/oscar/dashboard/influencers/")
-
-
 
     def get_queryset(self):
         qs = self.model._default_manager.all()
@@ -122,14 +102,12 @@ class InfluencerListView(generic.ListView):
             self.is_filtered = True
         return qs
 
-
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerListView, self).get_context_data(**kwargs)
         ctx['queryset_description'] = self.description
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered
         return ctx
-
 
 
 class InfluencerCreateView(generic.View):
@@ -144,31 +122,32 @@ class InfluencerCreateView(generic.View):
     def get(self, request, *args, **kwargs):
         return render(request, 'influencers/influencer_form.html', {'form': InfluencerCreateForm})
 
-
     def post(self, request, *args, **kwargs):
         influencer_form = InfluencerCreateForm(data=request.POST)
         if influencer_form.is_valid():
             influencer_user = User.objects.create(email=influencer_form['email'].value(),
-                                                 password=influencer_form['password1'].value(),
-                                                 first_name=influencer_form['first_name'].value(),
-                                                 last_name=influencer_form['last_name'].value(),
-                                                 contact_number=influencer_form['contact_number'].value(),
-                                                 is_influencer=True,
-                                                 gender=influencer_form.cleaned_data['gender'],
-                                                 is_active =influencer_form['is_active'].value(),
-                                                 )
+                                                  password=influencer_form['password1'].value(),
+                                                  first_name=influencer_form['first_name'].value(),
+                                                  last_name=influencer_form['last_name'].value(),
+                                                  contact_number=influencer_form['contact_number'].value(),
+                                                  is_influencer=True,
+                                                  gender=influencer_form.cleaned_data['gender'],
+                                                  is_active=influencer_form['is_active'].value(),
+            )
             influencer_user.save()
             influencer_user.set_password(influencer_form['password1'].value())
             influencer_user.save()
             from django.core.exceptions import ObjectDoesNotExist
+
             try:
                 state = States.objects.get(pk=influencer_form['state'].value())
             except ObjectDoesNotExist:
                 state = None
             influencer_location = Locations.objects.create(city=influencer_form['city'].value(),
                                                            state=state,
-                                                           country=Country.objects.get(pk=influencer_form['country'].value()),
-                                                           )
+                                                           country=Country.objects.get(
+                                                               pk=influencer_form['country'].value()),
+            )
             influencer_location.save()
             influencer_profile = Influencers.objects.create(bio=influencer_form['bio'].value(),
                                                             height=influencer_form['height'].value(),
@@ -177,7 +156,7 @@ class InfluencerCreateView(generic.View):
                                                             waist=influencer_form['waist'].value(),
                                                             users=influencer_user,
                                                             location=influencer_location,
-                                                            )
+            )
             if 'image' in request.FILES:
                 influencer_profile.image = request.FILES['image']
 
@@ -189,23 +168,18 @@ class InfluencerCreateView(generic.View):
             return render(request, 'influencers/influencer_form.html', {'form': influencer_form})
 
 
-
 class InfluencerManageView(generic.UpdateView):
-
     """
     Edit and update an influencer
     """
     template_name = 'influencers/influencer_manage.html'
-
     form_class = InfluencerManageForm
-
     success_url = reverse_lazy('dashboard:influencer-list')
 
     def get_object(self, queryset=None):
         self.influencer = get_object_or_404(Influencers, pk=self.kwargs['pk'])
 
         return self.influencer
-
 
     def get_initial(self):
         return {'city': self.influencer.location.city,
@@ -216,7 +190,7 @@ class InfluencerManageView(generic.UpdateView):
                 'first_name': self.influencer.users.first_name,
                 'last_name': self.influencer.users.last_name,
                 'is_active': self.influencer.users.is_active
-        }
+                }
 
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerManageView, self).get_context_data(**kwargs)
@@ -248,7 +222,6 @@ class InfluencerDeleteView(generic.DeleteView):
         return reverse('dashboard:influencer-list')
 
 
-
 class InfluencerFilterView(generic.ListView):
     """
     View for filtering influencer models based on active influencer parameter
@@ -261,7 +234,6 @@ class InfluencerFilterView(generic.ListView):
     def get(self, request, *args, **kwargs):
 
         return super(InfluencerFilterView, self).get(request, *args, **kwargs)
-
 
     def get_queryset(self):
 
@@ -287,7 +259,6 @@ class InfluencerFilterView(generic.ListView):
             self.is_filtered = True
         return queryset
 
-
     def get_context_data(self, **kwargs):
         ctx = super(InfluencerFilterView, self).get_context_data(**kwargs)
         if self.request.GET.get('active'):
@@ -297,7 +268,6 @@ class InfluencerFilterView(generic.ListView):
         ctx['is_filtered'] = self.is_filtered
 
         return ctx
-
 
 
 class InfluencerUserUpdateView(generic.UpdateView):
@@ -325,6 +295,3 @@ class InfluencerUserUpdateView(generic.UpdateView):
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
         return reverse('dashboard:influencer-list')
-
-
-
