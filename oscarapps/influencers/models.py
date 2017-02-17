@@ -85,7 +85,7 @@ class InfluencerProductReserve(models.Model):
         verbose_name_plural = _('Influencer Product Reservations')
 
     def  __str__(self):
-        return self.influencer
+        return self.influencer.users.first_name + "-->" + self.product.title
 
 
 # class InfluencerProductRentedDetails(models.Model):
