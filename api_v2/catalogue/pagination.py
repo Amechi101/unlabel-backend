@@ -6,7 +6,6 @@ from collections import OrderedDict
 
 class CustomPagination(LimitOffsetPagination):
     def get_paginated_response(self, data):
-        print(self)
         return Response(OrderedDict([
             ('count', self.count),
             ('next', self.get_next_link()),
