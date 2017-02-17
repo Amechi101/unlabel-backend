@@ -203,7 +203,7 @@ class InfluencerBrandSerializer(serializers.ModelSerializer):
 
 
 class InfluencerBrandProductSerializer(serializers.Serializer):
-    products = ProductSerializer(many=True)
+    products = InfluencerProductSerializer(many=True)
     brand = InfluencerBrandSerializer()
 
     def validate(self, attrs):
