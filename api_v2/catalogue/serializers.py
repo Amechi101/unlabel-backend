@@ -127,9 +127,6 @@ class ProductSerializer(OscarModelSerializer):
     sku = serializers.SerializerMethodField(source='get_sku')
     retail_price = serializers.SerializerMethodField(source='get_retail_price')
 
-
-
-
     def get_sku(self, obj):
         try:
             stock_record = StockRecord.objects.get(product=obj)
@@ -150,7 +147,6 @@ class ProductSerializer(OscarModelSerializer):
         ser = AvailabilitySerializer(
             strategy.fetch_for_product(product).availability)
         return ser.data
-
 
     class Meta:
         model = Product
@@ -242,8 +238,6 @@ class InfluencerImageSerializer(serializers.Serializer):
 
 class InfluencerProductNoteSerializer(serializers.Serializer):
     note = serializers.CharField(required=True,max_length=200)
-
-
 
 
 

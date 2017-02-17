@@ -87,7 +87,8 @@ urlpatterns = [
     url(r'^influencer_add_product_note/$',catalogueViews.InfluencerProductNote.as_view(),
         name='influencer_add_product_note'),
 
-
+    # url(r'^influencer_product_variants/$',catalogueViews.InfluencerProductNote.as_view(),
+    #     name='influencer_product_variants'),
 
 
 ]
