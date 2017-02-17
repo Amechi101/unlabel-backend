@@ -20,7 +20,7 @@ from oscarapps.catalogue.models import InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
     InfluencerBrandProductSerializer, \
-    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer
+    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer, BaseProductSerializer
 from oscarapps.partner.models import PartnerFollow, Style
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
@@ -261,12 +261,12 @@ class InfluencerBrandListView(generics.ListAPIView):
         return queryset
 
 
-class InfluencerProductListView(generics.ListAPIView):
+class InfluencerBaseProductListView(generics.ListAPIView):
     '''
     List products for influencer based on brand
     '''
     pagination_class = CustomPagination
-    serializer_class = ProductSerializer
+    serializer_class = BaseProductSerializer
     http_method_names = ('get',)
 
     # HL - price high to low
@@ -281,50 +281,76 @@ class InfluencerProductListView(generics.ListAPIView):
             return queryset
         if brand_id != None:
             if param == 'OLD':
-                prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
-                prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
-                    'date_created').values_list('product', flat=True)
-                queryset = Product.objects.filter(pk__in=prod_Sort_List)
-                ###sorting the queryset
-                item_list = []
-                for item in prod_Sort_List:
-                    obj = queryset.get(id=item)
-                    item_list.append(obj)
-                return item_list
+                prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                return queryset
             elif param == 'HL':
                 prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
                 prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                     'price_retail').values_list('product', flat=True)
-                queryset = Product.objects.filter(pk__in=prod_Sort_List)
-                ###sorting the queryset
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
                 item_list = []
                 for item in prod_Sort_List:
-                    obj = queryset.get(id=item)
-                    item_list.append(obj)
+                    try:
+                        obj = products_list_unsorted.get(id=item)
+                        item_list.append(obj)
+                    except:
+                        pass
                 return item_list
 
             elif param == "LH":
                 prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
                 prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                     '-price_retail').values_list('product', flat=True)
-                queryset = Product.objects.filter(pk__in=prod_Sort_List)
-                ###sorting the queryset
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
                 item_list = []
                 for item in prod_Sort_List:
-                    obj = queryset.get(id=item)
-                    item_list.append(obj)
+                    try:
+                        obj = products_list_unsorted.get(id=item)
+                        item_list.append(obj)
+                    except:
+                        pass
                 return item_list
             else:
-                prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
-                prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
-                    '-date_created').values_list('product', flat=True)
-                queryset = Product.objects.filter(pk__in=prod_Sort_List)
-                ###sorting the queryset
-                item_list = []
-                for item in prod_Sort_List:
-                    obj = queryset.get(id=item)
-                    item_list.append(obj)
-                return item_list
+                prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                return queryset
 
 
     def list(self, request, *args, **kwargs):
@@ -356,6 +382,25 @@ class InfluencerProductListView(generics.ListAPIView):
         else :
             return Response(None)
 
+class InfluencerChildProductsListView(generics.ListAPIView):
+    '''
+    List products for influencer based on brand
+    '''
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = ProductSerializer
+    http_method_names = ('get',)
+
+    def get_queryset(self, *args, **kwargs):
+        if self.request.GET.get("prod_id"):
+            prod_id = self.request.GET.get('prod_id')
+            try:
+                base_product = Product.objects.filter(pk=prod_id)
+            except ObjectDoesNotExist:
+                return None
+            child_products = Product.objects.filter(parent=base_product)
+            return child_products
+
+
 
 class InfluencerReserveProduct(APIView):
     '''
@@ -381,6 +426,10 @@ class InfluencerReserveProduct(APIView):
             influencer_product_reserved.influencer = influencer_user
             influencer_product_reserved.product = product_to_reserve
             product_to_reserve.status = 'R'
+            if product_to_reserve.structure == "child":
+                base_product = product_to_reserve.parent
+                base_product.status = 'R'
+                base_product.save()
             influencer_product_reserved.save()
             product_to_reserve.save()
             content = {"message": "Product reservered successfully"}

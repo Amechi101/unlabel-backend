@@ -109,6 +109,30 @@ class AvailabilitySerializer(serializers.Serializer):
     num_available = serializers.IntegerField(required=False)
     message = serializers.CharField()
 
+class BaseProductSerializer(OscarModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='product-detail')
+    stockrecords = serializers.HyperlinkedIdentityField(
+        view_name='product-stockrecord-list')
+    attributes = ProductAttributeValueSerializer(
+        many=True, required=False, source="attribute_values")
+    categories = serializers.StringRelatedField(many=True, required=False)
+    product_class = serializers.StringRelatedField(required=False)
+    images = ProductImageSerializer(many=True, required=False)
+    price = serializers.HyperlinkedIdentityField(view_name='product-price')
+    options = OptionSerializer(many=True, required=False)
+    recommended_products = RecommmendedProductSerializer(
+        many=True, required=False)
+
+    class Meta:
+        model = Product
+        fields = overridable(
+            'OSCARAPI_PRODUCTDETAIL_FIELDS',
+            default=(
+                'url', 'id', 'title', 'description', 'material_info',
+                'date_created', 'date_updated', 'recommended_products',
+                'attributes', 'categories', 'product_class',
+                'stockrecords', 'images', 'price', 'options', ))
+
 
 class ProductSerializer(OscarModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
