@@ -3,6 +3,7 @@ from django.core import exceptions
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django.forms.models import inlineformset_factory
+from django.forms.widgets import HiddenInput
 
 from oscar.core.loading import get_model
 from oscar.forms.widgets import ImageInput
@@ -33,6 +34,9 @@ class ProductForm(CoreProductForm):
         # Restrict accessible partners for non-staff users
         if not self.user.is_staff:
             self.fields['brand'].queryset = self.user.partners.all()
+
+        if self.instance.structure == 'parent':
+            self.fields["rental_status"].widget = HiddenInput()
 
     class Meta(CoreProductForm.Meta):
         fields = [

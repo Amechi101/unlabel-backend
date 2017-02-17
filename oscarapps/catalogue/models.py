@@ -41,7 +41,7 @@ class InfluencerProductImage(models.Model):
         ordering = ["display_order"]
         unique_together = ("product", "display_order")
         verbose_name = _('Influencer product image')
-        verbose_name_plural = _('influencer product images')
+        verbose_name_plural = _('Influencer product images')
 
     def __str__(self):
         return u"Influencer image of '%s'" % self.product
@@ -139,7 +139,6 @@ class Product(AbstractProduct, BaseApplicationModel):
     influencer_product_note = models.TextField(blank=True, null=True,
                                               verbose_name=_('Influencer product Note'))
     weight = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True, verbose_name=_('Weight information'))
-
     on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
     size = models.ManyToManyField(Size, blank=True, null=True, verbose_name="Size")
     size_class = models.ForeignKey(SizeClass, blank=True, null=True, verbose_name="Size class")
@@ -166,14 +165,6 @@ class Product(AbstractProduct, BaseApplicationModel):
         default=YES,
         verbose_name=_('Requires shipping.?')
     )
-
-    # Metadata
-    class Meta:
-        verbose_name = _('Product')
-        verbose_name_plural = _('Products')
-
-    def __str__(self):
-        return "{0}".format(self.title)
 
     def save(self, *args, **kwargs):
         if self.description:
