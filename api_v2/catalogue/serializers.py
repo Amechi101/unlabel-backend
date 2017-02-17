@@ -187,11 +187,31 @@ class RentalInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InfluencerProductSerializer(serializers.ModelSerializer):
+    # images = ProductImageSerializer(many=True, required=False)
+    images = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
+
+    def get_images(self,obj):
+        if obj.structure == "child":
+            image_for_product = obj.parent
+        else:
+            image_for_product = obj
+        prod_image = ProductImage.objects.filter(product=image_for_product)
+        image_serializer = ProductImageSerializer(prod_image, many=True, required=False)
+        return image_serializer.data
+
+    def get_price(self,obj):
+        try:
+            stock = StockRecord.objects.get(product=obj)
+        except:
+            return None
+        return stock.price_retail
+
 
     class Meta:
         model = Product
         fields = ['material_info','influencer_product_note','weight', 'item_sex_type', 'rental_status','requires_shipping',
-                  'title', 'description','id' ]
+                  'title', 'description','id','images','price' ]
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
