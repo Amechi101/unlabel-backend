@@ -59,9 +59,6 @@ urlpatterns = [
     url(r'^influencer_reserve_product/(?P<product_id>[0-9]+)/',catalogueViews.InfluencerReserveProduct.as_view(),
         name='influencer_product_reserve'),
 
-    url(r'^influencer_product_list/',
-        catalogueViews.InfluencerProductListView.as_view(),name='influencer_product_list_view'),
-
     url(r'^login/$', influencerViews.LoginView.as_view(), name='influencer-login'),
 
     url(r'^influencer_followed_partners/$',influencerViews.InfluencerFollowedBrands.as_view(),
@@ -87,8 +84,11 @@ urlpatterns = [
     url(r'^influencer_add_product_note/$',catalogueViews.InfluencerProductNote.as_view(),
         name='influencer_add_product_note'),
 
-    # url(r'^influencer_product_variants/$',catalogueViews.InfluencerProductNote.as_view(),
-    #     name='influencer_product_variants'),
+    url(r'^influencer_product_list/',
+        catalogueViews.InfluencerBaseProductListView.as_view(),name='influencer_product_list_view'),
+
+    url(r'^influencer_product_variants/$',catalogueViews.InfluencerChildProductsListView.as_view(),
+        name='influencer_product_variants'),
 
 
 ]
