@@ -63,9 +63,9 @@ class PartnerListView(CorePartnerListView):
             messages.success(
             self.request, "An invitation email was successfully sent to '%s' " %invite_sent.email)
             invite_sent.save()
-            return HttpResponseRedirect("/oscar/dashboard/partners/")
+            return HttpResponseRedirect("/dashboard/partners/")
         else:
-            return HttpResponseRedirect("/oscar/dashboard/partners/")
+            return HttpResponseRedirect("/dashboard/partners/")
 
 
     def get_queryset(self):
@@ -139,7 +139,7 @@ class PartnerCreateView(generic.View):
 
             partner_profile.save()
 
-            return HttpResponseRedirect("/oscar/dashboard/partners/")
+            return HttpResponseRedirect("/dashboard/partners/")
 
         else:
             return render(request, 'dashboard/partners/partner_form.html', {'form': partner_form})
