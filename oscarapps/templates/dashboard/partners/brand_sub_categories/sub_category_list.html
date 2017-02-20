@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "Brand Sub Category" %} | {{ block.super }}
+    {% trans "Brand Specializations" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -11,14 +11,14 @@
         <li>
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
-        <li class="active">{% trans "Brand Sub Category" %}</li>
+        <li class="active">{% trans "Brand Specializations" %}</li>
     </ul>
 {% endblock %}
 
 {% block header %}
     <div class="page-header">
-        <a href="{% url 'dashboard:brand-sub-category-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new brand sub category" %}</a>
-        <h1>{% trans "Brand Sub Category" %}</h1>
+        <a href="{% url 'dashboard:brand-sub-category-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create Brand Specialization" %}</a>
+        <h1>{% trans "Brand Specializations" %}</h1>
     </div>
 {% endblock header %}
 
@@ -56,8 +56,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="{% url 'dashboard:brand-sub-category-manage' pk=sub_category.pk %}">{% trans "Manage Brand Sub Category" %}</a></li>
-                                        <li><a href="{% url 'dashboard:brand-sub-category-delete' pk=sub_category.pk %}">{% trans "Delete Brand Sub Category" %}</a></li>
+                                        <li><a href="{% url 'dashboard:brand-sub-category-manage' pk=sub_category.pk %}">{% trans "Manage Brand Specialization" %}</a></li>
+                                        <li><a href="{% url 'dashboard:brand-sub-category-delete' pk=sub_category.pk %}">{% trans "Delete Brand Specialization" %}</a></li>
                                    </ul>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr><td>{% trans "No brand sub category found." %}</td></tr>
+                <tr><td>{% trans "No brand specialization found." %}</td></tr>
             {% endif %}
         </table>
         {% include "dashboard/partials/pagination.html" %}

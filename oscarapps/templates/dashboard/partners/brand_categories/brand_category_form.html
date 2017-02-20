@@ -2,10 +2,10 @@
 {% load category_tags %}
 {% load i18n %}
 
-{% block body_class %}{{ block.super }} create-page brand category{% endblock %}
+{% block body_class %}{{ block.super }} create-page store type{% endblock %}
 
 {% block title %}
-    {{ title }} | {% trans "Brand Categories" %} | {{ block.super }}
+    {{ title }} | {% trans "Store Type" %} | {{ block.super }}
 {% endblock %}
 
 {% block breadcrumbs %}
@@ -14,7 +14,7 @@
             <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
         </li>
         <li>
-            <a href="{% url 'dashboard:brand-category-list' %}">{% trans "Brand Categories" %}</a>
+            <a href="{% url 'dashboard:brand-category-list' %}">{% trans "Store Types" %}</a>
         </li>
         <li class="active">{{ title }}</li>
     </ul>

@@ -165,11 +165,11 @@ OSCAR_DASHBOARD_NAVIGATION = [
             },
 
             {
-                'label': _('Brand Categories'),
+                'label': _('Store Type'),
                 'url_name': 'dashboard:brand-category-list',
             },
             {
-                'label': _('Brand Sub Category'),
+                'label': _('Brand Specialization'),
                 'url_name': 'dashboard:brand-sub-category-list',
             },
         ],

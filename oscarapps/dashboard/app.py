@@ -2,11 +2,11 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import AuthenticationForm
 from django.conf.urls import include, url
 
-from oscar.core.application import DashboardApplication
+from oscar.core.application import DashboardApplication as CoreDashboardApplication
 from oscar.core.loading import get_class
 
 
-class DashboardApplication(DashboardApplication):
+class DashboardApplication(CoreDashboardApplication):
     name = 'dashboard'
     permissions_map = {
         'index': (['is_staff'], ['partner.dashboard_access']),
@@ -45,17 +45,14 @@ class DashboardApplication(DashboardApplication):
             url(r'^vouchers/', include(self.vouchers_app.urls)),
             url(r'^comms/', include(self.comms_app.urls)),
             url(r'^shipping/', include(self.shipping_app.urls)),
-
             url(r'^login/$', auth_views.login, {
                 'template_name': 'dashboard/login.html',
                 'authentication_form': AuthenticationForm,
-            }, name='login'),
+                }, name='login'),
             url(r'^logout/$', auth_views.logout, {
                 'next_page': '/',
-            }, name='logout'),
-
+                }, name='logout'),
         ]
         return self.post_process_urls(urls)
-
 
 application = DashboardApplication()
