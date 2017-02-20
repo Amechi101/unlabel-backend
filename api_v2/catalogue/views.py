@@ -679,6 +679,8 @@ class InfluencerProductGoLive(APIView):
                         and original_product.influencer_product_note is not None:
                     original_product.status='L'
                     original_product.save()
+                    reserved_product.status='L'
+                    reserved_product.save()
                     content = {'message' : 'Product Successfully made live'}
                     return Response(content,status=status.HTTP_200_OK)
                 else:

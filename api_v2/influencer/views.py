@@ -22,7 +22,8 @@ from django.core.exceptions import ValidationError
 
 from api_v2.catalogue.serializers import PartnerSerializer
 from users.models import User
-from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer
+from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer, \
+    InfluencerPhysicalAttributesSerializer
 from oscarapps.partner.models import PartnerFollow, Partner
 from oscarapps.influencers.models import Influencers
 
@@ -279,7 +280,11 @@ class InfluencerPicAndBio(APIView):
     def post(self,request,*args,**kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer_user = request.user
-            influencer = Influencers.objects.get(users=request.user)
+            try:
+                influencer = Influencers.objects.get(users=request.user)
+            except:
+                content = {"message":"Influencer profile not found."}
+                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             if request.data["bio"] is None:
                 content = {"message": "Please enter valid a valid bio."}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
@@ -291,4 +296,55 @@ class InfluencerPicAndBio(APIView):
             influencer.save()
             content = {"message":"successfully updated."}
             return Response(content,status=status.HTTP_200_OK)
+        else:
+            content = {"message":"Please login as influencer and try again."}
+            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+class PhysicalAttributesUpdate(APIView):
+    '''
+    View for updating influencer physical attributes
+    '''
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get','post')
+    serializer_class = InfluencerPhysicalAttributesSerializer
+
+    def get(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            try:
+                influencer_profile = Influencers.objects.get(users=request.user)
+            except:
+                if request.user.is_anonymous() is False:
+                    influencer_profile = Influencers()
+                    influencer_profile.users = request.user
+            attributes_serializer = self.serializer_class(influencer_profile)
+            return Response(attributes_serializer.data,status=status.HTTP_200_OK)
+        else:
+            content = {"message":"Please login as influencer and try again."}
+            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+    def post(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            try:
+                influencer_profile = Influencers.objects.get(users=request.user)
+            except:
+                if request.user.is_anonymous() is False:
+                    influencer_profile = Influencers()
+                    influencer_profile.users = request.user
+            if request.data['waist']:
+                influencer_profile.waist = request.data['waist']
+            if request.data['hips']:
+                influencer_profile.hips = request.data['hips']
+            if request.data['chest_or_bust']:
+                influencer_profile.chest_or_bust = request.data['chest_or_bust']
+            if request.data['height']:
+                influencer_profile.height = request.data['height']
+            influencer_profile.save()
+            content = {"message":"Physical attributes updated successfully."}
+            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+        else:
+            content = {"message":"Please login as influencer and try again."}
+            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
 

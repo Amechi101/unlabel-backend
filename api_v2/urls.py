@@ -96,6 +96,9 @@ urlpatterns = [
     url(r'^influencer_remove_product_image/$',catalogueViews.InfluencerRemoveProductImage.as_view(),
         name='influencer_remove product_images' ),
 
+    url(r'influencer_physical_attributes/',influencerViews.PhysicalAttributesUpdate.as_view(),
+        name='influencer_physical_attributes_serializer')
+
 
 
 ]
