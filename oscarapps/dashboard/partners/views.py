@@ -1,5 +1,7 @@
 import uuid
 
+from django.core.exceptions import PermissionDenied
+
 from oscarapps.address.models import States, Country, Locations
 from oscarapps.dashboard.partners.forms import PartnerCreateForm, PartnerManageForm, PartnerRentalInfoForm
 from oscarapps.partner.models import Partner
@@ -71,7 +73,7 @@ class PartnerListView(CorePartnerListView):
     def get_queryset(self):
 
         if not self.request.user.is_staff:
-            qs = Partner.objects.filter(users=self.request.user)
+            qs = self.model._default_manager.filter(users=self.request.user)
         else:
             qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
@@ -90,6 +92,13 @@ class PartnerListView(CorePartnerListView):
 
         return qs
 
+    def get_context_data(self, **kwargs):
+        ctx = super(PartnerListView, self).get_context_data(**kwargs)
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_staff'] = self.request.user.is_staff
+        ctx['is_filtered'] = self.is_filtered
+        return ctx
 
 class PartnerCreateView(generic.View):
     model = Partner
@@ -150,6 +159,9 @@ class PartnerManageView(CorePartnerManageView, FormView):
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
+        if not self.request.user.is_staff:
+            if self.partner.users.all().first() != self.request.user:
+                raise PermissionDenied
         return self.partner
 
     def get_initial(self):
