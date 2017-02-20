@@ -1,5 +1,5 @@
 from django.contrib import admin
-from oscarapps.catalogue.models import SizeClass, Size
+from oscarapps.catalogue.models import SizeClass, Size,InfluencerProductImage
 
 class SizeAdmin(admin.ModelAdmin):
     list_filter = ['size', 'size_class', 'size_sex_type', ]
@@ -8,4 +8,5 @@ class SizeAdmin(admin.ModelAdmin):
 
 admin.site.register(Size, SizeAdmin)
 admin.site.register(SizeClass)
+admin.site.register(InfluencerProductImage)
 from oscar.apps.catalogue.admin import *  # noqa

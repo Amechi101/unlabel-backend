@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import random
 import string
+import datetime
 from decimal import Decimal
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
@@ -77,20 +78,24 @@ class InfluencerProductReserve(models.Model):
 
     influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
     product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
-    date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
+    date_reserved = models.DateTimeField(null=False,blank=False, verbose_name=_('Product Reserved Date'))
+    date_rented = models.DateTimeField(null=True, blank=True, verbose_name=_('Product Reserved Date'))
 
     class Meta:
         verbose_name_plural = _('Influencer Product Reservations')
 
+    def  __str__(self):
+        return self.influencer.users.first_name + "-->" + self.product.title
 
-class InfluencerProductRentedDetails(models.Model):
 
-    influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
-    product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
-    date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
-
-    class Meta:
-        verbose_name_plural = _('Influencer Product-Rentals')
+# class InfluencerProductRentedDetails(models.Model):
+#
+#     influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
+#     product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
+#     date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
+#
+#     class Meta:
+#         verbose_name_plural = _('Influencer Product-Rentals')
 
 @receiver(pre_save, sender=Product, dispatch_uid="update_rental_date")
 def update_influencer_product_rental_info(sender, instance, **kwargs):
@@ -100,9 +105,10 @@ def update_influencer_product_rental_info(sender, instance, **kwargs):
         if len(influencer_product_reserve) > 0 :
                 influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
                 if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
-                    influencer_producted_rented_details = InfluencerProductRentedDetails()
+                    influencer_producted_rented_details = InfluencerProductReserve()
                     influencer_producted_rented_details.influencer = influencer_user
                     influencer_producted_rented_details.product = current_obj
+                    influencer_producted_rented_details.date_rented = datetime.now()
                     influencer_producted_rented_details.save()
     except:
         pass

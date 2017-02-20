@@ -9,7 +9,7 @@ from oscarapi.utils import (
 from oscarapps.partner.models import PartnerFollow,RentalInformation
 from oscarapps.partner.models import Partner, Style
 from oscarapps.address.models import Locations,States
-from oscarapps.catalogue.models import Product,Size
+from oscarapps.catalogue.models import Product,Size,InfluencerProductImage
 from oscar.apps.partner.models import StockRecord
 from oscarapps.influencers.models import Influencers,InfluencerProductReserve
 from oscar.core.loading import get_model, get_class
@@ -109,6 +109,30 @@ class AvailabilitySerializer(serializers.Serializer):
     num_available = serializers.IntegerField(required=False)
     message = serializers.CharField()
 
+class BaseProductSerializer(OscarModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='product-detail')
+    stockrecords = serializers.HyperlinkedIdentityField(
+        view_name='product-stockrecord-list')
+    attributes = ProductAttributeValueSerializer(
+        many=True, required=False, source="attribute_values")
+    categories = serializers.StringRelatedField(many=True, required=False)
+    product_class = serializers.StringRelatedField(required=False)
+    images = ProductImageSerializer(many=True, required=False)
+    price = serializers.HyperlinkedIdentityField(view_name='product-price')
+    options = OptionSerializer(many=True, required=False)
+    recommended_products = RecommmendedProductSerializer(
+        many=True, required=False)
+
+    class Meta:
+        model = Product
+        fields = overridable(
+            'OSCARAPI_PRODUCTDETAIL_FIELDS',
+            default=(
+                'url', 'id', 'title', 'description', 'material_info',
+                'date_created', 'date_updated', 'recommended_products',
+                'attributes', 'categories', 'product_class',
+                'stockrecords', 'images', 'price', 'options', ))
+
 
 class ProductSerializer(OscarModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
@@ -126,9 +150,6 @@ class ProductSerializer(OscarModelSerializer):
         many=True, required=False)
     sku = serializers.SerializerMethodField(source='get_sku')
     retail_price = serializers.SerializerMethodField(source='get_retail_price')
-
-
-
 
     def get_sku(self, obj):
         try:
@@ -150,7 +171,6 @@ class ProductSerializer(OscarModelSerializer):
         ser = AvailabilitySerializer(
             strategy.fetch_for_product(product).availability)
         return ser.data
-
 
     class Meta:
         model = Product
@@ -187,32 +207,39 @@ class RentalInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InfluencerProductSerializer(serializers.ModelSerializer):
+    # images = ProductImageSerializer(many=True, required=False)
+    images = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
+
+    def get_images(self,obj):
+        if obj.structure == "child":
+            image_for_product = obj.parent
+        else:
+            image_for_product = obj
+        prod_image = ProductImage.objects.filter(product=image_for_product)
+        image_serializer = ProductImageSerializer(prod_image, many=True, required=False)
+        return image_serializer.data
+
+    def get_price(self,obj):
+        try:
+            stock = StockRecord.objects.get(product=obj)
+        except:
+            return None
+        return stock.price_retail
+
 
     class Meta:
         model = Product
-        fields = ['material_info','influencer_description','weight', 'item_sex_type', 'rental_status','requires_shipping',
-                  'title', 'description', ]
+        fields = ['material_info','influencer_product_note','weight', 'item_sex_type', 'rental_status','requires_shipping',
+                  'title', 'description','id','images','price' ]
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
     rental_info = RentalInfoSerializer()
-    # products = BrandProductSerializer()    #serializers.SerializerMethodField(source='get_products')
 
     class Meta:
         model = Partner
         fields = '__all__'
-
-    # def get_products(self,obj):
-    #     request = self.context.get("request")
-    #     if request and hasattr(request, "user") and request.user.is_anonymous() == False:
-        # influencer_profile = Influencers.objects.filter(users=request.user)
-        # prod_reserve_list = InfluencerProductReserve.objects.filter(influencer=influencer_profile)
-        # products = Product.objects.filter(pk__in=prod_reserve_list)
-        # ser = BrandProductSerializer(data=products)
-        # return ser.data
-
-        # else:
-        #     return False
 
 
 class InfluencerBrandProductSerializer(serializers.Serializer):
@@ -221,4 +248,20 @@ class InfluencerBrandProductSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         return attrs
+
+
+class InfluencerProductImagesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=InfluencerProductImage
+        fields='__all__'
+
+class InfluencerImageSerializer(serializers.Serializer):
+    image = serializers.ImageField(required=True)
+    product_id = serializers.IntegerField(required=True)
+
+class InfluencerProductNoteSerializer(serializers.Serializer):
+    note = serializers.CharField(required=True,max_length=200)
+
+
 

@@ -3,14 +3,12 @@ from django.core import exceptions
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django.forms.models import inlineformset_factory
-from oscar.core.utils import slugify
 
 from oscar.core.loading import get_model
 from oscar.forms.widgets import ImageInput
 from oscar.apps.dashboard.catalogue.forms import ProductForm as CoreProductForm
 from oscar.apps.dashboard.catalogue.forms import StockRecordForm as \
     CoreStockRecordForm
-
 from oscar.apps.dashboard.catalogue.forms import ProductImageForm
 
 
@@ -50,6 +48,9 @@ class ProductForm(CoreProductForm):
             self.fields['status'].choices = status_choice
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
             self.fields['brand'].widget = forms.HiddenInput()
+
+        if self.instance.structure == 'parent':
+            self.fields["rental_status"].widget = HiddenInput()
 
     class Meta(CoreProductForm.Meta):
         fields = [
