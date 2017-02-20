@@ -207,7 +207,6 @@ class RentalInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class InfluencerProductSerializer(serializers.ModelSerializer):
-    # images = ProductImageSerializer(many=True, required=False)
     images = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
 

@@ -77,9 +77,9 @@ class InfluencerListView(generic.ListView):
             messages.success(
                 self.request, "An invitation email was successfully sent to '%s' " % invite_sent.email)
             invite_sent.save()
-            return HttpResponseRedirect("/oscar/dashboard/influencers/")
+            return HttpResponseRedirect("/dashboard/influencers/")
         else:
-            return HttpResponseRedirect("/oscar/dashboard/influencers/")
+            return HttpResponseRedirect("/dashboard/influencers/")
 
     def get_queryset(self):
         qs = self.model._default_manager.all()
@@ -162,7 +162,7 @@ class InfluencerCreateView(generic.View):
 
             influencer_profile.save()
 
-            return HttpResponseRedirect("/oscar/dashboard/influencers/")
+            return HttpResponseRedirect("/dashboard/influencers/")
 
         else:
             return render(request, 'influencers/influencer_form.html', {'form': influencer_form})

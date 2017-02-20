@@ -24,12 +24,11 @@
         {% endif %}
     {% endblock header %}
 
-
     {% block dashboard_content %}
 {% if request.user.is_superuser %}
         <h2>Invite via email</h2>
         <div class="well">
-            <form action="/oscar/dashboard/partners/" method="POST" class="form-inline">
+            <form action="/dashboard/partners/" method="POST" class="form-inline">
                 {%csrf_token%}
                 <input type="email" id="invite_email" name="invite_email" >
                 <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Sending...' %}">{% trans "Send Brand Invite Email" %}</button>
