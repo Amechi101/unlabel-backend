@@ -50,7 +50,7 @@ class ProductForm(CoreProductForm):
             self.fields['brand'].widget = forms.HiddenInput()
 
         if self.instance.structure == 'parent':
-            self.fields["rental_status"].widget = HiddenInput()
+            self.fields["rental_status"].widget = forms.HiddenInput()
 
     class Meta(CoreProductForm.Meta):
         fields = [

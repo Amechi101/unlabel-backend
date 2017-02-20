@@ -69,7 +69,11 @@ class PartnerListView(CorePartnerListView):
 
 
     def get_queryset(self):
-        qs = self.model._default_manager.all()
+
+        if not self.request.user.is_staff:
+            qs = Partner.objects.filter(users=self.request.user)
+        else:
+            qs = self.model._default_manager.all()
         qs = sort_queryset(qs, self.request, ['name'])
         self.description = _("All brands")
         self.is_filtered = False

@@ -4,6 +4,11 @@ from oscar.core.loading import get_class
 
 
 class PartnersDashboardApplication(CorePartnersDashboardApplication):
+    permissions_map = _map = {
+        'partner-list': (['is_staff'], ['partner.dashboard_access']),
+        'partner-address-manage': (['is_staff'], ['partner.dashboard_access']),
+        'partner-manage': (['is_staff'], ['partner.dashboard_access']),
+    }
 
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerRentalInfoManageView')
     partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
