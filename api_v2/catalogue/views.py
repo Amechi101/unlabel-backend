@@ -1,34 +1,30 @@
 from __future__ import unicode_literals
-import json
-from itertools import chain
-from collections import OrderedDict, namedtuple
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
 from django.contrib import auth
-
-from rest_framework import permissions, authentication
+from django.db.models import Max
+from rest_framework import authentication
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework import generics, serializers
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import pagination
+from oscarapi import permissions
 
 from oscar.core.loading import get_model, get_class
-from oscarapi import serializers, permissions
 from oscarapps.customer.models import UserProductLike
-from oscarapps.catalogue.models import Product, Size, SizeClass
 from .pagination import CustomPagination
-
-from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer,SizeSerializer
+from .serializers import SizeSerializer
+from oscarapps.partner.models import PartnerFollow, Style
+from oscarapps.catalogue.models import InfluencerProductImage
+from oscarapps.influencers.models import Influencers, InfluencerProductReserve
+from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
+    InfluencerBrandProductSerializer, \
+    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer, BaseProductSerializer
 from oscarapps.partner.models import PartnerFollow, Style
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
-from .serializers import PartnerSerializer,StoreTypeSerializer,ProductSerializer,\
-    InfluencerBrandSerializer,InfluencerProductSerializer,InfluencerBrandProductSerializer
-from oscarapps.partner.models import PartnerFollow,Style
-from oscarapps.influencers.models import Influencers,InfluencerProductReserve
-
 from oscar.apps.partner.models import StockRecord
+
 
 # from oscar.apps.basket.models import
 
@@ -54,16 +50,6 @@ Option = get_model('catalogue', 'Option')
 User = auth.get_user_model()
 Country = get_model('address', 'Country')
 Partner = get_model('partner', 'Partner')
-
-
-# class ProductListView(generics.ListAPIView):
-#
-# paginate_by=5
-#     count=5
-#     # pagination_class = pagination.PageNumberPagination
-#     queryset = Product.objects.all()
-#     serializer_class = serializers.ProductLinkSerializer
-
 
 
 class ProductLikeView(APIView):
@@ -104,6 +90,7 @@ class ProductLikeView(APIView):
 
 
 class BrandListView(generics.ListAPIView):
+    '''List of brands with at least one live product'''
     pagination_class = pagination.LimitOffsetPagination
     serializer_class = PartnerSerializer
     http_method_names = ('get',)
@@ -152,6 +139,9 @@ class BrandListView(generics.ListAPIView):
 
 
 class ProductListView(generics.ListAPIView):
+    '''
+    List products based on the brand selected(id)
+    '''
     pagination_class = pagination.LimitOffsetPagination
     serializer_class = ProductSerializer
     http_method_names = ('get',)
@@ -223,6 +213,9 @@ class PartnerFollowView(APIView):
 
 
 class InfluencerBrandListView(generics.ListAPIView):
+    '''
+    List brands for influencer
+    '''
     pagination_class = pagination.LimitOffsetPagination
     serializer_class = PartnerSerializer
     http_method_names = ('get',)
@@ -268,9 +261,12 @@ class InfluencerBrandListView(generics.ListAPIView):
         return queryset
 
 
-class InfluencerProductListView(generics.ListAPIView):
+class InfluencerBaseProductListView(generics.ListAPIView):
+    '''
+    List products for influencer based on brand
+    '''
     pagination_class = CustomPagination
-    serializer_class = ProductSerializer
+    serializer_class = BaseProductSerializer
     http_method_names = ('get',)
 
     # HL - price high to low
@@ -282,33 +278,80 @@ class InfluencerProductListView(generics.ListAPIView):
         param = self.request.GET.get('param')
         if brand_id == None:
             queryset = Product.objects.filter(status='U').order_by('created')
+            return queryset
         if brand_id != None:
             if param == 'OLD':
-                queryset = Product.objects.filter(brand=brand_id, status='U').order_by('created')
+                prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                return queryset
             elif param == 'HL':
-                prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
-                prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('price_retail').values_list('product',flat = True)
-                queryset = Product.objects.filter(pk__in = prod_Sort_List)
-                ###sorting the queryset
-                item_list=[]
+                prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
+                prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
+                    'price_retail').values_list('product', flat=True)
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
+                item_list = []
                 for item in prod_Sort_List:
-                    obj = queryset.get(id=item)
-                    item_list.append(obj)
+                    try:
+                        obj = products_list_unsorted.get(id=item)
+                        item_list.append(obj)
+                    except:
+                        pass
                 return item_list
 
             elif param == "LH":
-                prod_id_List = Product.objects.filter(brand = brand_id, status = 'U' ).values_list('id',flat = True)
-                prod_Sort_List = StockRecord.objects.filter(product__in = prod_id_List).order_by('-price_retail').values_list('product',flat = True)
-                queryset = Product.objects.filter(pk__in = prod_Sort_List)
-                ###sorting the queryset
-                item_list=[]
+                prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
+                prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
+                    '-price_retail').values_list('product', flat=True)
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
+                item_list = []
                 for item in prod_Sort_List:
-                    obj = queryset.get(id=item)
-                    item_list.append(obj)
+                    try:
+                        obj = products_list_unsorted.get(id=item)
+                        item_list.append(obj)
+                    except:
+                        pass
                 return item_list
             else:
-                queryset = Product.objects.filter(brand=brand_id, status='U').order_by('-created')
-        return queryset
+                prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
+                products_to_list =[]
+                for product in products:
+                    if product.structure == "child":
+                        products_to_list.append(product.parent.pk)
+                    elif product.structure == "standalone":
+                        products_to_list.append(product.pk)
+                    elif product.structure == "parent":
+                        products_to_list.append(product.pk)
+                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                return queryset
+
 
     def list(self, request, *args, **kwargs):
 
@@ -327,17 +370,42 @@ class InfluencerProductListView(generics.ListAPIView):
             profile = False
 
         queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            data = {'profile': profile, 'data': serializer.data}
-            return self.get_paginated_response(data)
+        if queryset is not None:
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                data = {'profile': profile, 'data': serializer.data}
+                return self.get_paginated_response(data)
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        else :
+            return Response(None)
+
+class InfluencerChildProductsListView(generics.ListAPIView):
+    '''
+    List products for influencer based on brand
+    '''
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = ProductSerializer
+    http_method_names = ('get',)
+
+    def get_queryset(self, *args, **kwargs):
+        if self.request.GET.get("prod_id"):
+            prod_id = self.request.GET.get('prod_id')
+            try:
+                base_product = Product.objects.filter(pk=prod_id)
+            except ObjectDoesNotExist:
+                return None
+            child_products = Product.objects.filter(parent=base_product)
+            return child_products
+
 
 
 class InfluencerReserveProduct(APIView):
+    '''
+    View for influencer to reserve a product
+    '''
     authentication = authentication.SessionAuthentication
     http_method_names = ('post',)
 
@@ -358,16 +426,23 @@ class InfluencerReserveProduct(APIView):
             influencer_product_reserved.influencer = influencer_user
             influencer_product_reserved.product = product_to_reserve
             product_to_reserve.status = 'R'
+            if product_to_reserve.structure == "child":
+                base_product = product_to_reserve.parent
+                base_product.status = 'R'
+                base_product.save()
             influencer_product_reserved.save()
             product_to_reserve.save()
-            content = {"message":"Product reservered successfully"}
-            return Response(content,status = status.HTTP_200_OK)
+            content = {"message": "Product reservered successfully"}
+            return Response(content, status=status.HTTP_200_OK)
         except:
             content = {"message": "Please try again after some time"}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class GetSize(generics.ListAPIView):
+    '''
+    View to get size list of products
+    '''
     http_method_names = ('get')
     serializer_class = SizeSerializer
 
@@ -381,77 +456,205 @@ class GetSize(generics.ListAPIView):
 
 
 class InfluencerReservedProducts(APIView):
+    '''
+    View for listing reserved products
+    based on brands for influencer
+    '''
+    pagination_class = pagination.LimitOffsetPagination
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get')
+    serializer_class = InfluencerBrandProductSerializer
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer = Influencers.objects.filter(users=request.user)
-            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',flat=True)
-            products_reserved = Product.objects.filter(pk__in=reserved_items,rental_status='NON').values_list('id',flat=True)
-            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner',flat=True)
+            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
+                                                                                                        flat=True)
+            products_reserved = Product.objects.filter(pk__in=reserved_items, status='R',
+                                                       rental_status='NON').values_list('id', flat=True)
+            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
             influencer_reserved_products = []
             for brand in brands:
-                prod_stock = StockRecord.objects.filter(partner=brand,product__in=products_reserved).values_list('product',flat=True)
-                brand_prod = Product.objects.filter(pk__in=prod_stock,rental_status='NON')
-                print("...................................",brand_prod)
-                # brand_ser = InfluencerBrandSerializer(brand)
-                # product_ser = InfluencerProductSerializer(brand_prod, many=True)
-
-                BrandAndProd = { 'products':brand_prod,'brand': brand }
+                prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
+                    'product', flat=True)
+                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='NON')
+                BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
-            return Response(influencer_reserved_products)
+            results_dict = {'results' : influencer_reserved_products}
+            return Response(results_dict)
 
 
 class InfluencerRentedProducts(APIView):
+    '''
+    View for listing rented products
+    based on brands for influencer
+    '''
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get')
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer = Influencers.objects.filter(users=request.user)
-            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',flat=True)
-            products_reserved = Product.objects.filter(pk__in=reserved_items,rental_status='REN').values_list('id',flat=True)
-            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner',flat=True)
+            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
+                                                                                                        flat=True)
+            products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='REN').values_list('id',
+                                                                                                               flat=True)
+            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
             influencer_reserved_products = []
             for brand in brands:
-                prod_stock = StockRecord.objects.filter(partner=brand,product__in=products_reserved).values_list('product',flat=True)
-                brand_prod = Product.objects.filter(pk__in=prod_stock,rental_status='REN')
-                print("...................................",brand_prod)
-                # brand_ser = InfluencerBrandSerializer(brand)
-                # product_ser = InfluencerProductSerializer(brand_prod, many=True)
-
-                BrandAndProd = { 'products':brand_prod,'brand': brand }
+                prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
+                    'product', flat=True)
+                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='REN')
+                BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
             return Response(influencer_reserved_products)
+
 
 class InfluencerLiveProducts(APIView):
+    '''
+    View for listing live products
+    based on brands for influencer
+    '''
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get')
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer = Influencers.objects.filter(users=request.user)
-            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',flat=True)
-            products_reserved = Product.objects.filter(pk__in=reserved_items,status='L').values_list('id',flat=True)
-            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner',flat=True)
+            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
+                                                                                                        flat=True)
+            products_reserved = Product.objects.filter(pk__in=reserved_items, status='L').values_list('id', flat=True)
+            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
             influencer_reserved_products = []
             for brand in brands:
-                prod_stock = StockRecord.objects.filter(partner=brand,product__in=products_reserved).values_list('product',flat=True)
-                brand_prod = Product.objects.filter(pk__in=prod_stock,status='L')
-                print("...................................",brand_prod)
-                # brand_ser = InfluencerBrandSerializer(brand)
-                # product_ser = InfluencerProductSerializer(brand_prod, many=True)
-
-                BrandAndProd = { 'products':brand_prod,'brand': brand }
+                prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
+                    'product', flat=True)
+                brand_prod = Product.objects.filter(pk__in=prod_stock, status='L')
+                BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
             return Response(influencer_reserved_products)
+
+
+class InfluencerProductImagesView(APIView):
+    '''
+    View for influencer to view and
+    add product images
+    '''
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get', 'post')
+    serializer_class = InfluencerImageSerializer
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            if request.GET.get('prod_id'):
+                prod_id = request.GET.get('prod_id')
+                try:
+                    influencer_product = Product.objects.get(pk=prod_id)
+                except ObjectDoesNotExist:
+                    content = {'message': "invalid product id"}
+                    return Response(content, status=status.HTTP_204_NO_CONTENT)
+                if influencer_product.structure == "child":
+                    image_for_product = influencer_product.parent
+                else:
+                    image_for_product = influencer_product
+                influencer_prod_images = InfluencerProductImage.objects.filter(product=image_for_product)
+                if len(influencer_prod_images) != 0:
+                    image_serializer = InfluencerProductImagesSerializer(influencer_prod_images, many=True)
+                    return Response(image_serializer.data)
+            content = {'message': "invalid product id"}
+            return Response(content, status=status.HTTP_204_NO_CONTENT)
+        else:
+            content = {'message': "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            image_ser = self.serializer_class(data=request.data)
+            if image_ser.is_valid():
+                try:
+                    influencer_product = Product.objects.get(pk=image_ser.data['product_id'])
+                except ObjectDoesNotExist:
+                    content = {'message': "invalid product id"}
+                    return Response(content, status=status.HTTP_204_NO_CONTENT)
+                if influencer_product.structure == "child":
+                    image_for_product = influencer_product.parent
+                else:
+                    image_for_product = influencer_product
+                images_max_order = InfluencerProductImage.objects.filter(product=image_for_product).aggregate(
+                    Max('display_order'))
+                next_order = images_max_order['display_order__max'] + 1
+                new_product_image = InfluencerProductImage()
+                new_product_image.original = image_ser.validated_data['image']
+                new_product_image.product = image_for_product
+                new_product_image.display_order = next_order
+                new_product_image.save()
+                content = {'message': "image added successfully"}
+                return Response(content, status=status.HTTP_200_OK)
+
+
+class InfluencerProductNote(APIView):
+    '''
+    View for adding product note and viewing current
+    product note
+    '''
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get', 'post')
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            if request.GET.get('prod_id'):
+                prod_id = request.GET.get('prod_id')
+                try:
+                    influencer_product = Product.objects.get(pk=prod_id)
+                except ObjectDoesNotExist:
+                    content = {'message': "invalid product id"}
+                    return Response(content, status=status.HTTP_204_NO_CONTENT)
+                if influencer_product.structure == "child":
+                    note_for_product = influencer_product.parent
+                else:
+                    note_for_product = influencer_product
+                note_serializer = InfluencerProductNoteSerializer(note_for_product.influencer_product_note)
+                return Response(note_serializer.data)
+            content = {'message': "invalid product id"}
+            return Response(content, status=status.HTTP_204_NO_CONTENT)
+        content = {'message': "Please login as influencer."}
+        return Response(content, status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request, *args, **kwargs):
+        if request.data['note'] and request.data['prod_id']:
+            try:
+                product = Product.objects.get(pk=request.data["product_id"])
+            except:
+                content = {'message': "Invalid product id."}
+                return Response(content, status=status.HTTP_204_NO_CONTENT)
+            if len(request.data['note']) < 200:
+                product.influencer_product_note = request.data['note']
+                product.save()
+                content = {'message': "Product note successfully saved."}
+                return Response(content, status=status.HTTP_200_OK)
+            else:
+                content = {'message': "Product note max length is 200 charecters."}
+                return Response(content, status=status.HTTP_205_RESET_CONTENT)
+
+
+
+
+
+
+
+
+
+
+
+
