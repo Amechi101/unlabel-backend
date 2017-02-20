@@ -406,6 +406,7 @@ class InfluencerReserveProduct(APIView):
     '''
     View for influencer to reserve a product
     '''
+    permission_classes = (permissions.IsAuthenticated,)
     authentication = authentication.SessionAuthentication
     http_method_names = ('post',)
 
@@ -499,21 +500,23 @@ class InfluencerRentedProducts(APIView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer = Influencers.objects.filter(users=request.user)
-            reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
+            rented_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
                                                                                                         flat=True)
-            products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='REN').values_list('id',
+            products_rented = Product.objects.filter(pk__in=rented_items, rental_status='REN').values_list('id',
                                                                                                                flat=True)
-            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
+            stock_brand = StockRecord.objects.filter(product__in=products_rented).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
-            influencer_reserved_products = []
+            influencer_rented_products = []
             for brand in brands:
-                prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
+                prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_rented).values_list(
                     'product', flat=True)
                 brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='REN')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
-                influencer_reserved_products.append(brand_product_ser.data)
-            return Response(influencer_reserved_products)
+                influencer_rented_products.append(brand_product_ser.data)
+            results_dict = {'results' : influencer_rented_products}
+            return Response(results_dict)
+
 
 
 class InfluencerLiveProducts(APIView):
@@ -541,7 +544,8 @@ class InfluencerLiveProducts(APIView):
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
-            return Response(influencer_reserved_products)
+            results_dict = {'results' : influencer_reserved_products}
+            return Response(results_dict)
 
 
 class InfluencerProductImagesView(APIView):
@@ -568,11 +572,11 @@ class InfluencerProductImagesView(APIView):
                 else:
                     image_for_product = influencer_product
                 influencer_prod_images = InfluencerProductImage.objects.filter(product=image_for_product)
-                if len(influencer_prod_images) != 0:
-                    image_serializer = InfluencerProductImagesSerializer(influencer_prod_images, many=True)
-                    return Response(image_serializer.data)
-            content = {'message': "invalid product id"}
-            return Response(content, status=status.HTTP_204_NO_CONTENT)
+                image_serializer = InfluencerProductImagesSerializer(influencer_prod_images, many=True)
+                return Response(image_serializer.data)
+            else:
+                content = {'message': "product id not found."}
+                return Response(content, status=status.HTTP_204_NO_CONTENT)
         else:
             content = {'message': "Please login as influencer and try again."}
             return Response(content, status=status.HTTP_204_NO_CONTENT)
@@ -592,7 +596,10 @@ class InfluencerProductImagesView(APIView):
                     image_for_product = influencer_product
                 images_max_order = InfluencerProductImage.objects.filter(product=image_for_product).aggregate(
                     Max('display_order'))
-                next_order = images_max_order['display_order__max'] + 1
+                if images_max_order['display_order__max'] is not None:
+                    next_order = images_max_order['display_order__max'] + 1
+                else:
+                    next_order = 0
                 new_product_image = InfluencerProductImage()
                 new_product_image.original = image_ser.validated_data['image']
                 new_product_image.product = image_for_product
@@ -647,14 +654,78 @@ class InfluencerProductNote(APIView):
                 content = {'message': "Product note max length is 200 charecters."}
                 return Response(content, status=status.HTTP_205_RESET_CONTENT)
 
+class InfluencerProductGoLive(APIView):
+    '''
+    API for making producy live
+    '''
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('post')
 
+    def post(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer:
+            if request.data['prod_id'] :
+                try:
+                    reserved_product = Product.objects.get(pk = request.data['prod_id'])
+                except:
+                    content = {'meassage': 'invalid product id.'}
+                    return Response(content,status=status.HTTP_205_RESET_CONTENT)
+                if reserved_product.structure == "child":
+                    original_product = reserved_product.parent
+                else:
+                    original_product = reserved_product
 
+                if InfluencerProductImage.objects.filter(product=original_product).count()  > 0 \
+                        and original_product.influencer_product_note is not None:
+                    original_product.status='L'
+                    original_product.save()
+                    content = {'message' : 'Product Successfully made live'}
+                    return Response(content,status=status.HTTP_200_OK)
+                else:
+                    content = {'message' : 'Please add product note and images to make live'}
+                    return Response(content,status=status.HTTP_205_RESET_CONTENT)
 
+        else:
+            content = {'message' : 'Please login as influencer'}
+            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
+class InfluencerRemoveProductImage(APIView):
+    '''
+    API for influencer to remove product image
+    '''
 
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get','post')
 
+    def post(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            if request.data['prod_id'] and request.data['display_order'] :
+                try:
+                    reserved_product = InfluencerProductReserve.objects.get(product=request.data['prod_id'])
+                except:
+                    content = {'meassage': 'invalid product id.'}
+                    return Response(content,status=status.HTTP_205_RESET_CONTENT)
+                if reserved_product.structure == "child":
+                    image_for_product = reserved_product.parent
+                else:
+                    image_for_product = reserved_product
+                product_image = InfluencerProductImage.objects.filter(product = image_for_product,
+                                                                      display_order=request.data['display_order'])
+                product_image.delete()
+                product_images = InfluencerProductImage.objects.filter(product = image_for_product)
 
-
+                for image in product_images:
+                    if image.display_order > request.data['display_order']:
+                        image.display_order = image.display_order - 1
+                content = {'message' : "Product image deleted successfully."}
+                return Response(content,status=status.HTTP_200_OK)
+            else:
+                content = {'message' : "Please check product id and image order"}
+                return Response(content,status=status.HTTP_200_OK)
+        else:
+            content = {'message' : "Please login as influencer and try again."}
+            return Response(content,status=status.HTTP_200_OK)
 
 
 
