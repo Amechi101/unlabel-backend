@@ -15,47 +15,55 @@
     </ul>
 {% endblock %}
 
-{% block header %}
-    <div class="page-header">
-        <a href="{% url 'dashboard:partner-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new brand" %}</a>
-        <h1>{% trans "Brands" %}</h1>
-    </div>
-{% endblock header %}
+    {% block header %}
+        {% if request.user.is_superuser %}
+        <div class="page-header">
+            <a href="{% url 'dashboard:partner-create' %}" class="btn btn-lg btn-primary pull-right"><i class="icon-plus"></i> {% trans "Create new brand" %}</a>
+            <h1>{% trans "Brands" %}</h1>
+        </div>
+        {% endif %}
+    {% endblock header %}
 
-{% block dashboard_content %}
-    <h2>Invite via email</h2>
-    <div class="well">
-        <form action="/dashboard/partners/" method="POST" class="form-inline">
-            {%csrf_token%}
-            <input type="email" id="invite_email" name="invite_email" >
-            <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Sending...' %}">{% trans "Send Brand Invite Email" %}</button>
-        </form>
-    </div>
-    <h2>Search</h2>
-    <div class="well">
-        <form action="" method="get" class="form-inline">
-            {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
-            <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
-            {% if is_filtered %}
-                <a class="btn btn-default" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
-            {% endif %}
-        </form>
-    </div>
-    <h2>Filters</h2>
-    <div class="well">
-        <form  method="get" action= "{% url 'dashboard:partner-filter' %}" class="form-inline">
-         <input type="checkbox" id ="active_id" name="active" > Active Brands
-         <input class="datetimepicker" style="margin-left: 100px" type="date" id ="created_date_id" name="created_date" value="{{ created_date }}" > : Created Date
-         <input class="datetimepicker" style="margin-left: 100px" type="date" id ="modified_date_id" value="{{ modified_date }}"  name="modified_date" >  :Modified Date
-         <input type="submit" style="margin-left: 100px" value="Filter" class="btn btn-primary">
-         <a class="btn btn-default" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
-        </form>
-    </div>
+    {% block dashboard_content %}
+{% if request.user.is_superuser %}
+        <h2>Invite via email</h2>
+        <div class="well">
+            <form action="/dashboard/partners/" method="POST" class="form-inline">
+                {%csrf_token%}
+                <input type="email" id="invite_email" name="invite_email" >
+                <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Sending...' %}">{% trans "Send Brand Invite Email" %}</button>
+            </form>
+        </div>
+        <h2>Search</h2>
+        <div class="well">
+            <form action="" method="get" class="form-inline">
+                {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
+                <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
+                {% if is_filtered %}
+                    <a class="btn btn-default" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
+                {% endif %}
+            </form>
+        </div>
+        <h2>Filters</h2>
+        <div class="well">
+            <form  method="get" action= "{% url 'dashboard:partner-filter' %}" class="form-inline">
+             <input type="checkbox" id ="active_id" name="active" > Active Brands
+             <input class="datetimepicker" style="margin-left: 100px" type="date" id ="created_date_id" name="created_date" value="{{ created_date }}" > : Created Date
+             <input class="datetimepicker" style="margin-left: 100px" type="date" id ="modified_date_id" value="{{ modified_date }}"  name="modified_date" >  :Modified Date
+             <input type="submit" style="margin-left: 100px" value="Filter" class="btn btn-primary">
+             <a class="btn btn-default" href="{% url 'dashboard:partner-list' %}" >{% trans "Reset" %}</a>
+            </form>
+        </div>
+
+{% endif %}
     <form action="" method="post" class="order_table">
         {% csrf_token %}
         <table class="table table-striped table-bordered">
             <caption>
-                <i class="icon-briefcase icon-large"></i>{{ queryset_description }}
+                {% if request.user.is_superuser %}
+                      <i class="icon-briefcase icon-large"></i>{{ queryset_description }}
+                {% else %}
+                {% endif %}
             </caption>
             {% if partners %}
                 <tr>
