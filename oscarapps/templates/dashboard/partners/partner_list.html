@@ -87,17 +87,7 @@
                             {% endwith %}
                         </td>
                         <td>
-                            {% with addresses=partner.addresses.all %}
-                            {% if addresses %}
-                                <ul>
-                                    {% for address in addresses %}
-                                        <li>{{ address.summary }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% else %}
-                                {% trans 'No address associated.' %}
-                            {% endif %}
-                            {% endwith %}
+                            {{ partner.location }}
                         </td>
                         <td>
                             <div class="btn-toolbar">
