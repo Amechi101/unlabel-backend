@@ -7,9 +7,13 @@ from oscar.apps.dashboard.catalogue.views import ProductCreateUpdateView as \
 from oscar.apps.dashboard.catalogue.views import ProductListView as CoreProductListView
 from oscar.apps.dashboard.catalogue.views import ProductDeleteView as \
     CoreProductDeleteView
+from oscar.core.loading import get_classes
 
 from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
 
+ProductTable, CategoryTable \
+    = get_classes('oscarapps.dashboard.catalogue.tables',
+                  ('ProductTable', 'CategoryTable'))
 
 class ProductCreateUpdateView(CoreProductCreateUpdateView):
     influencer_product_image_formset = InfluencerProductImageFormSet
@@ -27,7 +31,6 @@ class ProductCreateUpdateView(CoreProductCreateUpdateView):
         """
         Filter products that the user doesn't have permission to update
         """
-
         return filter_products(Product.objects.all(), self.request.user)
 
     def get_form_kwargs(self):

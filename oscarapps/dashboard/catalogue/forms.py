@@ -65,7 +65,6 @@ class StockRecordForm(forms.ModelForm):
     price_retail = forms.IntegerField(min_value=0)
     price_excl_tax = forms.IntegerField(min_value=0)
     cost_price = forms.IntegerField(min_value=0)
-
     def __init__(self, product_class, user, *args, **kwargs):
         # The user kwarg is not used by stock StockRecordForm. We pass it
         # anyway in case one wishes to customise the partner queryset
@@ -75,6 +74,8 @@ class StockRecordForm(forms.ModelForm):
         # Restrict accessible partners for non-staff users
         if not self.user.is_staff:
             self.fields['partner'].queryset = self.user.partners.all()
+            self.fields['partner'].initial = Partner.objects.get(users=self.user)
+            self.fields['partner'].widget = forms.HiddenInput()
 
         # If not tracking stock, we hide the fields
         if not product_class.track_stock:
