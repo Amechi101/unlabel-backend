@@ -8,7 +8,7 @@ from oscarapi.utils import (
 
 from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord
 from oscarapps.address.models import Locations, States
-from oscarapps.catalogue.models import Product, Size, InfluencerProductImage
+from oscarapps.catalogue.models import Product,InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
 from oscar.core.loading import get_model, get_class
@@ -195,11 +195,6 @@ class StateSerializer(serializers.ModelSerializer):
         model = States
         fields = '__all__'
 
-
-class SizeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Size
-        fields = '__all__'
 
 class RentalInfoSerializer(serializers.ModelSerializer):
     state = StateSerializer()
