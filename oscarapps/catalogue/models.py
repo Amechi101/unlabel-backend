@@ -1,8 +1,10 @@
-from oscar.apps.catalogue.abstract_models import AbstractProduct, AbstractCategory, AbstractProductImage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
+
+
 from oscarapps.partner.models import Partner
+from oscar.apps.catalogue.abstract_models import AbstractProduct
 from oscarapps.influencers.models import *
 
 
@@ -23,7 +25,7 @@ class InfluencerProductImage(models.Model):
     product = models.ForeignKey(
         'catalogue.Product', related_name='influencer_product_images', verbose_name=_("Product"))
     original = models.ImageField(
-        _("Original"), upload_to=settings.OSCAR_IMAGE_FOLDER, max_length=255)
+        _("Original"), upload_to='Influencer Product Images', max_length=255)
     caption = models.CharField(_("Caption"), max_length=200, blank=True)
 
     #: Use display_order to determine which is the "primary" image
@@ -40,7 +42,7 @@ class InfluencerProductImage(models.Model):
         ordering = ["display_order"]
         unique_together = ("product", "display_order")
         verbose_name = _('Influencer product image')
-        verbose_name_plural = _('influencer product images')
+        verbose_name_plural = _('Influencer product images')
 
     def __str__(self):
         return u"Influencer image of '%s'" % self.product
@@ -98,12 +100,12 @@ class Product(AbstractProduct, BaseApplicationModel):
         (YES, 'Yes'),
         (NO, 'No'),
     )
-    brand = models.ForeignKey(Partner, blank=True, null=True, default="", verbose_name="Brand")
-    material_info = models.TextField(blank=True, default="", verbose_name=_('Material & Care Information'))
+    brand = models.ForeignKey(Partner, blank=True, null=True, verbose_name="Brand")
+    material_info = models.TextField(blank=True, default="", verbose_name=_('Material & care information'))
     likes = models.PositiveIntegerField(default=0)
-    influencer_description = models.TextField(max_length=200, blank=True, null=True,
-                                              verbose_name=_('Influencer Product Description'))
-    weight = models.PositiveIntegerField(max_length=10, blank=True, null=True, verbose_name=_('Product weight information'))
+    influencer_product_note = models.TextField(blank=True, null=True,
+                                              verbose_name=_('Influencer product Note'))
+    weight = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True, verbose_name=_('Weight information'))
     on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
     item_sex_type = models.CharField(
         max_length=1,
@@ -120,7 +122,7 @@ class Product(AbstractProduct, BaseApplicationModel):
         max_length=3,
         choices=rental_status_choice,
         default=NONE,
-        verbose_name=_("Rental Status")
+        verbose_name=_("Rental status")
     )
     requires_shipping = models.CharField(
         max_length=1,
@@ -129,21 +131,13 @@ class Product(AbstractProduct, BaseApplicationModel):
         verbose_name=_('Requires shipping.?')
     )
 
-    # Metadata
-    class Meta:
-        verbose_name = _('Product')
-        verbose_name_plural = _('Products')
-
-    def __str__(self):
-        return "{0}".format(self.title)
-
     def save(self, *args, **kwargs):
         if self.description:
             self.description = strip_tags(self.description)
         if self.material_info:
             self.material_info = strip_tags(self.material_info)
-        if self.influencer_description:
-            self.influencer_description = strip_tags(self.influencer_description)
+        if self.influencer_product_note:
+            self.influencer_product_note = strip_tags(self.influencer_product_note)
         super(Product, self).save(*args, **kwargs)
 
 

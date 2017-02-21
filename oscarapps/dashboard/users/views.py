@@ -2,22 +2,13 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
-    DeleteView, DetailView, FormView, ListView, TemplateView, UpdateView)
+    DeleteView, DetailView, FormView, ListView, UpdateView)
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import FormMixin
-from django_tables2 import SingleTableMixin
-from django.views.generic import View
-from django.contrib.sites.models import Site
-from django.utils.http import urlsafe_base64_encode
-from django.contrib.sites.models import Site
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from django.core.mail.message import EmailMessage
-from django.shortcuts import render, redirect
+from django_tables2 import SingleTableView
 
 from oscar.apps.customer.utils import normalise_email
 from oscar.core.compat import get_user_model
@@ -33,7 +24,7 @@ ProductAlert = get_model('customer', 'ProductAlert')
 User = get_user_model()
 
 
-class IndexView(BulkEditMixin, SingleTableMixin, FormMixin, TemplateView):
+class IndexView(BulkEditMixin, FormMixin, SingleTableView):
     template_name = 'dashboard/users/index.html'
     table_pagination = True
     model = User
@@ -63,7 +54,10 @@ class IndexView(BulkEditMixin, SingleTableMixin, FormMixin, TemplateView):
         return kwargs
 
     def get_queryset(self):
-        queryset = self.model.objects.all().order_by('-date_joined')
+        if not self.request.user.is_staff:
+            queryset = self.model.objects.filter(is_staff=False, is_superuser=False).order_by('-date_joined')
+        else:
+            queryset = self.model.objects.all().order_by('-date_joined')
         return self.apply_search(queryset)
 
     def apply_search(self, queryset):
@@ -238,48 +232,3 @@ class ProductAlertDeleteView(DeleteView):
     def get_success_url(self):
         messages.warning(self.request, _("Product alert deleted"))
         return reverse('dashboard:user-alert-list')
-
-
-class InfluencerInviteView(View):
-    """
-    View for sending invitation email to user email,
-    the generated link will be send to the user
-    and will be redirected back to the same page.
-    """
-
-    def post(self,request,pk):
-        invite_user=User.objects.get(id=pk)
-        current_site = Site.objects.get_current()
-        domain = current_site.domain
-        invite_user=User.objects.get(id=pk)
-        context = {
-            'domain': domain,
-            'uid': urlsafe_base64_encode(force_bytes(invite_user.pk)),
-            'user': invite_user,
-            'token': default_token_generator.make_token(invite_user),
-            'protocol': 'http',
-        }
-        tosend = context['protocol']+'://'+context['domain']+'/influencers/influencer-sign-up/'+context['uid'].decode("utf-8")+'/'
-        email = EmailMessage()
-        email.subject = "Influencer inviattion from Unlabel"
-        email.content_subtype = "html"
-        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
-                        <body>
-                        <br><br>
-                        You're being invited as influencer at unlabel
-                        <br><br>
-                        Please fill the form provided at the link :
-                        <br><br>
-                        """+tosend+"""
-                        <br><br>
-                        Thank you for using our site!
-                        <br/>
-                        <br/>
-                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
-                        </body>
-                        </head>
-                        </html>"""
-        email.from_email = "Unlabel App"
-        email.to = [invite_user.email]
-        email.send()
-        return HttpResponseRedirect("/oscar/dashboard/users/"+str(invite_user.id)+"/")

@@ -89,55 +89,50 @@
 
             var country_id = $('#id_country');
             var state_id = $('#id_state');
+            var size_id = $('#id_size');
 
             if(country_id.val()=='US'){
                 state_id.prop('disabled',false);
             }
             else{
-                state_id.prop('disabled',true)    ;
+                state_id.prop('disabled',true);
             }
+            size_id.prop('disabled',true);
 
-        });
+    });
+
     var country_id = $('#id_country');
     var state_id = $('#id_state');
+    var size_class_id = $('#id_size_class');
+    var size_id = $('#id_size');
+
+    size_class_id.change(function(e){
+        $("#id_size").select2("val", "");
+        size_id.prop('disabled',false);
+                  $.ajax({
+                       type:'GET',
+                       url: '/api_v2/get_size?size_class='+size_class_id.val()+'',
+                       success: function (data) {
+                           var sizes= data.results;
+                           var options = '';
+                           for (var size = 0; size < sizes.length; size++) {
+                               options += '<option value="' + sizes[size]['id'] + '">' + sizes[size]['size_sex_type'] +" "+ sizes[size]['size'] + '</option>';
+                           }
+                           $('#id_size').html(options);
+                       }
+                  });
+
+    });
 
     country_id.change(function(e){
                 if(country_id.val()=="US")
                 {
                     state_id.prop('disabled',false);
-//                     ********** Required
-//                      $.ajax({
-//                    type:'GET',
-//                    url: '/api_v2/get_states?country=US',
-//
-//                    success: function (data) { //Array of data returned from server side function
-//
-//                     $('#id_state').replaceWith(data.html);
-//
-//                 }
-//                });
-//                     ************till here
-
                 }
                 else
                 {
                     state_id.prop('disabled',true);
                     state_id.select2("val",null);
-//                     ********** Required
-//                    $.ajax({
-//                    type:'GET',
-//                    url: '/api_v2/get_states?country=nil',
-//
-//                    success: function (data) {
-//                        console.log(data);
-//                        var i=0;
-//                        for(i=0;i<data.length;i++){
-//
-//                            $('#id_state').replaceWith('<option value=' + data[i]["key"] + '>' + data[i]["value"] + '</option>' )
-//                        }
-//                    }
-//                });
-//                     ************till here
                 }
         });
 

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from oscar.apps.address.models import UserAddress,Country
+from oscarapps.address.models import States, Locations
 
 
 class UserAddressSerializer(serializers.ModelSerializer):
@@ -33,3 +34,15 @@ class UserAddressSerializer(serializers.ModelSerializer):
     #     return customer_add
 
 
+class CountrySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Country
+        fields = ['printable_name','pk']
+
+
+class StateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = States
+        fields = ['name', 'pk']

@@ -7,7 +7,10 @@ from oscar.core.loading import get_class
 class UserManagementApplication(DashboardApplication):
     name = None
     default_permissions = ['is_staff', ]
-
+    permissions_map = _map = {
+        'users-index': (['is_staff'],
+                                     ['partner.dashboard_access']),
+        }
     index_view = get_class('dashboard.users.views', 'IndexView')
     user_detail_view = get_class('dashboard.users.views', 'UserDetailView')
     password_reset_view = get_class('dashboard.users.views',
@@ -18,8 +21,6 @@ class UserManagementApplication(DashboardApplication):
                                   'ProductAlertUpdateView')
     alert_delete_view = get_class('dashboard.users.views',
                                   'ProductAlertDeleteView')
-    influencer_invite_view = get_class('dashboard.users.views',
-                                    'InfluencerInviteView')
 
     def get_urls(self):
         urls = [
@@ -40,9 +41,6 @@ class UserManagementApplication(DashboardApplication):
             url(r'^alerts/(?P<pk>-?\d+)/update/$',
                 self.alert_update_view.as_view(),
                 name='user-alert-update'),
-            url(r'^(?P<pk>-?\d+)/influencer-invite/$',
-                self.influencer_invite_view.as_view(),
-                name='influencer-invite'),
         ]
         return self.post_process_urls(urls)
 
