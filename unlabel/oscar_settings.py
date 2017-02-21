@@ -59,16 +59,6 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Statistics'),
                 'url_name': 'dashboard:order-stats',
             },
-            {
-                'label': _('Brands'),
-                'url_name': 'dashboard:partner-list',
-            },
-            {
-                'label': _('Influencers'),
-                'url_name': 'dashboard:influencer-list',
-            },
-
-
             # The shipping method dashboard is disabled by default as it might
             # be confusing. Weight-based shipping methods aren't hooked into
             # the shipping repository by default (as it would make
@@ -79,6 +69,21 @@ OSCAR_DASHBOARD_NAVIGATION = [
             # },
         ]
     },
+    {
+        'label': _('Partners'),
+        'icon': 'icon-user',
+        'children': [
+            {
+                'label': _('Brands'),
+                'url_name': 'dashboard:partner-list',
+            },
+            {
+                'label': _('Influencers'),
+                'url_name': 'dashboard:influencer-list',
+            },
+        ]
+    },
+
     {
         'label': _('Customers'),
         'icon': 'icon-group',
