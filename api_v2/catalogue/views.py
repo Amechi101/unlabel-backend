@@ -15,7 +15,7 @@ from oscar.core.loading import get_model, get_class
 from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
 
-from .serializers import SizeSerializer, InfluencerBrandCategorySerializer,InfluencerBrandStyleSerializer
+from .serializers import InfluencerBrandCategorySerializer,InfluencerBrandStyleSerializer
 from oscarapps.partner.models import PartnerFollow, Style, Category
 
 from oscarapps.catalogue.models import InfluencerProductImage
