@@ -57,3 +57,8 @@ class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
         model = Influencers
         fields = '__all__'
 
+class InfluencerPhysicalAttributesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Influencers
+        fields = ['height','chest_or_bust','hips','waist']
