@@ -21,13 +21,9 @@ Partner = get_model('partner', 'Partner')
 StockRecord = get_model('partner', 'StockRecord')
 InfluencerProductImage = get_model('catalogue', 'InfluencerProductImage')
 ProductImage = get_model('catalogue', 'ProductImage')
-SizeClass = get_model('catalogue', 'SizeClass')
-Size = get_model('catalogue', 'Size')
 
 
 class ProductForm(CoreProductForm):
-    # size_class = forms.ModelChoiceField(queryset=SizeClass.objects.all())
-    # size = forms.ModelMultipleChoiceField(queryset=Size.objects.all())
 
     def __init__(self, user, *args, **kwargs):
         # The user kwarg is not used by stock StockRecordForm. We pass it

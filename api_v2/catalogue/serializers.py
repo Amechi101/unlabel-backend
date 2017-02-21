@@ -10,6 +10,7 @@ from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, Re
 from oscarapps.address.models import Locations, States
 from oscarapps.catalogue.models import Product, Size, InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
+from oscar.apps.partner.models import StockRecord
 from oscar.core.loading import get_model, get_class
 
 Selector = get_class('partner.strategy', 'Selector')
@@ -199,7 +200,6 @@ class SizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Size
         fields = '__all__'
-
 
 class RentalInfoSerializer(serializers.ModelSerializer):
     state = StateSerializer()
