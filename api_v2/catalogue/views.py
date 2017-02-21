@@ -14,7 +14,10 @@ from oscarapi import permissions
 from oscar.core.loading import get_model, get_class
 from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
-from oscarapps.partner.models import PartnerFollow, Style
+
+from .serializers import SizeSerializer, InfluencerBrandCategorySerializer,InfluencerBrandStyleSerializer
+from oscarapps.partner.models import PartnerFollow, Style, Category
+
 from oscarapps.catalogue.models import InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
@@ -572,7 +575,7 @@ class InfluencerProductImagesView(APIView):
             image_ser = self.serializer_class(data=request.data)
             if image_ser.is_valid():
                 try:
-                    influencer_product = Product.objects.get(pk=image_ser.data['product_id'])
+                    influencer_product = Product.objects.get(pk=image_ser.data['note'])
                 except ObjectDoesNotExist:
                     content = {'message': "invalid product id"}
                     return Response(content, status=status.HTTP_204_NO_CONTENT)
@@ -715,5 +718,13 @@ class InfluencerRemoveProductImage(APIView):
             content = {'message' : "Please login as influencer and try again."}
             return Response(content,status=status.HTTP_200_OK)
 
+
+class InfluencerBrandCategories(generics.ListAPIView):
+    serializer_class = InfluencerBrandCategorySerializer
+    queryset = Category.objects.all()
+
+class InfluencerBrandStyles(generics.ListAPIView):
+    serializer_class = InfluencerBrandStyleSerializer
+    queryset = Style.objects.all()
 
 
