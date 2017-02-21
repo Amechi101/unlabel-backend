@@ -14,7 +14,6 @@ from oscarapi import permissions
 from oscar.core.loading import get_model, get_class
 from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
-from .serializers import SizeSerializer
 from oscarapps.partner.models import PartnerFollow, Style
 from oscarapps.catalogue.models import InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
@@ -440,20 +439,7 @@ class InfluencerReserveProduct(APIView):
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
-class GetSize(generics.ListAPIView):
-    '''
-    View to get size list of products
-    '''
-    http_method_names = ('get')
-    serializer_class = SizeSerializer
 
-    def get_queryset(self, *args, **kwargs):
-        if self.request.GET.get('size_class'):
-            size_class = self.request.GET.get('size_class')
-            sizes = Size.objects.filter(size_class=size_class)
-            return sizes
-        else:
-            return Size.objects.all()
 
 
 class InfluencerReservedProducts(APIView):
