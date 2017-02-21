@@ -47,6 +47,9 @@ urlpatterns = [  # admin
                  url(r'^rest-auth/', include('rest_auth.urls')),
 
 
+                 url(r'^pay/', include('oscarapps.checkout.urls')),
+
+
                  ]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
 # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
