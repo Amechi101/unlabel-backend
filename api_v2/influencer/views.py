@@ -227,7 +227,7 @@ class InfluencerProfileUpdate(APIView):
                     try:
                         validate_email(request.data['email'])
                         if request.user.email != request.data['email']:
-                            email_exists = User.objects.filter(email=request.data["email"]).count()
+                            email_exists = User.objects.filter(email__iexact=request.data["email"]).count()
                             if email_exists > 0:
                                 content = {"message": "email already in use."}
                                 return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
@@ -283,6 +283,9 @@ class InfluencerPicAndBio(APIView):
         return Response(content,status=status.HTTP_204_NO_CONTENT)
 
     def post(self,request,*args,**kwargs):
+        print("====================================")
+        print("-------------------------------",request.data)
+        print("=================================")
         if request.user.is_authenticated() and request.user.is_influencer is True:
             image_ser = self.serializer_class(data=request.data)
             influencer_user = request.user
@@ -291,12 +294,15 @@ class InfluencerPicAndBio(APIView):
             except:
                 content = {"message":"Influencer profile not found."}
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-
-            influencer.bio = image_ser.validated_data['bio']
-            influencer.image = image_ser.validated_data['image']
-            influencer.save()
-            content = {"message":"successfully updated."}
-            return Response(content,status=status.HTTP_200_OK)
+            if image_ser.is_valid():
+                influencer.bio = image_ser.data['bio']
+                influencer.image = request.data['image']
+                influencer.save()
+                content = {"message":"successfully updated."}
+                return Response(content,status=status.HTTP_200_OK)
+            else:
+                content = {"message":"Phahahahahahahad try again."}
+                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         else:
             content = {"message":"Please login as influencer and try again."}
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
