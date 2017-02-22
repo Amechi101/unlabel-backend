@@ -549,7 +549,7 @@ class InfluencerProductImagesView(APIView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if request.GET.get('prod_id'):
+            if 'prod_id' in request.data:
                 prod_id = request.GET.get('prod_id')
                 try:
                     influencer_product = Product.objects.get(pk=prod_id)
@@ -609,7 +609,7 @@ class InfluencerProductNote(APIView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if request.GET.get('prod_id'):
+            if 'prod_id' in request.data:
                 prod_id = request.GET.get('prod_id')
                 try:
                     influencer_product = Product.objects.get(pk=prod_id)
@@ -628,9 +628,9 @@ class InfluencerProductNote(APIView):
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, *args, **kwargs):
-        if request.data['note'] and request.data['prod_id']:
+        if 'note' in request.data and 'prod_id in request.data':
             try:
-                product = Product.objects.get(pk=request.data["product_id"])
+                product = Product.objects.get(pk=request.data["prod_id"])
             except:
                 content = {'message': "Invalid product id."}
                 return Response(content, status=status.HTTP_204_NO_CONTENT)
@@ -653,7 +653,7 @@ class InfluencerProductGoLive(APIView):
 
     def post(self,request,*args,**kwargs):
         if request.user.is_authenticated() and request.user.is_influencer:
-            if request.data['prod_id'] :
+            if 'prod_id' in request.data:
                 try:
                     reserved_product = Product.objects.get(pk = request.data['prod_id'])
                 except:
@@ -691,7 +691,7 @@ class InfluencerRemoveProductImage(APIView):
 
     def post(self,request,*args,**kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if request.data['prod_id'] and request.data['display_order'] :
+            if 'prod_id' in request.data and 'display_order' in request.data:
                 try:
                     reserved_product = InfluencerProductReserve.objects.get(product=request.data['prod_id'])
                 except:

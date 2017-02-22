@@ -429,12 +429,16 @@ class InfluencerChangePassword(APIView):
 
     def post(self,request,*args,**kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if request.data['password'] is not None:
-                influencer = request.user
-                influencer.set_password(request.data['password'])
-                influencer.save()
-                content = {"message":"Password updated successfully."}
-                return Response(content,status=status.HTTP_200_OK)
+            if 'old_password' in request.data and 'new_password' in request.data:
+                if not self.request.user.check_password(request.data['old_password']):
+                    content = {"message":"The current password is wrong"}
+                    return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    influencer = request.user
+                    influencer.set_password(request.data['new_password'])
+                    influencer.save()
+                    content = {"message":"Password updated successfully."}
+                    return Response(content,status=status.HTTP_200_OK)
             else:
                 content = {"message":"Password not found."}
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
