@@ -590,7 +590,7 @@ class InfluencerProductImagesView(APIView):
                 else:
                     next_order = 0
                 new_product_image = InfluencerProductImage()
-                new_product_image.original = image_ser.validated_data['image']
+                new_product_image.original = request.data['image']
                 new_product_image.product = image_for_product
                 new_product_image.display_order = next_order
                 new_product_image.save()
