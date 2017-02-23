@@ -620,8 +620,7 @@ class InfluencerProductNote(APIView):
                     note_for_product = influencer_product.parent
                 else:
                     note_for_product = influencer_product
-                note_serializer = InfluencerProductNoteSerializer(note_for_product.influencer_product_note)
-                return Response(note_serializer.data)
+                return Response({'note':note_for_product.influencer_product_note},status=status.HTTP_200_OK)
             content = {'message': "invalid product id"}
             return Response(content, status=status.HTTP_204_NO_CONTENT)
         content = {'message': "Please login as influencer."}
@@ -630,13 +629,17 @@ class InfluencerProductNote(APIView):
     def post(self, request, *args, **kwargs):
         if 'note' in request.data and 'prod_id' in request.data:
             try:
-                product = Product.objects.get(pk=request.data["prod_id"])
+                influencer_product = Product.objects.get(pk=request.data["prod_id"])
             except:
                 content = {'message': "Invalid product id."}
                 return Response(content, status=status.HTTP_204_NO_CONTENT)
+            if influencer_product.structure == "child":
+                note_for_product = influencer_product.parent
+            else:
+                note_for_product = influencer_product
             if len(request.data['note']) < 200:
-                product.influencer_product_note = request.data['note']
-                product.save()
+                note_for_product.influencer_product_note = request.data['note']
+                note_for_product.save()
                 content = {'message': "Product note successfully saved."}
                 return Response(content, status=status.HTTP_200_OK)
             else:
