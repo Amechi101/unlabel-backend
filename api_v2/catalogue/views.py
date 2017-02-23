@@ -628,7 +628,7 @@ class InfluencerProductNote(APIView):
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, *args, **kwargs):
-        if 'note' in request.data and 'prod_id in request.data':
+        if 'note' in request.data and 'prod_id' in request.data:
             try:
                 product = Product.objects.get(pk=request.data["prod_id"])
             except:
@@ -640,7 +640,7 @@ class InfluencerProductNote(APIView):
                 content = {'message': "Product note successfully saved."}
                 return Response(content, status=status.HTTP_200_OK)
             else:
-                content = {'message': "Product note max length is 200 charecters."}
+                content = {'message': "Product note max length is 200 characters."}
                 return Response(content, status=status.HTTP_205_RESET_CONTENT)
 
 class InfluencerProductGoLive(APIView):
