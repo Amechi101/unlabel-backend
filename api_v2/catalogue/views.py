@@ -719,12 +719,28 @@ class InfluencerRemoveProductImage(APIView):
             return Response(content,status=status.HTTP_200_OK)
 
 
-class InfluencerBrandCategories(generics.ListAPIView):
+class InfluencerBrandCategories(APIView):
     serializer_class = InfluencerBrandCategorySerializer
-    queryset = Category.objects.all()
+    # queryset = Category.objects.all()
+    pagination_class = None
+    http_method_names = ('get',)
 
-class InfluencerBrandStyles(generics.ListAPIView):
+    def get(self,request,*args,**kwargs):
+        queryset = Category.objects.all()
+        category_ser = self.serializer_class(queryset, many=True)
+        result_dict = {'results':category_ser.data}
+        return Response(result_dict)
+
+class InfluencerBrandStyles(APIView):
     serializer_class = InfluencerBrandStyleSerializer
-    queryset = Style.objects.all()
+    permission_classes = ()
+    # queryset = Style.objects.all()
+    pagination_class = None
+    http_method_names = ('get',)
 
+    def get(self,request,*args,**kwargs):
+        queryset = Style.objects.all()
+        category_ser = self.serializer_class(queryset, many=True)
+        result_dict = {'results':category_ser.data}
+        return Response(result_dict)
 
