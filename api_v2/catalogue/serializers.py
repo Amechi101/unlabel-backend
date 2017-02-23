@@ -257,7 +257,7 @@ class InfluencerProductImagesSerializer(serializers.ModelSerializer):
 
 class InfluencerImageSerializer(serializers.Serializer):
     image = serializers.ImageField(required=True)
-    note = serializers.IntegerField(required=True)
+    note = serializers.CharField(required=True)
 
 
 class InfluencerProductNoteSerializer(serializers.Serializer):
