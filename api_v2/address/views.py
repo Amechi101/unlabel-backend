@@ -63,14 +63,16 @@ class GetCountriesView(APIView):
     def get(self,request,*args,**kwargs):
         country = Country.objects.all()
         country_serializer = CountrySerializer(country,many=True)
-        return Response(country_serializer.data)
+        results_dict = {'results' : country_serializer.data}
+        return Response(results_dict)
 
 class GetStatesView(APIView):
 
     def get(self,request,*args,**kwargs):
         states = States.objects.all()
         states_serializer = StateSerializer(states, many=True)
-        return Response(states_serializer.data)
+        results_dict = {'results' : states_serializer.data}
+        return Response(results_dict)
 
 class InfluencerBrandLocations(generics.ListAPIView):
     serializer_class = BrandLocationsSerializer
