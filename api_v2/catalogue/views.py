@@ -549,8 +549,8 @@ class InfluencerProductImagesView(APIView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if request.data['prod_id']:
-                prod_id = request.data['prod_id']
+            try:
+                prod_id = request.GET.get('prod_id')
                 try:
                     influencer_product = Product.objects.get(pk=prod_id)
                 except ObjectDoesNotExist:
@@ -563,8 +563,8 @@ class InfluencerProductImagesView(APIView):
                 influencer_prod_images = InfluencerProductImage.objects.filter(product=image_for_product)
                 image_serializer = InfluencerProductImagesSerializer(influencer_prod_images, many=True)
                 return Response(image_serializer.data)
-            else:
-                content = {'message': "product id not found."}
+            except:
+                content = {'message': "Some error occured. Please try again."}
                 return Response(content, status=status.HTTP_204_NO_CONTENT)
         else:
             content = {'message': "Please login as influencer and try again."}
