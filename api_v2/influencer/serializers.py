@@ -55,5 +55,48 @@ class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Influencers
-        fields = '__all__'
+        fields = ['bio','image']
 
+class InfluencerPhysicalAttributesSerializer(serializers.ModelSerializer):
+    sex = serializers.SerializerMethodField()
+
+    def get_sex(self,obj):
+        try:
+            inf_user = obj.users
+            return inf_user.gender
+        except:
+            return None
+
+    class Meta:
+        model = Influencers
+        fields = ['height','chest_or_bust','hips','waist','sex']
+
+class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
+    email=serializers.SerializerMethodField()
+    first_name=serializers.SerializerMethodField()
+    last_name=serializers.SerializerMethodField()
+
+    def get_email(self,obj):
+        try:
+            inf_user = obj.users
+            return inf_user.email
+        except:
+            return None
+
+    def get_first_name(self,obj):
+        try:
+            inf_user = obj.users
+            return inf_user.first_name
+        except:
+            return None
+
+    def get_last_name(self,obj):
+        try:
+            inf_user = obj.users
+            return inf_user.last_name
+        except:
+            return None
+
+    class Meta:
+        model=Influencers
+        fields=['image','auto_id','email','first_name', 'last_name']

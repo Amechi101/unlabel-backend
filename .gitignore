@@ -27,7 +27,6 @@ dist*
 local
 local.py
 /media
-/static
 manage_local.py
 l_manage.py
 locale/*/LC_MESSAGES/*.mo
