@@ -550,7 +550,7 @@ class InfluencerProductImagesView(APIView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             if request.data['prod_id']:
-                prod_id = request.GET.get('prod_id')
+                prod_id = request.data['prod_id']
                 try:
                     influencer_product = Product.objects.get(pk=prod_id)
                 except ObjectDoesNotExist:
