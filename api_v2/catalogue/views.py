@@ -549,7 +549,7 @@ class InfluencerProductImagesView(APIView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if 'prod_id' in request.data:
+            if request.data['prod_id']:
                 prod_id = request.GET.get('prod_id')
                 try:
                     influencer_product = Product.objects.get(pk=prod_id)
@@ -609,7 +609,7 @@ class InfluencerProductNote(APIView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            if 'prod_id' in request.data:
+            if request.data['prod_id']:
                 prod_id = request.GET.get('prod_id')
                 try:
                     influencer_product = Product.objects.get(pk=prod_id)
