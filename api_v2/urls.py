@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^Influencer_partnerList/',catalogueViews.InfluencerBrandListView.as_view(),name='influencer_brand_list_view'),
     url(r'^partner_follow/(?P<partner_id>[0-9]+)/', catalogueViews.PartnerFollowView.as_view(),
         name='Partner_follow_view'),
-    url(r'^influencer_reserve_product/(?P<product_id>[0-9]+)/',catalogueViews.InfluencerReserveProduct.as_view(),
+    url(r'^influencer_reserve_product/',catalogueViews.InfluencerReserveProduct.as_view(),
         name='influencer_product_reserve'),
     url(r'^login/$', influencerViews.LoginView.as_view(), name='influencer-login'),
     url(r'^influencer_followed_partners/$',influencerViews.InfluencerFollowedBrands.as_view(),
@@ -78,6 +78,8 @@ urlpatterns = [
         name='influencer_current_locations'),
     url(r'^influencer_change_password/$',influencerViews.InfluencerChangePassword.as_view(),
         name='influencer_change_password'),
+    url(r'^get_influencer_device_id/$',influencerViews.InfluencerDeviceId.as_view(),
+        name='get_influencer_device_id'),
 
 ]
 
