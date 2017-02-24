@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import auth
@@ -15,14 +16,15 @@ from oscar.core.loading import get_model, get_class
 from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
 
-from .serializers import InfluencerBrandCategorySerializer,InfluencerBrandStyleSerializer
+from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer
 from oscarapps.partner.models import PartnerFollow, Style, Category
 
 from oscarapps.catalogue.models import InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
     InfluencerBrandProductSerializer, \
-    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer, BaseProductSerializer
+    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer,\
+    BaseProductSerializer,IdSerializer
 from oscarapps.partner.models import PartnerFollow, Style
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
@@ -98,7 +100,7 @@ class BrandListView(generics.ListAPIView):
     http_method_names = ('get',)
 
     # ZA - sort by a to z
-    #AZ - sort by z to a
+    # AZ - sort by z to a
     #ASC - sort by date ascending
     #DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
@@ -155,9 +157,9 @@ class ProductListView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         brand_id = self.request.GET.get('brand')
         param = self.request.GET.get('param')
-        if brand_id == None:
+        if brand_id is None:
             queryset = Product.objects.filter(status='L').order_by('created')
-        elif param == None:
+        elif param is None:
             queryset = Product.objects.filter(brand=brand_id, status='L').order_by('created')
         elif param == 'New':
             queryset = Product.objects.filter(brand=brand_id, status='L').order_by('-created')
@@ -185,26 +187,32 @@ class StoreListView(generics.ListAPIView):
 
 class PartnerFollowView(APIView):
     authentication = authentication.SessionAuthentication
-    http_method_names = ('get',)
+    serializer_class = IdSerializer
+    http_method_names = ('post',)
 
-    def get(self, request, partner_id, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated() and request.user.is_influencer is True:
                 influencer = request.user
             else:
                 content = {"message": "Please login first."}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            try:
-                partner = Partner.objects.get(id=partner_id)
-            except:
-                content = {"message": "Invalid Brand id."}
+            id_ser = self.serializer_class(data=request.data,many=False)
+            if id_ser.is_valid():
+                try:
+                    partner = Partner.objects.get(id=id_ser.validated_data['id'])
+                except:
+                    content = {"message": "Invalid Brand id."}
+                    return Response(content, status=status.HTTP_200_OK)
+            else:
+                content = {"message": "Brand id not found"}
                 return Response(content, status=status.HTTP_200_OK)
             try:
                 follow_exists = PartnerFollow.objects.get(customer=influencer, partner=partner)
             except:
                 follow_exists = PartnerFollow.objects.create(customer=influencer, partner=partner)
                 follow_exists.save()
-                content = {"message": "Brand Liked"}
+                content = {"message": "Brand followed"}
                 return Response(content, status=status.HTTP_200_OK)
             follow_exists.delete()
             content = {"message": "Brand unfollowed"}
@@ -222,7 +230,7 @@ class InfluencerBrandListView(generics.ListAPIView):
     serializer_class = PartnerSerializer
     http_method_names = ('get',)
 
-    #ZA - sort by a to z
+    # ZA - sort by a to z
     #AZ - sort by z to a
     #ASC - sort by date ascending
     #DESC - sort by date descending
@@ -284,8 +292,8 @@ class InfluencerBaseProductListView(generics.ListAPIView):
         if brand_id != None:
             if param == 'OLD':
                 prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
-                products_to_list =[]
+                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                products_to_list = []
                 for product in products:
                     if product.structure == "child":
                         products_to_list.append(product.parent.pk)
@@ -299,8 +307,8 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                 prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
                 prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                     'price_retail').values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
-                products_to_list =[]
+                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                products_to_list = []
                 for product in products:
                     if product.structure == "child":
                         products_to_list.append(product.parent.pk)
@@ -322,8 +330,8 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                 prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
                 prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                     '-price_retail').values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
-                products_to_list =[]
+                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                products_to_list = []
                 for product in products:
                     if product.structure == "child":
                         products_to_list.append(product.parent.pk)
@@ -342,8 +350,8 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                 return item_list
             else:
                 prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U',pk__in=prod_Sort_List)
-                products_to_list =[]
+                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                products_to_list = []
                 for product in products:
                     if product.structure == "child":
                         products_to_list.append(product.parent.pk)
@@ -381,8 +389,9 @@ class InfluencerBaseProductListView(generics.ListAPIView):
 
             serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data)
-        else :
+        else:
             return Response(None)
+
 
 class InfluencerChildProductsListView(generics.ListAPIView):
     '''
@@ -403,7 +412,6 @@ class InfluencerChildProductsListView(generics.ListAPIView):
             return child_products
 
 
-
 class InfluencerReserveProduct(APIView):
     '''
     View for influencer to reserve a product
@@ -411,41 +419,51 @@ class InfluencerReserveProduct(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication = authentication.SessionAuthentication
     http_method_names = ('post',)
+    serializer_class = IdSerializer
+
 
     def post(self, request, *args, **kwargs):
-        try:
-            if request.user.is_authenticated() and request.user.is_influencer is True:
-                influencer_user = request.user
-            else:
-                content = {"message": "Please login first."}
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            try:
+                influencer_user = Influencers.objects.get(users=request.user)
+            except:
+                content = {"message": "Influencer profile not completed."}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            if request.data['prod_id']:
-                try:
-                    product_to_reserve = Product.objects.get(id=request.data['prod_id'], status='U')
-                except:
-                    content = {"message": "Product already reserved"}
-                    return Response(content, status=status.HTTP_303_SEE_OTHER)
-
-                influencer_product_reserved = InfluencerProductReserve()
-                influencer_product_reserved.influencer = influencer_user
-                influencer_product_reserved.product = product_to_reserve
-                product_to_reserve.status = 'R'
-                if product_to_reserve.structure == "child":
-                    base_product = product_to_reserve.parent
-                    base_product.status = 'R'
-                    base_product.save()
-                influencer_product_reserved.save()
-                product_to_reserve.save()
-                content = {"message": "Product reservered successfully"}
-                return Response(content, status=status.HTTP_200_OK)
-            else:
-                content = {"message": "Product id not found"}
-                return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
-        except:
-            content = {"message": "Please try again after some time"}
+        else:
+            content = {"message": "Please login first."}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-
-
+        id_ser = self.serializer_class(data=request.data,many=False)
+        if id_ser.is_valid():
+            print("----------------------------",id_ser.validated_data['id'])
+            try:
+                product_to_reserve = Product.objects.get(id=id_ser.validated_data['id'], status='U')
+            except:
+                content = {"message": "Product already reserved."}
+                return Response(content, status=status.HTTP_303_SEE_OTHER)
+            # try:
+            influencer_product_reserved = InfluencerProductReserve()
+            influencer_product_reserved.influencer = influencer_user
+            influencer_product_reserved.product = product_to_reserve
+            influencer_product_reserved.date_reserved = datetime.now()
+            product_to_reserve.status = 'R'
+            if product_to_reserve.structure == "child":
+                print("------------0000000")
+                base_product = Product.objects.get(pk=product_to_reserve.parent)
+                base_product.status = 'R'
+                base_product.save()
+                print("--------------------1111122222")
+            print("--------------------111555552")
+            influencer_product_reserved.save()
+            product_to_reserve.save()
+            print("--------------------1111111111111133333333333333333333")
+            content = {"message": "Product reservered successfully"}
+            return Response(content, status=status.HTTP_200_OK)
+            # except:
+            #     content = {"message": "Error occurred while reserving. please try again"}
+            #     return Response(content, status=status.HTTP_201_CREATED)
+        else:
+            content = {"message": "Product id not found"}
+            return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
 
 
 
@@ -477,7 +495,7 @@ class InfluencerReservedProducts(APIView):
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
-            results_dict = {'results' : influencer_reserved_products}
+            results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)
 
 
@@ -494,9 +512,9 @@ class InfluencerRentedProducts(APIView):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer = Influencers.objects.filter(users=request.user)
             rented_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
-                                                                                                        flat=True)
+                                                                                                      flat=True)
             products_rented = Product.objects.filter(pk__in=rented_items, rental_status='REN').values_list('id',
-                                                                                                               flat=True)
+                                                                                                           flat=True)
             stock_brand = StockRecord.objects.filter(product__in=products_rented).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
             influencer_rented_products = []
@@ -507,9 +525,8 @@ class InfluencerRentedProducts(APIView):
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_rented_products.append(brand_product_ser.data)
-            results_dict = {'results' : influencer_rented_products}
+            results_dict = {'results': influencer_rented_products}
             return Response(results_dict)
-
 
 
 class InfluencerLiveProducts(APIView):
@@ -537,7 +554,7 @@ class InfluencerLiveProducts(APIView):
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
-            results_dict = {'results' : influencer_reserved_products}
+            results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)
 
 
@@ -566,8 +583,8 @@ class InfluencerProductImagesView(APIView):
                     image_for_product = influencer_product
                 influencer_prod_images = InfluencerProductImage.objects.filter(product=image_for_product)
                 image_serializer = InfluencerProductImagesSerializer(influencer_prod_images, many=True)
-                results_dict = {'results':image_serializer.data}
-                return Response(results_dict,status=status.HTTP_200_OK)
+                results_dict = {'results': image_serializer.data}
+                return Response(results_dict, status=status.HTTP_200_OK)
             except:
                 content = {'message': "Some error occured. Please try again."}
                 return Response(content, status=status.HTTP_204_NO_CONTENT)
@@ -625,7 +642,7 @@ class InfluencerProductNote(APIView):
                     note_for_product = influencer_product.parent
                 else:
                     note_for_product = influencer_product
-                return Response({'note':note_for_product.influencer_product_note},status=status.HTTP_200_OK)
+                return Response({'note': note_for_product.influencer_product_note}, status=status.HTTP_200_OK)
             content = {'message': "invalid product id"}
             return Response(content, status=status.HTTP_204_NO_CONTENT)
         content = {'message': "Please login as influencer."}
@@ -651,6 +668,7 @@ class InfluencerProductNote(APIView):
                 content = {'message': "Product note max length is 200 characters."}
                 return Response(content, status=status.HTTP_205_RESET_CONTENT)
 
+
 class InfluencerProductGoLive(APIView):
     '''
     API for making producy live
@@ -659,34 +677,35 @@ class InfluencerProductGoLive(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('post')
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer:
             if 'prod_id' in request.data:
                 try:
-                    reserved_product = Product.objects.get(pk = request.data['prod_id'])
+                    reserved_product = Product.objects.get(pk=request.data['prod_id'])
                 except:
                     content = {'meassage': 'invalid product id.'}
-                    return Response(content,status=status.HTTP_205_RESET_CONTENT)
+                    return Response(content, status=status.HTTP_205_RESET_CONTENT)
                 if reserved_product.structure == "child":
                     original_product = reserved_product.parent
                 else:
                     original_product = reserved_product
 
-                if InfluencerProductImage.objects.filter(product=original_product).count()  > 0 \
+                if InfluencerProductImage.objects.filter(product=original_product).count() > 0 \
                         and original_product.influencer_product_note is not None:
-                    original_product.status='L'
+                    original_product.status = 'L'
                     original_product.save()
-                    reserved_product.status='L'
+                    reserved_product.status = 'L'
                     reserved_product.save()
-                    content = {'message' : 'Product Successfully made live'}
-                    return Response(content,status=status.HTTP_200_OK)
+                    content = {'message': 'Product Successfully made live'}
+                    return Response(content, status=status.HTTP_200_OK)
                 else:
-                    content = {'message' : 'Please add product note and images to make live'}
-                    return Response(content,status=status.HTTP_205_RESET_CONTENT)
+                    content = {'message': 'Please add product note and images to make live'}
+                    return Response(content, status=status.HTTP_205_RESET_CONTENT)
 
         else:
-            content = {'message' : 'Please login as influencer'}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {'message': 'Please login as influencer'}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
 
 class InfluencerRemoveProductImage(APIView):
     '''
@@ -695,36 +714,36 @@ class InfluencerRemoveProductImage(APIView):
 
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get','post')
+    http_method_names = ('get', 'post')
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             if 'prod_id' in request.data and 'display_order' in request.data:
                 try:
                     reserved_product = InfluencerProductReserve.objects.get(product=request.data['prod_id'])
                 except:
                     content = {'meassage': 'invalid product id.'}
-                    return Response(content,status=status.HTTP_205_RESET_CONTENT)
+                    return Response(content, status=status.HTTP_205_RESET_CONTENT)
                 if reserved_product.structure == "child":
                     image_for_product = reserved_product.parent
                 else:
                     image_for_product = reserved_product
-                product_image = InfluencerProductImage.objects.filter(product = image_for_product,
+                product_image = InfluencerProductImage.objects.filter(product=image_for_product,
                                                                       display_order=request.data['display_order'])
                 product_image.delete()
-                product_images = InfluencerProductImage.objects.filter(product = image_for_product)
+                product_images = InfluencerProductImage.objects.filter(product=image_for_product)
 
                 for image in product_images:
                     if image.display_order > request.data['display_order']:
                         image.display_order = image.display_order - 1
-                content = {'message' : "Product image deleted successfully."}
-                return Response(content,status=status.HTTP_200_OK)
+                content = {'message': "Product image deleted successfully."}
+                return Response(content, status=status.HTTP_200_OK)
             else:
-                content = {'message' : "Please check product id and image order"}
-                return Response(content,status=status.HTTP_200_OK)
+                content = {'message': "Please check product id and image order"}
+                return Response(content, status=status.HTTP_200_OK)
         else:
-            content = {'message' : "Please login as influencer and try again."}
-            return Response(content,status=status.HTTP_200_OK)
+            content = {'message': "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_200_OK)
 
 
 class InfluencerBrandCategories(APIView):
@@ -733,11 +752,12 @@ class InfluencerBrandCategories(APIView):
     pagination_class = None
     http_method_names = ('get',)
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         queryset = Category.objects.all()
         category_ser = self.serializer_class(queryset, many=True)
-        result_dict = {'results':category_ser.data}
+        result_dict = {'results': category_ser.data}
         return Response(result_dict)
+
 
 class InfluencerBrandStyles(APIView):
     serializer_class = InfluencerBrandStyleSerializer
@@ -746,9 +766,9 @@ class InfluencerBrandStyles(APIView):
     pagination_class = None
     http_method_names = ('get',)
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         queryset = Style.objects.all()
         category_ser = self.serializer_class(queryset, many=True)
-        result_dict = {'results':category_ser.data}
+        result_dict = {'results': category_ser.data}
         return Response(result_dict)
 
