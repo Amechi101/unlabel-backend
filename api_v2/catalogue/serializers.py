@@ -286,6 +286,8 @@ class InfluencerBrandStyleSerializer(serializers.ModelSerializer):
         model = Style
         fields = '__all__'
 
+class IdSerializer(serializers.Serializer):
+    id = serializers.CharField(required=True, max_length=10)
 
 
 

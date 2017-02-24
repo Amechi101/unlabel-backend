@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^influencer_forgot_password/',
         influencerViews.InfluencerForgotPassword.as_view(),name='influencer_forgot_password_view'),
     url(r'^Influencer_partnerList/',catalogueViews.InfluencerBrandListView.as_view(),name='influencer_brand_list_view'),
-    url(r'^partner_follow/(?P<partner_id>[0-9]+)/', catalogueViews.PartnerFollowView.as_view(),
+    url(r'^partner_follow/', catalogueViews.PartnerFollowView.as_view(),
         name='Partner_follow_view'),
     url(r'^influencer_reserve_product/',catalogueViews.InfluencerReserveProduct.as_view(),
         name='influencer_product_reserve'),

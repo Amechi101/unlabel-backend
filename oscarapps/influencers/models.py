@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import random
 import string
-import datetime
+from datetime import datetime
 from decimal import Decimal
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
