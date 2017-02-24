@@ -434,33 +434,24 @@ class InfluencerReserveProduct(APIView):
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         id_ser = self.serializer_class(data=request.data,many=False)
         if id_ser.is_valid():
-            print("----------------------------",id_ser.validated_data['id'])
             try:
                 product_to_reserve = Product.objects.get(id=id_ser.validated_data['id'], status='U')
             except:
                 content = {"message": "Product already reserved."}
                 return Response(content, status=status.HTTP_303_SEE_OTHER)
-            # try:
             influencer_product_reserved = InfluencerProductReserve()
             influencer_product_reserved.influencer = influencer_user
             influencer_product_reserved.product = product_to_reserve
             influencer_product_reserved.date_reserved = datetime.now()
             product_to_reserve.status = 'R'
             if product_to_reserve.structure == "child":
-                print("------------0000000")
-                base_product = Product.objects.get(pk=product_to_reserve.parent)
+                base_product = Product.objects.get(pk=product_to_reserve.parent.id)
                 base_product.status = 'R'
                 base_product.save()
-                print("--------------------1111122222")
-            print("--------------------111555552")
             influencer_product_reserved.save()
             product_to_reserve.save()
-            print("--------------------1111111111111133333333333333333333")
             content = {"message": "Product reservered successfully"}
             return Response(content, status=status.HTTP_200_OK)
-            # except:
-            #     content = {"message": "Error occurred while reserving. please try again"}
-            #     return Response(content, status=status.HTTP_201_CREATED)
         else:
             content = {"message": "Product id not found"}
             return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
