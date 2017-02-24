@@ -4,8 +4,6 @@ from oscarapps.address.models import States,Locations
 import datetime
 
 
-
-
 def SaveSendMail(userObj,Sub,Body):
     try :
         now = datetime.datetime.now()

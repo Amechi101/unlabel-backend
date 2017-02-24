@@ -140,6 +140,8 @@ class Product(AbstractProduct, BaseApplicationModel):
             self.influencer_product_note = strip_tags(self.influencer_product_note)
         super(Product, self).save(*args, **kwargs)
 
-
+    @property
+    def get_brand_pk(self):
+        return self.brand.pk
 
 from oscar.apps.catalogue.models import *

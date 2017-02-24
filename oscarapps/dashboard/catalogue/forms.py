@@ -24,7 +24,7 @@ ProductImage = get_model('catalogue', 'ProductImage')
 
 
 class ProductForm(CoreProductForm):
-
+    brand = forms.ModelChoiceField(queryset=Partner.objects.all(), required=True)
     def __init__(self, user, *args, **kwargs):
         # The user kwarg is not used by stock StockRecordForm. We pass it
         # anyway in case one wishes to customise the partner queryset

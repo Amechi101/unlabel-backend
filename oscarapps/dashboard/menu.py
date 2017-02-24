@@ -13,7 +13,6 @@ def get_nodes(user):
     """
 
     if user.is_staff:
-         print ("=========")
          all_nodes = create_menu(settings.OSCAR_DASHBOARD_NAVIGATION)
     else:
         OSCAR_DASHBOARD_NAVIGATION_NEW = []

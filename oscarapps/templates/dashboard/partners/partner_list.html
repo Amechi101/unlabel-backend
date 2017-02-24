@@ -68,8 +68,11 @@
             {% if partners %}
                 <tr>
                     <th>{% anchor 'name' _('Name') %}</th>
-                    <th>{% trans 'Users' %}</th>
-                    <th>{% trans 'Addresses' %}</th>
+                    {% if request.user.is_superuser %}
+                        <th>{% trans 'Users' %}</th>
+                        <th>{% trans 'Location' %}</th>
+                    {% endif %}
+                    <th>{% trans 'Rental Address' %}</th>
                     <th>&nbsp;</th>
                 </tr>
                 {% for partner in partners %}
@@ -77,42 +80,67 @@
                         <td>
                             <a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{{ partner.name }}</a>
                         </td>
-                        <td>
-                            {% with users=partner.users.all %}
-                                {% if users %}
-                                    <ul>
-                                        {% for user in users %}
-                                            <li>
-                                                <a href="{% url 'dashboard:partner-user-update' partner_pk=partner.pk user_pk=user.id %}" title="{% trans "Edit the user's details" %}">
-                                                    {{ user.get_full_name|default:user.email }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    {% trans 'No users associated.' %}
+                        {% if request.user.is_superuser %}
+                            <td>
+                                {% with users=partner.users.all %}
+                                    {% if users %}
+                                        <ul>
+                                            {% for user in users %}
+                                                <li>
+                                                    <a href="{% url 'dashboard:partner-user-update' partner_pk=partner.pk user_pk=user.id %}" title="{% trans "Edit the user's details" %}">
+                                                        {{ user.get_full_name|default:user.email }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        {% trans 'No users associated.' %}
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                            <td>
+                                {% if partner.location %}
+    {#                                 <a href="{% url 'dashboard:partner-manage' pk=partner.pk  %}" title="{% trans "Edit rental address" %}">#}
+                                                        {{ partner.location.city}},
+                                         {% if partner.location.state  %}
+                                             {{partner.location.state }},
+                                         {% endif %}
+                                             {{partner.location.country }}
+                                     </a>
                                 {% endif %}
-                            {% endwith %}
-                        </td>
+                            </td>
+                        {% endif %}
                         <td>
-                            {{ partner.location }}
+                            {% if partner.rental_info %}
+                                 <a href="{% url 'dashboard:partner-address-manage' pk=partner.pk  %}" title="{% trans "Edit rental address" %}">
+                                                    {{ partner.rental_info.city}},
+                                     {% if partner.rental_info.state  %}
+                                         {{partner.rental_info.state }},
+                                     {% endif %}
+                                         {{partner.rental_info.country }}
+                                 </a>
+                            {% endif %}
                         </td>
-                        <td>
-                            <div class="btn-toolbar">
-                                <div class="btn-group">
-                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
-                                        {% trans "Actions" %}
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{% trans "Manage brand and users" %}</a></li>
-                                        <li><a href="{% url 'dashboard:partner-delete' pk=partner.pk %}">{% trans "Delete brand" %}</a></li>
-                                        <li><a href="{% url 'dashboard:partner-user-select' partner_pk=partner.pk %}">{% trans "Link an existing user" %}</a></li>
-                                        <li><a href="{% url 'dashboard:partner-user-create' partner_pk=partner.pk %}">{% trans "Link a new user" %}</a></li>
-                                    </ul>
+                        {% if request.user.is_superuser %}
+                            <td>
+                                <div class="btn-toolbar">
+                                    <div class="btn-group">
+                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+                                            {% trans "Actions" %}
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{% trans "Manage brand and users" %}</a></li>
+                                            <li><a href="{% url 'dashboard:partner-delete' pk=partner.pk %}">{% trans "Delete brand" %}</a></li>
+                                            <li><a href="{% url 'dashboard:partner-user-select' partner_pk=partner.pk %}">{% trans "Link an existing user" %}</a></li>
+                                            <li><a href="{% url 'dashboard:partner-user-create' partner_pk=partner.pk %}">{% trans "Link a new user" %}</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             {% else %}
