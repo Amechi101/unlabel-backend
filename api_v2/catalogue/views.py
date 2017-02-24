@@ -412,31 +412,35 @@ class InfluencerReserveProduct(APIView):
     authentication = authentication.SessionAuthentication
     http_method_names = ('post',)
 
-    def post(self, request, product_id, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated() and request.user.is_influencer is True:
                 influencer_user = request.user
             else:
                 content = {"message": "Please login first."}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            try:
-                product_to_reserve = Product.objects.get(id=product_id, status='U')
-            except:
-                content = {"message": "Product already reserved"}
-                return Response(content, status=status.HTTP_303_SEE_OTHER)
+            if request.data['prod_id']:
+                try:
+                    product_to_reserve = Product.objects.get(id=request.data['prod_id'], status='U')
+                except:
+                    content = {"message": "Product already reserved"}
+                    return Response(content, status=status.HTTP_303_SEE_OTHER)
 
-            influencer_product_reserved = InfluencerProductReserve()
-            influencer_product_reserved.influencer = influencer_user
-            influencer_product_reserved.product = product_to_reserve
-            product_to_reserve.status = 'R'
-            if product_to_reserve.structure == "child":
-                base_product = product_to_reserve.parent
-                base_product.status = 'R'
-                base_product.save()
-            influencer_product_reserved.save()
-            product_to_reserve.save()
-            content = {"message": "Product reservered successfully"}
-            return Response(content, status=status.HTTP_200_OK)
+                influencer_product_reserved = InfluencerProductReserve()
+                influencer_product_reserved.influencer = influencer_user
+                influencer_product_reserved.product = product_to_reserve
+                product_to_reserve.status = 'R'
+                if product_to_reserve.structure == "child":
+                    base_product = product_to_reserve.parent
+                    base_product.status = 'R'
+                    base_product.save()
+                influencer_product_reserved.save()
+                product_to_reserve.save()
+                content = {"message": "Product reservered successfully"}
+                return Response(content, status=status.HTTP_200_OK)
+            else:
+                content = {"message": "Product id not found"}
+                return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
         except:
             content = {"message": "Please try again after some time"}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
@@ -562,7 +566,8 @@ class InfluencerProductImagesView(APIView):
                     image_for_product = influencer_product
                 influencer_prod_images = InfluencerProductImage.objects.filter(product=image_for_product)
                 image_serializer = InfluencerProductImagesSerializer(influencer_prod_images, many=True)
-                return Response(image_serializer.data)
+                results_dict = {'results':image_serializer.data}
+                return Response(results_dict,status=status.HTTP_200_OK)
             except:
                 content = {'message': "Some error occured. Please try again."}
                 return Response(content, status=status.HTTP_204_NO_CONTENT)

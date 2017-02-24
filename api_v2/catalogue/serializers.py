@@ -119,10 +119,22 @@ class BaseProductSerializer(OscarModelSerializer):
     categories = serializers.StringRelatedField(many=True, required=False)
     product_class = serializers.StringRelatedField(required=False)
     images = ProductImageSerializer(many=True, required=False)
-    price = serializers.HyperlinkedIdentityField(view_name='product-price')
+    price = serializers.SerializerMethodField()
     options = OptionSerializer(many=True, required=False)
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
+
+    def get_price(self,obj):
+        child_products = Product.objects.filter(structure='child',parent=obj)
+        for child_product in child_products:
+            try:
+                child_stock = StockRecord.objects.get(product=child_product)
+                price_retail = child_stock.price_retail
+                return {'price_retail':price_retail}
+            except:
+                pass
+        return {'price_retail':'No Stock'}
+
 
     class Meta:
         model = Product
