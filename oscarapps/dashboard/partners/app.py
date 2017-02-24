@@ -4,6 +4,11 @@ from oscar.core.loading import get_class
 
 
 class PartnersDashboardApplication(CorePartnersDashboardApplication):
+    permissions_map = _map = {
+        'partner-list': (['is_staff'], ['partner.dashboard_access']),
+        'partner-address-manage': (['is_staff'], ['partner.dashboard_access']),
+        'partner-manage': (['is_staff'], ['partner.dashboard_access']),
+    }
 
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerRentalInfoManageView')
     partner_filter_view = get_class('oscarapps.dashboard.partners.views', 'PartnerFilterView')
@@ -65,20 +70,20 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
                 self.user_update_view.as_view(),
                 name='partner-user-update'),
 
-            url(r'^sub_category/$', self.sub_category_list_view.as_view(), name='brand-sub-category-list'),
-            url(r'^sub_category/create/$', self.sub_category_create_view.as_view(),
+            url(r'^specialization/$', self.sub_category_list_view.as_view(), name='brand-sub-category-list'),
+            url(r'^specialization/create/$', self.sub_category_create_view.as_view(),
                 name='brand-sub-category-create'),
-            url(r'^sub_category/(?P<pk>\d+)/$', self.sub_category_manage_view.as_view(),
+            url(r'^specialization/(?P<pk>\d+)/$', self.sub_category_manage_view.as_view(),
                 name='brand-sub-category-manage'),
-            url(r'^sub_category/(?P<pk>\d+)/delete/$', self.sub_category_delete_view.as_view(),
+            url(r'^specialization/(?P<pk>\d+)/delete/$', self.sub_category_delete_view.as_view(),
                 name='brand-sub-category-delete'),
 
-            url(r'^brand_category/$', self.brand_category_list_view.as_view(), name='brand-category-list'),
-            url(r'^brand_category/create/$', self.brand_category_create_view.as_view(),
+            url(r'^store_type/$', self.brand_category_list_view.as_view(), name='brand-category-list'),
+            url(r'^store_type/create/$', self.brand_category_create_view.as_view(),
                 name='brand-category-create'),
-            url(r'^brand_category/(?P<pk>\d+)/$', self.brand_category_manage_view.as_view(),
+            url(r'^store_type/(?P<pk>\d+)/$', self.brand_category_manage_view.as_view(),
                 name='brand-category-manage'),
-            url(r'^brand_category/(?P<pk>\d+)/delete/$', self.brand_category_delete_view.as_view(),
+            url(r'^store_type/(?P<pk>\d+)/delete/$', self.brand_category_delete_view.as_view(),
                 name='brand-category-delete'),
 
             url(r'^brand_style/$', self.brand_style_list_view.as_view(), name='brand-style-list'),

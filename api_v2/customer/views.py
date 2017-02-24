@@ -1,30 +1,25 @@
 from __future__ import unicode_literals
-from django.contrib.auth.tokens import default_token_generator
-from django.http import HttpResponse
-from django.utils.http import urlsafe_base64_encode
-from django.views.generic import ListView, TemplateView
-import json, ast,os
-from django.core import serializers
-from rest_framework import permissions, authentication
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from scarface.models import Application, Platform, Device, Topic, PushMessage
-from scarface.tests import TEST_ARN_TOKEN_APNS
-from .serializers import CustomerRegisterSerializer
-from django.core.mail.message import EmailMessage
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.utils.encoding import force_bytes
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import View
+
+from api_v2.utils import *
+
 import re
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import Site
+from django.core.mail.message import EmailMessage
+from django.http import HttpResponse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.views.generic import View
 from rest_auth.registration.views import SocialLoginView
-import datetime
-from api_v2.utils import *
+from rest_framework import permissions, authentication
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from scarface.models import Application, Platform, Device, Topic, PushMessage
+from .serializers import CustomerRegisterSerializer
+
 
 # from oscarapps.customer.models import EmailConfirmation
 

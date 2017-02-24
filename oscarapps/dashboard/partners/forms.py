@@ -41,8 +41,8 @@ class PartnerCreateForm(forms.Form):
     state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
     style = forms.ModelMultipleChoiceField(label="Style", queryset=Style.objects.all(), required=True,)
-    category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all(), required=True)
-    sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
+    category = forms.ModelMultipleChoiceField(label="Store Type", queryset=Category.objects.all(), required=True)
+    sub_category = forms.ModelMultipleChoiceField(label="Specialization", queryset=SubCategory.objects.all(),
                                                   required=True)
     is_active = forms.BooleanField(initial=True, help_text="Uncheck to deactivate store")
 
@@ -105,8 +105,8 @@ class PartnerManageForm(forms.ModelForm):
         labels = {
             'name': 'Store Name',
             'style': 'Selected Styles',
-            'category': 'Selected Categories',
-            'sub_category': 'Selected Sub Categories'
+            'category': 'Selected Store Types',
+            'sub_category': 'Selected Specializations'
         }
 
 
@@ -122,6 +122,7 @@ class PartnerManageForm(forms.ModelForm):
     #                 raise forms.ValidationError("Password should have at least 6 characters and one uppercase,"
     #                                         "lowercase,digit,special character")
     #         return password2
+
 
     def save(self, commit=True):
         instance = super(PartnerManageForm, self).save(commit=False)
@@ -187,6 +188,7 @@ class PartnerRentalInfoForm(forms.ModelForm):
                   'post_box', 'zipcode', 'city', 'country', 'state',)
 
         labels = {'zipcode': 'Zip Code'}
+
 #################
 #Brand Styles
 #################
@@ -236,7 +238,7 @@ class BrandCategoryCreateForm(forms.ModelForm):
 
     class Meta:
         model = BrandCategories
-        fields = ('name',)
+        fields = ('name', 'description')
 
 
 

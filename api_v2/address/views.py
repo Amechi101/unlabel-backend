@@ -10,12 +10,14 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 from django.core.mail.message import EmailMessage
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from .serializers import UserAddressSerializer, CountrySerializer, StateSerializer
+from .serializers import UserAddressSerializer, CountrySerializer, StateSerializer,BrandLocationsSerializer
 from oscar.apps.address.models import Country
 from oscarapps.address.models import States, Locations
+from oscarapps.partner.models import Partner
 from django.http import HttpResponse
 
 
@@ -58,18 +60,28 @@ class AddAddressView(APIView):
 
 class GetCountriesView(APIView):
 
-
     def get(self,request,*args,**kwargs):
         country = Country.objects.all()
         country_serializer = CountrySerializer(country,many=True)
-        return Response(country_serializer.data)
+        results_dict = {'results' : country_serializer.data}
+        return Response(results_dict)
 
 class GetStatesView(APIView):
 
     def get(self,request,*args,**kwargs):
         states = States.objects.all()
         states_serializer = StateSerializer(states, many=True)
-        return Response(states_serializer.data)
+        results_dict = {'results' : states_serializer.data}
+        return Response(results_dict)
+
+class InfluencerBrandLocations(generics.ListAPIView):
+    serializer_class = BrandLocationsSerializer
+    model = Locations
+
+    def get_queryset(self,*args,**kwargs):
+        brand_locations_id = Partner.objects.all().values_list('location')
+        brand_locations = Locations.objects.filter(pk__in=brand_locations_id)
+        return brand_locations
 
 
 

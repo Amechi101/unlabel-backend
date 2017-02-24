@@ -9,176 +9,20 @@ https://docs.djangoproject.com/en/1.8/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
-from django.utils.translation import ugettext_lazy as _
+
 import os
 import json
-import dj_database_url
-from oscar.defaults import *
 
+from django.core.exceptions import ImproperlyConfigured
 
-OSCAR_SHOP_NAME = 'Unlabel'
-AUTH_USER_MODEL = "users.User"
+from oscar import get_core_apps
+from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-PASSWORD_RESET_TIMEOUT_DAYS = 1
+from unlabel.oscar_settings import *
 
-OSCAR_DEFAULT_CURRENCY = 'USD'
-OSCAR_DASHBOARD_NAVIGATION = [
-    {
-        'label': _('Dashboard'),
-        'icon': 'icon-th-list',
-        'url_name': 'dashboard:index',
-    },
-    {
-        'label': _('Inventory Management'),
-        'icon': 'icon-sitemap',
-        'children': [
-            {
-                'label': _('Products'),
-                'url_name': 'dashboard:catalogue-product-list',
-            },
-            {
-                'label': _('Product Types'),
-                'url_name': 'dashboard:catalogue-class-list',
-            },
-
-            {
-                'label': _('Categories'),
-                'url_name': 'dashboard:catalogue-category-list',
-            },
-            {
-                'label': _('Ranges'),
-                'url_name': 'dashboard:range-list',
-            },
-            {
-                'label': _('Low stock alerts'),
-                'url_name': 'dashboard:stock-alert-list',
-            },
-
-        ]
-    },
-    {
-        'label': _('Fulfilment'),
-        'icon': 'icon-shopping-cart',
-        'children': [
-            {
-                'label': _('Orders'),
-                'url_name': 'dashboard:order-list',
-            },
-            {
-                'label': _('Statistics'),
-                'url_name': 'dashboard:order-stats',
-            },
-            {
-                'label': _('Brands'),
-                'url_name': 'dashboard:partner-list',
-            },
-            {
-                'label': _('Influencers'),
-                'url_name': 'dashboard:influencer-list',
-            },
-
-
-            # The shipping method dashboard is disabled by default as it might
-            # be confusing. Weight-based shipping methods aren't hooked into
-            # the shipping repository by default (as it would make
-            # customising the repository slightly more difficult).
-            # {
-            #     'label': _('Shipping charges'),
-            #     'url_name': 'dashboard:shipping-method-list',
-            # },
-        ]
-    },
-    {
-        'label': _('Customers'),
-        'icon': 'icon-group',
-        'children': [
-            {
-                'label': _('Users'),
-                'url_name': 'dashboard:users-index',
-            },
-            {
-                'label': _('Stock alert requests'),
-                'url_name': 'dashboard:user-alert-list',
-            },
-        ]
-    },
-    {
-        'label': _('Offers'),
-        'icon': 'icon-bullhorn',
-        'children': [
-            {
-                'label': _('Offers'),
-                'url_name': 'dashboard:offer-list',
-            },
-            {
-                'label': _('Vouchers'),
-                'url_name': 'dashboard:voucher-list',
-            },
-        ],
-    },
-    {
-        'label': _('Content'),
-        'icon': 'icon-folder-close',
-        'children': [
-            {
-                'label': _('Content blocks'),
-                'url_name': 'dashboard:promotion-list',
-            },
-            {
-                'label': _('Content blocks by page'),
-                'url_name': 'dashboard:promotion-list-by-page',
-            },
-            {
-                'label': _('Pages'),
-                'url_name': 'dashboard:page-list',
-            },
-            {
-                'label': _('Email templates'),
-                'url_name': 'dashboard:comms-list',
-            },
-            {
-                'label': _('Reviews'),
-                'url_name': 'dashboard:reviews-list',
-            },
-        ]
-    },
-    {
-        'label': _('Reports'),
-        'icon': 'icon-bar-chart',
-        'url_name': 'dashboard:reports-index',
-    },
-    {
-        'label': _('CRUD'),
-        'icon': 'icon-edit',
-        'children': [
-            # {
-            #     'label': _('Style Preferences'),
-            #     'url_name': 'dashboard:style-list',
-            # },
-            {
-                'label': _('Brand Styles'),
-                'url_name': 'dashboard:brand-style-list',
-            },
-
-            {
-                'label': _('Brand Categories'),
-                'url_name': 'dashboard:brand-category-list',
-            },
-            {
-                'label': _('Brand Sub Category'),
-                'url_name': 'dashboard:brand-sub-category-list',
-            },
-        ],
-    },
-
-]
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
-from django.core.exceptions import ImproperlyConfigured
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -205,7 +49,7 @@ AWS_SECRET_ACCESS_KEY = 'XaCKTRxXb/NBS60sQhJAvnWh6NcKpQJjlg80K0xb'
 SCARFACE_REGION_NAME = 'ap-south-1'
 SCARFACE_LOGGING_ENABLED = True
 
-
+STRIPE_API_KEY = "sk_test_TiQXNU4lcqe8ckslYQMn1fEK"
 
 SCARFACE_APNS_CERTIFICATE = "-----BEGIN CERTIFICATE-----\nMIIFlzCCBH+gAwIBAgIIFy2yaV/8fd8wDQYJKoZIhvcNAQEFB\
 QAwgZYxCzAJBgNV\nBAYTAlVTMRMwEQYDVQQKDApBcHBsZSBJbmMuMSwwKgYDVQQLDCNBcHBsZSBXb3Js\nZHdpZGUgRGV2ZWxvcGVy\
@@ -246,8 +90,6 @@ zV8AXBilJe\ncQnGiUzAtQ1lR820a00/3b/9ifTMuNoWHxwYZeiQgs/Y9y4tMAfBXWiQTBhJKkuh\nfg
 YX1ZxINuLFKcSNlet5AoGBAJzPYZU0e92ShlD/1qFC\nfJbv2VmBApIER/iZRg8CL0U48OY8hV1Li9cuXv/rA6ZZ6vhK08hVaVNbBTg\
 LYEoL\n0fwTtvsrUVHcSGtFna7AtJrisWWev2kTLNGLioXNPEOczDEzniJlwoG2NNTRIyJK\nvNYc1hkssQE9PLLGolkHf6kA\n-----END PRIVATE KEY-----"
 
-
-
 def get_secret(setting, secrets=secrets):
     """
     Get the secret variable or return explicit exception.
@@ -259,10 +101,7 @@ def get_secret(setting, secrets=secrets):
         error_msg = "Set the {0} environment variable".format(setting)
         raise ImproperlyConfigured(error_msg)
 
-
-
 SECRET_KEY = get_secret("SECRET_KEY")
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -316,8 +155,6 @@ INSTALLED_APPS = [
     'users',
 ]
 
-from oscar import get_core_apps
-
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
     [
         'oscarapps.customer',
@@ -327,6 +164,8 @@ INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
         'oscarapps.dashboard',
         'oscarapps.dashboard.partners',
         'oscarapps.dashboard.catalogue',
+        'oscarapps.dashboard.users',
+        'oscarapps.checkout'
     ])
 
 MIDDLEWARE_CLASSES = (
@@ -382,7 +221,7 @@ ROOT_URLCONF = 'unlabel.urls'
 #         },
 #     },
 # ]
-from oscar import OSCAR_MAIN_TEMPLATE_DIR
+
 
 TEMPLATES = [
    {
@@ -433,9 +272,9 @@ FIXTURE_DIRS = [
 
 
 # Administration
-LOGIN_URL = '/admin/login/'
-LOGOUT_URL = '/admin/logout/'
-LOGIN_REDIRECT_URL = '/admin/'
+# LOGIN_URL = '/admin/login/'
+# LOGOUT_URL = '/admin/logout/'
+# LOGIN_REDIRECT_URL = '/admin/'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -445,7 +284,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "unlabel", "static")
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),
+                   ]
 # Api settings
 TASTYPIE_DEFAULT_FORMATS = ['json']
 
@@ -499,11 +339,6 @@ EMAIL_HOST_USER = 'unlabelapp@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'unlabelapp@gmail.com'
-
-# try:
-#     from local_settings import *
-# except ImportError:
-#     pass
 
 assert len(SECRET_KEY) > 20, 'Please set SECRET_KEY in local_settings.py'
 

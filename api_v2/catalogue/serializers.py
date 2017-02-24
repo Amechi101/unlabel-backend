@@ -6,12 +6,11 @@ from oscarapi.utils import (
     OscarHyperlinkedModelSerializer
 )
 
-from oscarapps.partner.models import PartnerFollow,RentalInformation
-from oscarapps.partner.models import Partner, Style
-from oscarapps.address.models import Locations,States
-from oscarapps.catalogue.models import Product,Size,InfluencerProductImage
+from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord
+from oscarapps.address.models import Locations, States
+from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
-from oscarapps.influencers.models import Influencers,InfluencerProductReserve
+from oscarapps.catalogue.models import Product , InfluencerProductImage
 from oscar.core.loading import get_model, get_class
 
 Selector = get_class('partner.strategy', 'Selector')
@@ -29,15 +28,15 @@ Partner = get_model('partner', 'Partner')
 class LocationSerializer(serializers.ModelSerializer):
     state = serializers.SerializerMethodField(source='get_state')
 
-    def get_state(self,obj):
+    def get_state(self, obj):
         if obj.state is not None:
             return obj.state.name
-        else :
+        else:
             return None
 
     class Meta:
         model = Locations
-        fields = ('city','state','country','latitude','longitude')
+        fields = ('city', 'state', 'country', 'latitude', 'longitude')
 
 
 class PartnerSerializer(OscarModelSerializer):
@@ -104,10 +103,12 @@ class RecommmendedProductSerializer(OscarModelSerializer):
         fields = overridable(
             'OSCARAPI_RECOMMENDED_PRODUCT_FIELDS', default=('url',))
 
+
 class AvailabilitySerializer(serializers.Serializer):
     is_available_to_buy = serializers.BooleanField()
     num_available = serializers.IntegerField(required=False)
     message = serializers.CharField()
+
 
 class BaseProductSerializer(OscarModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name='product-detail')
@@ -118,10 +119,22 @@ class BaseProductSerializer(OscarModelSerializer):
     categories = serializers.StringRelatedField(many=True, required=False)
     product_class = serializers.StringRelatedField(required=False)
     images = ProductImageSerializer(many=True, required=False)
-    price = serializers.HyperlinkedIdentityField(view_name='product-price')
+    price = serializers.SerializerMethodField()
     options = OptionSerializer(many=True, required=False)
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
+
+    def get_price(self,obj):
+        child_products = Product.objects.filter(structure='child',parent=obj)
+        for child_product in child_products:
+            try:
+                child_stock = StockRecord.objects.get(product=child_product)
+                price_retail = child_stock.price_retail
+                return {'price_retail':price_retail}
+            except:
+                pass
+        return {'price_retail':'No Stock'}
+
 
     class Meta:
         model = Product
@@ -165,7 +178,7 @@ class ProductSerializer(OscarModelSerializer):
             return "0.00"
         return stock_record.price_retail
 
-    def get_availability(self,obj):
+    def get_availability(self, obj):
         product = obj
         strategy = Selector().strategy()
         ser = AvailabilitySerializer(
@@ -188,30 +201,28 @@ class StoreTypeSerializer(OscarModelSerializer):
         model = Style
         fields = '__all__'
 
+
 class StateSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model=States
-        fields='__all__'
-
-class SizeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Size
+        model = States
         fields = '__all__'
-        
+
+
 class RentalInfoSerializer(serializers.ModelSerializer):
     state = StateSerializer()
+
     class Meta:
         model = RentalInformation
         fields = '__all__'
 
+
 class InfluencerProductSerializer(serializers.ModelSerializer):
-    # images = ProductImageSerializer(many=True, required=False)
     images = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
+    attributes = ProductAttributeValueSerializer(
+        many=True, required=False, source="attribute_values")
 
-    def get_images(self,obj):
+    def get_images(self, obj):
         if obj.structure == "child":
             image_for_product = obj.parent
         else:
@@ -220,7 +231,7 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         image_serializer = ProductImageSerializer(prod_image, many=True, required=False)
         return image_serializer.data
 
-    def get_price(self,obj):
+    def get_price(self, obj):
         try:
             stock = StockRecord.objects.get(product=obj)
         except:
@@ -230,8 +241,8 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['material_info','influencer_product_note','weight', 'item_sex_type', 'rental_status','requires_shipping',
-                  'title', 'description','id','images','price' ]
+        fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
+                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes']
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
@@ -251,17 +262,32 @@ class InfluencerBrandProductSerializer(serializers.Serializer):
 
 
 class InfluencerProductImagesSerializer(serializers.ModelSerializer):
-
     class Meta:
-        model=InfluencerProductImage
-        fields='__all__'
+        model = InfluencerProductImage
+        fields = '__all__'
+
 
 class InfluencerImageSerializer(serializers.Serializer):
     image = serializers.ImageField(required=True)
-    product_id = serializers.IntegerField(required=True)
+    note = serializers.CharField(required=True)
+
 
 class InfluencerProductNoteSerializer(serializers.Serializer):
-    note = serializers.CharField(required=True,max_length=200)
+    note = serializers.CharField(required=True, max_length=200)
+
+
+class InfluencerBrandCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
+
+class InfluencerBrandStyleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Style
+        fields = '__all__'
+
+class IdSerializer(serializers.Serializer):
+    id = serializers.CharField(required=True, max_length=10)
 
 
 

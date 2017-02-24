@@ -1,11 +1,19 @@
-from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
+from django.db.models import Q
+from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
+from django.utils.translation import ugettext_lazy as _
+
 from oscar.apps.dashboard.catalogue.views import ProductCreateUpdateView as \
     CoreProductCreateUpdateView
 from oscar.apps.dashboard.catalogue.views import ProductListView as CoreProductListView
-from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
-from django.utils.translation import ugettext_lazy as _
 from oscar.apps.dashboard.catalogue.views import ProductDeleteView as \
     CoreProductDeleteView
+from oscar.core.loading import get_classes
+
+from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
+
+ProductTable, CategoryTable \
+    = get_classes('oscarapps.dashboard.catalogue.tables',
+                  ('ProductTable', 'CategoryTable'))
 
 class ProductCreateUpdateView(CoreProductCreateUpdateView):
     influencer_product_image_formset = InfluencerProductImageFormSet
@@ -127,11 +135,11 @@ class ProductListView(CoreProductListView):
 
         return queryset
 
+
 class ProductDeleteView(CoreProductDeleteView):
 
     def get_queryset(self):
         """
         Filter products that the user doesn't have permission to update
         """
-        print ("fffffffffffffffffffffffffff")
         return Product.objects.all()
