@@ -726,7 +726,7 @@ class InfluencerRemoveProductImage(APIView):
                 product_images = InfluencerProductImage.objects.filter(product=image_for_product)
 
                 for image in product_images:
-                    if image.display_order > request.data['display_order']:
+                    if image.display_order > int(request.data['display_order']):
                         image.display_order = image.display_order - 1
                 content = {'message': "Product image deleted successfully."}
                 return Response(content, status=status.HTTP_200_OK)
