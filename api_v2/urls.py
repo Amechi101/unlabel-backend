@@ -78,8 +78,8 @@ urlpatterns = [
         name='influencer_current_locations'),
     url(r'^influencer_change_password/$',influencerViews.InfluencerChangePassword.as_view(),
         name='influencer_change_password'),
-    url(r'^get_influencer_device_id/$',influencerViews.InfluencerDeviceId.as_view(),
-        name='get_influencer_device_id'),
+    # url(r'^get_influencer_device_id/$',influencerViews.InfluencerDeviceId.as_view(),
+    #     name='get_influencer_device_id'),
 
 ]
 
