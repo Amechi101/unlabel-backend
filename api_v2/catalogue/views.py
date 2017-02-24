@@ -712,13 +712,14 @@ class InfluencerRemoveProductImage(APIView):
             if 'prod_id' in request.data and 'display_order' in request.data:
                 try:
                     reserved_product = InfluencerProductReserve.objects.get(product=request.data['prod_id'])
+                    product = Product.objects.get(pk = request.data['prod_id'])
                 except:
-                    content = {'meassage': 'invalid product id.'}
+                    content = {'message': 'invalid product id.'}
                     return Response(content, status=status.HTTP_205_RESET_CONTENT)
-                if reserved_product.structure == "child":
-                    image_for_product = reserved_product.parent
+                if product.structure == "child":
+                    image_for_product = product.parent
                 else:
-                    image_for_product = reserved_product
+                    image_for_product = product
                 product_image = InfluencerProductImage.objects.filter(product=image_for_product,
                                                                       display_order=request.data['display_order'])
                 product_image.delete()
