@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from api_v2.utils import *
-
+import uuid
 import re
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from django.contrib.auth.models import User
@@ -15,9 +15,11 @@ from django.views.generic import View
 from rest_auth.registration.views import SocialLoginView
 from rest_framework import permissions, authentication
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from scarface.models import Application, Platform, Device, Topic, PushMessage
+# from scarface.models import Application, Platform, Device, Topic, PushMessage
+from push_notifications.models import APNSDevice
 from .serializers import CustomerRegisterSerializer
 
 
@@ -66,6 +68,38 @@ class PushNotificationView(View):
         return HttpResponse("Partner successfully registered.")
 
 #######################################push testing ends
+
+# @api_view(['post',])
+# class DjangoPush(APIView):
+
+class DjangoPush(APIView):
+    def post(request):
+
+        # dev_id = request.data['device_id']
+        # p_token = request.data['token']
+        if re.match("[0-9a-fA-F]{64}", "D91CD8F77356E83EDE1E32F797798D8872C7312CFE1606E571741C65068F5A3B") is not None:
+            device, created = APNSDevice.objects.get_or_create(user=request.user)
+            device.registration_id = "D91CD8F77356E83EDE1E32F797798D8872C7312CFE1606E571741C65068F5A3B"
+            device.active = True
+            device.save()
+            if created:
+                device.send_message("This is the bloody push notification.")
+                return Response({'message':"done"},status=status.HTTP_201_CREATED)
+            else:
+                return Response()
+        else:
+            return Response("device_token invalid or not provided", status=status.HTTP_400_BAD_REQUEST)
+
+        # apple_device = APNSDevice()
+        # apple_device.device_id = uuid.UUID("ec04b7235df4a21183f062f51ffa2b975c1eb82e").hex
+        # apple_device.registration_id = "D91CD8F77356E83EDE1E32F797798D8872C7312CFE1606E571741C65068F5A3B"
+        # apple_device.name = "Issac _ Testing django push notification"
+        # apple_device.active = True
+        # apple_device.user = request.user
+        # apple_device.save()
+        # apple_device.send_message("This is the bloody push notification.")
+        # content = {'message':"sent successfully"}
+        # return Response(content,status=status.HTTP_200_OK)
 
 
 

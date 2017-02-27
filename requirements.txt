@@ -71,3 +71,4 @@ SQLAlchemy==0.9.9
 static3==0.5.1
 tzlocal==1.2.2
 Unidecode==0.4.19
+django-push-notifications==1.4.1

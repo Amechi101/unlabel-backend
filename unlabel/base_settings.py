@@ -153,6 +153,7 @@ INSTALLED_APPS = [
 
     ### for user
     'users',
+    'push_notifications',
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
@@ -199,28 +200,6 @@ HAYSTACK_CONNECTIONS = {
 }
 
 ROOT_URLCONF = 'unlabel.urls'
-
-# TEMPLATES = [
-# {
-#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-#         'DIRS': ['unlabel/templates', 'applications/templates'],
-#         'APP_DIRS': True,
-#         'OPTIONS': {
-#             'context_processors': [
-#                 'django.contrib.auth.context_processors.auth',
-#                 'django.template.context_processors.debug',
-#                 'django.template.context_processors.i18n',
-#                 'django.template.context_processors.media',
-#                 'django.template.context_processors.static',
-#                 'django.template.context_processors.tz',
-#                 'django.template.context_processors.request',
-#                 'django.contrib.messages.context_processors.messages',
-#                 'unlabel.context_processors.theme',
-#                 'unlabel.context_processors.consts',
-#             ]
-#         },
-#     },
-# ]
 
 
 TEMPLATES = [
@@ -363,3 +342,10 @@ SOCIALACCOUNT_PROVIDERS = \
         'LOCALE_FUNC': 'path.to.callable',
         'VERIFIED_EMAIL': False,
         'VERSION': 'v2.4'}}
+
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+        # "FCM_API_KEY": "[your api key]",
+        # "GCM_API_KEY": "[your api key]",
+        "APNS_CERTIFICATE": "ios_dev.pem",
+}
