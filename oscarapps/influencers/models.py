@@ -41,10 +41,10 @@ class Influencers(BaseApplicationModel):
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
     users = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="influencers",blank=True, verbose_name=_("Users"))
-    height = models.DecimalField(max_digits=10, decimal_places=3, default=Decimal('0.000'), verbose_name=_('Height'), help_text=_('US Measurements'))
-    chest_or_bust = models.DecimalField(max_digits=10, decimal_places=3,default=Decimal('0.000'), verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
-    hips = models.DecimalField(max_digits=10, decimal_places=3,default=Decimal('0.000'),  verbose_name=_('hips'), help_text=_('US Measurements'))
-    waist = models.DecimalField(max_digits=10, decimal_places=3, default=Decimal('0.000'),  verbose_name=_('waist'), help_text=_('US Measurements'))
+    height = models.PositiveIntegerField(default=0, verbose_name=_('Height'), help_text=_('US Measurements'))
+    chest_or_bust = models.PositiveIntegerField(default=0, verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
+    hips = models.PositiveIntegerField(default=0, verbose_name=_('hips'), help_text=_('US Measurements'))
+    waist = models.PositiveIntegerField(default=0, verbose_name=_('waist'), help_text=_('US Measurements'))
 
     def id_generator(self, size=10, chars=string.ascii_uppercase + string.digits):
         auto_id = ''.join(random.choice(chars) for _ in range(size))
