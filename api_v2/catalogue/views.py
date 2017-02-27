@@ -435,7 +435,7 @@ class InfluencerReserveProduct(APIView):
         id_ser = self.serializer_class(data=request.data,many=False)
         if id_ser.is_valid():
             try:
-                product_to_reserve = Product.objects.get(id=id_ser.validated_data['id'], status='U')
+                product_to_reserve = Product.objects.get(id=id_ser.validated_data['id'])
             except:
                 content = {"message": "Product does not exist."}
                 return Response(content, status=status.HTTP_303_SEE_OTHER)
