@@ -437,25 +437,41 @@ class InfluencerReserveProduct(APIView):
             try:
                 product_to_reserve = Product.objects.get(id=id_ser.validated_data['id'], status='U')
             except:
-                content = {"message": "Product already reserved."}
+                content = {"message": "Product does not exist."}
                 return Response(content, status=status.HTTP_303_SEE_OTHER)
-            influencer_product_reserved = InfluencerProductReserve()
-            influencer_product_reserved.influencer = influencer_user
-            influencer_product_reserved.product = product_to_reserve
-            influencer_product_reserved.date_reserved = datetime.now()
-            product_to_reserve.status = 'R'
-            if product_to_reserve.structure == "child":
-                base_product = Product.objects.get(pk=product_to_reserve.parent.id)
-                base_product.status = 'R'
-                base_product.save()
-            influencer_product_reserved.save()
-            product_to_reserve.save()
-            content = {"message": "Product reservered successfully"}
-            return Response(content, status=status.HTTP_200_OK)
+            if product_to_reserve.status == 'U':
+                influencer_product_reserved = InfluencerProductReserve()
+                influencer_product_reserved.influencer = influencer_user
+                influencer_product_reserved.product = product_to_reserve
+                influencer_product_reserved.date_reserved = datetime.now()
+                product_to_reserve.status = 'R'
+                if product_to_reserve.structure == "child":
+                    base_product = Product.objects.get(pk=product_to_reserve.parent.id)
+                    base_product.status = 'R'
+                    base_product.save()
+                influencer_product_reserved.save()
+                product_to_reserve.save()
+                content = {"message": "Product reservered successfully."}
+                return Response(content, status=status.HTTP_200_OK)
+            elif product_to_reserve.status == 'R':
+                try:
+                    product_reserved = InfluencerProductReserve.objects.get(influencer=influencer_user,
+                                                                            product=id_ser.validated_data['id'])
+                except ObjectDoesNotExist:
+                    content = {"message": "Product already reserved."}
+                    return Response(content, status=status.HTTP_303_SEE_OTHER)
+                product_reserved.delete()
+                product_to_reserve.status = "U"
+                if product_to_reserve.structure == "child":
+                    base_product = Product.objects.get(pk=product_to_reserve.parent.id)
+                    base_product.status = 'U'
+                    base_product.save()
+                product_to_reserve.save()
+                content = {"message": "Product unreservered successfully."}
+                return Response(content, status=status.HTTP_200_OK)
         else:
-            content = {"message": "Product id not found"}
-            return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
-
+            content = {"message": "Invalid Product id."}
+            return Response(content, status=status.HTTP_200_OK)
 
 
 class InfluencerReservedProducts(APIView):
