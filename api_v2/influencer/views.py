@@ -25,7 +25,8 @@ from api_v2.catalogue.serializers import PartnerSerializer
 from oscarapps.address.models import Locations, States
 
 from api_v2.address.serializers import BrandLocationsSerializer
-from users.models import User
+from users.models import User #,UserDevice
+# from scarface.models import Application, Platform, Device, Topic, PushMessage
 from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer, \
     InfluencerPhysicalAttributesSerializer, InflencerProfileDetailsSerializer
 from oscarapps.partner.models import PartnerFollow, Partner
@@ -283,9 +284,6 @@ class InfluencerPicAndBio(APIView):
         return Response(content,status=status.HTTP_204_NO_CONTENT)
 
     def post(self,request,*args,**kwargs):
-        print("====================================")
-        print("-------------------------------",request.data)
-        print("=================================")
         if request.user.is_authenticated() and request.user.is_influencer is True:
             image_ser = self.serializer_class(data=request.data)
             influencer_user = request.user
@@ -296,12 +294,13 @@ class InfluencerPicAndBio(APIView):
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             if image_ser.is_valid():
                 influencer.bio = image_ser.data['bio']
+                influencer.image.delete()
                 influencer.image = request.data['image']
                 influencer.save()
                 content = {"message":"successfully updated."}
                 return Response(content,status=status.HTTP_200_OK)
             else:
-                content = {"message":"Phahahahahahahad try again."}
+                content = {"message":"Please try again."}
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         else:
             content = {"message":"Please login as influencer and try again."}
@@ -396,7 +395,7 @@ class InfluencerCurrentLocationView(APIView):
             except:
                 content = {"message":"Please complete the influencer profile information."}
                 return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            if request.data['country'] is None or request.data['city'] is None or request.data['state'] is None :
+            if request.data['country'] is None or request.data['city'] is None :
                 content = {"message":"Please verify city, state and country."}
                 return Response(content,status=status.HTTP_206_PARTIAL_CONTENT)
 
@@ -407,7 +406,7 @@ class InfluencerCurrentLocationView(APIView):
                 content = {"message":"Please verify country id."}
                 return Response(content,status=status.HTTP_206_PARTIAL_CONTENT)
             influencer_location.country = country
-            if request.data['state'] != 0 :
+            if request.data['state']:
                 try:
                     state = States.objects.get(pk=request.data['state'])
                 except:
@@ -416,6 +415,8 @@ class InfluencerCurrentLocationView(APIView):
                 influencer_location.state = state
             influencer_location.city = request.data['city']
             influencer_location.save()
+            influencer_profile.location=influencer_location
+            influencer_profile.save()
             content = {"message":"successfully updated location."}
             return Response(content,status=status.HTTP_200_OK)
         else:
@@ -445,6 +446,52 @@ class InfluencerChangePassword(APIView):
         else:
             content = {"message":"Please login as influencer and try again."}
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+# class InfluencerDeviceId(APIView):
+#     authentication = authentication.SessionAuthentication
+#     permission_classes = (permissions.IsAuthenticated,)
+#     http_method_names = ('post',)
+#
+#     def post(self,request,*args,**kwargs):
+#         if request.user.is_authenticated() and request.user.is_influencer is True:
+#             # if 'device_id' in request.data and 'push_token' in request.data :
+#                 app = Application.objects.create(name='tester_application12')
+#                 apns_platform = Platform.objects.create(
+#                 platform='APNS_SANDBOX',
+#                 application=app,
+#                 arn="arn:aws:sns:ap-south-1:275431664439:app/APNS_SANDBOX/unlabel_-7"
+#                 )
+#
+#                 apple_device = Device.objects.create(device_id= "ec04b7235df4a21183f062f51ffa2b975c1eb82e",
+#                 push_token = "9F74C3B1E23CF6DAFD0ECC77D2BAFA4B620F75D13B1A98F89ED8C3F9A147A2B2",platform = apns_platform
+#                 )
+#                 apple_device.register()
+#                 topic = Topic.objects.create(
+#                 name='test_topic',
+#                 application=app,
+#                 )
+#
+#                 topic.register()
+#                 #topic.register_device(arn_device)
+#
+#                 message = PushMessage(
+#                 badge_count=1,
+#                 context='url_alert',
+#                 context_id='none',
+#                 has_new_content=True,
+#                 message="Unlabel Welcomes you",
+#                 sound="default"
+#                 )
+#                 apple_device.send(message)
+#
+#
+#
+#                 user_device = UserDevice()
+#                 user_device.user = request.user
+#                 user_device.device = apple_device
+#                 user_device.save()
+#                 print("--------------------------------------22222222")
+
 
 
 

@@ -49,6 +49,7 @@ class StateSerializer(serializers.ModelSerializer):
 
 class BrandLocationsSerializer(serializers.ModelSerializer):
     state = StateSerializer()
+    country = CountrySerializer()
     class Meta:
         model = Locations
         fields = ['city','latitude','longitude','state','country','id']
