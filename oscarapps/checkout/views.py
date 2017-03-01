@@ -1,15 +1,26 @@
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect , Http404
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 import stripe
-from oscar.apps.checkout import views
+from oscar.apps.checkout.views import ThankYouView as CoreThankYouView
+from oscar.apps.checkout.views import PaymentDetailsView as CorePaymentDetailsView
 from oscar.apps.payment import forms, models
+from oscarapps.payment.models import CommissionConfiguration,\
+    InfluencerCommission,\
+    BrandCommission,\
+    UnlabelCommission
+
+from oscar.apps.payment.models import Bankcard
+from oscar.apps.order.models import Order
+from oscar.apps.basket.models import Line
+from oscarapps.influencers.models import InfluencerProductReserve
 
 from unlabel import base_settings
 
 
-class PaymentDetailsView(views.PaymentDetailsView):
+class PaymentDetailsView(CorePaymentDetailsView):
     """
       Stripe Integration
     """
@@ -76,10 +87,6 @@ class PaymentDetailsView(views.PaymentDetailsView):
         """
         Make submission to Stripe
         """
-        # Using authorization here (two-stage model).  You could use sale to
-        # perform the auth and capture in one step.  The choice is dependent
-        # on your business model.
-
         try:
             stripe.api_key = base_settings.STRIPE_API_KEY
             self.stripe = stripe
@@ -94,14 +101,76 @@ class PaymentDetailsView(views.PaymentDetailsView):
                 },
                 description="Order Number: " + str(order_number)
             )
-            if response:
-                source_type, is_created = models.SourceType.objects.get_or_create(
-                    name='Stripe')
-                source = source_type.sources.model(
-                    source_type=source_type,
-                    amount_allocated=total.incl_tax, currency=total.currency)
-                self.add_payment_source(source)
-                self.add_payment_event('Authorised', total.incl_tax)
-
-        except self.stripe.CardError:
+            if response["status"] == "succeeded":
+                try:
+                    source_type, is_created = models.SourceType.objects.get_or_create(
+                        name='Stripe')
+                    source = source_type.sources.model(
+                        source_type=source_type,
+                        amount_allocated=total.incl_tax, currency=total.currency, reference=response["id"])
+                    self.add_payment_source(source)
+                    self.add_payment_event('Authorised', total.incl_tax)
+                    bank_card, created = Bankcard.objects.get_or_create(number=kwargs['bankcard'].number,
+                                                                        expiry_date=kwargs['bankcard'].expiry_date,
+                                                                        user=self.request.user)
+                    bank_card.save()
+                except:
+                    stripe.Refund.create(charge=response["id"])
+                    raise self.stripe.CardError
+        except:
             raise self.stripe.CardError
+
+
+class ThankYouView(CoreThankYouView):
+
+    def get_object(self):
+        # We allow superusers to force an order thank-you page for testing
+        order = None
+        if self.request.user.is_superuser:
+            if 'order_number' in self.request.GET:
+                order = Order._default_manager.get(
+                    number=self.request.GET['order_number'])
+            elif 'order_id' in self.request.GET:
+                order = Order._default_manager.get(
+                    id=self.request.GET['order_id'])
+
+        if not order:
+            if 'checkout_order_id' in self.request.session:
+                order = Order._default_manager.get(
+                    pk=self.request.session['checkout_order_id'])
+            else:
+                raise Http404(_("No order found"))
+        try:
+            if order:
+                commission_conf = CommissionConfiguration.objects.all().first()
+                lines = Line.objects.filter(basket=order.basket)
+                if not InfluencerCommission.objects.filter(order=order) or \
+                        (not BrandCommission.objects.filter(order=order)) or \
+                        (not UnlabelCommission.objects.filter(order=order)):
+                    unlabel_commission_total = 0
+                    for line in lines:
+                            brand_commission_obj, created = BrandCommission.objects.get_or_create(brand=line.product.brand, order=order)
+                            if brand_commission_obj.amount is None:
+                                brand_commission_obj.amount = (((line.price_incl_tax*commission_conf.brand_commission)
+                                                        /100)*line.quantity)
+                            else:
+                                brand_commission_obj.amount += (((line.price_incl_tax*commission_conf.brand_commission)
+                                                            /100)*line.quantity)
+                            brand_commission_obj.save()
+                            influencer_prod_res = InfluencerProductReserve.objects.get(product=line.product)
+                            influencer_commission_obj, created = InfluencerCommission.objects.get_or_create(influencer=influencer_prod_res.influencer, order=order)
+                            if influencer_commission_obj.amount is None:
+                                influencer_commission_obj.amount = (((line.price_incl_tax*commission_conf.influencer_commission)
+                                                        /100)*line.quantity)
+                            else:
+                                influencer_commission_obj.amount += (((line.price_incl_tax*commission_conf.influencer_commission)
+                                                        /100)*line.quantity)
+                            influencer_commission_obj.save()
+                            unlabel_commission_total += (((line.price_incl_tax*commission_conf.unlabel_commission)
+                                                              /100)*line.quantity)
+                    unlabel_commission_obj, created = UnlabelCommission.objects.get_or_create(order=order)
+                    unlabel_commission_obj.amount = unlabel_commission_total
+                    unlabel_commission_obj.save()
+        except Exception as e:
+             return order
+        return order

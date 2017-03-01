@@ -50,6 +50,7 @@ SCARFACE_REGION_NAME = 'ap-south-1'
 SCARFACE_LOGGING_ENABLED = True
 
 STRIPE_API_KEY = "sk_test_STJxYzsopQx9fd4xIcE4EzT9"
+STRIPE_CLIENT_ID = "ca_AB3gizjA9Uhs9g2AsaOWzBiII3LxRLl6"
 
 SCARFACE_APNS_CERTIFICATE = "-----BEGIN CERTIFICATE-----\nMIIFlzCCBH+gAwIBAgIIFy2yaV/8fd8wDQYJKoZIhvcNAQEFB\
 QAwgZYxCzAJBgNV\nBAYTAlVTMRMwEQYDVQQKDApBcHBsZSBJbmMuMSwwKgYDVQQLDCNBcHBsZSBXb3Js\nZHdpZGUgRGV2ZWxvcGVy\
@@ -159,6 +160,7 @@ INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
     [
         'oscarapps.customer',
         'oscarapps.partner',
+        'oscarapps.payment',
         'oscarapps.catalogue',
         'oscarapps.address',
         'oscarapps.dashboard',
@@ -166,7 +168,6 @@ INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
         'oscarapps.dashboard.catalogue',
         'oscarapps.dashboard.users',
         'oscarapps.checkout',
-        'oscarapps.payment',
     ])
 
 MIDDLEWARE_CLASSES = (

@@ -10,6 +10,8 @@ from oscar.core.loading import get_class
 # from api_v2.app import application as oscar_override_api
 
 home_view = get_class('promotions.views', 'HomeView')
+stripe_view = get_class('dashboard.views',
+                                 'StripeView')
 
 urlpatterns = [  # admin
                  url(r"^admin/", include(admin.site.urls)),
@@ -48,6 +50,10 @@ urlpatterns = [  # admin
 
 
                  # url(r'^pay/', include('oscarapps.checkout.urls')),
+
+                url(r'^stripe',
+                  stripe_view.as_view(),
+                  name='stripe'),
 
 
                  ]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \

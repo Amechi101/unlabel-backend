@@ -1,14 +1,27 @@
+import json
+import requests
+import stripe
+
 from datetime import timedelta
 from decimal import Decimal as D
 from decimal import ROUND_UP
 
 from django.db.models import Avg, Count, Sum
 from django.utils.timezone import now
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
+from django.views import generic
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+
 
 from oscar.apps.promotions.models import AbstractPromotion
 from oscar.core.compat import get_user_model
 from oscar.core.loading import get_model
+
+
+from unlabel.base_settings import STRIPE_CLIENT_ID, STRIPE_API_KEY
+from oscarapps.payment.models import StripeCredential
+
 
 ConditionalOffer = get_model('offer', 'ConditionalOffer')
 Voucher = get_model('voucher', 'Voucher')
@@ -196,3 +209,47 @@ class IndexView(TemplateView):
             ).values('status').annotate(freq=Count('id'))
         }
         return stats
+
+
+
+class StripeRedirectView(RedirectView):
+
+    base_stripe_url = "https://connect.stripe.com"
+    authorize_url = "/oauth/authorize"
+    # token_url = "/oauth/token"
+    extra_data = "?response_type=code&client_id="+STRIPE_CLIENT_ID+"&scope=read_write"
+    url = base_stripe_url+authorize_url+extra_data
+
+
+    def get_redirect_url(self, *args, **kwargs):
+        return super(StripeRedirectView, self).get_redirect_url(*args, **kwargs)
+
+
+class StripeView(generic.View):
+    base_stripe_url = "https://connect.stripe.com"
+    authorize_url = "/oauth/authorize"
+
+    def get(self, request, *args, **kwargs):
+        try:
+            response = requests.post(
+            'https://connect.stripe.com/oauth/token',
+              data={
+                'client_secret': STRIPE_API_KEY,
+                'code': request.GET['code'],
+                'grant_type': 'authorization_code',
+              },
+
+            ).json()
+
+            if request.user:
+                stripe_cred_obj, created = StripeCredential.objects.get_or_create(user=request.user)
+                stripe_cred_obj.stripe_id = response["stripe_user_id"]
+                stripe_cred_obj.save()
+
+        except:
+            pass
+
+        return redirect('dashboard:index')
+
+
+
