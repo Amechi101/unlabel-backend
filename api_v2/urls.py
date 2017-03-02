@@ -88,6 +88,7 @@ urlpatterns = [
         name='influencer_change_password'),
     url(r'^influencer_brand_specialization/$',catalogueViews.InfluencerBrandSpecialization.as_view(),
         name='get_influencer_device_id'),
+
     url(r'^influencer_brand_search/$',catalogueViews.Influecner_brand_search.as_view(),
         name='influecner-brand-search'),
 
