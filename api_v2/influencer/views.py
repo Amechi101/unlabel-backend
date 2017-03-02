@@ -222,7 +222,7 @@ class InfluencerProfileUpdate(APIView):
 
     def post(self,request,*args,**kwargs):
         contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
-        name_pattern = re.compile(r'^[A-Za-z.]+$')
+        name_pattern = re.compile(r'^[A-Za-z. ]+$')
 
         if request.user.is_authenticated():
             try:
@@ -237,10 +237,10 @@ class InfluencerProfileUpdate(APIView):
                         if request.user.email != request.data['email']:
                             email_exists = User.objects.filter(email__iexact=request.data["email"]).count()
                             if email_exists > 0:
-                                content = {"message": "email already in use."}
+                                content = {"message": "The email you entered is already in use."}
                                 return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
                     except ValidationError:
-                        content = {"message": "invalid email"}
+                        content = {"message": "Plesase enter a valid email"}
                         return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
                     influencer_user.email = request.data['email']
 
@@ -252,12 +252,12 @@ class InfluencerProfileUpdate(APIView):
                     influencer_user.contact_number = request.data["contact_number"]
 
                 if request.data["first_name"] is None or name_pattern.match(request.data["first_name"]) is None :
-                    content = {"message": "Please enter valid firt name"}
+                    content = {"message": "Please enter valid first name"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
                     influencer_user.first_name = request.data["first_name"]
 
-                if request.data["last_name"] is None or name_pattern.match(request.data["first_name"]) is None :
+                if request.data["last_name"] is None or name_pattern.match(request.data["last_name"]) is None :
                     content = {"message": "Please enter valid last name"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
@@ -269,7 +269,7 @@ class InfluencerProfileUpdate(APIView):
                 return Response(content,status = status.HTTP_200_OK)
             else:
                 content = {"message" : "user is not an influencer"}
-                return Response(content,status = status.HTTP_200_OK)
+                return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 class InfluencerPicAndBio(APIView):
     authentication = authentication.SessionAuthentication
