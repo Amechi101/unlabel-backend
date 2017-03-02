@@ -31,6 +31,7 @@ from .serializers import LoginSerializer, InfluencerProfileSerializer, Influence
     InfluencerPhysicalAttributesSerializer, InflencerProfileDetailsSerializer
 from oscarapps.partner.models import PartnerFollow, Partner
 from oscarapps.influencers.models import Influencers
+from push_notification.models import APNSDevice
 
 
 class LoginView(APIView):
@@ -119,6 +120,12 @@ class LoginView(APIView):
             basket = operations.get_anonymous_basket(request)
             if basket:
                 operations.flush_and_delete_basket(basket)
+        if request.user.is_influencer and request.user.is_authenticated():
+            try:
+                device = APNSDevice.objects.get(user=request.user)
+                device.delete()
+            except:
+                pass
 
         request.session.clear()
         request.session.delete()

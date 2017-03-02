@@ -17,14 +17,14 @@ from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
 
 from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer
-from oscarapps.partner.models import PartnerFollow, Style, Category
+from oscarapps.partner.models import PartnerFollow, Style, Category,SubCategory
 
 from oscarapps.catalogue.models import InfluencerProductImage
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
     InfluencerBrandProductSerializer, \
     InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer,\
-    BaseProductSerializer,IdSerializer
+    BaseProductSerializer,IdSerializer,InfluecnerBrandSpecializationSerializer
 from oscarapps.partner.models import PartnerFollow, Style
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
@@ -779,4 +779,65 @@ class InfluencerBrandStyles(APIView):
         category_ser = self.serializer_class(queryset, many=True)
         result_dict = {'results': category_ser.data}
         return Response(result_dict)
+
+class InfluencerBrandSpecialization(APIView):
+    serializer_class = InfluecnerBrandSpecializationSerializer
+    pagination_class = None
+    http_method_names = ('get',)
+
+    def get(self, request, *args, **kwargs):
+        queryset = SubCategory.objects.all()
+        category_ser = self.serializer_class(queryset, many=True)
+        result_dict = {'results': category_ser.data}
+        return Response(result_dict)
+
+class Influecner_brand_search(generics.ListAPIView):
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = PartnerSerializer
+    http_method_names = ('get',)
+
+    def get_queryset(self):
+
+        search_text=""
+        search_category = []
+        search_location = []
+        search_style = []
+        search_specialization = []
+
+        search_text = self.request.GET.get('search','')
+        if self.request.GET.get('location','') != "":
+            search_location = list(map(int,self.request.GET.get('location','').split(',')))
+        if self.request.GET.get('store_type','') != "":
+            search_category = list(map(int,self.request.GET.get('store_type','')))
+        if self.request.GET.get('specialization','') != "":
+            search_specialization = list(map(int,self.request.GET.get('specialization','')))
+        if self.request.GET.get('style','') != "":
+            search_style = list(map(int,self.request.GET.get('style')))
+
+
+        partner = Partner.objects.all()
+        if search_text is not None:
+            partner = partner.filter(name__icontains=search_text)
+        if search_location:
+            partner = partner.filter(location__in=search_location)
+        if search_category:
+            partner = partner.filter(category__in=search_category)
+        if search_specialization:
+            partner = partner.filter(sub_category__in=search_specialization)
+        if search_style:
+            partner = partner.filter(style__in=search_style)
+
+        param = self.request.GET.get('param')
+        if param == "ZA":
+            partner = partner.order_by('-name')
+        elif param == "DESC":
+            partner = partner.order_by('created')
+        elif param == "ASC":
+            partner = partner.order_by('-created')
+        else:
+            partner = partner.order_by('name')
+
+        return partner
+
+
 

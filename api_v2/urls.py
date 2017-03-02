@@ -10,10 +10,16 @@ from .utils import *
 #####   customer urls   #####
 urlpatterns = [
 
-    url(r'testing_pushnotes/',
-        customerViews.PushNotificationView.as_view(), name='push_notes'),
-    url(r'testing_djangopush/',
-        customerViews.DjangoPush().as_view(), name='django-push_notes'),
+    # url(r'testing_pushnotes/',
+    #     customerViews.PushNotificationView.as_view(), name='push_notes'),
+    # url(r'testing_djangopush/',
+    #     customerViews.DjangoPush().as_view(), name='django-push_notes'),
+    url(r'register_device/',
+        customerViews.RegisterDevice().as_view(), name='push_register_device'),
+    url(r'send_notification/',
+        customerViews.SendNotification().as_view(), name='send_push'),
+
+
     ###-------customer apis
     url(r'customer_register/',
         customerViews.CustomerRegisterView.as_view(),name='register_view'),
@@ -80,8 +86,13 @@ urlpatterns = [
         name='influencer_current_locations'),
     url(r'^influencer_change_password/$',influencerViews.InfluencerChangePassword.as_view(),
         name='influencer_change_password'),
-    # url(r'^get_influencer_device_id/$',influencerViews.InfluencerDeviceId.as_view(),
-    #     name='get_influencer_device_id'),
+    url(r'^influencer_brand_specialization/$',catalogueViews.InfluencerBrandSpecialization.as_view(),
+        name='get_influencer_device_id'),
+    url(r'^influencer_brand_search/$',catalogueViews.Influecner_brand_search.as_view(),
+        name='influecner-brand-search'),
+
+
+
 
 ]
 
