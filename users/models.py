@@ -1,5 +1,5 @@
 from django.db import models
-from scarface.models import Application, Platform, Device, Topic, PushMessage
+import boto3
 
 from oscar.apps.customer.abstract_models import AbstractUser
 

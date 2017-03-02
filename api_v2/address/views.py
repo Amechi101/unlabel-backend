@@ -74,16 +74,14 @@ class GetStatesView(APIView):
         results_dict = {'results' : states_serializer.data}
         return Response(results_dict)
 
-class InfluencerBrandLocations(generics.ListAPIView):
+class InfluencerBrandLocations(APIView):
     serializer_class = BrandLocationsSerializer
-    model = Locations
 
-    def get_queryset(self,*args,**kwargs):
+    def get(self,request,*args,**kwargs):
         brand_locations_id = Partner.objects.all().values_list('location')
         brand_locations = Locations.objects.filter(pk__in=brand_locations_id)
-        return brand_locations
-
-
-
+        loc_ser = self.serializer_class(brand_locations, many=True)
+        results_dict = {'results' : loc_ser.data}
+        return Response(results_dict)
 
 

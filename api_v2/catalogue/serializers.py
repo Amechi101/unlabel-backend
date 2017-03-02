@@ -6,7 +6,7 @@ from oscarapi.utils import (
     OscarHyperlinkedModelSerializer
 )
 
-from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord
+from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord,SubCategory
 from oscarapps.address.models import Locations, States
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
@@ -288,6 +288,11 @@ class InfluencerBrandStyleSerializer(serializers.ModelSerializer):
 
 class IdSerializer(serializers.Serializer):
     id = serializers.CharField(required=True, max_length=10)
+
+class InfluecnerBrandSpecializationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
 
 
 
