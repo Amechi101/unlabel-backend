@@ -20,7 +20,7 @@ from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyle
 from oscarapps.partner.models import PartnerFollow, Style, Category,SubCategory
 
 from oscarapps.catalogue.models import InfluencerProductImage
-from oscarapps.influencers.models import Influencers, InfluencerProductReserve
+from oscarapps.influencers.models import Influencers, InfluencerProductReserve,InfluencerProductUnreserve
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
     InfluencerBrandProductSerializer, \
     InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer,\
@@ -235,13 +235,13 @@ class InfluencerBrandListView(generics.ListAPIView):
     #ASC - sort by date ascending
     #DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
-    def get_queryset(self, *args, **kwargs):
-        param = self.request.GET.get('param')
-        search = self.request.GET.get('search')
-        type = self.request.GET.get('type')
-        live_brand_id = Product.objects.filter()  #.values_list('brand',flat = True)
 
-        if search == None and type == None:
+    def get_queryset(self, *args, **kwargs):
+        display_type = self.request.GET.get('display','')
+        if display_type == 'FEED':
+            param = self.request.GET.get('param')
+            search = self.request.GET.get('search')
+            type = self.request.GET.get('type')
             if param == "ZA":
                 queryset = Partner.objects.all().order_by('-name')
             elif param == "DESC":
@@ -250,25 +250,46 @@ class InfluencerBrandListView(generics.ListAPIView):
                 queryset = Partner.objects.all().order_by('-created')
             else:
                 queryset = Partner.objects.all().order_by('name')
-        elif search == None:
+            return queryset
+        elif display_type == 'FILTER':
+            search_text=""
+            search_category = []
+            search_location = []
+            search_style = []
+            search_specialization = []
+
+            search_text = self.request.GET.get('search','')
+            if self.request.GET.get('location','') != "":
+                search_location = list(map(int,self.request.GET.get('location','').split(',')))
+            if self.request.GET.get('store_type','') != "":
+                search_category = list(map(int,self.request.GET.get('store_type','')))
+            if self.request.GET.get('specialization','') != "":
+                search_specialization = list(map(int,self.request.GET.get('specialization','')))
+            if self.request.GET.get('style','') != "":
+                search_style = list(map(int,self.request.GET.get('style')))
+
+            partner = Partner.objects.all()
+            if search_text is not None:
+                partner = partner.filter(name__icontains=search_text)
+            if search_location:
+                partner = partner.filter(location__in=search_location)
+            if search_category:
+                partner = partner.filter(category__in=search_category)
+            if search_specialization:
+                partner = partner.filter(sub_category__in=search_specialization)
+            if search_style:
+                partner = partner.filter(style__in=search_style)
+
+            param = self.request.GET.get('param')
             if param == "ZA":
-                queryset = Partner.objects.filter(store_type=type).order_by('-name')
+                partner = partner.order_by('-name')
             elif param == "DESC":
-                queryset = Partner.objects.filter(store_type=type).order_by('created')
+                partner = partner.order_by('created')
             elif param == "ASC":
-                queryset = Partner.objects.filter(store_type=type).order_by('-created')
+                partner = partner.order_by('-created')
             else:
-                queryset = Partner.objects.filter(store_type=type).order_by('name')
-        elif type == None:
-            if param == "ZA":
-                queryset = Partner.objects.filter(name__icontains=search).order_by('-name')
-            elif param == "DESC":
-                queryset = Partner.objects.filter(name__icontains=search).order_by('created')
-            elif param == "ASC":
-                queryset = Partner.objects.filter(name__icontains=search).order_by('-created')
-            else:
-                queryset = Partner.objects.filter(name__icontains=search).order_by('name')
-        return queryset
+                partner = partner.order_by('name')
+            return partner
 
 
 class InfluencerBaseProductListView(generics.ListAPIView):
@@ -460,6 +481,11 @@ class InfluencerReserveProduct(APIView):
                 except ObjectDoesNotExist:
                     content = {"message": "Product already reserved."}
                     return Response(content, status=status.HTTP_303_SEE_OTHER)
+                unreserve_detail = InfluencerProductUnreserve()
+                unreserve_detail.product = Product.objects.get(id=id_ser.validated_data['id'])
+                unreserve_detail.influencer = Influencers.objects.get(users=request.user)
+                unreserve_detail.type = 'SELF'
+                unreserve_detail.save()
                 product_reserved.delete()
                 product_to_reserve.status = "U"
                 if product_to_reserve.structure == "child":
@@ -790,54 +816,5 @@ class InfluencerBrandSpecialization(APIView):
         category_ser = self.serializer_class(queryset, many=True)
         result_dict = {'results': category_ser.data}
         return Response(result_dict)
-
-class Influecner_brand_search(generics.ListAPIView):
-    pagination_class = pagination.LimitOffsetPagination
-    serializer_class = PartnerSerializer
-    http_method_names = ('get',)
-
-    def get_queryset(self):
-
-        search_text=""
-        search_category = []
-        search_location = []
-        search_style = []
-        search_specialization = []
-
-        search_text = self.request.GET.get('search','')
-        if self.request.GET.get('location','') != "":
-            search_location = list(map(int,self.request.GET.get('location','').split(',')))
-        if self.request.GET.get('store_type','') != "":
-            search_category = list(map(int,self.request.GET.get('store_type','')))
-        if self.request.GET.get('specialization','') != "":
-            search_specialization = list(map(int,self.request.GET.get('specialization','')))
-        if self.request.GET.get('style','') != "":
-            search_style = list(map(int,self.request.GET.get('style')))
-
-
-        partner = Partner.objects.all()
-        if search_text is not None:
-            partner = partner.filter(name__icontains=search_text)
-        if search_location:
-            partner = partner.filter(location__in=search_location)
-        if search_category:
-            partner = partner.filter(category__in=search_category)
-        if search_specialization:
-            partner = partner.filter(sub_category__in=search_specialization)
-        if search_style:
-            partner = partner.filter(style__in=search_style)
-
-        param = self.request.GET.get('param')
-        if param == "ZA":
-            partner = partner.order_by('-name')
-        elif param == "DESC":
-            partner = partner.order_by('created')
-        elif param == "ASC":
-            partner = partner.order_by('-created')
-        else:
-            partner = partner.order_by('name')
-
-        return partner
-
 
 
