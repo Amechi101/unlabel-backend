@@ -93,12 +93,15 @@ class RegisterDevice(APIView):
     """
     API view to register an Android/IOS device.
     """
+    authentication = (authentication.SessionAuthentication,)
+    http_method_names = ('post',)
 
     def post(self, request, *args, **kwargs):
         response = Response(data={"status": False})
         device_type = request.data.get('device_type', '').lower()
+        print("-------------------",device_type)
         if request.user.is_authenticated() and request.user.is_influencer:
-            if device_type == 'iOS':
+            if device_type == 'ios':
                 ua = request.data.get('device', '').lower()
                 token_updated = False
                 # Device.objects.create(user=request.user)
