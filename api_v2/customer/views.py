@@ -102,8 +102,8 @@ class RegisterDevice(APIView):
                 ua = request.data.get('device', '').lower()
                 token_updated = False
                 # Device.objects.create(user=request.user)
-                status = self.registration_checking(ua, request)
-                return status
+                reg_status = self.registration_checking(ua, request)
+                return reg_status
         return Response({'status': 'HTTP_404_NOT_FOUND'}, status=status.HTTP_404_NOT_FOUND)
 
     def registration_checking(self, ua, request):
