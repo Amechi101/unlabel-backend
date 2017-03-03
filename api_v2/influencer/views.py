@@ -7,6 +7,7 @@ from rest_framework import permissions, authentication
 from django.core.mail.message import EmailMessage
 from django.contrib.sites.models import Site
 from django.utils.encoding import force_bytes
+from django.contrib.auth import update_session_auth_hash
 from django.conf import settings
 from rest_framework import status
 from rest_framework.exceptions import MethodNotAllowed
@@ -262,9 +263,7 @@ class InfluencerProfileUpdate(APIView):
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
                     influencer_user.last_name = request.data["last_name"]
-
                 influencer_user.save();
-
                 content = {"message" : "Influencer profile has been successfully updated."}
                 return Response(content,status = status.HTTP_200_OK)
             else:
@@ -445,6 +444,7 @@ class InfluencerChangePassword(APIView):
                     influencer = request.user
                     influencer.set_password(request.data['new_password'])
                     influencer.save()
+                    update_session_auth_hash(request, influencer)
                     content = {"message":"Password updated successfully."}
                     return Response(content,status=status.HTTP_200_OK)
             else:
@@ -454,52 +454,14 @@ class InfluencerChangePassword(APIView):
             content = {"message":"Please login as influencer and try again."}
             return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-# class InfluencerDeviceId(APIView):
-#     authentication = authentication.SessionAuthentication
-#     permission_classes = (permissions.IsAuthenticated,)
-#     http_method_names = ('post',)
-#
-#     def post(self,request,*args,**kwargs):
-#         if request.user.is_authenticated() and request.user.is_influencer is True:
-#             # if 'device_id' in request.data and 'push_token' in request.data :
-#                 app = Application.objects.create(name='tester_application12')
-#                 apns_platform = Platform.objects.create(
-#                 platform='APNS_SANDBOX',
-#                 application=app,
-#                 arn="arn:aws:sns:ap-south-1:275431664439:app/APNS_SANDBOX/unlabel_-7"
-#                 )
-#
-#                 apple_device = Device.objects.create(device_id= "ec04b7235df4a21183f062f51ffa2b975c1eb82e",
-#                 push_token = "9F74C3B1E23CF6DAFD0ECC77D2BAFA4B620F75D13B1A98F89ED8C3F9A147A2B2",platform = apns_platform
-#                 )
-#                 apple_device.register()
-#                 topic = Topic.objects.create(
-#                 name='test_topic',
-#                 application=app,
-#                 )
-#
-#                 topic.register()
-#                 #topic.register_device(arn_device)
-#
-#                 message = PushMessage(
-#                 badge_count=1,
-#                 context='url_alert',
-#                 context_id='none',
-#                 has_new_content=True,
-#                 message="Unlabel Welcomes you",
-#                 sound="default"
-#                 )
-#                 apple_device.send(message)
-#
-#
-#
-#                 user_device = UserDevice()
-#                 user_device.user = request.user
-#                 user_device.device = apple_device
-#                 user_device.save()
-#                 print("--------------------------------------22222222")
+class InfluencerContentsLink(APIView):
 
-
-
-
-
+    def get(self,request,*args,**kwargs):
+        privacy_policy_url = "www.google.com"
+        terms_conditions_url = "www.google.com"
+        operations_agreement_url = "www.google.com"
+        content = { 'privacy_policy_url':privacy_policy_url,
+                    'terms_conditions_url':terms_conditions_url,
+                    'operations_agreement_url':operations_agreement_url
+        }
+        return Response(content,status=status.HTTP_200_OK)
