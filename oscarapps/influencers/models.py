@@ -35,14 +35,16 @@ class Influencers(BaseApplicationModel):
     """
     Information for each influencer
     """
-
-    auto_id = models.CharField(unique=True, max_length=16, blank=True, null=True, default="", verbose_name=_('Influencer ID'))
+    auto_id = models.CharField(unique=True, max_length=16, blank=True, null=True, default="",
+                               verbose_name=_('Influencer ID'))
     image = models.ImageField(upload_to='Influencers', null=True, blank=True)
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     location = models.ForeignKey(Locations, null=True, blank=True, default="", verbose_name=_('Location'))
-    users = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="influencers",blank=True, verbose_name=_("Users"))
+    users = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="influencers", blank=True,
+                                 verbose_name=_("Users"))
     height = models.PositiveIntegerField(default=0, verbose_name=_('Height'), help_text=_('US Measurements'))
-    chest_or_bust = models.PositiveIntegerField(default=0, verbose_name=_('Chest or Bust'), help_text=_('US Measurements'))
+    chest_or_bust = models.PositiveIntegerField(default=0, verbose_name=_('Chest or Bust'),
+                                                help_text=_('US Measurements'))
     hips = models.PositiveIntegerField(default=0, verbose_name=_('hips'), help_text=_('US Measurements'))
     waist = models.PositiveIntegerField(default=0, verbose_name=_('waist'), help_text=_('US Measurements'))
 
@@ -65,53 +67,60 @@ class Influencers(BaseApplicationModel):
 
 
 class InfluencerInvite(models.Model):
-    email = models.EmailField(blank=True,null=True)
-    code = models.CharField(max_length=20, blank=False,null=False)
+    email = models.EmailField(blank=True, null=True)
+    code = models.CharField(max_length=20, blank=False, null=False)
     date_sent = models.DateTimeField(auto_now_add=True)
     is_used = models.BooleanField(default=False)
 
-    def  __str__(self):
+    def __str__(self):
         return self.email
 
 
 class InfluencerProductReserve(models.Model):
-
     influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
     product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
-    date_reserved = models.DateTimeField(null=False,blank=False, verbose_name=_('Product Reserved Date'))
+    date_reserved = models.DateTimeField(null=False, blank=False, verbose_name=_('Product Reserved Date'))
     date_rented = models.DateTimeField(null=True, blank=True, verbose_name=_('Product Reserved Date'))
 
     class Meta:
         verbose_name_plural = _('Influencer Product Reservations')
 
-    def  __str__(self):
+    def __str__(self):
         return self.influencer.users.first_name + "-->" + self.product.title
 
 
-# class InfluencerProductRentedDetails(models.Model):
-#
-#     influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
-#     product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
-#     date_reserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
-#
-#     class Meta:
-#         verbose_name_plural = _('Influencer Product-Rentals')
+class InfluencerProductUnreserve(models.Model):
+
+    self = 'SELF'
+    sys = 'SYS'
+    type_choices = ((self, 'SELF'),
+                    (sys, 'SYS'))
+    influencer = models.ForeignKey(Influencers, blank=False, null=False, verbose_name=_('Influencer'))
+    product = models.ForeignKey(Product, blank=False, null=False, verbose_name=_('Product'))
+    date_unreserved = models.DateTimeField(auto_now_add=True, verbose_name=_('Product Reserved Date'))
+    type = models.TextField(choices=type_choices, null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = _('Influencer Product-Unreserve')
+
 
 @receiver(pre_save, sender=Product, dispatch_uid="update_rental_date")
 def update_influencer_product_rental_info(sender, instance, **kwargs):
     try:
         current_obj = Product.objects.get(pk=instance.pk)
-        influencer_product_reserve = InfluencerProductReserve.objects.get(product=current_obj).values_list('influencer', flat=True)
-        if len(influencer_product_reserve) > 0 :
-                influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
-                if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
-                    influencer_producted_rented_details = InfluencerProductReserve()
-                    influencer_producted_rented_details.influencer = influencer_user
-                    influencer_producted_rented_details.product = current_obj
-                    influencer_producted_rented_details.date_rented = datetime.now()
-                    influencer_producted_rented_details.save()
+        influencer_product_reserve = InfluencerProductReserve.objects.get(product=current_obj).values_list('influencer',
+                                                                                                           flat=True)
+        if len(influencer_product_reserve) > 0:
+            influencer_user = Influencers.objects.get(pk=influencer_product_reserve)
+            if current_obj.rental_status != 'REN' and instance.rental_status == "REN":
+                influencer_producted_rented_details = InfluencerProductReserve()
+                influencer_producted_rented_details.influencer = influencer_user
+                influencer_producted_rented_details.product = current_obj
+                influencer_producted_rented_details.date_rented = datetime.now()
+                influencer_producted_rented_details.save()
     except:
         pass
+
 
 pre_save.connect(update_influencer_product_rental_info, sender=Product, dispatch_uid="update_rental_date")
 
