@@ -79,12 +79,22 @@ class StripeCredential(BaseApplicationModel):
     def __str__(self):
         return self.user.email
 
-class Payout(BaseApplicationModel):
+
+class BrandPayout(BaseApplicationModel):
     stripe_credential = models.ForeignKey(StripeCredential, blank=True, null=True, verbose_name="Stripe Credential")
-    order = models.ForeignKey(Order, blank=True, null=True, verbose_name="Order")
     is_completed = models.BooleanField(default=False)
     total_amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Total Amount Transferred", null=True, blank=True)
+
+    def __str__(self):
+        return self.stripe_credential.user.email
+
+class InfluencerPayout(BaseApplicationModel):
+    stripe_credential = models.ForeignKey(StripeCredential, blank=True, null=True, verbose_name="Stripe Credential")
+    is_completed = models.BooleanField(default=False)
+    total_amount = models.DecimalField(max_digits=11, decimal_places=8,
+                                verbose_name="Total Amount Transferred", null=True, blank=True)
+    reference = models.CharField(max_length=128, blank=True, verbose_name="Reference")
 
     def __str__(self):
         return self.stripe_credential.user.email

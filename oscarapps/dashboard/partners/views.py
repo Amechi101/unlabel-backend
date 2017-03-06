@@ -116,6 +116,7 @@ class PartnerCreateView(generic.View):
                                                  password=partner_form['password1'].value(),
                                                  first_name=partner_form['first_name'].value(),
                                                  last_name=partner_form['last_name'].value(),
+                                                 is_brand = True
                                                  )
             partner_user.save()
             partner_user.set_password(partner_form['password1'].value())

@@ -3,7 +3,8 @@ from .models import CommissionConfiguration,\
     BrandCommission,\
     UnlabelCommission,\
     StripeCredential,\
-    Payout
+    InfluencerPayout,\
+    BrandPayout
 from django.contrib import admin
 
 admin.site.register(CommissionConfiguration)
@@ -11,6 +12,7 @@ admin.site.register(InfluencerCommission)
 admin.site.register(BrandCommission)
 admin.site.register(UnlabelCommission)
 admin.site.register(StripeCredential)
-admin.site.register(Payout)
+admin.site.register(BrandPayout)
+admin.site.register(InfluencerPayout)
 
 from oscar.apps.payment.admin import *  # noqa

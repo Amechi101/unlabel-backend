@@ -67,6 +67,14 @@ class InfluencerSignUpView(View):
                     influencer_user.email = influencer_form.cleaned_data['email']
                     influencer_user.first_name = influencer_form.cleaned_data['first_name']
                     influencer_user.last_name = influencer_form.cleaned_data['last_name']
+                    influencer_profile = Influencers()
+                    influencer_profile.bio = influencer_form.cleaned_data['bio']
+                    influencer_profile.image = request.FILES['image']
+                    influencer_profile.chest_or_bust = influencer_form.cleaned_data['chest_or_bust']
+                    influencer_profile.height = influencer_form.cleaned_data['height']
+                    influencer_profile.hips = influencer_form.cleaned_data['hips']
+                    influencer_profile.waist = influencer_form.cleaned_data['waist']
+                    influencer_profile.save()
                     influencer_user.is_influencer = True
                     influencer_user.contact_number = influencer_form.cleaned_data['contact_number']
                     influencer_user.gender = influencer_form.cleaned_data['gender']
