@@ -17,6 +17,7 @@ StripeCredential = get_model('payment', 'StripeCredential')
 
 stripe.api_key = base_settings.STRIPE_API_KEY
 
+
 class Command(BaseCommand):
     help = "Populates the list of countries with data from pycountry."
 
@@ -68,9 +69,12 @@ class Command(BaseCommand):
                         transaction.reference = str(transfer["id"])
                         transaction.save()
                 except:
-                    trn = stripe.Transfer.retrieve(transfer["id"])
-                    trn.reversals.create()
+
+                    if transfer["status"] == "paid":
+                        trn = stripe.Transfer.retrieve(transfer["id"])
+                        trn.reversals.create()
              except:
+
                  pass
 
         for transaction in InfluencerPayout.objects.all():
@@ -87,9 +91,11 @@ class Command(BaseCommand):
                         transaction.reference = str(transfer["id"])
                         transaction.save()
                 except:
-                    trn = stripe.Transfer.retrieve(transfer["id"])
-                    trn.reversals.create()
+                    if transfer["status"] == "paid":
+                        trn = stripe.Transfer.retrieve(transfer["id"])
+                        trn.reversals.create()
             except:
+
                  pass
         print("success")
 

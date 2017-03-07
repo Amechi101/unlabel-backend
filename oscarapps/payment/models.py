@@ -85,6 +85,7 @@ class BrandPayout(BaseApplicationModel):
     is_completed = models.BooleanField(default=False)
     total_amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Total Amount Transferred", null=True, blank=True)
+    reference = models.CharField(max_length=128, blank=True, verbose_name="Reference")
 
     def __str__(self):
         return self.stripe_credential.user.email
