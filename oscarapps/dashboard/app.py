@@ -29,6 +29,10 @@ class DashboardApplication(CoreDashboardApplication):
     vouchers_app = get_class('dashboard.vouchers.app', 'application')
     comms_app = get_class('dashboard.communications.app', 'application')
     shipping_app = get_class('dashboard.shipping.app', 'application')
+    stripe_redirect_view = get_class('dashboard.views',
+                                 'StripeRedirectView')
+    stripe_view = get_class('dashboard.views',
+                                 'StripeView')
 
     def get_urls(self):
         urls = [
@@ -54,6 +58,12 @@ class DashboardApplication(CoreDashboardApplication):
             url(r'^logout/$', auth_views.logout, {
                 'next_page': '/',
                 }, name='logout'),
+            url(r'^stripe-redirect$',
+                self.stripe_redirect_view.as_view(),
+                name='stripe-redirect'),
+
+
+
         ]
         return self.post_process_urls(urls)
 

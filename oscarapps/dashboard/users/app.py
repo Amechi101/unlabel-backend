@@ -7,10 +7,10 @@ from oscar.core.loading import get_class
 class UserManagementApplication(DashboardApplication):
     name = None
     default_permissions = ['is_staff', ]
-    permissions_map = _map = {
-        'users-index': (['is_staff'],
-                                     ['partner.dashboard_access']),
-        }
+    # permissions_map = _map = {
+    #     'users-index': (['is_staff'],
+    #                                  ['partner.dashboard_access']),
+    #     }
     index_view = get_class('dashboard.users.views', 'IndexView')
     user_detail_view = get_class('dashboard.users.views', 'UserDetailView')
     password_reset_view = get_class('dashboard.users.views',

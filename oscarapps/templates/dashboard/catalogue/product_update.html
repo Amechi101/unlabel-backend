@@ -67,7 +67,9 @@
                                 only one template block (instead of all affected) has to be altered.
                             {% endcomment %}
                             {% block tabs %}
-                                <li class="active"><a href="#product_details" data-toggle="tab">{% trans 'Product details' %}</a></li>
+                                {% if not parent %}
+                                    <li class="active"><a href="#product_details" data-toggle="tab">{% trans 'Product details' %}</a></li>
+                                {% endif %}
                                 {% if not parent %}
                                     <li><a href="#product_category" data-toggle="tab">{% trans 'Categories' %}</a></li>
                                 {% endif %}
@@ -98,7 +100,11 @@
             <div class="col-md-9">
                 <div class="tab-content">
                     {% block product_details %}
+                        {% if not parent %}
                         <div class="tab-pane active" id="product_details">
+                        {% else %}
+                        <div class="tab-pane active" id="product_details" style="display: none;">
+                        {% endif %}
                             <div class="table-header">
                                 <h3>{% trans "Product details" %}</h3>
                             </div>
@@ -182,7 +188,11 @@
                     {% endblock product_images %}
 
                     {% block influencer_product_images %}
+                        {% if not user.is_staff %}
+                        <div class="tab-pane" id="influencer_product_images" style="pointer-events:none;">
+                        {% else %}
                         <div class="tab-pane" id="influencer_product_images">
+                        {% endif %}
                             {% block influencer_product_images_content %}
                                 <div class="table-header">
                                     <h3>{% trans "Upload, change or remove images" %}</h3>

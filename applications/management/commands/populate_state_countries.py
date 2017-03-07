@@ -68,6 +68,7 @@ statesList = [
       'Wyoming'
 ]
 
+
 class Command(BaseCommand):
     help = "Populates the list of countries with data from pycountry."
 
