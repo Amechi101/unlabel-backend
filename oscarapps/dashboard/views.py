@@ -158,6 +158,7 @@ class IndexView(TemplateView):
         orders = Order.objects.all()
         if not self.request.user.is_staff:
             products = Product.objects.filter(brand__users=self.request.user)
+            products = products.filter(parent=None)
             orders = Order.objects.filter(basket__owner=self.request.user)
 
         orders_last_day = orders.filter(date_placed__gt=datetime_24hrs_ago)
@@ -231,7 +232,6 @@ class StripeView(generic.View):
 
     def get(self, request, *args, **kwargs):
         try:
-            print("==============")
             response = requests.post(
             'https://connect.stripe.com/oauth/token',
               data={
@@ -241,7 +241,7 @@ class StripeView(generic.View):
               },
 
             ).json()
-            print(response,"rrrrrrrrrrrrrrrrrrrrrr)
+
             if request.user:
                 stripe_cred_obj, created = StripeCredential.objects.get_or_create(user=request.user)
                 stripe_cred_obj.stripe_id = response["stripe_user_id"]
