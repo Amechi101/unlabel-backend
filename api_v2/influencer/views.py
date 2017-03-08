@@ -465,3 +465,14 @@ class InfluencerContentsLink(APIView):
                     'operations_agreement_url':operations_agreement_url
         }
         return Response(content,status=status.HTTP_200_OK)
+
+class InfluencerGetBalance(APIView):
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get',)
+
+    def get(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            influencer_remaining = 999
+            content = {'results':{'balance':influencer_remaining}}
+            return Response(content,status=status.HTTP_200_OK)
