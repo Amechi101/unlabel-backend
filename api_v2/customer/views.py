@@ -99,7 +99,6 @@ class RegisterDevice(APIView):
     def post(self, request, *args, **kwargs):
         response = Response(data={"status": False})
         device_type = request.data.get('device_type', '').lower()
-        print("-------------------",device_type)
         if request.user.is_authenticated() and request.user.is_influencer:
             if device_type == 'ios':
                 ua = request.data.get('device', '').lower()
@@ -165,14 +164,14 @@ class SendNotification(APIView):
         #     selected_ids = selected_ids.split(',')
         # device_ids = NotificationLog.objects.filter(id__in=selected_ids, sent_status='DRAFT').values_list('device_id',
         #                                                                                                   flat=True)
-        devices = APNSDevice.objects.filter(device_id__in=['353E3132835144E5876AE5E4D6BE76DD'])
+        devices = APNSDevice.objects.filter(device_id__in=['6F48605DEBB74BCD83AD8F1201406269'])
         print(">>>>>>>>>>>>devices", devices)
         for device in devices:
             deviceid = device.device_id
             registrationid = device.registration_id
             arn = device.aws_subscription_arn
             image = ''
-            msg = "payload test from aws snsssss"
+            msg = "hellooooo from unlabel..........................."
             payload_dict = {"aps": {"alert": "test", "sound": "default", "badge": 0}, "uri": "www.google.com"}
 
             s = SNS()

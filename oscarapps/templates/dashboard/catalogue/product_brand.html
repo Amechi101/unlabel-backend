@@ -1,3 +1,6 @@
-{% load django_tables2 %}
-<a href="{% url 'dashboard:partner-manage' pk=record.brand.pk %}{% querystring %}">{{ value }}</a>
+{#{% load django_tables2 %}#}
+{#<a href="{% url 'dashboard:partner-manage' pk=record.brand.pk %}{% querystring %}">{{ value }}</a>#}
 {#{{ record.brand.name }}#}
+
+{% load django_tables2 %}
+<a href="{% url 'dashboard:partner-manage' pk=record.get_brand_pk %}{% querystring %}">{{ value }}</a>

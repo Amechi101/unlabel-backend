@@ -1,7 +1,7 @@
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
-
 
 from oscarapps.partner.models import Partner
 from oscar.apps.catalogue.abstract_models import AbstractProduct
@@ -138,8 +138,24 @@ class Product(AbstractProduct, BaseApplicationModel):
             self.material_info = strip_tags(self.material_info)
         if self.influencer_product_note:
             self.influencer_product_note = strip_tags(self.influencer_product_note)
+        if self.structure == 'parent'and self.rental_status=='REN':
+            try:
+                child_products = Product.objects.filter(parent=self.id)
+                for child in child_products:
+                    try:
+                        influencer_reserved = InfluencerProductReserve.objects.get(product=child)
+                        child.rental_status='REN'
+                        child.save()
+                    except:
+                        pass
+            except:
+                print("-->exception in parent product rental status save--> ")
+
         super(Product, self).save(*args, **kwargs)
 
+    @property
+    def get_brand_pk(self):
+        return self.brand.pk
 
 
 from oscar.apps.catalogue.models import *

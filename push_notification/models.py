@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 # from scarface.models import Application, Platform, Device, Topic, PushMessage
@@ -27,14 +28,39 @@ class SNS(object):
         )
         return response
 
-    def send_message(self, arn, message, payload_dict=None):
-        data_dict = {'message': message}
-        if payload_dict:
-            data_dict.update(payload_dict)
-        apns_dict = {'data': data_dict}
-        apns_string = json.dumps(apns_dict, ensure_ascii=False)
-        message = {'default': message, 'GCM': apns_string}
-        messageJSON = json.dumps(message, ensure_ascii=False)
+    def send_message(self, arn, message, payload_dict):
+
+
+        # endpoint = self.client.PlatformEndpoint(arn)
+        # txt = "I sent this via Boto3!"
+        # msg_dict = {"aps": {"alert": txt}}
+        #
+        # payload =  { "default": "one of the notification platforms,,...............",
+        #                 "aps":"{\"alert\": \"Check out these awesome deals!\",\"url\":\"www.amazon.com\"} }" }
+        #
+        # response=endpoint.publish(
+        #     Message=json.dumps(payload),
+        #     MessageStructure='json'
+        # )
+
+
+        # data_dict = {'message': message}
+        # if payload_dict:
+        #     data_dict.update(payload_dict)
+        # apns_dict = {'data': data_dict}
+        # apns_string = json.dumps(apns_dict, ensure_ascii=False)
+        # message = {'default': message, 'aps': apns_string}
+        # message = {'aps':{'alert':'hahahahahahahah','sound':'default','badge':0},'uri':'www.google.com','default':''}
+        # messageJSON = { "default": "This is the default message which must be present when publishing a message to a topic. The default message will only be used if a message is not present for one of the notification platforms.",
+        #                 "aps":"{\"alert\": \"Check out these awesome deals!\",\"url\":\"www.amazon.com\"} }" }
+
+        # messageJSON = json.dumps(message, ensure_ascii=False)
+        # print("------------message: ",messageJSON)
+        apns_dict = {'aps':{'alert':message,'sound':'mySound.caf', "data": payload_dict}}
+        apns_string = json.dumps(apns_dict,ensure_ascii=False)
+        message = {'default':'default message','APNS_SANDBOX':apns_string}
+        messageJSON = json.dumps(message,ensure_ascii=False)
+        print("------------message: ",messageJSON)
         response = self.client.publish(
             TargetArn=arn,
             MessageStructure='json',
@@ -81,23 +107,35 @@ def delete_aws_sns(sender, instance, **kwargs):
 post_delete.connect(delete_aws_sns, sender=APNSDevice)
 
 
-# class NotificationType(models.Model):
-#     product_rented = 'product_rented'
-#     product_reservation_lost = 'product_reservation_lost'
-#     product_not_live = 'product_not_live'
-#     live_not_returned = 'live_not_returned'
-#     followed_brand_product_added = 'followed_brand_product_added'
-#     new_brand_added = 'new_brand_added'
-#     general_notificatin = 'general_notification'
-#
-#     type_choice = (
-#         (product_rented, 'Producted Rented'),
-#         (product_reservation_lost, 'Product Reservation Lost'),
-#         (product_not_live, 'Product Not Live'),
-#         (live_not_returned,'Live And Not Returned')
-#         (followed_brand_product_added,'Followed Brand Added Product')
-#         (new_brand_added,'New Brand Added')
-#         (general_notificatin,'General Notification')
-#
-#
-#     )
+class NotificationDetails(models.Model):
+    product_rented = 'pr'
+    product_reservation_lost = 'prl'
+    product_not_live = 'pnl'
+    live_not_returned = 'lnr'
+    followed_brand_product_added = 'followed_brand_product_added'
+    new_brand_added = 'nba'
+    general_notification = 'general_notification'
+
+    type_choice = (
+        (product_rented, 'Producted Rented'),
+        (product_reservation_lost, 'Product Reservation Lost'),
+        (product_not_live, 'Product Not Live'),
+        (live_not_returned,'Live And Not Returned'),
+        (followed_brand_product_added,'Followed Brand Added Product'),
+        (new_brand_added,'New Brand Added'),
+        (general_notification,'General Notification')
+    )
+
+    notification_type = models.CharField(max_length=4, null=True, blank=True,choices=type_choice )
+    sent = models.BooleanField(default=False )
+    text = models.CharField(null=True,blank=True,max_length=100 )
+    payload = models.CharField(null=True,blank=True,max_length=200)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,blank=True)
+    date_sent = models.DateTimeField(auto_now_add=False,null=True,blank=True)
+
+    class Meta:
+        verbose_name_plural = _("Notification Deatils")
+
+    def __str__(self):
+        return self.notification_type
+
