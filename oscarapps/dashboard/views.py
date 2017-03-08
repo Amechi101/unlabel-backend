@@ -232,6 +232,7 @@ class StripeView(generic.View):
 
     def get(self, request, *args, **kwargs):
         try:
+            print("-----------------------",request,"=====",request.user)
             response = requests.post(
             'https://connect.stripe.com/oauth/token',
               data={
