@@ -231,6 +231,7 @@ class StripeView(generic.View):
 
     def get(self, request, *args, **kwargs):
         try:
+            print("==============")
             response = requests.post(
             'https://connect.stripe.com/oauth/token',
               data={
@@ -240,7 +241,7 @@ class StripeView(generic.View):
               },
 
             ).json()
-
+            print(response,"rrrrrrrrrrrrrrrrrrrrrr)
             if request.user:
                 stripe_cred_obj, created = StripeCredential.objects.get_or_create(user=request.user)
                 stripe_cred_obj.stripe_id = response["stripe_user_id"]
