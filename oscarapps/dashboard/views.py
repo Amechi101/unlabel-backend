@@ -241,7 +241,7 @@ class StripeView(generic.View):
               },
 
             ).json()
-
+            print (response, request)
             if request.user:
                 stripe_cred_obj, created = StripeCredential.objects.get_or_create(user=request.user)
                 stripe_cred_obj.stripe_id = response["stripe_user_id"]
