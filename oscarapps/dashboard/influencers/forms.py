@@ -171,24 +171,29 @@ class ExistingUserForm(forms.ModelForm):
     """
     # role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect,
     #                          label=_('User role'))
-    password1 = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput,
-        required=False,
-        validators=password_validators)
-    password2 = forms.CharField(
-        required=False,
-        label=_('Confirm Password'),
-        widget=forms.PasswordInput)
 
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1', '')
-        password2 = self.cleaned_data.get('password2', '')
-
-        if password1 != password2:
-            raise forms.ValidationError(
-                _("The two password fields didn't match."))
-        return password2
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    gender = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    # password1 = forms.CharField(
+    #     label=_('Password'),
+    #     widget=forms.PasswordInput,
+    #     required=False,
+    #     validators=password_validators)
+    # password2 = forms.CharField(
+    #     required=False,
+    #     label=_('Confirm Password'),
+    #     widget=forms.PasswordInput)
+    #
+    # def clean_password2(self):
+    #     password1 = self.cleaned_data.get('password1', '')
+    #     password2 = self.cleaned_data.get('password2', '')
+    #
+    #     if password1 != password2:
+    #         raise forms.ValidationError(
+    #             _("The two password fields didn't match."))
+    #     return password2
 
     # def __init__(self, *args, **kwargs):
     #     user = kwargs['instance']
@@ -217,5 +222,5 @@ class ExistingUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['username', 'first_name', 'last_name']) + ['contact_number', 'gender']
+            ['username', 'first_name', 'last_name','email']) + ['contact_number', 'gender']
         exclude = ('password1',)

@@ -58,6 +58,13 @@
                         <th>{% trans "Date joined" %}</th>
                         <td>{{ customer.date_joined }}</td>
                     </tr>
+                    <tr>
+                        <th>{% trans "User Type" %}</th>
+                         {% if customer.is_influencer %}
+                           <td> Influencer</td>
+                         {% endif %}
+
+                    </tr>
                     {% if customer.userrecord %}
                         {% with record=customer.userrecord %}
                             <tr>

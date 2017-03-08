@@ -9,6 +9,8 @@ from django.core.validators import validate_email
 from oscar.core.loading import get_model
 from oscar.core.validators import password_validators
 from oscar.apps.catalogue.models import ProductClass
+from oscar.core.compat import existing_user_fields
+from django.contrib.auth.models import Permission
 
 from oscarapps.address.models import Locations, States, Country
 from oscarapps.partner.models import Partner, Category, Style, SubCategory, RentalInformation
@@ -76,9 +78,6 @@ class PartnerManageForm(forms.ModelForm):
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
-    email = forms.CharField(label='Email', required=True)
-    first_name = forms.CharField(label="First Name", required=True)
-    last_name = forms.CharField(label="Last Name", required=True)
     is_active = forms.BooleanField(required=False, help_text="Check|Un check to activate|deactivate store")
 
     # password1 = forms.CharField(
@@ -96,7 +95,6 @@ class PartnerManageForm(forms.ModelForm):
         model = Partner
         fields = (
             'name', 'image', 'description',
-            'email', 'first_name', 'last_name',
             'city', 'country', 'state',
             'style', 'category', 'sub_category', 'is_active',
             # 'password1', 'password2',
@@ -139,14 +137,8 @@ class PartnerManageForm(forms.ModelForm):
             state = None
         instance.location.state = state
         instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
-        user = instance.users.all().first()
-        user.email = self.cleaned_data['email']
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
         if commit:
             instance.location.save()
-            user.save()
-            instance.users.add(user)
             instance.save()
         return instance
 
@@ -266,3 +258,53 @@ class SubCategoryCreateForm(forms.ModelForm):
     class Meta:
         model = BrandSubCategory
         fields = ('name','description' )
+
+ROLE_CHOICES = (
+    ('staff', _('Full dashboard access')),
+    ('limited', _('Limited dashboard access')),
+)
+
+
+
+class ExistingUserForm(forms.ModelForm):
+    """
+    Slightly different form that makes
+    * makes saving password optional
+    * doesn't regenerate username
+    * doesn't allow changing email till #668 is resolved
+    """
+    role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect,
+                             label=_('User role'))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    email = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs['instance']
+        role = 'staff' if user.is_staff else 'limited'
+        kwargs.get('initial', {}).setdefault('role', role)
+        super(ExistingUserForm, self).__init__(*args, **kwargs)
+
+    def save(self):
+        role = self.cleaned_data.get('role', 'none')
+        user = super(ExistingUserForm, self).save(commit=False)
+        user.is_staff = role == 'staff'
+        if self.cleaned_data['password1']:
+            user.set_password(self.cleaned_data['password1'])
+        user.save()
+
+        dashboard_perm = Permission.objects.get(
+            codename='dashboard_access', content_type__app_label='partner')
+        user_has_perm = user.user_permissions.filter(
+            pk=dashboard_perm.pk).exists()
+        if role == 'limited' and not user_has_perm:
+            user.user_permissions.add(dashboard_perm)
+        elif role == 'staff' and user_has_perm:
+            user.user_permissions.remove(dashboard_perm)
+        return user
+
+
+    class Meta:
+        model = User
+        fields = existing_user_fields(
+            ['first_name', 'last_name', 'email'])

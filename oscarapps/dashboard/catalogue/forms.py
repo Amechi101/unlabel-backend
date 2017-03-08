@@ -21,33 +21,42 @@ Partner = get_model('partner', 'Partner')
 StockRecord = get_model('partner', 'StockRecord')
 InfluencerProductImage = get_model('catalogue', 'InfluencerProductImage')
 ProductImage = get_model('catalogue', 'ProductImage')
-
+InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
 
 class ProductForm(CoreProductForm):
+    brand = forms.ModelChoiceField(queryset=Partner.objects.all(), required=True)
 
     def __init__(self, user, *args, **kwargs):
         # The user kwarg is not used by stock StockRecordForm. We pass it
         # anyway in case one wishes to customise the partner queryset
         self.user = user
         super(ProductForm, self).__init__(*args, **kwargs)
-
         # Restrict accessible partners for non-staff users
         if not self.user.is_staff:
+            if self.instance.status == "L":
+                DRAFT = 'D'
+                LIVE = 'L'
+                status_choice = (
+                   (DRAFT, 'Draft'),
+                   (LIVE, 'Live'),
+                   )
+                self.fields['status'].choices = status_choice
+            else:
+                self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
             self.fields['brand'].queryset = self.user.partners.all()
-            UNRESERVED = 'U'
-            RESERVED = 'R'
-            DRAFT = 'D'
-            status_choice = (
-               (UNRESERVED, 'Unreserved'),
-               (RESERVED, 'Reserved'),
-               (DRAFT, 'Draft'),
-                )
-            self.fields['status'].choices = status_choice
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
             self.fields['brand'].widget = forms.HiddenInput()
+        try:
+            InfluencerProductReserve.objects.get(product=self.instance)
+            # self.fields['status'].
+        except:
+          # self.initial['rental_status'] = 'None'
+          self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+        # if self.instance.structure == 'parent':
+        #     self.fields["rental_status"].widget = forms.HiddenInput()
+        #     print(self.instance.rental_status)
 
-        if self.instance.structure == 'parent':
-            self.fields["rental_status"].widget = forms.HiddenInput()
+
 
     class Meta(CoreProductForm.Meta):
         fields = [
@@ -56,13 +65,19 @@ class ProductForm(CoreProductForm):
             'weight', 'on_sale', 'requires_shipping']
         labels = {
             'title': _('Name'),
+            'status': _('Product Status')
         }
+
+
+
+
 
 
 class StockRecordForm(forms.ModelForm):
     price_retail = forms.IntegerField(min_value=0)
     price_excl_tax = forms.IntegerField(min_value=0)
     cost_price = forms.IntegerField(min_value=0)
+
     def __init__(self, product_class, user, *args, **kwargs):
         # The user kwarg is not used by stock StockRecordForm. We pass it
         # anyway in case one wishes to customise the partner queryset

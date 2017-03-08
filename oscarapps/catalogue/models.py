@@ -156,6 +156,6 @@ class Product(AbstractProduct, BaseApplicationModel):
     @property
     def get_brand_pk(self):
         return self.brand.pk
-
-
+      
+      
 from oscar.apps.catalogue.models import *

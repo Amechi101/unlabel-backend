@@ -63,10 +63,10 @@ OSCAR_DASHBOARD_NAVIGATION = [
             # be confusing. Weight-based shipping methods aren't hooked into
             # the shipping repository by default (as it would make
             # customising the repository slightly more difficult).
-            # {
-            #     'label': _('Shipping charges'),
-            #     'url_name': 'dashboard:shipping-method-list',
-            # },
+            {
+                'label': _('Shipping charges'),
+                'url_name': 'dashboard:shipping-method-list',
+            },
         ]
     },
     {
@@ -85,18 +85,19 @@ OSCAR_DASHBOARD_NAVIGATION = [
     },
 
     {
-        'label': _('Customers'),
+        'label': _('Users'),
         'icon': 'icon-group',
-        'children': [
-            {
-                'label': _('Users'),
-                'url_name': 'dashboard:users-index',
-            },
-            {
-                'label': _('Stock alert requests'),
-                'url_name': 'dashboard:user-alert-list',
-            },
-        ]
+        'url_name': 'dashboard:users-index',
+        # 'children': [
+        #     {
+        #         'label': _('Users'),
+        #         'url_name': 'dashboard:users-index',
+        #     },
+        #     {
+        #         'label': _('Stock alert requests'),
+        #         'url_name': 'dashboard:user-alert-list',
+        #     },
+        # ]
     },
     {
         'label': _('Offers'),
