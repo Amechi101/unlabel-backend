@@ -56,7 +56,7 @@ class InfluencerSignUpView(View):
             influencer_invite = InfluencerInvite.objects.get(code=code,is_used=False)
         except:
             return HttpResponse("sorry link is used already")
-        return render(request, 'pages/influencer_register.html', {'user_form': InfluencerSignUpForm})
+        return render(request, 'influencers/influencer_register.html', {'user_form': InfluencerSignUpForm})
 
     def post(self, request, code, *args, **kwargs):
 
