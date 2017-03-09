@@ -43,6 +43,10 @@ class LocationSerializer(serializers.ModelSerializer):
 class PartnerSerializer(OscarModelSerializer):
     location = LocationSerializer()
     followed = serializers.SerializerMethodField(source='get_followed')
+    share_url = serializers.SerializerMethodField()
+
+    def get_share_url(self,obj):
+        return "http://35.166.138.246"
 
     def get_followed(self, obj):
         request = self.context.get("request")
@@ -126,7 +130,7 @@ class BaseProductSerializer(OscarModelSerializer):
         many=True, required=False)
 
     def get_price(self, obj):
-        if obj.structure == 'child':
+        if obj.structure == 'parent':
             child_products = Product.objects.filter(structure='child', parent=obj)
             for child_product in child_products:
                 try:
@@ -135,10 +139,13 @@ class BaseProductSerializer(OscarModelSerializer):
                     return {'price_retail': price_retail}
                 except:
                     pass
-            return {'price_retail': 'No Stock'}
+            return {'price_retail': 0.0 }
         else:
-            base_stock = StockRecord.objects.get(product=obj)
-            return {'price_retail': base_stock.price_retail}
+            try:
+                base_stock = StockRecord.objects.get(product=obj)
+                return {'price_retail': base_stock.price_retail}
+            except:
+                return {'price_retail': 0.0 }
 
 
     class Meta:
@@ -226,6 +233,10 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField()
     attributes = ProductAttributeValueSerializer(
         many=True, required=False, source="attribute_values")
+    share_url = serializers.SerializerMethodField()
+
+    def get_share_url(self,obj):
+        return "http://35.166.138.246/"
 
     def get_images(self, obj):
         if obj.structure == "child":
