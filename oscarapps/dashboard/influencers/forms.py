@@ -102,9 +102,6 @@ class InfluencerManageForm(forms.ModelForm):
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
-    email = forms.CharField(label='Email', required=True)
-    first_name = forms.CharField(label="First Name", required=True)
-    last_name = forms.CharField(label="Last Name", required=True)
     is_active = forms.BooleanField(required=False)
     image = forms.ImageField(widget=ImageInput)
     # password1 = forms.CharField(
@@ -121,7 +118,7 @@ class InfluencerManageForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('auto_id', 'email', 'first_name', 'last_name', 'is_active',
+        fields = ('auto_id', 'is_active',
                   'bio', 'image',
                   'height', 'chest_or_bust', 'hips', 'waist',
                   'city', 'country', 'state',
