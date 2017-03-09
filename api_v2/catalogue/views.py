@@ -428,8 +428,11 @@ class InfluencerChildProductsListView(generics.ListAPIView):
                 base_product = Product.objects.filter(pk=prod_id)
             except ObjectDoesNotExist:
                 return None
-            child_products = Product.objects.filter(parent=base_product)
-            return child_products
+            if base_product.structure == 'standalone':
+                return base_product
+            else:
+                child_products = Product.objects.filter(parent=base_product)
+                return child_products
 
 
 class InfluencerReserveProduct(APIView):
