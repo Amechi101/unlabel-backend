@@ -38,6 +38,7 @@ class ProductForm(CoreProductForm):
         self.user = user
         super(ProductForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
+
         if self.instance.structure == "child":
             self.fields['brand'].initial = self.instance.parent.brand.id
         DRAFT = 'D'
@@ -85,15 +86,30 @@ class ProductForm(CoreProductForm):
                     else:
                         self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
 
+    def save(self, commit=True):
+        instance = super(ProductForm, self).save(commit=False)
+        if self.instance.structure == "child":
+            instance.title = self.instance.parent.title
+            instance.brand = self.instance.parent.brand
+            instance.description = self.instance.parent.description
+            instance.material_info = self.instance.parent.material_info
+            instance.influencer_product_note = self.instance.parent.influencer_product_note
+            instance.weight = self.instance.parent.weight
+        instance.save()
+        return instance
+
+
+
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'item_sex_type',
+            'title', 'upc', 'description', 'material_info', 'influencer_product_note', 'item_sex_type',
             'status', 'rental_status', 'brand',
             'weight', 'on_sale', 'requires_shipping']
         labels = {
             'title': _('Name'),
             'status': _('Product Status')
         }
+
 
 
 class StockRecordForm(forms.ModelForm):
