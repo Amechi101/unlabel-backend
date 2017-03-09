@@ -243,9 +243,9 @@ class InfluencerBrandListView(generics.ListAPIView):
             type = self.request.GET.get('type')
             if param == "ZA":
                 queryset = Partner.objects.all().order_by('-name')
-            elif param == "DESC":
+            elif param == "OLD":
                 queryset = Partner.objects.all().order_by('created')
-            elif param == "ASC":
+            elif param == "NEW":
                 queryset = Partner.objects.all().order_by('-created')
             else:
                 queryset = Partner.objects.all().order_by('name')
@@ -282,9 +282,9 @@ class InfluencerBrandListView(generics.ListAPIView):
             param = self.request.GET.get('param')
             if param == "ZA":
                 partner = partner.order_by('-name')
-            elif param == "DESC":
+            elif param == "OLD":
                 partner = partner.order_by('created')
-            elif param == "ASC":
+            elif param == "NEW":
                 partner = partner.order_by('-created')
             else:
                 partner = partner.order_by('name')
@@ -340,10 +340,21 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                 item_list = []
                 for item in prod_Sort_List:
                     try:
-                        obj = products_list_unsorted.get(id=item)
-                        item_list.append(obj)
+                        curr_prod = Product.objects.get(pk=item)
+                        if curr_prod.structure == 'child':
+                            base = curr_prod.parent
+                        else:
+                            base = curr_prod
+                        if base not in item_list:
+                            item_list.append(base)
                     except:
                         pass
+
+                    # try:
+                    #     obj = products_list_unsorted.get(id=item)
+                    #     item_list.append(obj)
+                    # except:
+                    #     pass
                 return item_list
 
             elif param == "LH":
@@ -363,10 +374,22 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                 item_list = []
                 for item in prod_Sort_List:
                     try:
-                        obj = products_list_unsorted.get(id=item)
-                        item_list.append(obj)
+                        curr_prod = Product.objects.get(pk=item)
+                        if curr_prod.structure == 'child':
+                            base = curr_prod.parent
+                        else:
+                            base = curr_prod
+                        if base not in item_list:
+                            item_list.append(base)
                     except:
                         pass
+
+                # for item in prod_Sort_List:
+                #     try:
+                #         obj = products_list_unsorted.get(id=item)
+                #         item_list.append(obj)
+                #     except:
+                #         pass
                 return item_list
             else:
                 prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
@@ -427,10 +450,8 @@ class InfluencerChildProductsListView(generics.ListAPIView):
             try:
                 base_product = Product.objects.get(pk=prod_id)
             except ObjectDoesNotExist:
-                print("====================excception")
                 return None
             if base_product.structure == 'standalone':
-                print("--------------3333")
                 return Product.objects.filter(pk=prod_id)
             else:
                 child_products = Product.objects.filter(parent=base_product)
