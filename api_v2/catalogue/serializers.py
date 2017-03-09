@@ -6,11 +6,12 @@ from oscarapi.utils import (
     OscarHyperlinkedModelSerializer
 )
 
-from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord,SubCategory
+from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord, \
+    SubCategory
 from oscarapps.address.models import Locations, States
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
-from oscarapps.catalogue.models import Product , InfluencerProductImage
+from oscarapps.catalogue.models import Product, InfluencerProductImage
 from oscar.core.loading import get_model, get_class
 
 Selector = get_class('partner.strategy', 'Selector')
@@ -124,16 +125,20 @@ class BaseProductSerializer(OscarModelSerializer):
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
 
-    def get_price(self,obj):
-        child_products = Product.objects.filter(structure='child',parent=obj)
-        for child_product in child_products:
-            try:
-                child_stock = StockRecord.objects.get(product=child_product)
-                price_retail = child_stock.price_retail
-                return {'price_retail':price_retail}
-            except:
-                pass
-        return {'price_retail':'No Stock'}
+    def get_price(self, obj):
+        if obj.structure == 'child':
+            child_products = Product.objects.filter(structure='child', parent=obj)
+            for child_product in child_products:
+                try:
+                    child_stock = StockRecord.objects.get(product=child_product)
+                    price_retail = child_stock.price_retail
+                    return {'price_retail': price_retail}
+                except:
+                    pass
+            return {'price_retail': 'No Stock'}
+        else:
+            base_stock = StockRecord.objects.get(product=obj)
+            return {'price_retail': base_stock.price_retail}
 
 
     class Meta:
@@ -281,13 +286,16 @@ class InfluencerBrandCategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+
 class InfluencerBrandStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Style
         fields = '__all__'
 
+
 class IdSerializer(serializers.Serializer):
     id = serializers.CharField(required=True, max_length=10)
+
 
 class InfluecnerBrandSpecializationSerializer(serializers.ModelSerializer):
     class Meta:
