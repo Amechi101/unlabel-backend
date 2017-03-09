@@ -127,6 +127,9 @@ class PartnerManageForm(forms.ModelForm):
         instance.location.city = self.cleaned_data['city']
         instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
         instance.is_active = self.cleaned_data['is_active']
+        instance.style = self.cleaned_data['style']
+        instance.category = self.cleaned_data['category']
+        instance.sub_category = self.cleaned_data['sub_category']
 
         if str(self.cleaned_data['country']) == "United States":
             try:
