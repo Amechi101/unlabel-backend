@@ -10,15 +10,14 @@ class CatalogueApplication(DashboardApplication):
     default_permissions = ['is_staff', ]
     permissions_map = _map = {
         'catalogue-product': (['is_staff'], ['partner.dashboard_access']),
-        'catalogue-product-create': (['is_staff'],
-                                     ['partner.dashboard_access']),
+        'catalogue-product-create': (['is_staff'], ['partner.dashboard_access']),
         'catalogue-product-list': (['is_staff'], ['partner.dashboard_access']),
-        'catalogue-product-delete': (['is_staff'],
-                                     ['partner.dashboard_access']),
-        'catalogue-product-lookup': (['is_staff'],
-                                     ['partner.dashboard_access']),
-        'catalogue-product-create-child': (['is_staff'],
-                                     ['partner.dashboard_access']),
+        'catalogue-product-delete': (['is_staff'], ['partner.dashboard_access']),
+        'catalogue-product-lookup': (['is_staff'], ['partner.dashboard_access']),
+        'catalogue-product-create-child': (['is_staff'], ['partner.dashboard_access']),
+        'stock_alert_view': (['is_staff'], ['partner.dashboard_access']),
+        'reserved-products': (['is_staff'], ['partner.dashboard_access']),
+
     }
 
     product_list_view = get_class('dashboard.catalogue.views',
@@ -31,6 +30,9 @@ class CatalogueApplication(DashboardApplication):
                                           'ProductCreateUpdateView')
     product_delete_view = get_class('dashboard.catalogue.views',
                                     'ProductDeleteView')
+
+    reserved_products_view = get_class('dashboard.catalogue.views',
+                                 'ReservedProductsView')
 
     product_class_create_view = get_class('dashboard.catalogue.views',
                                           'ProductClassCreateView')
@@ -106,6 +108,9 @@ class CatalogueApplication(DashboardApplication):
             url(r'^product-type/(?P<pk>\d+)/delete/$',
                 self.product_class_delete_view.as_view(),
                 name='catalogue-class-delete'),
+            url(r'^reserved-products/$',
+                self.reserved_products_view.as_view(),
+                name='reserved-products'),
         ]
         return self.post_process_urls(urls)
 
