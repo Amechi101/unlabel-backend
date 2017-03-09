@@ -23,6 +23,12 @@ InfluencerProductImage = get_model('catalogue', 'InfluencerProductImage')
 ProductImage = get_model('catalogue', 'ProductImage')
 InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
 
+
+class ReservedProductSearchForm(forms.Form):
+    name = forms.CharField(
+        required=False, label="Name")
+
+
 class ProductForm(CoreProductForm):
     brand = forms.ModelChoiceField(queryset=Partner.objects.all(), required=True)
 
@@ -32,6 +38,9 @@ class ProductForm(CoreProductForm):
         self.user = user
         super(ProductForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
+        if self.instance.structure == "child":
+            self.fields['brand'].initial = self.instance.parent.brand.id
+
         if not self.user.is_staff:
             if self.instance.status == "L":
                 DRAFT = 'D'
@@ -69,10 +78,6 @@ class ProductForm(CoreProductForm):
         }
 
 
-
-
-
-
 class StockRecordForm(forms.ModelForm):
     price_retail = forms.IntegerField(min_value=0)
     price_excl_tax = forms.IntegerField(min_value=0)
@@ -82,8 +87,8 @@ class StockRecordForm(forms.ModelForm):
         # The user kwarg is not used by stock StockRecordForm. We pass it
         # anyway in case one wishes to customise the partner queryset
         self.user = user
-        super(StockRecordForm, self).__init__(*args, **kwargs)
 
+        super(StockRecordForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
         if not self.user.is_staff:
             self.fields['partner'].queryset = self.user.partners.all()

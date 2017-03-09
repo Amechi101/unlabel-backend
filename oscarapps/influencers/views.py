@@ -17,7 +17,7 @@ from users.models import User
 
 
 class InfluencerListView(ListView):
-    template_name = 'pages/_influencers.html'
+    template_name = 'influencers/influencers.html'
 
     model = Influencers
 
@@ -31,7 +31,7 @@ class InfluencerListView(ListView):
 class InfluencerDetailView(SingleObjectMixin, ListView):
     model = Influencers
 
-    template_name = 'pages/_influencer_detail.html'
+    template_name = 'influencers/influencer_detail.html'
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=Influencers.objects.all())
@@ -52,7 +52,7 @@ class InfluencerDetailView(SingleObjectMixin, ListView):
 
 class InfluencerSignUpView(View):
     def get(self, request, code, *args, **kwargs):
-        return render(request, 'pages/influencer_register.html', {'user_form': InfluencerSignUpForm})
+        return render(request, 'influencers/influencer_register.html', {'user_form': InfluencerSignUpForm})
 
     def post(self, request, code, *args, **kwargs):
 
@@ -86,7 +86,7 @@ class InfluencerSignUpView(View):
 
                     return HttpResponse("Influencer successfully registered.")
                 else:
-                    return render(request, 'pages/influencer_register.html', {'user_form': influencer_form})
+                    return render(request, 'influencers/influencer_register.html', {'user_form': influencer_form})
             else:
                 return HttpResponse("The link is expired")
         except:

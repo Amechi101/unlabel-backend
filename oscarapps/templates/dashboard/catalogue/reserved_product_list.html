@@ -1,0 +1,63 @@
+{% extends 'dashboard/layout.html' %}
+{% load sorting_tags %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Reserved Products" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+        </li>
+        <li class="active">{% trans "Reserved Products" %}</li>
+    </ul>
+{% endblock %}
+{% block dashboard_content %}
+
+        <h2>Search</h2>
+    <div class="well">
+        <form action="/dashboard/catalogue/reserved-products/" method="get" class="form-inline">
+            {% include 'dashboard/partials/form_fields_inline.html' with form=form %}
+            <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Searching...' %}">{% trans "Search" %}</button>
+            {% if is_filtered %}
+                <a class="btn btn-default" href="{% url 'dashboard:reserved-products' %}" >{% trans "Reset" %}</a>
+            {% endif %}
+        </form>
+    </div>
+    <form action="" method="post" class="order_table">
+        {% csrf_token %}
+        <table class="table table-striped table-bordered">
+            <caption>
+                <i class="icon-briefcase icon-large"></i>{{ queryset_description }}
+            </caption>
+            {% if reservedproducts %}
+                <tr>
+                    <th>{% trans 'Product' %}</th>
+                    <th>{% trans 'Influencer' %}</th>
+
+                </tr>
+                {% for item in reservedproducts %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'dashboard:catalogue-product' pk=item.product.pk %}">{{ item.product.title }}</a>
+                        </td>
+                        <td>
+                            {%if user.is_staff %}
+                                      <a href="{% url 'dashboard:influencer-manage' pk=item.influencer.pk %}">{{ item.influencer }}</a>
+                            {% else %}
+                                {{ item.influencer }}
+                           {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            {% else %}
+                <tr><td>{% trans "No such reserved product" %}</td></tr>
+            {% endif %}
+
+        </table>
+        {% include "dashboard/partials/pagination.html" %}
+    </form>
+{% endblock dashboard_content %}
