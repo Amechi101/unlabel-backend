@@ -1,3 +1,6 @@
+ <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <h1>Unlabel Influencer sign-up</h1>
 
     <form id="Influencer_register_form" method="post" action="." enctype="multipart/form-data">
@@ -6,3 +9,23 @@
                     {% csrf_token %}
         <input type="submit" name="submit" value="Register" />
     </form>
+
+
+
+
+<script>
+    var country_id = $('#id_country');
+    var state_id = $('#id_state');
+     country_id.change(function(e){
+                if(country_id.val()=="US")
+                {
+                    state_id.prop('disabled',false);
+                }
+                else
+                {
+                    state_id.prop('disabled',true);
+{#                    state_id.select2("val",null);#}
+                }
+        });
+
+</script>
