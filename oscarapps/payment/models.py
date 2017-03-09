@@ -31,6 +31,7 @@ class InfluencerCommission(BaseApplicationModel):
     order = models.ForeignKey(Order, blank=True, null=True, verbose_name="Order")
     amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Commission received", null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.influencer)+", "+str(self.order)+", "+str(self.amount)
@@ -41,6 +42,7 @@ class BrandCommission(BaseApplicationModel):
     order = models.ForeignKey(Order, blank=True, null=True, verbose_name="Order")
     amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Commission received", null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.brand)+", "+str(self.order)+", "+str(self.amount)
@@ -50,6 +52,7 @@ class UnlabelCommission(BaseApplicationModel):
     order = models.ForeignKey(Order, blank=True, null=True, verbose_name="Order")
     amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Commission received", null=True, blank=True)
+    is_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.order)+", "+str(self.amount)

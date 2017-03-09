@@ -31,6 +31,8 @@ class Command(BaseCommand):
         influencer_list = []
         influencer_commissions = InfluencerCommission.objects.filter(created__range=[start_date, end_date])
         for obj in influencer_commissions:
+            obj.is_completed = True
+            obj.save()
             influencer_list.append(obj.influencer)
         influencer_list = list(set(influencer_list))
         for influencer in influencer_list:
@@ -38,13 +40,13 @@ class Command(BaseCommand):
             total_commission = 0
             for obj in total_influencers:
                 total_commission += obj.amount
-            print(total_commission)
             InfluencerPayout.objects.create(stripe_credential=StripeCredential.objects.get(user=influencer.users),
                                             total_amount=total_commission)
         brand_list = []
         brand_commissions = BrandCommission.objects.filter(created__range=[start_date, end_date])
-        print(brand_commissions)
         for obj in brand_commissions:
+            obj.is_completed = True
+            obj.save()
             brand_list.append(obj.brand)
         brand_list = list(set(brand_list))
         for brand in brand_list:
