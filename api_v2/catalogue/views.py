@@ -425,11 +425,13 @@ class InfluencerChildProductsListView(generics.ListAPIView):
         if self.request.GET.get("prod_id"):
             prod_id = self.request.GET.get('prod_id')
             try:
-                base_product = Product.objects.filter(pk=prod_id)
+                base_product = Product.objects.get(pk=prod_id)
             except ObjectDoesNotExist:
+                print("====================excception")
                 return None
             if base_product.structure == 'standalone':
-                return base_product
+                print("--------------3333")
+                return Product.objects.filter(pk=prod_id)
             else:
                 child_products = Product.objects.filter(parent=base_product)
                 return child_products
