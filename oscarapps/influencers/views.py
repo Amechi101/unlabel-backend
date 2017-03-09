@@ -52,13 +52,17 @@ class InfluencerDetailView(SingleObjectMixin, ListView):
 
 class InfluencerSignUpView(View):
     def get(self, request, code, *args, **kwargs):
-        return render(request, 'influencers/influencer_register.html', {'user_form': InfluencerSignUpForm})
+        try:
+            influencer_invite = InfluencerInvite.objects.get(code=code,is_used=False)
+        except:
+            return HttpResponse("sorry link is used already")
+        return render(request, 'pages/influencer_register.html', {'user_form': InfluencerSignUpForm})
 
     def post(self, request, code, *args, **kwargs):
 
         influencer_form = InfluencerSignUpForm(data=request.POST)
         try :
-            influencer_invite = InfluencerInvite.objects.get(code=code)
+            influencer_invite = InfluencerInvite.objects.get(code=code,is_used=False)
             check_date = datetime.datetime.utcnow().replace(tzinfo=utc)
             sent_date = influencer_invite.date_sent
             if (((check_date - sent_date).total_seconds())/60)/60 < 24 and influencer_invite.is_used == False:
@@ -67,6 +71,17 @@ class InfluencerSignUpView(View):
                     influencer_user.email = influencer_form.cleaned_data['email']
                     influencer_user.first_name = influencer_form.cleaned_data['first_name']
                     influencer_user.last_name = influencer_form.cleaned_data['last_name']
+                    influencer_user.is_influencer = True
+                    influencer_user.contact_number = influencer_form.cleaned_data['contact_number']
+                    influencer_user.gender = influencer_form.cleaned_data['gender']
+                    influencer_user.save()
+                    influencer_user.set_password(influencer_form.cleaned_data['password1'])
+                    influencer_user.save()
+                    influencer_location = Locations()
+                    influencer_location.city = influencer_form.cleaned_data['city']
+                    influencer_location.state = influencer_form.cleaned_data['state']
+                    influencer_location.country = influencer_form.cleaned_data['country']
+                    influencer_location.save()
                     influencer_profile = Influencers()
                     influencer_profile.bio = influencer_form.cleaned_data['bio']
                     influencer_profile.image = request.FILES['image']
@@ -74,13 +89,9 @@ class InfluencerSignUpView(View):
                     influencer_profile.height = influencer_form.cleaned_data['height']
                     influencer_profile.hips = influencer_form.cleaned_data['hips']
                     influencer_profile.waist = influencer_form.cleaned_data['waist']
+                    influencer_profile.users = influencer_user
+                    influencer_profile.location = influencer_location
                     influencer_profile.save()
-                    influencer_user.is_influencer = True
-                    influencer_user.contact_number = influencer_form.cleaned_data['contact_number']
-                    influencer_user.gender = influencer_form.cleaned_data['gender']
-                    influencer_user.save()
-                    influencer_user.set_password(influencer_form.cleaned_data['password1'])
-                    influencer_user.save()
                     influencer_invite.is_used = True
                     influencer_invite.save()
 
@@ -88,9 +99,9 @@ class InfluencerSignUpView(View):
                 else:
                     return render(request, 'influencers/influencer_register.html', {'user_form': influencer_form})
             else:
-                return HttpResponse("The link is expired")
+                return HttpResponse("The page you requested is expired.")
         except:
-            return HttpResponse("sorry link is used already")
+            return HttpResponse("Sorry, The sign up link you requested is already used.")
 
 
 

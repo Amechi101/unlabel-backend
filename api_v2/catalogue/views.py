@@ -17,16 +17,15 @@ from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
 
 from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer
-from oscarapps.partner.models import PartnerFollow, Style, Category,SubCategory
+from oscarapps.partner.models import PartnerFollow, Style, Category, SubCategory
 
 from oscarapps.catalogue.models import InfluencerProductImage
-from oscarapps.influencers.models import Influencers, InfluencerProductReserve,InfluencerProductUnreserve
+from oscarapps.influencers.models import Influencers, InfluencerProductReserve, InfluencerProductUnreserve
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
     InfluencerBrandProductSerializer, \
-    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer,\
-    BaseProductSerializer,IdSerializer,InfluecnerBrandSpecializationSerializer
+    InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer, \
+    BaseProductSerializer, IdSerializer, InfluecnerBrandSpecializationSerializer
 from oscarapps.partner.models import PartnerFollow, Style
-from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
 
 
@@ -101,8 +100,8 @@ class BrandListView(generics.ListAPIView):
 
     # ZA - sort by a to z
     # AZ - sort by z to a
-    #ASC - sort by date ascending
-    #DESC - sort by date descending
+    # ASC - sort by date ascending
+    # DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
     def get_queryset(self, *args, **kwargs):
         param = self.request.GET.get('param')
@@ -197,7 +196,7 @@ class PartnerFollowView(APIView):
             else:
                 content = {"message": "Please login first."}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            id_ser = self.serializer_class(data=request.data,many=False)
+            id_ser = self.serializer_class(data=request.data, many=False)
             if id_ser.is_valid():
                 try:
                     partner = Partner.objects.get(id=id_ser.validated_data['id'])
@@ -231,13 +230,13 @@ class InfluencerBrandListView(generics.ListAPIView):
     http_method_names = ('get',)
 
     # ZA - sort by a to z
-    #AZ - sort by z to a
-    #ASC - sort by date ascending
+    # AZ - sort by z to a
+    # ASC - sort by date ascending
     #DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
 
     def get_queryset(self, *args, **kwargs):
-        display_type = self.request.GET.get('display','')
+        display_type = self.request.GET.get('display', '')
         if display_type == 'FEED':
             param = self.request.GET.get('param')
             search = self.request.GET.get('search')
@@ -252,21 +251,21 @@ class InfluencerBrandListView(generics.ListAPIView):
                 queryset = Partner.objects.all().order_by('name')
             return queryset
         elif display_type == 'FILTER':
-            search_text=""
+            search_text = ""
             search_category = []
             search_location = []
             search_style = []
             search_specialization = []
 
-            search_text = self.request.GET.get('search','')
-            if self.request.GET.get('location','') != "":
-                search_location = list(map(int,self.request.GET.get('location','').split(',')))
-            if self.request.GET.get('store_type','') != "":
-                search_category = list(map(int,self.request.GET.get('store_type','')))
-            if self.request.GET.get('specialization','') != "":
-                search_specialization = list(map(int,self.request.GET.get('specialization','')))
-            if self.request.GET.get('style','') != "":
-                search_style = list(map(int,self.request.GET.get('style')))
+            search_text = self.request.GET.get('search', '')
+            if self.request.GET.get('location', '') != "":
+                search_location = list(map(int, self.request.GET.get('location', '').split(',')))
+            if self.request.GET.get('store_type', '') != "":
+                search_category = list(map(int, self.request.GET.get('store_type', '')))
+            if self.request.GET.get('specialization', '') != "":
+                search_specialization = list(map(int, self.request.GET.get('specialization', '')))
+            if self.request.GET.get('style', '') != "":
+                search_style = list(map(int, self.request.GET.get('style')))
 
             partner = Partner.objects.all()
             if search_text is not None:
@@ -453,7 +452,7 @@ class InfluencerReserveProduct(APIView):
         else:
             content = {"message": "Please login first."}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        id_ser = self.serializer_class(data=request.data,many=False)
+        id_ser = self.serializer_class(data=request.data, many=False)
         if id_ser.is_valid():
             try:
                 product_to_reserve = Product.objects.get(id=id_ser.validated_data['id'])
@@ -465,6 +464,7 @@ class InfluencerReserveProduct(APIView):
                 influencer_product_reserved.influencer = influencer_user
                 influencer_product_reserved.product = product_to_reserve
                 influencer_product_reserved.date_reserved = datetime.now()
+
                 product_to_reserve.status = 'R'
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
@@ -570,15 +570,30 @@ class InfluencerLiveProducts(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get')
+    # ZA - sort by a to z
+    # AZ - sort by z to a
+    # ASC - sort by date ascending
+    # DESC - sort by date descending
 
     def get(self, request, *args, **kwargs):
+        param = self.request.GET.get('param')
+
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer = Influencers.objects.filter(users=request.user)
             reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
                                                                                                         flat=True)
             products_reserved = Product.objects.filter(pk__in=reserved_items, status='L').values_list('id', flat=True)
             stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
-            brands = Partner.objects.filter(pk__in=stock_brand)
+
+            if param == "ZA":
+                brands = Partner.objects.filter(pk__in=stock_brand).order_by('-name')
+            elif param == "DESC":
+                brands = Partner.objects.filter(pk__in=stock_brand).order_by('created')
+            elif param == "ASC":
+                brands = Partner.objects.filter(pk__in=stock_brand).order_by('-created')
+            else:
+                brands = Partner.objects.filter(pk__in=stock_brand).order_by('name')
+
             influencer_reserved_products = []
             for brand in brands:
                 prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
@@ -725,10 +740,15 @@ class InfluencerProductGoLive(APIView):
 
                 if InfluencerProductImage.objects.filter(product=original_product).count() > 0 \
                         and original_product.influencer_product_note is not None:
-                    original_product.status = 'L'
-                    original_product.save()
+                    if reserved_product.structure == "child":
+                        original_product.status = 'L'
+                        original_product.save()
                     reserved_product.status = 'L'
                     reserved_product.save()
+                    influencer_product_details = InfluencerProductReserve.objects.get(product=reserved_product)
+                    influencer_product_details.is_live=True
+                    influencer_product_details.date_live=datetime.now()
+                    influencer_product_details.save()
                     content = {'message': 'Product Successfully made live'}
                     return Response(content, status=status.HTTP_200_OK)
                 else:
@@ -754,7 +774,7 @@ class InfluencerRemoveProductImage(APIView):
             if 'prod_id' in request.data and 'display_order' in request.data:
                 try:
                     reserved_product = InfluencerProductReserve.objects.get(product=request.data['prod_id'])
-                    product = Product.objects.get(pk = request.data['prod_id'])
+                    product = Product.objects.get(pk=request.data['prod_id'])
                 except:
                     content = {'message': 'invalid product id.'}
                     return Response(content, status=status.HTTP_205_RESET_CONTENT)
@@ -796,7 +816,6 @@ class InfluencerBrandCategories(APIView):
 class InfluencerBrandStyles(APIView):
     serializer_class = InfluencerBrandStyleSerializer
     permission_classes = ()
-    # queryset = Style.objects.all()
     pagination_class = None
     http_method_names = ('get',)
 
@@ -805,6 +824,7 @@ class InfluencerBrandStyles(APIView):
         category_ser = self.serializer_class(queryset, many=True)
         result_dict = {'results': category_ser.data}
         return Response(result_dict)
+
 
 class InfluencerBrandSpecialization(APIView):
     serializer_class = InfluecnerBrandSpecializationSerializer
