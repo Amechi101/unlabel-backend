@@ -258,7 +258,7 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
-                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes']
+                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes','share_url']
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
