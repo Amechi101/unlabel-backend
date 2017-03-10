@@ -326,7 +326,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
             elif param == 'HL':
                 prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
                 prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
-                    'price_retail').values_list('product', flat=True)
+                    '-price_retail').values_list('product', flat=True)
                 products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
                 products_to_list = []
                 for product in products:
@@ -360,7 +360,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
             elif param == "LH":
                 prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
                 prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
-                    '-price_retail').values_list('product', flat=True)
+                    'price_retail').values_list('product', flat=True)
                 products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
                 products_to_list = []
                 for product in products:
@@ -402,7 +402,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                         products_to_list.append(product.pk)
                     elif product.structure == "parent":
                         products_to_list.append(product.pk)
-                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('-created')
                 return queryset
 
 
