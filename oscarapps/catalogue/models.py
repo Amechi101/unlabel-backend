@@ -139,6 +139,7 @@ class Product(AbstractProduct, BaseApplicationModel):
         if self.influencer_product_note:
             self.influencer_product_note = strip_tags(self.influencer_product_note)
         if self.structure == 'parent'and self.rental_status=='REN':
+            print("------------------------ parent rented----",self.rental_status)
             try:
                 child_products = Product.objects.filter(parent=self.id)
                 for child in child_products:

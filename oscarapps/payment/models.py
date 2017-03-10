@@ -32,6 +32,7 @@ class InfluencerCommission(BaseApplicationModel):
     amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Commission received", null=True, blank=True)
 
+
     def __str__(self):
         return str(self.influencer)+", "+str(self.order)+", "+str(self.amount)
 
