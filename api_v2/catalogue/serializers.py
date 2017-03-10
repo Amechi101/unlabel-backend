@@ -234,6 +234,10 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     attributes = ProductAttributeValueSerializer(
         many=True, required=False, source="attribute_values")
     share_url = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+
+    def get_description(self,obj):
+        return "xsgfdsgfDSF"
 
     def get_share_url(self,obj):
         return "http://35.166.138.246/"
