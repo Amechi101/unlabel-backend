@@ -205,7 +205,7 @@ class BrandStyleCreateForm(forms.ModelForm):
 
     class Meta:
         model = BrandStyle
-        fields = ('name',)
+        fields = ('name','description')
 
 
 
@@ -233,7 +233,7 @@ class BrandCategoryCreateForm(forms.ModelForm):
 
     class Meta:
         model = BrandCategories
-        fields = ('name', 'description')
+        fields = ('name',)
 
 
 

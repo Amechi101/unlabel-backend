@@ -818,14 +818,15 @@ class InfluencerRemoveProductImage(APIView):
                 for image in product_images:
                     if image.display_order > int(request.data['display_order']):
                         image.display_order = image.display_order - 1
+                        image.save()
                 content = {'message': "Product image deleted successfully."}
                 return Response(content, status=status.HTTP_200_OK)
             else:
                 content = {'message': "Please check product id and image order"}
-                return Response(content, status=status.HTTP_200_OK)
+                return Response(content, status=status.HTTP_204_NO_CONTENT)
         else:
             content = {'message': "Please login as influencer and try again."}
-            return Response(content, status=status.HTTP_200_OK)
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class InfluencerBrandCategories(APIView):
