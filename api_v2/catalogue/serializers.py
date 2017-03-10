@@ -235,9 +235,29 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         many=True, required=False, source="attribute_values")
     share_url = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
+    material_info = serializers.SerializerMethodField()
+    sku = serializers.SerializerMethodField(source='get_sku')
+
+    def get_sku(self, obj):
+        try:
+            stock_record = StockRecord.objects.get(product=obj)
+        except ObjectDoesNotExist:
+            return ""
+        return stock_record.partner_sku
+
+    def get_material_info(self,obj):
+        if obj.structure == 'child':
+            desc = obj.parent.material_info
+        else:
+            desc = obj.material_info
+        return desc
 
     def get_description(self,obj):
-        return "xsgfdsgfDSF"
+        if obj.structure == 'child':
+            desc = obj.parent.description
+        else:
+            desc = obj.description
+        return desc
 
     def get_share_url(self,obj):
         return "http://35.166.138.246/"
@@ -255,14 +275,14 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         try:
             stock = StockRecord.objects.get(product=obj)
         except:
-            return None
+            return 0
         return stock.price_retail
 
 
     class Meta:
         model = Product
         fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
-                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes','share_url']
+                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes','share_url','sku']
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
