@@ -17,8 +17,9 @@
 {% endblock %}
 
 {% block dashboard_content %}
+{%if not user.is_staff %}
  <a  href="{% url 'dashboard:stripe-redirect' %}" >Connect To Stripe</a>
-
+ {% endif %}
 <div class="table-header">
     <i class="icon-signal icon-large"></i>{% trans "Your Store Statistics" %}
 </div>
