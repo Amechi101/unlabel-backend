@@ -205,7 +205,7 @@ class BrandStyleCreateForm(forms.ModelForm):
 
     class Meta:
         model = BrandStyle
-        fields = ('name', 'description')
+        fields = ('name',)
 
 
 

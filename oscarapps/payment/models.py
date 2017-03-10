@@ -33,6 +33,7 @@ class InfluencerCommission(BaseApplicationModel):
                                 verbose_name="Commission received", null=True, blank=True)
     is_completed = models.BooleanField(default=False)
 
+
     def __str__(self):
         return str(self.influencer)+", "+str(self.order)+", "+str(self.amount)
 
