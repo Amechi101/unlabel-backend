@@ -261,11 +261,11 @@ class InfluencerBrandListView(generics.ListAPIView):
             if self.request.GET.get('location', '') != '""' :
                 search_location = list(map(int, self.request.GET.get('location', '').split(',')))
             if self.request.GET.get('store_type', '') != '""':
-                search_category = list(map(int, self.request.GET.get('store_type', '')))
+                search_category = list(map(int, self.request.GET.get('store_type', '').split(',')))
             if self.request.GET.get('specialization', '') != '""':
-                search_specialization = list(map(int, self.request.GET.get('specialization', '')))
+                search_specialization = list(map(int, self.request.GET.get('specialization', '').split(',')))
             if self.request.GET.get('style', '') != '""':
-                search_style = list(map(int, self.request.GET.get('style')))
+                search_style = list(map(int, self.request.GET.get('style').split(',')))
 
             partner = Partner.objects.all()
             if search_text is not None:
