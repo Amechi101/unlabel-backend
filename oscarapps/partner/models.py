@@ -51,9 +51,9 @@ class Category(BaseApplicationModel):
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        if self.name == 'M':
+        if self.name == 'Menswear':
             value = "Menswear"
-        elif self.name == 'F':
+        elif self.name == 'Womenswear':
             value = "Womenswear"
         return value
 
