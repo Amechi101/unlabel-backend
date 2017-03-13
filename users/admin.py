@@ -31,7 +31,7 @@ class CustomUserAdmin(UserAdmin):
    ordering = ("email",)
 
    fieldsets = (
-       (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'contact_number', 'is_influencer', 'is_brand', 'gender','is_active')}),
+       (None, {'fields': ('email', 'password', 'first_name', 'last_name', 'contact_number', 'is_influencer', 'is_brand','gender', 'is_active','is_staff')}),
    )
    add_fieldsets = (
        (None, {

@@ -24,6 +24,7 @@ from oscar.apps.dashboard.partners.forms import PartnerSearchForm
 from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartnerDeleteView
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
+from oscar.apps.dashboard.partners.views import PartnerUserUpdateView as CorePartnerUserUpdateView
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 from django.contrib.auth.models import Permission
@@ -99,6 +100,7 @@ class PartnerListView(CorePartnerListView):
         ctx['is_staff'] = self.request.user.is_staff
         ctx['is_filtered'] = self.is_filtered
         return ctx
+
 
 class PartnerCreateView(generic.View):
     model = Partner
@@ -187,7 +189,6 @@ class PartnerManageView(CorePartnerManageView, FormView):
             self.request, _("Brand '%s' was updated successfully.") %
             self.partner.name)
         return super(PartnerManageView, self).form_valid(form)
-
 
 
 class PartnerRentalInfoManageView(generic.UpdateView):
@@ -295,6 +296,12 @@ class PartnerFilterView(generic.ListView):
         return ctx
 
 
+class PartnerUserUpdateView(CorePartnerUserUpdateView):
+
+    def get_form_kwargs(self):
+        kwargs = super(PartnerUserUpdateView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
 #=========================
 #Brand Categories Views
 #==========================
