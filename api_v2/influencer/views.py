@@ -405,29 +405,43 @@ class InfluencerCurrentLocationView(APIView):
             except:
                 content = {"message": "Please complete the influencer profile information."}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            if request.data['country'] is None or request.data['city'] is None:
-                content = {"message": "Please verify city, state and country."}
-                return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
 
-            influencer_location = Locations()
-            try:
-                country = Country.objects.get(pk=request.data['country'])
-            except:
-                content = {"message": "Please verify country id."}
-                return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
-            influencer_location.country = country
-            if request.data['state'] and request.data['state'] != "":
+            if request.data['location_id'] is None:
+                content = {"message": "Please location id."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            else:
                 try:
-                    state = States.objects.get(pk=request.data['state'])
-                    influencer_location.state = state
+                    influencer_location = Locations.objects.get(pk=request.data['location_id'])
                 except:
-                    content = {"message": "Please verify state id."}
-                    return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
-                influencer_location.state = state
-            influencer_location.city = request.data['city']
-            influencer_location.save()
-            influencer_profile.location = influencer_location
-            influencer_profile.save()
+                    content = {"message": "Please select valid location id."}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                influencer_profile.location = influencer_location
+                influencer_profile.save()
+
+
+            # if request.data['country'] is None or request.data['city'] is None:
+            #     content = {"message": "Please verify city, state and country."}
+            #     return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+            #
+            # influencer_location = Locations()
+            # try:
+            #     country = Country.objects.get(pk=request.data['country'])
+            # except:
+            #     content = {"message": "Please verify country id."}
+            #     return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+            # influencer_location.country = country
+            # if request.data['state'] and request.data['state'] != "":
+            #     try:
+            #         state = States.objects.get(pk=request.data['state'])
+            #         influencer_location.state = state
+            #     except:
+            #         content = {"message": "Please verify state id."}
+            #         return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+            #     influencer_location.state = state
+            # influencer_location.city = request.data['city']
+            # influencer_location.save()
+            # influencer_profile.location = influencer_location
+            # influencer_profile.save()
             content = {"message": "successfully updated location."}
             return Response(content, status=status.HTTP_200_OK)
         else:
