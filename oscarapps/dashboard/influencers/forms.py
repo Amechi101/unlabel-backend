@@ -12,6 +12,25 @@ from oscar.forms.widgets import ImageInput
 from oscarapps.influencers.models import Influencers
 from oscarapps.address.models import Country, States
 from users.models import User
+from oscar.core.loading import get_model
+
+Locations = get_model('address', 'Locations')
+
+
+class LocationSearchForm(forms.Form):
+    city = forms.CharField(
+        required=False, label=pgettext_lazy(u"Locations's city", u"City"))
+
+
+class LocationCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(LocationCreateForm, self).__init__(*args, **kwargs)
+        self.fields['city'].required = True
+
+    class Meta:
+        model = Locations
+        fields = ('city', 'country', 'state', 'latitude', 'longitude')
 
 
 class InfluencerSearchForm(forms.Form):
@@ -46,10 +65,11 @@ class InfluencerCreateForm(forms.Form):
     contact_number = forms.CharField(required=True, label="Contact Number")
     image = forms.ImageField(label="Profile Image", required=False)
     bio = forms.CharField(widget=forms.Textarea, label="Bio", help_text="Few words about yourself")
-    city = forms.CharField(label="City", required=True)
-    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
-                                   help_text="Only select state if your country is USA else leave it unselected")
+    # city = forms.CharField(label="City", required=True)
+    # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
+    # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
+    #                                help_text="Only select state if your country is USA else leave it unselected")
+    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
     gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
     height = forms.IntegerField(required=True, min_value=0, label="Height", help_text="Enter size in inches")
     chest_or_bust = forms.IntegerField(required=True, min_value=0, label="Chest / Bust", help_text="Enter size in inches")
@@ -104,10 +124,11 @@ class InfluencerManageForm(forms.ModelForm):
     )
 
     auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
-    city = forms.CharField(label="City", required=True)
-    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
-                                   help_text="Only select state if your country is USA else leave it unselected")
+    # city = forms.CharField(label="City", required=True)
+    # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
+    # state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
+    #                                help_text="Only select state if your country is USA else leave it unselected")
+    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
     is_active = forms.BooleanField(required=False)
     image = forms.ImageField(widget=ImageInput)
     gender = forms.ChoiceField()
@@ -136,7 +157,8 @@ class InfluencerManageForm(forms.ModelForm):
                   'bio', 'image',
                   'gender',
                   'height', 'chest_or_bust', 'hips', 'waist',
-                  'city', 'country', 'state',
+                  # 'city', 'country', 'state',
+                  'location'
                   )
 
 
@@ -156,17 +178,18 @@ class InfluencerManageForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(InfluencerManageForm, self).save(commit=False)
-        instance.location.city = self.cleaned_data['city']
-        try:
-            state = States.objects.get(name=self.cleaned_data['state'])
-        except ObjectDoesNotExist:
-            state = None
-        instance.location.state = state
-        instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        # instance.location.city = self.cleaned_data['city']
+        # try:
+        #     state = States.objects.get(name=self.cleaned_data['state'])
+        # except ObjectDoesNotExist:
+        #     state = None
+        # instance.location.state = state
+        # instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
         instance.users.is_active = self.cleaned_data['is_active']
         instance.users.gender = self.cleaned_data['gender']
+        instance.location = self.cleaned_data['location']
         if commit:
-            instance.location.save()
+            # instance.location.save()
             instance.users.save()
             instance.save()
         return instance

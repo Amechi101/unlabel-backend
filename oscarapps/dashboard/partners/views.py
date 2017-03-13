@@ -25,6 +25,7 @@ from oscar.apps.dashboard.partners.views import PartnerDeleteView as CorePartner
 from oscar.apps.dashboard.partners.views import PartnerListView as CorePartnerListView
 from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartnerManageView
 from oscar.apps.dashboard.partners.views import PartnerUserUpdateView as CorePartnerUserUpdateView
+
 from oscar.core.loading import get_classes, get_model
 from oscar.views import sort_queryset
 from django.contrib.auth.models import Permission
@@ -118,7 +119,8 @@ class PartnerCreateView(generic.View):
                                                  password=partner_form['password1'].value(),
                                                  first_name=partner_form['first_name'].value(),
                                                  last_name=partner_form['last_name'].value(),
-                                                 is_brand = True
+                                                 is_brand = True,
+                                                 is_influencer = False
                                                  )
             partner_user.save()
             partner_user.set_password(partner_form['password1'].value())
@@ -128,16 +130,17 @@ class PartnerCreateView(generic.View):
                 codename='dashboard_access', content_type__app_label='partner')
             partner_user.user_permissions.add(dashboard_access_perm)
             partner_user.save()
-
-            try:
-                state = States.objects.get(pk=partner_form['state'].value())
-            except:
-                state = None
-            partner_location = Locations.objects.create(city=partner_form['city'].value(),
-                                                        state=state,
-                                                        country=Country.objects.get(pk=partner_form['country'].value()),
-                                                        )
-            partner_location.save()
+            #
+            # try:
+            #     state = States.objects.get(pk=partner_form['state'].value())
+            # except:
+            #     state = None
+            # partner_location = Locations.objects.create(city=partner_form['city'].value(),
+            #                                             state=state,
+            #                                             country=Country.objects.get(pk=partner_form['country'].value()),
+            #                                             )
+            # partner_location.save()
+            partner_location = Locations.objects.get(pk=partner_form['location'].value())
             partner_profile = Partner.objects.create(name=partner_form['name'].value(),
                                                     description=partner_form['description'].value(),
                                                     )
@@ -169,14 +172,17 @@ class PartnerManageView(CorePartnerManageView, FormView):
 
     def get_initial(self):
 
-      return {'city': self.partner.location.city,
-            'state': self.partner.location.state,
-            'country': self.partner.location.country,
+      return {
+            # 'city': self.partner.location.city,
+            # 'state': self.partner.location.state,
+            # 'country': self.partner.location.country,
+            'location': self.partner.location,
             'email': self.partner.users.all().first().email,
             'password': self.partner.users.all().first().password,
             'first_name': self.partner.users.all().first().first_name,
             'last_name': self.partner.users.all().first().last_name,
-            'is_active': self.partner.is_active}
+            'is_active': self.partner.is_active
+      }
 
     def get_context_data(self, **kwargs):
         ctx = super(PartnerManageView, self).get_context_data(**kwargs)
@@ -189,6 +195,7 @@ class PartnerManageView(CorePartnerManageView, FormView):
             self.request, _("Brand '%s' was updated successfully.") %
             self.partner.name)
         return super(PartnerManageView, self).form_valid(form)
+
 
 
 class PartnerRentalInfoManageView(generic.UpdateView):
@@ -217,7 +224,7 @@ class PartnerRentalInfoManageView(generic.UpdateView):
 
     def form_valid(self, form):
         messages.success(
-            self.request, _("Address of brand  '%s' was updated successfully.") %
+            self.request, _("Address of brand '%s' was updated successfully.") %
             self.partner.name)
 
         self.partner.rental_info = form.save()
@@ -297,11 +304,12 @@ class PartnerFilterView(generic.ListView):
 
 
 class PartnerUserUpdateView(CorePartnerUserUpdateView):
-
     def get_form_kwargs(self):
         kwargs = super(PartnerUserUpdateView, self).get_form_kwargs()
         kwargs.update({'request': self.request})
         return kwargs
+
+
 #=========================
 #Brand Categories Views
 #==========================

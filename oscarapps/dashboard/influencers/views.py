@@ -13,6 +13,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.template import Context
+from django.template import loader
 
 from oscar.core.loading import get_classes
 from oscar.views import sort_queryset
@@ -23,9 +25,9 @@ from users.models import User
 from oscarapps.address.models import Locations, States, Country
 from users.models import User
 from oscarapps.dashboard.influencers.forms import ExistingUserForm
-from oscarapps.influencers.models import Influencers,InfluencerInvite
-from django.template import Context
-from django.template import loader
+from oscarapps.influencers.models import Influencers, InfluencerInvite
+from oscar.core.loading import get_classes, get_model
+
 
 
 # ================
@@ -137,18 +139,19 @@ class InfluencerCreateView(generic.View):
             influencer_user.save()
             influencer_user.set_password(influencer_form['password1'].value())
             influencer_user.save()
-            from django.core.exceptions import ObjectDoesNotExist
-
-            try:
-                state = States.objects.get(pk=influencer_form['state'].value())
-            except ObjectDoesNotExist:
-                state = None
-            influencer_location = Locations.objects.create(city=influencer_form['city'].value(),
-                                                           state=state,
-                                                           country=Country.objects.get(
-                                                               pk=influencer_form['country'].value()),
-            )
-            influencer_location.save()
+            # from django.core.exceptions import ObjectDoesNotExist
+            #
+            # try:
+            #     state = States.objects.get(pk=influencer_form['state'].value())
+            # except ObjectDoesNotExist:
+            #     state = None
+            # influencer_location = Locations.objects.create(city=influencer_form['city'].value(),
+            #                                                state=state,
+            #                                                country=Country.objects.get(
+            #                                                    pk=influencer_form['country'].value()),
+            # )
+            # influencer_location.save()
+            influencer_location = Locations.objects.get(pk=influencer_form['location'].value())
             influencer_profile = Influencers.objects.create(bio=influencer_form['bio'].value(),
                                                             height=influencer_form['height'].value(),
                                                             chest_or_bust=influencer_form['chest_or_bust'].value(),
@@ -182,9 +185,11 @@ class InfluencerManageView(generic.UpdateView):
         return self.influencer
 
     def get_initial(self):
-        return {'city': self.influencer.location.city,
-                'state': self.influencer.location.state,
-                'country': self.influencer.location.country,
+        return {
+                # 'city': self.influencer.location.city,
+                # 'state': self.influencer.location.state,
+                # 'country': self.influencer.location.country,
+                'location':self.influencer.location,
                 'email': self.influencer.users.email,
                 'password': self.influencer.users.password,
                 'first_name': self.influencer.users.first_name,
@@ -295,3 +300,104 @@ class InfluencerUserUpdateView(generic.UpdateView):
         messages.success(self.request,
                          _("User '%s' was updated successfully.") % name)
         return reverse('dashboard:influencer-list')
+
+
+(
+    LocationSearchForm, LocationCreateForm
+) = get_classes(
+    'dashboard.influencers.forms',
+    ['LocationSearchForm', 'LocationCreateForm'], 'oscarapps')
+
+
+class LocationListView(generic.ListView):
+    model = Locations
+    context_object_name = 'locations'
+    template_name = 'dashboard/address/location_list.html'
+    form_class = LocationSearchForm
+
+    def get_queryset(self):
+        qs = self.model._default_manager.all()
+        qs = sort_queryset(qs, self.request, ['city'])
+        self.description = _("All locations")
+
+        # We track whether the queryset is filtered to determine whether we
+        # show the search form 'reset' button.
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+        if not self.form.is_valid():
+            return qs
+
+        data = self.form.cleaned_data
+
+        if data['city']:
+            qs = qs.filter(city__icontains=data['city'])
+            self.description = _("Locations matching '%s'") % data['city']
+            self.is_filtered = True
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(LocationListView, self).get_context_data(**kwargs)
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx
+
+
+class LocationCreateView(generic.CreateView):
+    model = Locations
+    template_name = 'dashboard/address/location_form.html'
+    form_class = LocationCreateForm
+    success_url = reverse_lazy('dashboard:location-list')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(LocationCreateView, self).get_context_data(**kwargs)
+        ctx['title'] = _('Create new brand specialization')
+        return ctx
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Location '%s' was created successfully.") %
+                         self.object)
+        return reverse('dashboard:location-list')
+
+class LocationManageView(generic.UpdateView):
+    """
+    """
+    template_name = 'dashboard/address/location_manage.html'
+    form_class = LocationCreateForm
+    success_url = reverse_lazy('dashboard:location-list')
+
+    def get_object(self, queryset=None):
+        self.location = get_object_or_404(Locations, pk=self.kwargs['pk'])
+        return self.location
+
+    def get_initial(self):
+        return {'city': self.location.city}
+
+    def get_context_data(self, **kwargs):
+        ctx = super(LocationManageView, self).get_context_data(**kwargs)
+        ctx['location'] = self.location
+        ctx['title'] = self.location.city
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Location '%s' was updated successfully.") %
+            self.location.city)
+        self.location.city = form.cleaned_data['city']
+        self.location.state = form.cleaned_data['state']
+        self.location.country = form.cleaned_data['country']
+        self.location.save()
+        return super(LocationManageView, self).form_valid(form)
+
+
+class LocationDeleteView(generic.DeleteView):
+    model = Locations
+    template_name = 'dashboard/address/location_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Location '%s' was deleted successfully.") %
+                         self.object.city)
+        return reverse('dashboard:location-list')

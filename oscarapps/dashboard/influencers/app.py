@@ -22,6 +22,16 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
     user_update_view = get_class('dashboard.influencers.views',
                                  'InfluencerUserUpdateView')
 
+    location_list_view = get_class('oscarapps.dashboard.influencers.views',
+                                 'LocationListView')
+    location_create_view = get_class('oscarapps.dashboard.influencers.views',
+                                 'LocationCreateView')
+    location_manage_view = get_class('oscarapps.dashboard.influencers.views',
+                                 'LocationManageView')
+    location_delete_view = get_class('oscarapps.dashboard.influencers.views',
+                                 'LocationDeleteView')
+
+
     def get_urls(self):
         urls = [
             url(r'^$', self.influencer_list_view.as_view(), name='influencer-list'),
@@ -35,6 +45,14 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
             url(r'^(?P<influencer_pk>\d+)/users/(?P<user_pk>\d+)/update/$',
                 self.user_update_view.as_view(),
                 name='influencer-user-update'),
+
+            url(r'^location$', self.location_list_view.as_view(), name='location-list'),
+            url(r'^location/create/$', self.location_create_view.as_view(),
+                name='location-create'),
+            url(r'^location/(?P<pk>\d+)/$', self.location_manage_view.as_view(),
+                name='location-manage'),
+            url(r'^location/(?P<pk>\d+)/delete/$', self.location_delete_view.as_view(),
+                name='location-delete'),
         ]
         return self.post_process_urls(urls)
 application = InfluencersDashboardApplication()
