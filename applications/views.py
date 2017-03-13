@@ -1,4 +1,4 @@
-from __future__ import unicode_literals 
+from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
@@ -8,48 +8,43 @@ from applications.models import Brand, Category, Style
 
 
 class BrandDetailView(SingleObjectMixin, ListView):
-	
-	model = Brand
-	
-	template_name = 'brands/_brand_detail.html'
-	
-	def get(self, request, *args, **kwargs):
-		self.object = self.get_object(queryset=Brand.objects.all())
+    model = Brand
 
-		return super(BrandDetailView, self).get(request, *args, **kwargs)
+    template_name = 'brands/_brand_detail.html'
 
-	def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Brand.objects.all())
 
-		ctx = super(BrandDetailView, self).get_context_data(**kwargs)
-		
-		ctx['brand'] = self.object
-		ctx['category_list'] = Category.objects.filter(brand=self.object)
-		ctx['style_list'] = Style.objects.filter(brand=self.object)
-		
+        return super(BrandDetailView, self).get(request, *args, **kwargs)
 
-		return ctx
+    def get_context_data(self, **kwargs):
+        ctx = super(BrandDetailView, self).get_context_data(**kwargs)
 
-	def get_queryset(self,  **kwargs):
-		return self.object
+        ctx['brand'] = self.object
+        ctx['category_list'] = Category.objects.filter(brand=self.object)
+        ctx['style_list'] = Style.objects.filter(brand=self.object)
+
+        return ctx
+
+    def get_queryset(self, **kwargs):
+        return self.object
 
 
 class BrandInviteView(SingleObjectMixin, ListView):
-	
-	model = Brand
-	
-	template_name = 'brands/_brand_invite.html'
-	
-	def get(self, request, *args, **kwargs):
-		self.object = self.get_object(queryset=Brand.objects.all())
+    model = Brand
 
-		return super(BrandInviteView, self).get(request, *args, **kwargs)
+    template_name = 'brands/_brand_invite.html'
 
-	def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Brand.objects.all())
 
-		ctx = super(BrandInviteView, self).get_context_data(**kwargs)
-		ctx['brand'] = self.object
+        return super(BrandInviteView, self).get(request, *args, **kwargs)
 
-		return ctx
+    def get_context_data(self, **kwargs):
+        ctx = super(BrandInviteView, self).get_context_data(**kwargs)
+        ctx['brand'] = self.object
 
-	def get_queryset(self,  **kwargs):
-		return self.object
+        return ctx
+
+    def get_queryset(self, **kwargs):
+        return self.object

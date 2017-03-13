@@ -236,7 +236,7 @@ class InfluencerBrandListView(generics.ListAPIView):
     # get the queryset for pagination based on the parameter given from ios
 
     def get_queryset(self, *args, **kwargs):
-        display_type = self.request.GET.get('display', '')
+        display_type = self.request.GET.get('display')
         if display_type == 'FEED':
             param = self.request.GET.get('param')
             search = self.request.GET.get('search')
@@ -258,13 +258,13 @@ class InfluencerBrandListView(generics.ListAPIView):
             search_specialization = []
 
             search_text = self.request.GET.get('search', '')
-            if self.request.GET.get('location', '') != '""' :
+            if self.request.GET.get('location', '') != '' :
                 search_location = list(map(int, self.request.GET.get('location', '').split(',')))
-            if self.request.GET.get('store_type', '') != '""':
+            if self.request.GET.get('store_type', '') != '':
                 search_category = list(map(int, self.request.GET.get('store_type', '').split(',')))
-            if self.request.GET.get('specialization', '') != '""':
+            if self.request.GET.get('specialization', '') != '':
                 search_specialization = list(map(int, self.request.GET.get('specialization', '').split(',')))
-            if self.request.GET.get('style', '') != '""':
+            if self.request.GET.get('style', '') != '':
                 search_style = list(map(int, self.request.GET.get('style').split(',')))
 
             partner = Partner.objects.all()
