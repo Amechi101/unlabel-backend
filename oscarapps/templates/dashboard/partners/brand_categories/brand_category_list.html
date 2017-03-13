@@ -72,4 +72,8 @@
         </table>
         {% include "dashboard/partials/pagination.html" %}
     </form>
+     <div class="well">
+    <i class="icon-warning-sign"></i> {% trans "" %}
+    {% trans "Deleting/Editing Store Types can cause unintended effects on related objects." %}
+</div>
 {% endblock dashboard_content %}

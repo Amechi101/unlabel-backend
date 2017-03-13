@@ -1,4 +1,5 @@
 from oscar.apps.customer.admin import *  # noqa
-# from .models import User
+from .models import UserProductLike
 
-# admin.site.register(User)
+
+admin.site.register(UserProductLike)
