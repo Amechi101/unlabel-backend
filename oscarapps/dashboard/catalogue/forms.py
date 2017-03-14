@@ -23,6 +23,12 @@ InfluencerProductImage = get_model('catalogue', 'InfluencerProductImage')
 ProductImage = get_model('catalogue', 'ProductImage')
 InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
 
+
+class ReservedProductSearchForm(forms.Form):
+    name = forms.CharField(
+        required=False, label="Name")
+
+
 class ProductForm(CoreProductForm):
     brand = forms.ModelChoiceField(queryset=Partner.objects.all(), required=True)
 
@@ -32,44 +38,77 @@ class ProductForm(CoreProductForm):
         self.user = user
         super(ProductForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
+
+        if self.instance.structure == "child":
+            self.fields['brand'].initial = self.instance.parent.brand.id
+        DRAFT = 'D'
+        LIVE = 'L'
+        status_choice = (
+           (DRAFT, 'Draft'),
+           (LIVE, 'Live'),
+           )
         if not self.user.is_staff:
-            if self.instance.status == "L":
-                DRAFT = 'D'
-                LIVE = 'L'
-                status_choice = (
-                   (DRAFT, 'Draft'),
-                   (LIVE, 'Live'),
-                   )
-                self.fields['status'].choices = status_choice
-            else:
-                self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
             self.fields['brand'].queryset = self.user.partners.all()
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
             self.fields['brand'].widget = forms.HiddenInput()
-        try:
-            InfluencerProductReserve.objects.get(product=self.instance)
-            # self.fields['status'].
-        except:
-          # self.initial['rental_status'] = 'None'
-          self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
-        # if self.instance.structure == 'parent':
-        #     self.fields["rental_status"].widget = forms.HiddenInput()
-        #     print(self.instance.rental_status)
+            if self.instance.status == "L" or "D":
+                self.fields['status'].choices = status_choice
+            else:
+                self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+            if self.instance.structure == 'parent':
+                child_products = Product.objects.filter(structure='child', parent=self.instance).values_list('pk', flat=True)
+                if InfluencerProductReserve.objects.filter(product__in=child_products).exists() is False:
+                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+                else:
+                    if self.instance.status == "L" or "D":
+                        self.fields['status'].choices = status_choice
+                    else:
+                        self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+            elif self.instance.structure == 'child':
+                if InfluencerProductReserve.objects.filter(product=self.instance.pk).exists() is False:
+                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+                else:
+                    if self.instance.status == "L" or "D":
+                        self.fields['status'].choices = status_choice
+                    else:
+                        self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+            elif self.instance.structure == 'standalone':
+
+                if InfluencerProductReserve.objects.filter(product=self.instance.pk).exists() is False:
+                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+                else:
+                    if self.instance.status == "L" or "D":
+                        self.fields['status'].choices = status_choice
+                    else:
+                        self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+    def save(self, commit=True):
+        instance = super(ProductForm, self).save(commit=False)
+        if self.instance.structure == "child":
+            instance.title = self.instance.parent.title
+            instance.brand = self.instance.parent.brand
+            instance.description = self.instance.parent.description
+            instance.material_info = self.instance.parent.material_info
+            instance.influencer_product_note = self.instance.parent.influencer_product_note
+            instance.weight = self.instance.parent.weight
+        instance.save()
+        return instance
 
 
 
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'item_sex_type',
+            'title', 'upc', 'description', 'material_info', 'influencer_product_note', 'item_sex_type',
             'status', 'rental_status', 'brand',
             'weight', 'on_sale', 'requires_shipping']
         labels = {
             'title': _('Name'),
             'status': _('Product Status')
         }
-
-
-
 
 
 
@@ -82,8 +121,8 @@ class StockRecordForm(forms.ModelForm):
         # The user kwarg is not used by stock StockRecordForm. We pass it
         # anyway in case one wishes to customise the partner queryset
         self.user = user
-        super(StockRecordForm, self).__init__(*args, **kwargs)
 
+        super(StockRecordForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
         if not self.user.is_staff:
             self.fields['partner'].queryset = self.user.partners.all()

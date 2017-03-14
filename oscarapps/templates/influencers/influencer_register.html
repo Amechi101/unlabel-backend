@@ -14,6 +14,19 @@
 
 
 <script>
+    $(document).ready(function(){
+            var gender = $('#id_gender');
+            var chest_or_bust = $('#id_chest_or_bust');
+            if(gender.val()=="M")
+                {
+                    $("label[for='id_chest_or_bust']").text("Chest *");
+                }
+                else
+                {
+                    $("label[for='id_chest_or_bust']").text("Bust *");
+                }
+
+    });
     var country_id = $('#id_country');
     var state_id = $('#id_state');
      country_id.change(function(e){
@@ -27,5 +40,18 @@
 {#                    state_id.select2("val",null);#}
                 }
         });
+    var gender = $('#id_gender');
+    var chest_or_bust = $('#id_chest_or_bust');
+    gender.change(function(e){
+                if(gender.val()=="M")
+                {
+                    $("label[for='id_chest_or_bust']").text("Chest *");
+                }
+                else
+                {
+                    $("label[for='id_chest_or_bust']").text("Bust *");
+                }
+        });
+
 
 </script>
