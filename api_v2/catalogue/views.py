@@ -306,106 +306,215 @@ class InfluencerBaseProductListView(generics.ListAPIView):
     # NEW - date newest to old
     # OLD - date oldest to new
     def get_queryset(self, *args, **kwargs):
-        brand_id = self.request.GET.get('brand')
-        param = self.request.GET.get('param')
-        if brand_id == None:
-            queryset = Product.objects.filter(status='U').order_by('created')
-            return queryset
-        if brand_id != None:
-            if param == 'OLD':
-                prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
-                products_to_list = []
-                for product in products:
-                    if product.structure == "child":
-                        products_to_list.append(product.parent.pk)
-                    elif product.structure == "standalone":
-                        products_to_list.append(product.pk)
-                    elif product.structure == "parent":
-                        products_to_list.append(product.pk)
-                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+        display_type = str(self.request.GET.get('display')).strip()
+        if display_type == 'FEED':
+            brand_id = str(self.request.GET.get('brand')).strip()
+            param = str(self.request.GET.get('param')).strip()
+            if brand_id == None:
+                queryset = Product.objects.filter(status='U').order_by('created')
                 return queryset
-            elif param == 'HL':
-                prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
-                prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
-                    '-price_retail').values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
-                products_to_list = []
-                for product in products:
-                    if product.structure == "child":
-                        products_to_list.append(product.parent.pk)
-                    elif product.structure == "standalone":
-                        products_to_list.append(product.pk)
-                    elif product.structure == "parent":
-                        products_to_list.append(product.pk)
-                products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
-                item_list = []
-                for item in prod_Sort_List:
-                    try:
-                        curr_prod = Product.objects.get(pk=item)
-                        if curr_prod.structure == 'child':
-                            base = curr_prod.parent
-                        else:
-                            base = curr_prod
-                        if base not in item_list:
-                            item_list.append(base)
-                    except:
-                        pass
+            if brand_id != None:
+                if param == 'OLD':
+                    prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                    return queryset
+                elif param == 'HL':
+                    prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
+                    prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
+                        '-price_retail').values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
+                    item_list = []
+                    for item in prod_Sort_List:
+                        try:
+                            curr_prod = Product.objects.get(pk=item)
+                            if curr_prod.structure == 'child':
+                                base = curr_prod.parent
+                            else:
+                                base = curr_prod
+                            if base not in item_list:
+                                item_list.append(base)
+                        except:
+                            pass
 
-                    # try:
-                    #     obj = products_list_unsorted.get(id=item)
-                    #     item_list.append(obj)
-                    # except:
-                    #     pass
-                return item_list
+                        # try:
+                        #     obj = products_list_unsorted.get(id=item)
+                        #     item_list.append(obj)
+                        # except:
+                        #     pass
+                    return item_list
 
-            elif param == "LH":
-                prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
-                prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
-                    'price_retail').values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
-                products_to_list = []
-                for product in products:
-                    if product.structure == "child":
-                        products_to_list.append(product.parent.pk)
-                    elif product.structure == "standalone":
-                        products_to_list.append(product.pk)
-                    elif product.structure == "parent":
-                        products_to_list.append(product.pk)
-                products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
-                item_list = []
-                for item in prod_Sort_List:
-                    try:
-                        curr_prod = Product.objects.get(pk=item)
-                        if curr_prod.structure == 'child':
-                            base = curr_prod.parent
-                        else:
-                            base = curr_prod
-                        if base not in item_list:
-                            item_list.append(base)
-                    except:
-                        pass
+                elif param == "LH":
+                    prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
+                    prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
+                        'price_retail').values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
+                    item_list = []
+                    for item in prod_Sort_List:
+                        try:
+                            curr_prod = Product.objects.get(pk=item)
+                            if curr_prod.structure == 'child':
+                                base = curr_prod.parent
+                            else:
+                                base = curr_prod
+                            if base not in item_list:
+                                item_list.append(base)
+                        except:
+                            pass
 
-                # for item in prod_Sort_List:
-                #     try:
-                #         obj = products_list_unsorted.get(id=item)
-                #         item_list.append(obj)
-                #     except:
-                #         pass
-                return item_list
-            else:
-                prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
-                products_to_list = []
-                for product in products:
-                    if product.structure == "child":
-                        products_to_list.append(product.parent.pk)
-                    elif product.structure == "standalone":
-                        products_to_list.append(product.pk)
-                    elif product.structure == "parent":
-                        products_to_list.append(product.pk)
-                queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('-created')
+                    # for item in prod_Sort_List:
+                    #     try:
+                    #         obj = products_list_unsorted.get(id=item)
+                    #         item_list.append(obj)
+                    #     except:
+                    #         pass
+                    return item_list
+                else:
+                    prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('-created')
+                    return queryset
+        elif display_type == 'FILTER':
+            brand_id = str(self.request.GET.get('brand')).strip()
+            param = str(self.request.GET.get('param')).strip()
+            gender = str(self.request.GET.get('gender')).strip()
+            if gender == 'M':
+                gen = ['M','U']
+            elif gender == 'W':
+                gen = ['W','U']
+            if brand_id == None:
+                queryset = Product.objects.filter(status='U').order_by('created')
                 return queryset
+            if brand_id != None:
+                if param == 'OLD':
+                    prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    queryset = Product.objects.filter(pk__in=products_to_list, status='U',item_sex_type__in=gen).order_by('created')
+                    return queryset
+                elif param == 'HL':
+                    prod_id_List = Product.objects.filter(brand=brand_id, status='U',item_sex_type__in=gen).values_list('id', flat=True)
+                    prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
+                        '-price_retail').values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    products_list_unsorted = Product.objects.filter(pk__in=products_to_list)
+                    item_list = []
+                    for item in prod_Sort_List:
+                        try:
+                            curr_prod = Product.objects.get(pk=item)
+                            if curr_prod.structure == 'child':
+                                base = curr_prod.parent
+                            else:
+                                base = curr_prod
+                            if base not in item_list:
+                                item_list.append(base)
+                        except:
+                            pass
+
+                        # try:
+                        #     obj = products_list_unsorted.get(id=item)
+                        #     item_list.append(obj)
+                        # except:
+                        #     pass
+                    return item_list
+
+                elif param == "LH":
+                    prod_id_List = Product.objects.filter(brand=brand_id, status='U',item_sex_type__in=gen).values_list('id', flat=True)
+                    prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
+                        'price_retail').values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    products_list_unsorted = Product.objects.filter(pk__in=products_to_list,item_sex_type__in=gen)
+                    item_list = []
+                    for item in prod_Sort_List:
+                        try:
+                            curr_prod = Product.objects.get(pk=item)
+                            if curr_prod.structure == 'child':
+                                base = curr_prod.parent
+                            else:
+                                base = curr_prod
+                            if base not in item_list:
+                                item_list.append(base)
+                        except:
+                            pass
+
+                    # for item in prod_Sort_List:
+                    #     try:
+                    #         obj = products_list_unsorted.get(id=item)
+                    #         item_list.append(obj)
+                    #     except:
+                    #         pass
+                    return item_list
+                else:
+                    prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products_to_list = []
+                    for product in products:
+                        if product.structure == "child":
+                            products_to_list.append(product.parent.pk)
+                        elif product.structure == "standalone":
+                            products_to_list.append(product.pk)
+                        elif product.structure == "parent":
+                            products_to_list.append(product.pk)
+                    queryset = Product.objects.filter(pk__in=products_to_list, status='U',item_sex_type__in=gen).order_by('-created')
+                    return queryset
+
 
 
     def list(self, request, *args, **kwargs):

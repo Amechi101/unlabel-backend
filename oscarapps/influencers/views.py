@@ -54,9 +54,13 @@ class InfluencerSignUpView(View):
     def get(self, request, code, *args, **kwargs):
         try:
             influencer_invite = InfluencerInvite.objects.get(code=code,is_used=False)
-        except:
-            return HttpResponse("sorry link is used already")
-        return render(request, 'influencers/influencer_register.html', {'user_form': InfluencerSignUpForm})
+        except ObjectDoesNotExist:
+            return HttpResponse("sorry invalid invite request.")
+        if influencer_invite.is_used is True:
+            return HttpResponse("sorry, The link is already used")
+        elif influencer_invite.is_used is False:
+            return render(request, 'pages/influencer_register.html', {'user_form': InfluencerSignUpForm})
+
 
     def post(self, request, code, *args, **kwargs):
 
@@ -77,11 +81,12 @@ class InfluencerSignUpView(View):
                     influencer_user.save()
                     influencer_user.set_password(influencer_form.cleaned_data['password1'])
                     influencer_user.save()
-                    influencer_location = Locations()
-                    influencer_location.city = influencer_form.cleaned_data['city']
-                    influencer_location.state = influencer_form.cleaned_data['state']
-                    influencer_location.country = influencer_form.cleaned_data['country']
-                    influencer_location.save()
+                    influencer_location = Locations.objects.get(pk=influencer_form['location'].value())
+                    # influencer_location = Locations()
+                    # influencer_location.city = influencer_form.cleaned_data['city']
+                    # influencer_location.state = influencer_form.cleaned_data['state']
+                    # influencer_location.country = influencer_form.cleaned_data['country']
+                    # influencer_location.save()
                     influencer_profile = Influencers()
                     influencer_profile.bio = influencer_form.cleaned_data['bio']
                     influencer_profile.image = request.FILES['image']
