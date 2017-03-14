@@ -84,4 +84,11 @@ class InfluencerBrandLocations(APIView):
         results_dict = {'results' : loc_ser.data}
         return Response(results_dict)
 
+class GetLocations(APIView):
+    serializer_class = BrandLocationsSerializer
 
+    def get(self,request,*args,**kwargs):
+        locations = Locations.objects.all()
+        location_ser = self.serializer_class(locations, many=True)
+        results_dict = {'results' : location_ser.data}
+        return Response(results_dict)
