@@ -43,10 +43,13 @@ class ProductForm(CoreProductForm):
             self.fields['brand'].initial = self.instance.parent.brand.id
         DRAFT = 'D'
         LIVE = 'L'
+        UNRESERVED = 'U'
+        RESERVED = 'R'
         status_choice = (
            (DRAFT, 'Draft'),
            (LIVE, 'Live'),
            )
+
         if not self.user.is_staff:
             self.fields['brand'].queryset = self.user.partners.all()
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
@@ -95,6 +98,7 @@ class ProductForm(CoreProductForm):
             instance.material_info = self.instance.parent.material_info
             instance.influencer_product_note = self.instance.parent.influencer_product_note
             instance.weight = self.instance.parent.weight
+            instance.rental_status = self.instance.parent.rental_status
         instance.save()
         return instance
 
