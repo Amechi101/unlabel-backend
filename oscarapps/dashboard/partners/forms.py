@@ -38,10 +38,11 @@ class PartnerCreateForm(forms.Form):
     name = forms.CharField(label="Store Name", required=True)
     image = forms.ImageField(required=False, label="Store Image")
     description = forms.CharField(widget=forms.Textarea, label=" Store Description")
-    city = forms.CharField(label="City", required=True)
-    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
-                                   help_text="Only select state if your country is USA else leave it unselected")
+    # city = forms.CharField(label="City", required=True)
+    # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
+    # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
+    #                                help_text="Only select state if your country is USA else leave it unselected")
+    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
     style = forms.ModelMultipleChoiceField(label="Style", queryset=Style.objects.all(), required=True,)
     category = forms.ModelMultipleChoiceField(label="Store Type", queryset=Category.objects.all(), required=True)
     sub_category = forms.ModelMultipleChoiceField(label="Specialization", queryset=SubCategory.objects.all(),
@@ -74,11 +75,12 @@ class PartnerCreateForm(forms.Form):
 
 class PartnerManageForm(forms.ModelForm):
 
-    city = forms.CharField(label="City", required=True)
-    country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
-    state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
-                                   help_text="Only select state if your country is USA else leave it unselected")
+    # city = forms.CharField(label="City", required=True)
+    # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
+    # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
+    #                                help_text="Only select state if your country is USA else leave it unselected")
     is_active = forms.BooleanField(required=False, help_text="Check|Un check to activate|deactivate store")
+    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
 
     # password1 = forms.CharField(
     #     label=_('Change Password'),
@@ -95,7 +97,8 @@ class PartnerManageForm(forms.ModelForm):
         model = Partner
         fields = (
             'name', 'image', 'description',
-            'city', 'country', 'state',
+            # 'city', 'country', 'state',
+            'location',
             'style', 'category', 'sub_category', 'is_active',
             # 'password1', 'password2',
             )
@@ -124,22 +127,23 @@ class PartnerManageForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(PartnerManageForm, self).save(commit=False)
-        instance.location.city = self.cleaned_data['city']
-        instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        # instance.location.city = self.cleaned_data['city']
+        # instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
         instance.is_active = self.cleaned_data['is_active']
         instance.style = self.cleaned_data['style']
         instance.category = self.cleaned_data['category']
         instance.sub_category = self.cleaned_data['sub_category']
 
-        if str(self.cleaned_data['country']) == "United States":
-            try:
-                state = States.objects.get(name=self.cleaned_data['state'])
-            except:
-                state = None
-        else:
-            state = None
-        instance.location.state = state
-        instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        # if str(self.cleaned_data['country']) == "United States":
+        #     try:
+        #         state = States.objects.get(name=self.cleaned_data['state'])
+        #     except:
+        #         state = None
+        # else:
+        #     state = None
+        # instance.location.state = state
+        # instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        instance.location = self.cleaned_data['location']
         if commit:
             instance.location.save()
             instance.save()
@@ -262,11 +266,12 @@ class SubCategoryCreateForm(forms.ModelForm):
         model = BrandSubCategory
         fields = ('name','description' )
 
+
+
 ROLE_CHOICES = (
     ('staff', _('Full dashboard access')),
     ('limited', _('Limited dashboard access')),
 )
-
 
 
 class ExistingUserForm(forms.ModelForm):
@@ -278,22 +283,49 @@ class ExistingUserForm(forms.ModelForm):
     """
     role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect,
                              label=_('User role'))
+    email = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
     first_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
+    password1 = forms.CharField(
+        label=_('Password'),
+        widget=forms.PasswordInput,
+        required=False,
+        validators=password_validators)
+    password2 = forms.CharField(
+        required=False,
+        label=_('Confirm Password'),
+        widget=forms.PasswordInput)
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1', '')
+        password2 = self.cleaned_data.get('password2', '')
+
+        if password1 != password2:
+            raise forms.ValidationError(
+                _("The two password fields didn't match."))
+        return password2
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        print(self.request.user)
+        super(ExistingUserForm, self).__init__(*args, **kwargs)
         user = kwargs['instance']
+        if self.request.user.is_brand:
+            self.fields["first_name"].widget = forms.TextInput()
+            self.fields["last_name"].widget = forms.TextInput()
+            del self.fields['role']
+        else:
+            del self.fields['password1']
+            del self.fields['password2']
         role = 'staff' if user.is_staff else 'limited'
         kwargs.get('initial', {}).setdefault('role', role)
-        super(ExistingUserForm, self).__init__(*args, **kwargs)
+
 
     def save(self):
         role = self.cleaned_data.get('role', 'none')
         user = super(ExistingUserForm, self).save(commit=False)
         user.is_staff = role == 'staff'
         user.save()
-
         dashboard_perm = Permission.objects.get(
             codename='dashboard_access', content_type__app_label='partner')
         user_has_perm = user.user_permissions.filter(
@@ -304,8 +336,7 @@ class ExistingUserForm(forms.ModelForm):
             user.user_permissions.remove(dashboard_perm)
         return user
 
-
     class Meta:
         model = User
         fields = existing_user_fields(
-            ['first_name', 'last_name', 'email'])
+            ['email', 'first_name', 'last_name']) + ['password1', 'password2']

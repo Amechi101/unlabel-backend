@@ -8,6 +8,7 @@ class PartnersDashboardApplication(CorePartnersDashboardApplication):
         'partner-list': (['is_staff'], ['partner.dashboard_access']),
         'partner-address-manage': (['is_staff'], ['partner.dashboard_access']),
         'partner-manage': (['is_staff'], ['partner.dashboard_access']),
+        'partner-user-update': (['is_staff'], ['partner.dashboard_access']),
     }
 
     partner_address_manage_view = get_class('oscarapps.dashboard.partners.views', 'PartnerRentalInfoManageView')

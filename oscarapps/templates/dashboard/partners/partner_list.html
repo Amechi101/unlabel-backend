@@ -67,20 +67,29 @@
             </caption>
             {% if partners %}
                 <tr>
-                    <th>{% anchor 'name' _('Name') %}</th>
                     {% if request.user.is_superuser %}
-                        <th>{% trans 'Users' %}</th>
+                        <th>{% anchor 'name' _('Name') %}</th>
+                    {% else%}
+                        <th>{% trans 'Store' %}</th>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
+                        <th>{% trans 'User' %}</th>
+                    {% else%}
+                        <th>{% trans 'Profile' %}</th>
+                    {% endif %}
+                    {% if request.user.is_superuser %}
                         <th>{% trans 'Location' %}</th>
                     {% endif %}
                     <th>{% trans 'Rental Address' %}</th>
-                    <th>&nbsp;</th>
+                    {% if request.user.is_superuser %}
+                      <th>&nbsp;</th>
+                    {% endif %}
                 </tr>
                 {% for partner in partners %}
                     <tr>
                         <td>
                             <a href="{% url 'dashboard:partner-manage' pk=partner.pk %}">{{ partner.name }}</a>
                         </td>
-                        {% if request.user.is_superuser %}
                             <td>
                                 {% with users=partner.users.all %}
                                     {% if users %}
@@ -98,7 +107,6 @@
                                     {% endif %}
                                 {% endwith %}
                             </td>
-                        {% endif %}
                         {% if request.user.is_superuser %}
                             <td>
                                 {% if partner.location %}

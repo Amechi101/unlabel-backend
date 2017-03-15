@@ -170,6 +170,11 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'url_name': 'dashboard:brand-sub-category-list',
             },
             {
+
+                'label': _('Locations'),
+                'url_name': 'dashboard:location-list',
+            },
+            {
                 'label': _('Size Classes'),
                 'url_name': 'dashboard:attribute-options',
             },
