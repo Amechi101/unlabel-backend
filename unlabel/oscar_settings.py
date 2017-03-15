@@ -165,6 +165,14 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Brand Specialization'),
                 'url_name': 'dashboard:brand-sub-category-list',
             },
+            {
+                'label': _('Size Classes'),
+                'url_name': 'dashboard:attribute-options',
+            },
+            {
+                'label': _('Size Options'),
+                'url_name': 'dashboard:size-options-list',
+            },
         ],
     },
 

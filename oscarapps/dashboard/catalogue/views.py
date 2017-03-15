@@ -1,4 +1,7 @@
+from django.contrib import messages
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
 from django.utils.translation import ugettext_lazy as _
 
@@ -7,13 +10,18 @@ from oscar.apps.dashboard.catalogue.views import ProductCreateUpdateView as \
 from oscar.apps.dashboard.catalogue.views import ProductListView as CoreProductListView
 from oscar.apps.dashboard.catalogue.views import ProductDeleteView as \
     CoreProductDeleteView
+from oscar.apps.catalogue.models import AttributeOption, AttributeOptionGroup
 from oscar.core.loading import get_classes
+from oscar.views import sort_queryset
+from django.views import generic
 
-from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
+from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet, AttributeOptionForm, SizeOptionForm, \
+    SizeOptionCreateForm
 
 ProductTable, CategoryTable \
     = get_classes('oscarapps.dashboard.catalogue.tables',
                   ('ProductTable', 'CategoryTable'))
+
 
 class ProductCreateUpdateView(CoreProductCreateUpdateView):
     influencer_product_image_formset = InfluencerProductImageFormSet
@@ -40,6 +48,7 @@ class ProductCreateUpdateView(CoreProductCreateUpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+
 def filter_products(queryset, user):
     """
     Restrict the queryset to products the given user has access to.
@@ -53,7 +62,6 @@ def filter_products(queryset, user):
 
 
 class ProductListView(CoreProductListView):
-
     """
     Dashboard view of the product list.
     Supports the permission-based dashboard.
@@ -137,9 +145,193 @@ class ProductListView(CoreProductListView):
 
 
 class ProductDeleteView(CoreProductDeleteView):
-
     def get_queryset(self):
         """
         Filter products that the user doesn't have permission to update
         """
         return Product.objects.all()
+
+
+class AttributeListView(generic.ListView):
+    model = AttributeOptionGroup
+    context_object_name = 'option_groups'
+    template_name = 'dashboard/catalogue/attribute_options/attribute_options_list.html'
+    # form_class = SubCategorySearchForm
+
+    # def get_queryset(self):
+    # qs = self.model._default_manager.all()
+    #     qs = sort_queryset(qs, self.request, ['name'])
+    #     self.description = _("All Brand Specializations")
+    #     # We track whether the queryset is filtered to determine whether we
+    #     # show the search form 'reset' button.
+    #     self.is_filtered = False
+    #     self.form = self.form_class(self.request.GET)
+    #     if not self.form.is_valid():
+    #         return qs
+    #     data = self.form.cleaned_data
+    #     if data['name']:
+    #         qs = qs.filter(name__icontains=data['name'])
+    #         self.description = _("Brand Specializations matching '%s'") % data['name']
+    #         self.is_filtered = True
+    #
+    #     return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AttributeListView, self).get_context_data(**kwargs)
+        # ctx['queryset_description'] = self.description
+        # ctx['form'] = self.form
+        # ctx['is_filtered'] = self.is_filtered
+        return ctx
+
+
+class AttributeManageView(generic.UpdateView):
+    """
+    This multi-purpose view renders out a form to edit the partner's details,
+    the associated address and a list of all associated users.
+    """
+    template_name = 'dashboard/catalogue/attribute_options/attribute_options_manage.html'
+    form_class = AttributeOptionForm
+    success_url = reverse_lazy('dashboard:attribute-options')
+
+    def get_object(self, queryset=None):
+        self.sub_category = get_object_or_404(AttributeOptionGroup, pk=self.kwargs['pk'])
+        return self.sub_category
+
+    def get_initial(self):
+        return {'name': self.sub_category.name}
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AttributeManageView, self).get_context_data(**kwargs)
+        ctx['sub_category'] = self.sub_category
+        ctx['title'] = self.sub_category.name
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Size Group '%s' was updated successfully.") %
+            self.sub_category.name)
+        self.sub_category.name = form.cleaned_data['name']
+        self.sub_category.save()
+        return super(AttributeManageView, self).form_valid(form)
+
+
+class AttributeOptionsCreateView(generic.CreateView):
+    model = AttributeOptionGroup
+    template_name = 'dashboard/catalogue/attribute_options/attribute_options_form.html'
+    form_class = AttributeOptionForm
+    success_url = reverse_lazy('dashboard:attribute-options')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(AttributeOptionsCreateView, self).get_context_data(**kwargs)
+        ctx['title'] = _('Create new Size Group')
+        return ctx
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Size Group '%s' was created successfully.") %
+                         self.object.name)
+        return reverse('dashboard:attribute-options')
+
+
+class AttributeOptionsDeleteView(generic.DeleteView):
+    model = AttributeOptionGroup
+    template_name = 'dashboard/catalogue/attribute_options/attribute_options_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Size Group '%s' was deleted successfully.") %
+                         self.object.name)
+        return reverse('dashboard:attribute-options')
+
+
+class OptionsListView(generic.ListView):
+    model = AttributeOption
+    context_object_name = 'option_groups'
+    template_name = 'dashboard/catalogue/size_options/size_options_list.html'
+    # form_class = SubCategorySearchForm
+
+    # def get_queryset(self):
+    # qs = self.model._default_manager.all()
+    #     qs = sort_queryset(qs, self.request, ['name'])
+    #     self.description = _("All Brand Specializations")
+    #     # We track whether the queryset is filtered to determine whether we
+    #     # show the search form 'reset' button.
+    #     self.is_filtered = False
+    #     self.form = self.form_class(self.request.GET)
+    #     if not self.form.is_valid():
+    #         return qs
+    #     data = self.form.cleaned_data
+    #     if data['name']:
+    #         qs = qs.filter(name__icontains=data['name'])
+    #         self.description = _("Brand Specializations matching '%s'") % data['name']
+    #         self.is_filtered = True
+    #
+    #     return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(OptionsListView, self).get_context_data(**kwargs)
+        # ctx['queryset_description'] = self.description
+        # ctx['form'] = self.form
+        # ctx['is_filtered'] = self.is_filtered
+        return ctx
+
+
+class OptionManageView(generic.UpdateView):
+    """
+    This multi-purpose view renders out a form to edit the partner's details,
+    the associated address and a list of all associated users.
+    """
+    template_name = 'dashboard/catalogue/size_options/size_options_manage.html'
+    form_class = SizeOptionForm
+    success_url = reverse_lazy('dashboard:size-options-list')
+
+    def get_object(self, queryset=None):
+        self.sub_category = get_object_or_404(AttributeOption, pk=self.kwargs['pk'])
+        return self.sub_category
+
+    def get_initial(self):
+        return {'name': self.sub_category.group}
+
+    def get_context_data(self, **kwargs):
+        ctx = super(OptionManageView, self).get_context_data(**kwargs)
+        ctx['sub_category'] = self.sub_category
+        ctx['title'] = self.sub_category.group.name
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, _("Size option '%s' for group '%s' was updated successfully.") %
+            (self.sub_category.option, self.sub_category.group))
+        self.sub_category.option = form.cleaned_data['option']
+        self.sub_category.save()
+        return super(OptionManageView, self).form_valid(form)
+
+
+class OptionsCreateView(generic.CreateView):
+    model = AttributeOption
+    template_name = 'dashboard/catalogue/size_options/size_options_form.html'
+    form_class = SizeOptionCreateForm
+    success_url = reverse_lazy('dashboard:size-options-list')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(OptionsCreateView, self).get_context_data(**kwargs)
+        ctx['title'] = _('Create new Size Option')
+        return ctx
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Size Option '%s' for group '%s' was created successfully.") % (
+                         self.object.option, self.object.group))
+        return reverse('dashboard:size-options-list')
+
+
+class OptionsDeleteView(generic.DeleteView):
+    model = AttributeOption
+    template_name = 'dashboard/catalogue/size_options/size_options_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Size option '%s' for group '%s' was deleted successfully.") %
+                         (self.object.option, self.object.group))
+        return reverse('dashboard:size-options-list')
+

@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext_lazy
 from django.forms.models import inlineformset_factory
 from oscar.core.utils import slugify
-
+from oscar.apps.catalogue.models import AttributeOption,AttributeOptionGroup
 from oscar.core.loading import get_model
 from oscar.forms.widgets import ImageInput
 from oscar.apps.dashboard.catalogue.forms import ProductForm as CoreProductForm
@@ -67,10 +67,6 @@ class ProductForm(CoreProductForm):
             'title': _('Name'),
             'status': _('Product Status')
         }
-
-
-
-
 
 
 class StockRecordForm(forms.ModelForm):
@@ -249,3 +245,36 @@ ProductAttributesFormSet = inlineformset_factory(ProductClass,
                                                  ProductAttribute,
                                                  form=ProductAttributesForm,
                                                  extra=3)
+
+class AttributeOptionForm(forms.ModelForm):
+
+    class Meta:
+        model = AttributeOptionGroup
+        fields = ['name']
+
+class SizeOptionForm(forms.ModelForm):
+
+    # def __init__(self, *args, **kwargs):
+    #     super(SizeOptionForm, self).__init__(*args, **kwargs)
+    #
+    #     # because we'll allow submission of the form with blank
+    #     # codes so that we can generate them.
+    #     self.fields["group"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+    class Meta:
+        model=AttributeOption
+        fields = ['option']
+
+
+class SizeOptionCreateForm(forms.ModelForm):
+
+    # def __init__(self, *args, **kwargs):
+    #     super(SizeOptionForm, self).__init__(*args, **kwargs)
+    #
+    #     # because we'll allow submission of the form with blank
+    #     # codes so that we can generate them.
+    #     self.fields["group"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+    class Meta:
+        model=AttributeOption
+        fields = ['group','option']
