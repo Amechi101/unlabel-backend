@@ -112,13 +112,14 @@ def update_influencer_product_rental_info(sender, instance, **kwargs):
     try:
         current_obj = Product.objects.get(pk=instance.pk)
         if current_obj.structure == 'parent':
-            print("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>standalone")
             child_products = Product.objects.filter(parent=current_obj)
             for child in child_products:
                 try:
                     influencer_product_reserve = InfluencerProductReserve.objects.get(product=child)
                     influencer_user = Influencers.objects.get(pk=influencer_product_reserve.influencer.id)
                     if instance.rental_status == "REN" and current_obj.rental_status == "NON":
+                        child.rental_status = "REN"
+                        child.save()
                         influencer_product_reserve.date_rented = datetime.now()
                         influencer_product_reserve.save()
                         notification = NotificationDetails()
@@ -131,7 +132,6 @@ def update_influencer_product_rental_info(sender, instance, **kwargs):
                 except:
                     print("-->error in signal--> changing status of parent")
         elif current_obj.structure == 'standalone':
-            print("->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>standalone")
             try:
                 influencer_product_reserve = InfluencerProductReserve.objects.get(product=current_obj)
                 influencer_user = Influencers.objects.get(pk=influencer_product_reserve.influencer)
