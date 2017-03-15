@@ -307,9 +307,11 @@ class InfluencerBaseProductListView(generics.ListAPIView):
     # OLD - date oldest to new
     def get_queryset(self, *args, **kwargs):
         display_type = str(self.request.GET.get('display')).strip()
+        print("----------------111=",display_type,"==")
         if display_type == 'FEED':
-            brand_id = str(self.request.GET.get('brand')).strip()
-            param = str(self.request.GET.get('param')).strip()
+            brand_id = str(self.request.GET.get('brand','')).strip()
+            param = str(self.request.GET.get('param','')).strip()
+            print("-------------==222=",brand_id,"==",param,"==")
             if brand_id == None:
                 queryset = Product.objects.filter(status='U').order_by('created')
                 return queryset
@@ -397,7 +399,9 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                     return item_list
                 else:
                     prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
+                    print("---------prod_Sort_List=",prod_Sort_List,"==")
                     products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    print("--------------------products=",products,"==")
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -407,6 +411,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                         elif product.structure == "parent":
                             products_to_list.append(product.pk)
                     queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('-created')
+                    print("------------------queysset=",queryset,"==")
                     return queryset
         elif display_type == 'FILTER':
             brand_id = str(self.request.GET.get('brand')).strip()
@@ -514,7 +519,6 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                             products_to_list.append(product.pk)
                     queryset = Product.objects.filter(pk__in=products_to_list, status='U',item_sex_type__in=gen).order_by('-created')
                     return queryset
-
 
 
     def list(self, request, *args, **kwargs):
