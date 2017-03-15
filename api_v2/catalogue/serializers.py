@@ -6,11 +6,12 @@ from oscarapi.utils import (
     OscarHyperlinkedModelSerializer
 )
 
-from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord,SubCategory
+from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord, \
+    SubCategory
 from oscarapps.address.models import Locations, States
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
-from oscarapps.catalogue.models import Product , InfluencerProductImage
+from oscarapps.catalogue.models import Product, InfluencerProductImage
 from oscar.core.loading import get_model, get_class
 
 Selector = get_class('partner.strategy', 'Selector')
@@ -42,6 +43,10 @@ class LocationSerializer(serializers.ModelSerializer):
 class PartnerSerializer(OscarModelSerializer):
     location = LocationSerializer()
     followed = serializers.SerializerMethodField(source='get_followed')
+    share_url = serializers.SerializerMethodField()
+
+    def get_share_url(self,obj):
+        return "http://35.166.138.246"
 
     def get_followed(self, obj):
         request = self.context.get("request")
@@ -124,16 +129,23 @@ class BaseProductSerializer(OscarModelSerializer):
     recommended_products = RecommmendedProductSerializer(
         many=True, required=False)
 
-    def get_price(self,obj):
-        child_products = Product.objects.filter(structure='child',parent=obj)
-        for child_product in child_products:
+    def get_price(self, obj):
+        if obj.structure == 'parent':
+            child_products = Product.objects.filter(structure='child', parent=obj)
+            for child_product in child_products:
+                try:
+                    child_stock = StockRecord.objects.get(product=child_product)
+                    price_retail = child_stock.price_retail
+                    return {'price_retail': price_retail}
+                except:
+                    pass
+            return {'price_retail': 0.0 }
+        else:
             try:
-                child_stock = StockRecord.objects.get(product=child_product)
-                price_retail = child_stock.price_retail
-                return {'price_retail':price_retail}
+                base_stock = StockRecord.objects.get(product=obj)
+                return {'price_retail': base_stock.price_retail}
             except:
-                pass
-        return {'price_retail':'No Stock'}
+                return {'price_retail': 0.0 }
 
 
     class Meta:
@@ -221,6 +233,34 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField()
     attributes = ProductAttributeValueSerializer(
         many=True, required=False, source="attribute_values")
+    share_url = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    material_info = serializers.SerializerMethodField()
+    sku = serializers.SerializerMethodField(source='get_sku')
+
+    def get_sku(self, obj):
+        try:
+            stock_record = StockRecord.objects.get(product=obj)
+        except ObjectDoesNotExist:
+            return ""
+        return stock_record.partner_sku
+
+    def get_material_info(self,obj):
+        if obj.structure == 'child':
+            desc = obj.parent.material_info
+        else:
+            desc = obj.material_info
+        return desc
+
+    def get_description(self,obj):
+        if obj.structure == 'child':
+            desc = obj.parent.description
+        else:
+            desc = obj.description
+        return desc
+
+    def get_share_url(self,obj):
+        return "http://35.166.138.246/"
 
     def get_images(self, obj):
         if obj.structure == "child":
@@ -235,14 +275,14 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         try:
             stock = StockRecord.objects.get(product=obj)
         except:
-            return None
+            return 0
         return stock.price_retail
 
 
     class Meta:
         model = Product
         fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
-                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes']
+                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes','share_url','sku']
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):
@@ -281,13 +321,16 @@ class InfluencerBrandCategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+
 class InfluencerBrandStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Style
         fields = '__all__'
 
+
 class IdSerializer(serializers.Serializer):
     id = serializers.CharField(required=True, max_length=10)
+
 
 class InfluecnerBrandSpecializationSerializer(serializers.ModelSerializer):
     class Meta:

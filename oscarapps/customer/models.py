@@ -15,7 +15,7 @@ class UserProductLike(models.Model):
         verbose_name_plural = _('Product_Likes')
 
     def __str__(self):
-        return self.product_like.likes
+        return str(self.product_like.likes)
 
 class UserVerify(models.Model):
     customer = models.ForeignKey( settings.AUTH_USER_MODEL )

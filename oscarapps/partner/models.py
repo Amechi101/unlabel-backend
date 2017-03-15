@@ -24,28 +24,38 @@ class BaseApplicationModel(models.Model):
 
 class Style(BaseApplicationModel):
 
-    name = models.CharField(unique=True, max_length=100, verbose_name=_('Name'))
-    description = models.TextField(blank=True, null=True, default="", verbose_name=_('Description'))
+   name = models.CharField(unique=True, max_length=100, verbose_name=_('Name'))
+   description = models.TextField(blank=True, null=True, default="", verbose_name=_('Description'))
 
-    class Meta:
-        verbose_name = _('Style')
-        verbose_name_plural = _('Styles')
+   class Meta:
+       verbose_name = _('Style')
+       verbose_name_plural = _('Styles')
 
-    def __str__(self):
-        return "{0}".format(self.name)
+   def __str__(self):
+       return "{0}".format(self.name)
 
 
 class Category(BaseApplicationModel):
 
-    name = models.CharField(unique=True, max_length=100, verbose_name=_('Name'))
-    description = models.TextField(blank=True, null=True, default="", verbose_name=_('Description'))
+    MALE = 'Menswear'
+    FEMALE = 'Womenswear'
+    item_sex_choice = (
+        (MALE, 'Menswear'),
+        (FEMALE, 'Womenswear'),
+    )
+
+    name = models.CharField(max_length=10, choices=item_sex_choice, default=MALE,verbose_name=_('Name'))
 
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        return "{0}".format(self.name)
+        if self.name == 'Menswear':
+            value = "Menswear"
+        elif self.name == 'Womenswear':
+            value = "Womenswear"
+        return value
 
 
 class SubCategory(BaseApplicationModel):

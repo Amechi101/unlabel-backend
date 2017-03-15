@@ -26,7 +26,7 @@ from api_v2.catalogue.serializers import PartnerSerializer
 from oscarapps.address.models import Locations, States
 
 from api_v2.address.serializers import BrandLocationsSerializer
-from users.models import User #,UserDevice
+from users.models import User  # ,UserDevice
 # from scarface.models import Application, Platform, Device, Topic, PushMessage
 from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer, \
     InfluencerPhysicalAttributesSerializer, InflencerProfileDetailsSerializer
@@ -146,7 +146,7 @@ class InfluencerForgotPassword(APIView):
             content = {"message": "invalid email"}
             return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
         try:
-            if User.objects.filter(email__iexact=request.data["email"],is_influencer=True,is_active=True).exists():
+            if User.objects.filter(email__iexact=request.data["email"], is_influencer=True, is_active=True).exists():
                 current_site = Site.objects.get_current()
                 domain = current_site.domain
                 user = User.objects.get(email__iexact=request.data["email"])
@@ -156,7 +156,7 @@ class InfluencerForgotPassword(APIView):
                     'user': user,
                     'token': default_token_generator.make_token(user),
                     'protocol': 'http',
-                    }
+                }
                 tosend = context['protocol'] + '://' + context['domain'] + '/api_v2/reset/' + context['uid'].decode(
                     "utf-8") + '/' + context['token']
                 mailid = request.data["email"]
@@ -203,32 +203,33 @@ class InfluencerFollowedBrands(generics.ListAPIView):
             queryset = Partner.objects.filter(pk__in=follow_list)
             return queryset
 
+
 class InfluencerProfileUpdate(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get','post')
+    http_method_names = ('get', 'post')
     serializer_class = InfluencerProfileSerializer
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             if request.user.is_influencer == True:
                 ser = self.serializer_class(request.user, many=False)
                 return Response(ser.data)
             else:
-                content = {"message":"user is not an influencer."}
-                return Response(content,status=status.HTTP_204_NO_CONTENT)
-        content = {"message":"user is not authenticated."}
-        return Response(content,status=status.HTTP_204_NO_CONTENT)
+                content = {"message": "user is not an influencer."}
+                return Response(content, status=status.HTTP_204_NO_CONTENT)
+        content = {"message": "user is not authenticated."}
+        return Response(content, status=status.HTTP_204_NO_CONTENT)
 
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         contact_number_pattern = re.compile(r'^\+?1?\d{9,15}$')
         name_pattern = re.compile(r'^[A-Za-z. ]+$')
 
         if request.user.is_authenticated():
             try:
                 influencer_user = request.user
-            except :
+            except:
                 content = {"message": "Please login and try again"}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             if influencer_user.is_influencer == True:
@@ -252,31 +253,32 @@ class InfluencerProfileUpdate(APIView):
                 else:
                     influencer_user.contact_number = request.data["contact_number"]
 
-                if request.data["first_name"] is None or name_pattern.match(request.data["first_name"]) is None :
+                if request.data["first_name"] is None or name_pattern.match(request.data["first_name"]) is None:
                     content = {"message": "Please enter valid first name"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
                     influencer_user.first_name = request.data["first_name"]
 
-                if request.data["last_name"] is None or name_pattern.match(request.data["last_name"]) is None :
+                if request.data["last_name"] is None or name_pattern.match(request.data["last_name"]) is None:
                     content = {"message": "Please enter valid last name"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
                     influencer_user.last_name = request.data["last_name"]
                 influencer_user.save();
-                content = {"message" : "Influencer profile has been successfully updated."}
-                return Response(content,status = status.HTTP_200_OK)
+                content = {"message": "Influencer profile has been successfully updated."}
+                return Response(content, status=status.HTTP_200_OK)
             else:
-                content = {"message" : "user is not an influencer"}
-                return Response(content,status = status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = {"message": "user is not an influencer"}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
 
 class InfluencerPicAndBio(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get','post')
+    http_method_names = ('get', 'post')
     serializer_class = InfluencerPicAndBioSerializer
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influencer = Influencers.objects.get(users=request.user)
@@ -286,31 +288,32 @@ class InfluencerPicAndBio(APIView):
                 influencer.save()
             ser = self.serializer_class(influencer, many=False)
             return Response(ser.data)
-        content = {"message":"user not authenticated"}
-        return Response(content,status=status.HTTP_204_NO_CONTENT)
+        content = {"message": "user not authenticated"}
+        return Response(content, status=status.HTTP_204_NO_CONTENT)
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             image_ser = self.serializer_class(data=request.data)
             influencer_user = request.user
             try:
                 influencer = Influencers.objects.get(users=request.user)
             except:
-                content = {"message":"Influencer profile not found."}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = {"message": "Influencer profile not found."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             if image_ser.is_valid():
                 influencer.bio = image_ser.data['bio']
                 influencer.image.delete()
                 influencer.image = request.data['image']
                 influencer.save()
-                content = {"message":"successfully updated."}
-                return Response(content,status=status.HTTP_200_OK)
+                content = {"message": "successfully updated."}
+                return Response(content, status=status.HTTP_200_OK)
             else:
-                content = {"message":"Please try again."}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = {"message": "Please try again."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         else:
-            content = {"message":"Please login as influencer and try again."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {"message": "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
 
 class PhysicalAttributesUpdate(APIView):
     '''
@@ -318,10 +321,10 @@ class PhysicalAttributesUpdate(APIView):
     '''
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get','post')
+    http_method_names = ('get', 'post')
     serializer_class = InfluencerPhysicalAttributesSerializer
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influencer_profile = Influencers.objects.get(users=request.user)
@@ -330,12 +333,12 @@ class PhysicalAttributesUpdate(APIView):
                     influencer_profile = Influencers()
                     influencer_profile.users = request.user
             attributes_serializer = self.serializer_class(influencer_profile)
-            return Response(attributes_serializer.data,status=status.HTTP_200_OK)
+            return Response(attributes_serializer.data, status=status.HTTP_200_OK)
         else:
-            content = {"message":"Please login as influencer and try again."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {"message": "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influencer_profile = Influencers.objects.get(users=request.user)
@@ -352,12 +355,12 @@ class PhysicalAttributesUpdate(APIView):
             if request.data['height']:
                 influencer_profile.height = request.data['height']
             influencer_profile.save()
-            content = {"message":"Physical attributes updated successfully."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {"message": "Physical attributes updated successfully."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
         else:
-            content = {"message":"Please login as influencer and try again."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {"message": "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
 class InfluencerProfileDetails(APIView):
@@ -366,113 +369,132 @@ class InfluencerProfileDetails(APIView):
     http_method_names = ('get',)
     serializer_class = InflencerProfileDetailsSerializer
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influnencer_profile = Influencers.objects.get(users=request.user)
             except:
-                content = {"message":"Please login as influencer and try again"}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = {"message": "Please login as influencer and try again"}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             inf_ser = self.serializer_class(influnencer_profile)
             return Response(inf_ser.data)
+
 
 class InfluencerCurrentLocationView(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get','post')
+    http_method_names = ('get', 'post')
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influencer_profile = Influencers.objects.get(users=request.user)
             except:
-                content = {"message":"Please complete the influencer profile information."}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = {"message": "Please complete the influencer profile information."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             location_serializer = BrandLocationsSerializer(influencer_profile.location, many=False)
             return Response(location_serializer.data)
         else:
-            content = {"message":"Please login and try again."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {"message": "Please login and try again."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influencer_profile = Influencers.objects.get(users=request.user)
             except:
-                content = {"message":"Please complete the influencer profile information."}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-            if request.data['country'] is None or request.data['city'] is None :
-                content = {"message":"Please verify city, state and country."}
-                return Response(content,status=status.HTTP_206_PARTIAL_CONTENT)
+                content = {"message": "Please complete the influencer profile information."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-            influencer_location = Locations()
-            try:
-                country = Country.objects.get(pk=request.data['country'])
-            except:
-                content = {"message":"Please verify country id."}
-                return Response(content,status=status.HTTP_206_PARTIAL_CONTENT)
-            influencer_location.country = country
-            if request.data['state']:
+            if request.data['location_id'] is None:
+                content = {"message": "Please location id."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            else:
                 try:
-                    state = States.objects.get(pk=request.data['state'])
+                    influencer_location = Locations.objects.get(pk=request.data['location_id'])
                 except:
-                    content = {"message":"Please verify state id."}
-                    return Response(content,status=status.HTTP_206_PARTIAL_CONTENT)
-                influencer_location.state = state
-            influencer_location.city = request.data['city']
-            influencer_location.save()
-            influencer_profile.location=influencer_location
-            influencer_profile.save()
-            content = {"message":"successfully updated location."}
-            return Response(content,status=status.HTTP_200_OK)
+                    content = {"message": "Please select valid location id."}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                influencer_profile.location = influencer_location
+                influencer_profile.save()
+
+
+            # if request.data['country'] is None or request.data['city'] is None:
+            #     content = {"message": "Please verify city, state and country."}
+            #     return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+            #
+            # influencer_location = Locations()
+            # try:
+            #     country = Country.objects.get(pk=request.data['country'])
+            # except:
+            #     content = {"message": "Please verify country id."}
+            #     return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+            # influencer_location.country = country
+            # if request.data['state'] and request.data['state'] != "":
+            #     try:
+            #         state = States.objects.get(pk=request.data['state'])
+            #         influencer_location.state = state
+            #     except:
+            #         content = {"message": "Please verify state id."}
+            #         return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+            #     influencer_location.state = state
+            # influencer_location.city = request.data['city']
+            # influencer_location.save()
+            # influencer_profile.location = influencer_location
+            # influencer_profile.save()
+            content = {"message": "successfully updated location."}
+            return Response(content, status=status.HTTP_200_OK)
         else:
-            content = {"message":"Please login as influencer and try again."}
-            return Response(content,status=status.HTTP_206_PARTIAL_CONTENT)
+            content = {"message": "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
+
+
 #
 class InfluencerChangePassword(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get','post')
+    http_method_names = ('get', 'post')
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             if 'old_password' in request.data and 'new_password' in request.data:
                 if not self.request.user.check_password(request.data['old_password']):
-                    content = {"message":"The current password is wrong"}
-                    return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                    content = {"message": "The current password is wrong"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
                     influencer = request.user
                     influencer.set_password(request.data['new_password'])
                     influencer.save()
                     update_session_auth_hash(request, influencer)
-                    content = {"message":"Password updated successfully."}
-                    return Response(content,status=status.HTTP_200_OK)
+                    content = {"message": "Password updated successfully."}
+                    return Response(content, status=status.HTTP_200_OK)
             else:
-                content = {"message":"Password not found."}
-                return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                content = {"message": "Password not found."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         else:
-            content = {"message":"Please login as influencer and try again."}
-            return Response(content,status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            content = {"message": "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
 
 class InfluencerContentsLink(APIView):
-
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         privacy_policy_url = "www.google.com"
         terms_conditions_url = "www.google.com"
         operations_agreement_url = "www.google.com"
-        content = { 'privacy_policy_url':privacy_policy_url,
-                    'terms_conditions_url':terms_conditions_url,
-                    'operations_agreement_url':operations_agreement_url
+        content = {'privacy_policy_url': privacy_policy_url,
+                   'terms_conditions_url': terms_conditions_url,
+                   'operations_agreement_url': operations_agreement_url
         }
-        return Response(content,status=status.HTTP_200_OK)
+        return Response(content, status=status.HTTP_200_OK)
+
 
 class InfluencerGetBalance(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get',)
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             influencer_remaining = 999
-            content = {'results':{'balance':influencer_remaining}}
-            return Response(content,status=status.HTTP_200_OK)
+            content = {'results': {'balance': influencer_remaining}}
+            return Response(content, status=status.HTTP_200_OK)

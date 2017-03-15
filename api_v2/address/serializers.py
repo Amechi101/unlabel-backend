@@ -50,6 +50,14 @@ class StateSerializer(serializers.ModelSerializer):
 class BrandLocationsSerializer(serializers.ModelSerializer):
     state = StateSerializer()
     country = CountrySerializer()
+    display_string = serializers.SerializerMethodField()
+
+    def get_display_string(self,obj):
+        display = obj.city + ","
+        display = display + str(States.objects.get(pk = obj.state.id).name) + ","
+        display = display + Country.objects.get(pk=obj.country.pk).printable_name
+        return display
+
     class Meta:
         model = Locations
-        fields = ['city','latitude','longitude','state','country','id']
+        fields = ['city','latitude','longitude','state','country','id','display_string']

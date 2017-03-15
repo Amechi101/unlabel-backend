@@ -105,7 +105,8 @@ urlpatterns = urlpatterns + [
 #### front end requests
 urlpatterns = urlpatterns + [
     url(r'get_countries',addressViews.GetCountriesView.as_view(), name='get_countries'),
-    url(r'get_states',addressViews.GetStatesView.as_view(), name='get_countries'),
+    url(r'get_states',addressViews.GetStatesView.as_view(), name='get_states'),
+    url(r'get_locations',addressViews.GetLocations.as_view(), name='get_locations'),
 ]
 
 
