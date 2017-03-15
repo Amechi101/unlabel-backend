@@ -96,17 +96,28 @@ class InfluencerCreateForm(forms.Form):
 
 
 class InfluencerManageForm(forms.ModelForm):
+    MALE = 'M'
+    FEMALE = 'F'
+    sex_choice = (
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
+    )
 
     auto_id = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'True'}))
     city = forms.CharField(label="City", required=True)
     country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
                                    help_text="Only select state if your country is USA else leave it unselected")
-    email = forms.CharField(label='Email', required=True)
-    first_name = forms.CharField(label="First Name", required=True)
-    last_name = forms.CharField(label="Last Name", required=True)
     is_active = forms.BooleanField(required=False)
     image = forms.ImageField(widget=ImageInput)
+    gender = forms.ChoiceField()
+
+    def __init__(self,  *args, **kwargs):
+        super(InfluencerManageForm, self).__init__(*args, **kwargs)
+        print(self.instance.users.gender)
+        self.fields['gender'].choices = self.sex_choice
+        self.fields['gender'].initial = self.instance.users.gender
+
     # password1 = forms.CharField(
     #     label=_('Password'),
     #     widget=forms.PasswordInput,
@@ -121,8 +132,9 @@ class InfluencerManageForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('auto_id', 'email', 'first_name', 'last_name', 'is_active',
+        fields = ('auto_id', 'is_active',
                   'bio', 'image',
+                  'gender',
                   'height', 'chest_or_bust', 'hips', 'waist',
                   'city', 'country', 'state',
                   )
@@ -151,10 +163,8 @@ class InfluencerManageForm(forms.ModelForm):
             state = None
         instance.location.state = state
         instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
-        instance.users.email = self.cleaned_data['email']
-        instance.users.first_name = self.cleaned_data['first_name']
-        instance.users.last_name = self.cleaned_data['last_name']
         instance.users.is_active = self.cleaned_data['is_active']
+        instance.users.gender = self.cleaned_data['gender']
         if commit:
             instance.location.save()
             instance.users.save()
@@ -205,8 +215,6 @@ class ExistingUserForm(forms.ModelForm):
         # role = self.cleaned_data.get('role', 'none')
         user = super(ExistingUserForm, self).save(commit=False)
         # user.is_staff = role == 'staff'
-        if self.cleaned_data['password1']:
-            user.set_password(self.cleaned_data['password1'])
         user.save()
 
         # dashboard_perm = Permission.objects.get(

@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import ListView
 
 from oscar.apps.dashboard.catalogue.views import ProductCreateUpdateView as \
     CoreProductCreateUpdateView
@@ -14,9 +15,14 @@ from oscar.apps.catalogue.models import AttributeOption, AttributeOptionGroup
 from oscar.core.loading import get_classes
 from oscar.views import sort_queryset
 from django.views import generic
-
 from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet, AttributeOptionForm, SizeOptionForm, \
     SizeOptionCreateForm
+from oscar.core.loading import get_model
+from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
+from .forms import ReservedProductSearchForm
+InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
+Partner = get_model('partner', 'Partner')
+
 
 ProductTable, CategoryTable \
     = get_classes('oscarapps.dashboard.catalogue.tables',
@@ -335,3 +341,35 @@ class OptionsDeleteView(generic.DeleteView):
                          (self.object.option, self.object.group))
         return reverse('dashboard:size-options-list')
 
+
+class ReservedProductsView(ListView):
+    model = InfluencerProductReserve
+    context_object_name = 'reservedproducts'
+    template_name = 'dashboard/catalogue/reserved_product_list.html'
+    form_class = ReservedProductSearchForm
+
+    def get_queryset(self):
+        self.description = _("All Reserved Products")
+        if not self.request.user.is_staff:
+            brand = Partner.objects.get(users=self.request.user)
+            qs = InfluencerProductReserve.objects.filter(product__brand=brand)
+        else:
+            qs = InfluencerProductReserve.objects.all()
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+        if not self.form.is_valid():
+            return qs
+        data = self.form.cleaned_data
+
+        if data['name']:
+            qs = qs.filter(product__title__icontains=data['name'])
+            self.description = _("Reserved products matching '%s'") % data['name']
+            self.is_filtered = True
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ReservedProductsView, self).get_context_data(**kwargs)
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx

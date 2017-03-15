@@ -127,6 +127,9 @@ class PartnerManageForm(forms.ModelForm):
         instance.location.city = self.cleaned_data['city']
         instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
         instance.is_active = self.cleaned_data['is_active']
+        instance.style = self.cleaned_data['style']
+        instance.category = self.cleaned_data['category']
+        instance.sub_category = self.cleaned_data['sub_category']
 
         if str(self.cleaned_data['country']) == "United States":
             try:
@@ -289,8 +292,6 @@ class ExistingUserForm(forms.ModelForm):
         role = self.cleaned_data.get('role', 'none')
         user = super(ExistingUserForm, self).save(commit=False)
         user.is_staff = role == 'staff'
-        if self.cleaned_data['password1']:
-            user.set_password(self.cleaned_data['password1'])
         user.save()
 
         dashboard_perm = Permission.objects.get(
