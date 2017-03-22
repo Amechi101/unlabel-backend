@@ -50,44 +50,70 @@ class ProductForm(CoreProductForm):
            (LIVE, 'Live'),
            )
 
+        NONE = "NON"
+        RENTED = 'REN'
+        RETURNED = 'RET'
+        rental_status_choice = (
+        (NONE, 'None'),
+        (RENTED, 'Rented'),
+        (RETURNED, 'Returned'),
+        )
+
         if not self.user.is_staff:
             self.fields['brand'].queryset = self.user.partners.all()
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
             self.fields['brand'].widget = forms.HiddenInput()
-            if self.instance.status == "L" or "D":
+
+            if self.instance.status == "L" or self.instance.status == "D":
                 self.fields['status'].choices = status_choice
             else:
                 self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
 
-            if self.instance.structure == 'parent':
-                child_products = Product.objects.filter(structure='child', parent=self.instance).values_list('pk', flat=True)
-                if InfluencerProductReserve.objects.filter(product__in=child_products).exists() is False:
-                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
-                else:
-                    if self.instance.status == "L" or "D":
-                        self.fields['status'].choices = status_choice
-                    else:
-                        self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            if self.instance.status == "R" or self.instance.status == "L":
+                self.fields['rental_status'].choices = rental_status_choice
+            else:
+                self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
 
-            elif self.instance.structure == 'child':
-                if InfluencerProductReserve.objects.filter(product=self.instance.pk).exists() is False:
-                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
-                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
-                else:
-                    if self.instance.status == "L" or "D":
-                        self.fields['status'].choices = status_choice
-                    else:
-                        self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
 
-            elif self.instance.structure == 'standalone':
-
-                if InfluencerProductReserve.objects.filter(product=self.instance.pk).exists() is False:
-                    self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
-                else:
-                    if self.instance.status == "L" or "D":
-                        self.fields['status'].choices = status_choice
-                    else:
-                        self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            # if self.instance.structure == 'parent':
+            #     child_products = Product.objects.filter(structure='child', parent=self.instance).values_list('pk', flat=True)
+            #     if InfluencerProductReserve.objects.filter(product__in=child_products).exists() is False:
+            #         self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            #     else:
+            #         if self.instance.status == "L" or self.instance.status == "D":
+            #             self.fields['status'].choices = status_choice
+            #         else:
+            #             self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            #
+            # elif self.instance.structure == 'child':
+            #     if InfluencerProductReserve.objects.filter(product=self.instance.pk).exists() is False:
+            #         self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            #         self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            #     else:
+            #         if self.instance.status == "L" or self.instance.status == "D":
+            #             self.fields['status'].choices = status_choice
+            #         else:
+            #             self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            #
+            # elif self.instance.structure == 'standalone':
+            #
+            #     if InfluencerProductReserve.objects.filter(product=self.instance.pk).exists() is False:
+            #         UNRESERVED = 'U'
+            #         RESERVED = 'R'
+            #         DRAFT = 'D'
+            #         LIVE = 'L'
+            #         status_choice = (
+            #             (UNRESERVED, 'Unreserved'),
+            #             (RESERVED, 'Reserved'),
+            #             (DRAFT, 'Draft'),
+            #             (LIVE, 'Live')
+            #         )
+            #         self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            #     else:
+            #         if self.instance.status == "L" or self.instance.status == "D":
+            #             self.fields['status'].choices = status_choice
+            #         else:
+            #             self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
 
     def save(self, commit=True):
         instance = super(ProductForm, self).save(commit=False)
