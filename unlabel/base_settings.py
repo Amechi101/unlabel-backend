@@ -254,7 +254,7 @@ FIXTURE_DIRS = [
 # Administration
 # LOGIN_URL = '/admin/login/'
 # LOGOUT_URL = '/admin/logout/'
-# LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_REDIRECT_URL = '/'
 
 
 # Static files (CSS, JavaScript, Images)

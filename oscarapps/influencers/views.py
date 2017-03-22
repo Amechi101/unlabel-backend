@@ -59,7 +59,7 @@ class InfluencerSignUpView(View):
         if influencer_invite.is_used is True:
             return HttpResponse("sorry, The link is already used")
         elif influencer_invite.is_used is False:
-            return render(request, 'pages/influencer_register.html', {'user_form': InfluencerSignUpForm})
+            return render(request, 'influencers/influencer_register.html', {'user_form': InfluencerSignUpForm})
 
 
     def post(self, request, code, *args, **kwargs):
