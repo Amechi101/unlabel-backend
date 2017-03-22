@@ -60,6 +60,9 @@ class ProductForm(CoreProductForm):
         )
 
         if not self.user.is_staff:
+            if self.instance.status != "L":
+               self.fields["influencer_product_note"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
             self.fields['brand'].queryset = self.user.partners.all()
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
             self.fields['brand'].widget = forms.HiddenInput()
