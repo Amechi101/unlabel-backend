@@ -3,7 +3,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
 
 from oscar.core.loading import get_class
-
+from django.utils.translation import ugettext_lazy as _
 Node = get_class('dashboard.nav', 'Node')
 
 
@@ -23,6 +23,16 @@ def get_nodes(user):
                                                 'icon': 'icon-user',
                                                 'url_name': 'dashboard:partner-list',
                                                },)
+        OSCAR_DASHBOARD_NAVIGATION_NEW.append({
+                                                'label': _('Payment'),
+                                                'icon': 'icon-money',
+                                                'children': [
+                                                    {
+                                                        'label': _('Connect stripe'),
+                                                        'url_name': 'dashboard:stripe-redirect',
+                                                    },
+                                                ]
+                                            },)
         all_nodes = create_menu(OSCAR_DASHBOARD_NAVIGATION_NEW)
     visible_nodes = []
     for node in all_nodes:
