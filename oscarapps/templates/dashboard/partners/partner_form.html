@@ -1,5 +1,7 @@
 {% extends 'dashboard/layout.html' %}
 {% load category_tags %}
+{% load form_tags %}
+{% load widget_tweaks %}
 {% load i18n %}
 
 {% block body_class %}{{ block.super }} create-page partner{% endblock %}
@@ -26,8 +28,104 @@
 
 
 {% block dashboard_content %}
-    <div class="well">
-        {% include 'dashboard/partials/form.html' with form=form %}
+{% if form.is_bound and not form.is_valid %}
+    <div class="alert alert-danger">
+        <strong>{% trans "Oops! We found some errors" %}</strong> - {% trans "please check the error messages below and try again" %}
     </div>
+{% endif %}
+
+{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger form-group has-error">
+            <span class="help-inline"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+        </div>
+    {% endfor %}
+{% endif %}
+{% load i18n %}
+
+<form
+    {% if form_id %}id="{{ form_id }}"{% endif %} class="form-{{ style|default:"stacked" }} {{ class }}" method="{{ method|default:"post" }}"
+    {% if action %}action="{{ action }}"{% endif %}
+    {% if includes_files %}enctype="multipart/form-data"{% endif %} enctype="multipart/form-data">
+
+    {% if not method == "get" %}{% csrf_token %}{% endif %}
+    {% for field in form %}
+              {% if field.label == 'Email' %}
+{#                    <hr>#}
+                    <h2><u>Profile Information</u></h2>
+{#                    <hr>#}
+                {% endif %}
+              {% if field.label == 'Store Name' %}
+{#                    <hr>#}
+
+                    <h2><u>Store Information</u></h2>
+{#                    <hr>#}
+                {% endif %}
+        {% if field.is_hidden %}
+            {{ field }}
+        {% else %}
+            {% comment %}
+                Make the field widget type available to templates so we can mark-up
+                checkboxes differently to other widgets.
+            {% endcomment %}
+            {% annotate_form_field field %}
+
+            {% block control_group %}
+                {% if field.label == 'email' %}
+                    saldj
+                {% endif %}
+                <div class="form-group {% if field.errors %}error{% endif %}">
+
+                    {% block label %}
+                        {% if not nolabel and field.widget_type != 'CheckboxInput' %}
+                            <label for="{{ field.auto_id }}" class="{% if style|default:"stacked" != 'stacked' %}col-sm-4{% endif%} control-label{% if field.field.required %} required{% endif %}">
+                                {{ field.label|safe }}
+                                {% if field.field.required %} <span>*</span>{% endif %}
+                            </label>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block controls %}
+                        <div class="{% if style|default:"stacked" != 'stacked' %}col-sm-8{% endif %}{% if field.widget_type == 'CheckboxInput' %} checkbox{% endif %}">
+                            {% block widget %}
+                                {% if field.widget_type == 'CheckboxInput' %}
+                                    <label for="{{ field.auto_id }}" class="checkbox {% if field.field.required %}required{% endif %}">
+                                        {% render_field field %}
+                                        {{ field.label|safe }}{% if field.field.required %} <span>*</span>{% endif %}
+                                    </label>
+                                {% elif field.widget_type == 'RadioSelect' %}
+                                    <label for="{{ field.auto_id }}" class="controls {% if field.field.required %}required{% endif %}">
+                                    {% render_field field %}
+                                    </label>
+                                {% else %}
+                                    {% render_field field class+="form-control" %}
+                                {% endif %}
+                            {% endblock %}
+
+                            {% block errors %}
+                                {% for error in field.errors %}
+                                    <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
+                                {% endfor %}
+                            {% endblock %}
+
+                            {% block help_text %}
+                                {% if field.help_text %}
+                                    <span class='help-block'>
+                                        {# We allow HTML within form help fields #}
+                                        {{ field.help_text|safe }}
+                                    </span>
+                                {% endif %}
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        {% endif %}
+    {% endfor %}
+    <div class="form-group">
+        <button class="btn btn-lg btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
+        {% trans "or" %} <a href="#" onclick="window.history.go(-1);return false" >{% trans "cancel" %}</a>.
+    </div>
+</form>
 
 {% endblock dashboard_content %}

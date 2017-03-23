@@ -157,7 +157,7 @@ class PartnerCreateView(generic.View):
             return HttpResponseRedirect("/dashboard/partners/")
 
         else:
-            return render(request, 'dashboard/partners/partner_form.html', {'form': partner_form})
+            return render(request, 'dashboard/partners/partner_form.html', {'form': list(partner_form)})
 
 
 class PartnerManageView(CorePartnerManageView, FormView):
