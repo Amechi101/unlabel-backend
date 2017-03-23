@@ -47,6 +47,8 @@ class InfluencerCreateForm(forms.Form):
         (FEMALE, 'Female'),
     )
     email = forms.CharField(label='Email', required=True)
+    first_name = forms.CharField(label="First Name", required=True)
+    last_name = forms.CharField(label="Last Name", required=True)
     password1 = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput,
@@ -60,10 +62,9 @@ class InfluencerCreateForm(forms.Form):
                   "lowercase,digit,special character",
         label=_('Confirm Password'),
         widget=forms.PasswordInput)
-    first_name = forms.CharField(label="First Name", required=True)
-    last_name = forms.CharField(label="Last Name", required=True)
+
     contact_number = forms.CharField(required=True, label="Contact Number")
-    image = forms.ImageField(label="Profile Image", required=False)
+    image = forms.ImageField(label="Profile Image", required=True)
     bio = forms.CharField(widget=forms.Textarea, label="Bio", help_text="Few words about yourself")
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
