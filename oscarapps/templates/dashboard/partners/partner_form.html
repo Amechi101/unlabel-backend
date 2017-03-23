@@ -51,15 +51,11 @@
     {% if not method == "get" %}{% csrf_token %}{% endif %}
     {% for field in form %}
               {% if field.label == 'Email' %}
-{#                    <hr>#}
-                    <h2><u>Profile Information</u></h2>
-{#                    <hr>#}
+                     <h2> <span style="text-decoration: underline; ">Profile Information</span></h2>
                 {% endif %}
               {% if field.label == 'Store Name' %}
-{#                    <hr>#}
-
-                    <h2><u>Store Information</u></h2>
-{#                    <hr>#}
+                     <br>
+                     <h2> <span style="text-decoration: underline; ">Store Information</span></h2>
                 {% endif %}
         {% if field.is_hidden %}
             {{ field }}
