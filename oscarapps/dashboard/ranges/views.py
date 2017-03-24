@@ -35,7 +35,7 @@ class RangeListView(ListView):
 
     def get_queryset(self):
         qs = self.model._default_manager.all()
-        if not self.request.user.is_staff:
+        if self.request.user.is_brand:
             qs = self.model._default_manager.filter(brand__users=self.request.user)
         return qs
 
@@ -71,8 +71,9 @@ class RangeCreateView(CreateView):
                                             description=range_form['description'].value(),
                                             is_public=range_form['is_public'].value(),
                                             includes_all_products=range_form['includes_all_products'].value(),
-                                            brand=Partner.objects.get(users=self.request.user),
                                             )
+            if self.request.user.is_brand:
+                range_object.brand = Partner.objects.get(users=self.request.user)
             range_object.included_categories.add(*list(Category.objects.filter(pk__in=range_form['included_categories'].value())))
             range_object.save()
             return HttpResponseRedirect("/dashboard/ranges/")
@@ -140,6 +141,8 @@ class RangeProductListView(BulkEditMixin, ListView):
 
     def get_queryset(self):
         products = self.get_range().all_products()
+        if self.request.user.is_brand:
+            products = products.filter(brand__users=self.request.user)
         return products.order_by('rangeproduct__display_order')
 
     def get_context_data(self, **kwargs):

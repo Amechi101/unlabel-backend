@@ -42,7 +42,7 @@ class OfferListView(ListView):
                             'num_applications', 'total_discount'])
 
         self.description = _("All offers")
-        if not self.request.user.is_staff:
+        if self.request.user.is_brand:
             qs = qs.filter(brand__users=self.request.user)
         # We track whether the queryset is filtered to determine whether we
         # show the search form 'reset' button.
@@ -233,7 +233,7 @@ class OfferWizardStepView(FormView):
         if condition:
             condition.save()
             offer.condition = condition
-        if not self.request.user.is_staff:
+        if self.request.user.is_brand:
             offer.brand = Brand.objects.get(users=self.request.user)
         offer.save()
 

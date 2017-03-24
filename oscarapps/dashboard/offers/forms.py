@@ -78,7 +78,7 @@ class ConditionForm(forms.ModelForm):
             # are no longer optional
             for field in ('type', 'range', 'value'):
                 self.fields[field].required = True
-        if not self.user.is_staff:
+        if self.user.is_brand:
             self.fields['range'].queryset = Range.objects.filter(brand__users=self.user)
 
     class Meta:
@@ -118,12 +118,9 @@ class BenefitForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs['user']
-        print(kwargs)
         del kwargs['user']
-        print("33333333333")
         super(BenefitForm, self).__init__(*args, **kwargs)
-        if not self.user.is_staff:
-            print("444444444")
+        if self.user.is_brand:
             self.fields['range'].queryset = Range.objects.filter(brand__users=self.user)
         custom_benefits = Benefit.objects.all().exclude(
             proxy_class=None)

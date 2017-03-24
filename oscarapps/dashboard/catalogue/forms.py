@@ -128,7 +128,22 @@ class ProductForm(CoreProductForm):
             instance.influencer_product_note = self.instance.parent.influencer_product_note
             instance.weight = self.instance.parent.weight
             instance.rental_status = self.instance.parent.rental_status
+            instance.status = self.instance.parent.status
         instance.save()
+        if self.instance.structure == "parent":
+            children = Product.objects.filter(structure="child", parent=instance)
+            if children:
+                for child in children:
+                    child.title = self.instance.title
+                    child.brand = self.instance.brand
+                    child.description = self.instance.description
+                    child.material_info = self.instance.material_info
+                    child.influencer_product_note = self.instance.influencer_product_note
+                    child.weight = self.instance.weight
+                    child.rental_status = self.instance.rental_status
+                    child.status = self.instance.status
+                    child.save()
+
         return instance
 
 
