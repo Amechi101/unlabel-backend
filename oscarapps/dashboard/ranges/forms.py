@@ -11,13 +11,19 @@ Range = get_model('offer', 'Range')
 
 
 class RangeForm(forms.ModelForm):
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(RangeForm, self).__init__(*args, **kwargs)
+        if self.user.is_brand:
+           self.fields['excluded_products'].queryset = Product.objects.filter(brand__users=self.user)
 
     class Meta:
         model = Range
         fields = [
             'name', 'description', 'is_public',
-            'includes_all_products', 'included_categories'
+            'includes_all_products', 'included_categories', 'excluded_products'
         ]
+
 
 class RangeProductForm(forms.Form):
     query = forms.CharField(

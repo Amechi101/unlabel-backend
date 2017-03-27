@@ -60,7 +60,6 @@ class ConditionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs['user']
-        print(kwargs)
         del kwargs['user']
         super(ConditionForm, self).__init__(*args, **kwargs)
         custom_conditions = Condition.objects.all().exclude(

@@ -61,10 +61,13 @@ class RangeCreateView(CreateView):
         ctx['title'] = _("Create range")
         return ctx
 
+    def get_form_kwargs(self):
+        kwargs = super(RangeCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def post(self, request, *args, **kwargs):
-        range_form = RangeForm(data=request.POST)
-        print(range_form['included_categories'].value())
+        range_form = RangeForm(self.request.user, data=request.POST)
         if range_form.is_valid():
             range_object = Range.objects.create(
                                             name=range_form['name'].value(),
@@ -79,6 +82,7 @@ class RangeCreateView(CreateView):
             return HttpResponseRedirect("/dashboard/ranges/")
         else:
             return render(request, 'dashboard/ranges/range_form.html', {'form': range_form})
+
 
 class RangeUpdateView(UpdateView):
     model = Range
@@ -109,7 +113,10 @@ class RangeUpdateView(UpdateView):
         return ctx
 
 
-
+    def get_form_kwargs(self):
+        kwargs = super(RangeUpdateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 class RangeDeleteView(DeleteView):
     model = Range

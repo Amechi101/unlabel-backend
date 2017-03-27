@@ -130,9 +130,12 @@ class OfferWizardStepView(FormView):
         if json_data:
             form_kwargs = json.loads(json_data)
             if 'range_id' in form_kwargs['data']:
-                form_kwargs['data']['range'] = Range.objects.get(
-                    id=form_kwargs['data']['range_id'])
-                del form_kwargs['data']['range_id']
+                try:
+                    form_kwargs['data']['range'] = Range.objects.get(
+                        id=form_kwargs['data']['range_id'])
+                    del form_kwargs['data']['range_id']
+                except:
+                    return form_kwargs
             return form_kwargs
 
         return {}

@@ -136,7 +136,6 @@ class InfluencerManageForm(forms.ModelForm):
 
     def __init__(self,  *args, **kwargs):
         super(InfluencerManageForm, self).__init__(*args, **kwargs)
-        print(self.instance.users.gender)
         self.fields['gender'].choices = self.sex_choice
         self.fields['gender'].initial = self.instance.users.gender
 
