@@ -38,44 +38,29 @@ class ProductForm(CoreProductForm):
         self.user = user
         super(ProductForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
-
+        self.fields['status'].required = False
+        print(self.instance.rental_status)
+        self.fields['rental_status'].required = False
         if self.instance.structure == "child":
             self.fields['brand'].initial = self.instance.parent.brand.id
-        DRAFT = 'D'
-        LIVE = 'L'
-        UNRESERVED = 'U'
-        RESERVED = 'R'
-        status_choice = (
-           (DRAFT, 'Draft'),
-           (LIVE, 'Live'),
-           )
-
-        NONE = "NON"
-        RENTED = 'REN'
-        RETURNED = 'RET'
-        rental_status_choice = (
-        (NONE, 'None'),
-        (RENTED, 'Rented'),
-        (RETURNED, 'Returned'),
-        )
 
         if not self.user.is_staff:
-            if self.instance.status != "L":
-               self.fields["influencer_product_note"].widget = forms.TextInput(attrs={'readonly': 'True'})
-
             self.fields['brand'].queryset = self.user.partners.all()
             self.fields['brand'].initial = Partner.objects.get(users=self.user)
             self.fields['brand'].widget = forms.HiddenInput()
 
-            if self.instance.status == "L" or self.instance.status == "D":
-                self.fields['status'].choices = status_choice
-            else:
-                self.fields["status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            if self.instance.status == "R" or self.instance.status == "U":
+                self.fields['status'].widget.attrs['disabled'] = 'disabled'
 
-            if self.instance.status == "R" or self.instance.status == "L":
-                self.fields['rental_status'].choices = rental_status_choice
-            else:
-                self.fields["rental_status"].widget = forms.TextInput(attrs={'readonly': 'True'})
+            if self.instance.status == "U":
+                print(self.instance.status)
+                self.fields['rental_status'].widget.attrs['disabled'] = 'disabled'
+
+
+            if self.instance.status != "L" or self.instance.status != "D":
+                self.fields["influencer_product_note"].widget = forms.TextInput(attrs={'readonly': 'True'})
+
+
 
 
             # if self.instance.structure == 'parent':
