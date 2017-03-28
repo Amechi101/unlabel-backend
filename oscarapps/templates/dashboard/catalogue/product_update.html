@@ -189,7 +189,11 @@
 
                     {% block influencer_product_images %}
                         {% if not user.is_staff %}
-                        <div class="tab-pane" id="influencer_product_images" style="pointer-events:none;">
+                           {% if product.status == "L" or product.status == "D" %}
+                              <div class="tab-pane" id="influencer_product_images">
+                           {% else %}
+                               <div class="tab-pane" id="influencer_product_images" style="pointer-events:none;">
+                           {% endif %}
                         {% else %}
                         <div class="tab-pane" id="influencer_product_images">
                         {% endif %}
