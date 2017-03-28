@@ -168,6 +168,9 @@ INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
         'oscarapps.dashboard.catalogue',
         'oscarapps.dashboard.users',
         'oscarapps.checkout',
+        'oscarapps.offer',
+        'oscarapps.dashboard.offers',
+        'oscarapps.dashboard.ranges',
     ])
 
 MIDDLEWARE_CLASSES = (

@@ -55,7 +55,7 @@ class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Influencers
-        fields = ['bio','image']
+        fields = ['bio', 'image']
 
 class InfluencerPhysicalAttributesSerializer(serializers.ModelSerializer):
     sex = serializers.SerializerMethodField()
