@@ -30,6 +30,9 @@
                 <tr>
                     <th>{% trans "Name" %}</th>
 {#                    <th>{% trans "Num products" %}</th>#}
+                    {% if not user.is_brand %}
+                      <th>{% trans "Owner" %}</th>
+                    {% endif %}
                     <th>{% trans "Is public?" %}</th>
                     <th>{% trans "Date created" %}</th>
                     <th></th>
@@ -37,6 +40,7 @@
             </thead>
             <tbody>
                 {% for range in ranges %}
+
                     <tr>
                         <td>
                             {% if range.is_editable %}
@@ -50,7 +54,13 @@
 {#                        {% else %}#}
 {#                            <td>{{ range.num_products|default:"-" }}</td>#}
 {#                        {% endif %}#}
-
+                         {% if not user.is_brand %}
+                            {% if range.brand != None %}
+                                <td>{{ range.brand }}</td>
+                            {% else %}
+                                 <td>Admin</td>
+                            {% endif %}
+                        {% endif %}
                         {% if range.is_public %}
                             <td>{% trans "Yes" %}</td>
                         {% else %}

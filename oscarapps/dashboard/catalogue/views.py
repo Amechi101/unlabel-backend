@@ -23,7 +23,7 @@ from .forms import ReservedProductSearchForm
 
 InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
 Partner = get_model('partner', 'Partner')
-
+ProductClass = get_model('catalogue', 'ProductClass')
 
 ProductTable, CategoryTable \
     = get_classes('oscarapps.dashboard.catalogue.tables',
@@ -54,6 +54,47 @@ class ProductCreateUpdateView(CoreProductCreateUpdateView):
         kwargs['parent'] = self.parent
         kwargs['user'] = self.request.user
         return kwargs
+
+    def get_object(self, queryset=None):
+        """
+        This parts allows generic.UpdateView to handle creating products as
+        well. The only distinction between an UpdateView and a CreateView
+        is that self.object is None. We emulate this behavior.
+
+        This method is also responsible for setting self.product_class and
+        self.parent.
+        """
+        self.creating = 'pk' not in self.kwargs
+        if self.creating:
+            # Specifying a parent product is only done when creating a child
+            # product.
+            parent_pk = self.kwargs.get('parent_pk')
+
+            if self.request.user.is_brand:
+                try:
+                    parent_product = Product.objects.get(pk=parent_pk)
+                except:
+                    parent_product = None
+                if parent_product:
+                    if parent_product.brand.users.all().first() != self.request.user:
+                          raise exceptions.PermissionDenied()
+            if parent_pk is None:
+                self.parent = None
+                # A product class needs to be specified when creating a
+                # standalone product.
+                product_class_slug = self.kwargs.get('product_class_slug')
+                self.product_class = get_object_or_404(
+                    ProductClass, slug=product_class_slug)
+            else:
+                self.parent = get_object_or_404(Product, pk=parent_pk)
+                self.product_class = self.parent.product_class
+
+            return None  # success
+        else:
+            product = super(ProductCreateUpdateView, self).get_object(queryset)
+            self.product_class = product.get_product_class()
+            self.parent = product.parent
+            return product
 
 
 def filter_products(queryset, user):
