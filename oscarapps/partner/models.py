@@ -116,7 +116,7 @@ class RentalInformation(Locations):
 class Partner(AbstractPartner, BaseApplicationModel):
     slug = models.SlugField(max_length=255, default="", blank=True, null=True, verbose_name=_('Brand Slug'))
     image = models.ImageField(_('Image'), upload_to=_('Brands'), blank=True, null=True, max_length=255)
-    location = models.ForeignKey(Locations, null=True, blank=True, default="", related_name=_('get_partner'),
+    location = models.ForeignKey(Locations, models.SET_NULL, null=True, blank=True, default="", related_name=_('get_partner'),
                                  verbose_name=_('Location'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))
     style = models.ManyToManyField('Style', blank=True, verbose_name=_('Style'))
@@ -124,7 +124,7 @@ class Partner(AbstractPartner, BaseApplicationModel):
     sub_category = models.ManyToManyField('SubCategory', blank=True, verbose_name=_('Sub category'))
     is_active = models.BooleanField(default=True, verbose_name=_('Store Active'),
                                     help_text=_('Check|Un check to activate|deactivate store'))
-    rental_info = models.ForeignKey('RentalInformation', null=True, blank=True, default="",
+    rental_info = models.ForeignKey('RentalInformation', models.SET_NULL, null=True, blank=True, default="",
                                      verbose_name=_('Rental Informaton'))
 
     class Meta:
