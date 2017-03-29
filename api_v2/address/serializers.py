@@ -54,7 +54,8 @@ class BrandLocationsSerializer(serializers.ModelSerializer):
 
     def get_display_string(self,obj):
         display = obj.city + ","
-        display = display + str(States.objects.get(pk = obj.state.id).name) + ","
+        if obj.state:
+           display = display + str(States.objects.get(pk = obj.state.id).name) + ","
         display = display + Country.objects.get(pk=obj.country.pk).printable_name
         return display
 
