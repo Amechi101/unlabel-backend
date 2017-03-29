@@ -252,13 +252,13 @@ class InfluencerBrandListView(generics.ListAPIView):
         if display_type == 'FEED':
             param = self.request.GET.get('param')
             if param == "ZA":
-                queryset = Partner.objects.all().order_by('-name')
+                queryset = partner.order_by('-name')
             elif param == "OLD":
-                queryset = Partner.objects.all().order_by('created')
+                queryset = partner.order_by('created')
             elif param == "NEW":
-                queryset = Partner.objects.all().order_by('-created')
+                queryset = partner.order_by('-created')
             else:
-                queryset = Partner.objects.all().order_by('name')
+                queryset = partner.order_by('name')
             return queryset
 
         elif display_type == 'FILTER':
