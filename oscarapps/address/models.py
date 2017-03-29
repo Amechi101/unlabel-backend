@@ -18,8 +18,8 @@ class States(models.Model):
 
 class Locations(models.Model):
     city = models.CharField(max_length=200, default="", blank=False, null=False, verbose_name=_('City'))
-    state = models.ForeignKey(States, null=True, blank=True, default='', verbose_name=_('State'))
-    country = models.ForeignKey(Country, null=False, blank=False, default="", verbose_name=_('Country'))
+    state = models.ForeignKey(States, models.SET_NULL, null=True, blank=True, default='', verbose_name=_('State'))
+    country = models.ForeignKey(Country, models.SET_NULL, null=True, blank=False, default="", verbose_name=_('Country'))
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, verbose_name=_('Latitude'))
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, verbose_name=_('Longitude'))
 

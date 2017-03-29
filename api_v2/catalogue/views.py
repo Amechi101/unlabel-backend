@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from datetime import datetime
+from haversine import haversine
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import auth
@@ -53,6 +54,7 @@ Option = get_model('catalogue', 'Option')
 User = auth.get_user_model()
 Country = get_model('address', 'Country')
 Partner = get_model('partner', 'Partner')
+Locations = get_model('address', 'Locations')
 
 
 class ProductLikeView(APIView):
@@ -234,13 +236,21 @@ class InfluencerBrandListView(generics.ListAPIView):
     # ASC - sort by date ascending
     #DESC - sort by date descending
     # get the queryset for pagination based on the parameter given from ios
-
     def get_queryset(self, *args, **kwargs):
         display_type = self.request.GET.get('display')
+        radius = int(self.request.GET.get('radius'))
+        location_id = self.request.GET.get('location_id')
+        location = Locations.objects.get(id=location_id)
+        influencer_location = (location.latitude, location.longitude)
+        partner = Partner.objects.all()
+        if radius !=0:
+            for p in partner:
+                partner_location = (p.location.latitude, p.location.longitude)
+                if haversine(influencer_location, partner_location, miles=True) > radius:
+                    partner = partner.exclude(id=p.id)
+
         if display_type == 'FEED':
             param = self.request.GET.get('param')
-            search = self.request.GET.get('search')
-            type = self.request.GET.get('type')
             if param == "ZA":
                 queryset = Partner.objects.all().order_by('-name')
             elif param == "OLD":
@@ -250,6 +260,7 @@ class InfluencerBrandListView(generics.ListAPIView):
             else:
                 queryset = Partner.objects.all().order_by('name')
             return queryset
+
         elif display_type == 'FILTER':
             search_text = ""
             search_category = []
@@ -267,7 +278,7 @@ class InfluencerBrandListView(generics.ListAPIView):
             if self.request.GET.get('style', '') != '':
                 search_style = list(map(int, self.request.GET.get('style').split(',')))
 
-            partner = Partner.objects.all()
+
             if search_text is not None:
                 partner = partner.filter(name__icontains=search_text)
             if search_location:
