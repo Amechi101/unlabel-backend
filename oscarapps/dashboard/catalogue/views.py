@@ -2,10 +2,12 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
+from django.views import generic
+from django.core import exceptions
 
+from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
 from oscar.apps.dashboard.catalogue.views import ProductCreateUpdateView as \
     CoreProductCreateUpdateView
 from oscar.apps.dashboard.catalogue.views import ProductListView as CoreProductListView
@@ -13,13 +15,12 @@ from oscar.apps.dashboard.catalogue.views import ProductDeleteView as \
     CoreProductDeleteView
 from oscar.apps.catalogue.models import AttributeOption, AttributeOptionGroup
 from oscar.core.loading import get_classes
-from oscar.views import sort_queryset
-from django.views import generic
-from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet, AttributeOptionForm, SizeOptionForm, \
+from oscarapps.dashboard.catalogue.forms import AttributeOptionForm, SizeOptionForm, \
     SizeOptionCreateForm
 from oscar.core.loading import get_model
 from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
 from .forms import ReservedProductSearchForm
+
 InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
 Partner = get_model('partner', 'Partner')
 
@@ -151,6 +152,14 @@ class ProductListView(CoreProductListView):
 
 
 class ProductDeleteView(CoreProductDeleteView):
+
+    def get_object(self):
+        obj = super(ProductDeleteView, self).get_object()
+        if self.request.user.is_brand:
+            if obj.brand.users.all().first() != self.request.user:
+                raise exceptions.PermissionDenied()
+        return obj
+
     def get_queryset(self):
         """
         Filter products that the user doesn't have permission to update
