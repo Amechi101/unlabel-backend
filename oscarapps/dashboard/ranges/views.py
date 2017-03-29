@@ -91,10 +91,8 @@ class RangeUpdateView(UpdateView):
 
     def get_object(self):
         obj = super(RangeUpdateView, self).get_object()
-        print(obj)
         if not obj.is_editable:
             raise exceptions.PermissionDenied("Not allowed")
-        print(obj.brand)
         try:
             if self.request.user.is_brand:
                 if obj.brand.users.all().first() != self.request.user:
@@ -133,10 +131,8 @@ class RangeDeleteView(DeleteView):
 
     def get_object(self):
         obj = super(RangeDeleteView, self).get_object()
-        print(obj)
         if not obj.is_editable:
             raise exceptions.PermissionDenied("Not allowed")
-        print(obj.brand)
         try:
             if self.request.user.is_brand:
                 if obj.brand.users.all().first() != self.request.user:
