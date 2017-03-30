@@ -239,9 +239,9 @@ class InfluencerBrandListView(generics.ListAPIView):
     def get_queryset(self, *args, **kwargs):
         display_type = self.request.GET.get('display')
         radius = int(self.request.GET.get('radius'))
-        location_id = self.request.GET.get('location_id')
-        location = Locations.objects.get(id=location_id)
-        influencer_location = (location.latitude, location.longitude)
+        lat = float(self.request.GET.get('lat'))
+        lon = float(self.request.GET.get('lon'))
+        influencer_location = (lat, lon)
         partner = Partner.objects.all()
         if radius !=0:
             for p in partner:
