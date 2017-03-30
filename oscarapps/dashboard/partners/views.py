@@ -165,7 +165,7 @@ class PartnerManageView(CorePartnerManageView, FormView):
 
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
-        if not self.request.user.is_staff:
+        if self.request.user.is_brand:
             if self.partner.users.all().first() != self.request.user:
                 raise PermissionDenied
         return self.partner
@@ -208,6 +208,9 @@ class PartnerRentalInfoManageView(generic.UpdateView):
     def get_object(self, queryset=None):
         self.partner = get_object_or_404(Partner, pk=self.kwargs['pk'])
         address = self.partner.rental_info
+        if self.request.user.is_brand:
+            if self.partner.users.all().first() != self.request.user:
+                raise PermissionDenied
         return address
 
     def get_initial(self):

@@ -39,7 +39,6 @@ class ProductForm(CoreProductForm):
         super(ProductForm, self).__init__(*args, **kwargs)
         # Restrict accessible partners for non-staff users
         self.fields['status'].required = False
-        print(self.instance.rental_status)
         self.fields['rental_status'].required = False
         if self.instance.structure == "child":
             self.fields['brand'].initial = self.instance.parent.brand.id
@@ -53,7 +52,6 @@ class ProductForm(CoreProductForm):
                 self.fields['status'].widget.attrs['disabled'] = 'disabled'
 
             if self.instance.status == "U":
-                print(self.instance.status)
                 self.fields['rental_status'].widget.attrs['disabled'] = 'disabled'
 
 

@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DeleteView, FormView, ListView
-
+from django.core import exceptions
 from oscar.core.loading import get_class, get_classes, get_model
 from oscar.views import sort_queryset
 
@@ -329,6 +329,13 @@ class OfferDeleteView(DeleteView):
     template_name = 'dashboard/offers/offer_delete.html'
     context_object_name = 'offer'
 
+    def get_object(self):
+        obj = super(OfferDeleteView, self).get_object()
+        if self.request.user.is_brand:
+            if obj.brand.users.all().first() != self.request.user:
+                raise exceptions.PermissionDenied()
+        return obj
+
     def get_success_url(self):
         messages.success(self.request, _("Offer deleted!"))
         return reverse('dashboard:offer-list')
@@ -341,8 +348,12 @@ class OfferDetailView(ListView):
     template_name = 'dashboard/offers/offer_detail.html'
     context_object_name = 'order_discounts'
 
+
     def dispatch(self, request, *args, **kwargs):
         self.offer = get_object_or_404(ConditionalOffer, pk=kwargs['pk'])
+        if self.request.user.is_brand:
+            if self.offer.brand.users.all().first() != self.request.user:
+                raise exceptions.PermissionDenied()
         return super(OfferDetailView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

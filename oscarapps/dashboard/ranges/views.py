@@ -93,6 +93,12 @@ class RangeUpdateView(UpdateView):
         obj = super(RangeUpdateView, self).get_object()
         if not obj.is_editable:
             raise exceptions.PermissionDenied("Not allowed")
+        try:
+            if self.request.user.is_brand:
+                if obj.brand.users.all().first() != self.request.user:
+                    raise exceptions.PermissionDenied()
+        except:
+            raise exceptions.PermissionDenied()
         return obj
 
     def get_success_url(self):
@@ -122,6 +128,18 @@ class RangeDeleteView(DeleteView):
     model = Range
     template_name = 'dashboard/ranges/range_delete.html'
     context_object_name = 'range'
+
+    def get_object(self):
+        obj = super(RangeDeleteView, self).get_object()
+        if not obj.is_editable:
+            raise exceptions.PermissionDenied("Not allowed")
+        try:
+            if self.request.user.is_brand:
+                if obj.brand.users.all().first() != self.request.user:
+                    raise exceptions.PermissionDenied()
+        except:
+            raise exceptions.PermissionDenied()
+        return obj
 
     def get_success_url(self):
         messages.warning(self.request, _("Range deleted"))
