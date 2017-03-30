@@ -43,11 +43,9 @@ class Range(AbstractRange):
             return self.proxy.contains_product(product)
 
         excluded_product_ids = self._excluded_product_ids()
+        print(excluded_product_ids)
         if product.id in excluded_product_ids:
-            if self.brand:
-                if product.brand == self.brand:
-                    return True
-                return False
+            #     return True
             return False
         ####################
         if self.includes_all_products:
