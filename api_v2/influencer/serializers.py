@@ -72,9 +72,10 @@ class InfluencerPhysicalAttributesSerializer(serializers.ModelSerializer):
         fields = ['height','chest_or_bust','hips','waist','sex']
 
 class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
-    email=serializers.SerializerMethodField()
-    first_name=serializers.SerializerMethodField()
-    last_name=serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    gender = serializers.SerializerMethodField()
 
     def get_email(self,obj):
         try:
@@ -97,6 +98,13 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
         except:
             return None
 
+    def get_gender(self, obj):
+        try:
+            inf_user = obj.users
+            return inf_user.gender
+        except:
+            return None
+
     class Meta:
-        model=Influencers
-        fields=['image','auto_id','email','first_name', 'last_name']
+        model = Influencers
+        fields=['image','auto_id','email','first_name', 'last_name' , 'gender']

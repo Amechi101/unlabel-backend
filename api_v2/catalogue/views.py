@@ -430,8 +430,8 @@ class InfluencerBaseProductListView(generics.ListAPIView):
             gender = str(self.request.GET.get('gender')).strip()
             if gender == 'M':
                 gen = ['M','U']
-            elif gender == 'W':
-                gen = ['W','U']
+            elif gender == 'F':
+                gen = ['F','U']
             if brand_id == None:
                 queryset = Product.objects.filter(status='U').order_by('created')
                 return queryset
