@@ -17,8 +17,10 @@ def get_nodes(user):
     else:
         OSCAR_DASHBOARD_NAVIGATION_NEW = []
         for nodes in settings.OSCAR_DASHBOARD_NAVIGATION:
+            print(nodes['label'])
             if (nodes['label']) != "Partners":
-                OSCAR_DASHBOARD_NAVIGATION_NEW.append(nodes)
+                if (nodes['label']) != "Payment":
+                  OSCAR_DASHBOARD_NAVIGATION_NEW.append(nodes)
         OSCAR_DASHBOARD_NAVIGATION_NEW.append({'label': ('Info'),
                                                 'icon': 'icon-user',
                                                 'url_name': 'dashboard:partner-list',

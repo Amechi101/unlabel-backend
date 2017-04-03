@@ -1,6 +1,7 @@
 import json
 import requests
 import stripe
+import datetime
 
 from datetime import timedelta
 from decimal import Decimal as D
@@ -10,9 +11,8 @@ from django.db.models import Avg, Count, Sum
 from django.utils.timezone import now
 from django.views.generic import TemplateView, RedirectView
 from django.views import generic
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
-
+from django.core.management import call_command
 
 from oscar.apps.promotions.models import AbstractPromotion
 from oscar.core.compat import get_user_model
@@ -250,5 +250,8 @@ class StripeView(generic.View):
 
         return redirect('dashboard:index')
 
-
+class PayoutView(generic.View):
+    def get(self, request, *args, **kwargs):
+        call_command('payout')
+        return redirect('dashboard:index')
 
