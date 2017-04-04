@@ -33,7 +33,8 @@ class InfluencerSignUpForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput)
     image = forms.ImageField(required=False, label="Profile image")
     bio = forms.CharField(widget=forms.Textarea, label="Few words about yourself")
-    location = forms.ModelChoiceField(label='Location', required=True, queryset=Locations.objects.all())
+    loc = forms.CharField(label="Location", required=True)
+    # location = forms.ModelChoiceField(label='Location', required=True, queryset=Locations.objects.all())
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False)
@@ -76,8 +77,6 @@ class InfluencerSignUpForm(forms.Form):
         if password1 is None or password_pattern.match(password1) is None:
             raise forms.ValidationError("Password should have at least 8 characters and one uppercase,"
                                         "lowercase,digit,special character")
-        if self.cleaned_data['location'] is None:
-            raise forms.ValidationError("Please select location.")
 
         return cleaned_data
 

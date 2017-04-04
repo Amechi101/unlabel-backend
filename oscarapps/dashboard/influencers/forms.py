@@ -22,15 +22,24 @@ class LocationSearchForm(forms.Form):
         required=False, label=pgettext_lazy(u"Locations's city", u"City"))
 
 
-class LocationCreateForm(forms.ModelForm):
+class LocationCreateForm(forms.Form):
+
+    loc = forms.CharField(label="Location", required=True)
+    is_brand_location = forms.BooleanField(label="Is brand location", required=False)
+    is_influencer_location = forms.BooleanField(label="Is influencer location", required=False)
+
+    class Meta:
+        fields = ('loc', 'is_brand_location', 'is_influencer_location')
+
+
+class LocationUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(LocationCreateForm, self).__init__(*args, **kwargs)
-        self.fields['city'].required = True
+        super(LocationUpdateForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Locations
-        fields = ('city', 'country', 'state', 'latitude', 'longitude')
+        fields = ('city', 'state', 'country', 'latitude', 'longitude', 'is_brand_location', 'is_influencer_location')
 
 
 class InfluencerSearchForm(forms.Form):
@@ -64,18 +73,20 @@ class InfluencerCreateForm(forms.Form):
         widget=forms.PasswordInput)
 
     contact_number = forms.CharField(required=True, label="Contact Number")
-    image = forms.ImageField(label="Profile Image", required=True)
+    image = forms.ImageField(label="Profile Image", required=False)
     bio = forms.CharField(widget=forms.Textarea, label="Bio", help_text="Few words about yourself")
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
     #                                help_text="Only select state if your country is USA else leave it unselected")
-    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+    # location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+
     gender = forms.ChoiceField(choices=sex_choice, label="Gender", widget=forms.Select(), required=True)
     height = forms.IntegerField(required=True, min_value=0, label="Height", help_text="Enter size in inches")
     chest_or_bust = forms.IntegerField(required=True, min_value=0, label="Chest / Bust", help_text="Enter size in inches")
     hips = forms.IntegerField(required=True, min_value=0, label="Hip", help_text="Enter size in inches")
     waist = forms.IntegerField(required=True, min_value=0, label="Waist", help_text="Enter size in inches")
+    loc = forms.CharField(label="Location", required=True)
     is_active = forms.BooleanField(initial=True)
 
     def clean_password2(self):
@@ -129,10 +140,12 @@ class InfluencerManageForm(forms.ModelForm):
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State/County", queryset=States.objects.all(), required=False,
     #                                help_text="Only select state if your country is USA else leave it unselected")
-    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+    # location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+    # location = forms.CharField(label="Location", required=True)
     is_active = forms.BooleanField(required=False)
-    image = forms.ImageField(widget=ImageInput)
+    image = forms.ImageField(widget=ImageInput, required=False)
     gender = forms.ChoiceField()
+    loc = forms.CharField(label="Location", required=True)
 
     def __init__(self,  *args, **kwargs):
         super(InfluencerManageForm, self).__init__(*args, **kwargs)
@@ -153,12 +166,12 @@ class InfluencerManageForm(forms.ModelForm):
 
     class Meta:
         model = Influencers
-        fields = ('auto_id', 'is_active',
+        fields = ('auto_id',
                   'bio', 'image',
                   'gender',
                   'height', 'chest_or_bust', 'hips', 'waist',
                   # 'city', 'country', 'state',
-                  'location'
+                  'loc', 'is_active',
                   )
 
 
@@ -178,18 +191,19 @@ class InfluencerManageForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(InfluencerManageForm, self).save(commit=False)
-        # instance.location.city = self.cleaned_data['city']
-        # try:
-        #     state = States.objects.get(name=self.cleaned_data['state'])
-        # except ObjectDoesNotExist:
-        #     state = None
-        # instance.location.state = state
-        # instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        loc = str(self.cleaned_data['loc']).split(', ')
+        instance.location.city = ", ".join(str(x) for x in loc[:-2])
+        instance.location.state = str(loc[-2:-1][0])
+        if str(loc[-1:][0]) == "United States":
+            instance.location.country = "USA"
+        else:
+            instance.location.country = str(loc[-1:][0])
+        instance.location.is_brand_location = True
+        instance.location.is_influencer_location = True
         instance.users.is_active = self.cleaned_data['is_active']
         instance.users.gender = self.cleaned_data['gender']
-        instance.location = self.cleaned_data['location']
         if commit:
-            # instance.location.save()
+            instance.location.save()
             instance.users.save()
             instance.save()
         return instance

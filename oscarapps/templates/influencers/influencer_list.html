@@ -60,6 +60,7 @@
                 <tr>
                     <th>{% anchor 'name' _('Name') %}</th>
                     <th>{% trans 'Users' %}</th>
+                    <th>{% trans 'Location' %}</th>
 
                 </tr>
                 {% for influencer in influencers %}
@@ -84,7 +85,10 @@
                                 {% endif %}
 
                         </td>
-{#            pa#}
+                        <td>
+                            {{ influencer.location }}
+                        </td>
+
                         <td>
                             <div class="btn-toolbar">
                                 <div class="btn-group">

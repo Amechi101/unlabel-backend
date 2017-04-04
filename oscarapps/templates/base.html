@@ -46,6 +46,7 @@
             <!-- jQuery -->
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
             <script>window.jQuery || document.write('<script src="{% static "oscar/js/jquery/jquery-1.9.1.min.js" %}"><\/script>')</script>
+            <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
         {% endblock %}
 
         {# Local scripts #}
@@ -86,6 +87,7 @@
 
 <script>
     $(document).ready(function(){
+        var test=0;
             var gender = $('#id_gender');
             var chest_or_bust = $('#id_chest_or_bust');
             if(gender.val()=="M")
@@ -98,42 +100,42 @@
                 }
 
 
-            var country_id = $('#id_country');
-            var state_id = $('#id_state');
-            var size_id = $('#id_size');
+{#            var country_id = $('#id_country');#}
+{#            var state_id = $('#id_state');#}
+{#            var size_id = $('#id_size');#}
+{##}
+{#            if(country_id.val()=='US'){#}
+{#                state_id.prop('disabled',false);#}
+{#            }#}
+{#            else{#}
+{#                state_id.prop('disabled',true);#}
+{#            }#}
 
-            if(country_id.val()=='US'){
-                state_id.prop('disabled',false);
-            }
-            else{
-                state_id.prop('disabled',true);
-            }
-
-
-    });
-
-    var country_id = $('#id_country');
-    var state_id = $('#id_state');
-    var size_class_id = $('#id_size_class');
-    var size_id = $('#id_size');
-
-    size_class_id.change(function(e){
-        $("#id_size").select2("val", "");
-        size_id.prop('disabled',false);
-                  $.ajax({
-                       type:'GET',
-                       url: '/api_v2/get_size?size_class='+size_class_id.val()+'',
-                       success: function (data) {
-                           var sizes= data.results;
-                           var options = '';
-                           for (var size = 0; size < sizes.length; size++) {
-                               options += '<option value="' + sizes[size]['id'] + '">' + sizes[size]['size_sex_type'] +" "+ sizes[size]['size'] + '</option>';
-                           }
-                           $('#id_size').html(options);
-                       }
-                  });
 
     });
+
+{#    var country_id = $('#id_country');#}
+{#    var state_id = $('#id_state');#}
+{#    var size_class_id = $('#id_size_class');#}
+{#    var size_id = $('#id_size');#}
+{##}
+{#    size_class_id.change(function(e){#}
+{#        $("#id_size").select2("val", "");#}
+{#        size_id.prop('disabled',false);#}
+{#                  $.ajax({#}
+{#                       type:'GET',#}
+{#                       url: '/api_v2/get_size?size_class='+size_class_id.val()+'',#}
+{#                       success: function (data) {#}
+{#                           var sizes= data.results;#}
+{#                           var options = '';#}
+{#                           for (var size = 0; size < sizes.length; size++) {#}
+{#                               options += '<option value="' + sizes[size]['id'] + '">' + sizes[size]['size_sex_type'] +" "+ sizes[size]['size'] + '</option>';#}
+{#                           }#}
+{#                           $('#id_size').html(options);#}
+{#                       }#}
+{#                  });#}
+{##}
+{#    });#}
     var gender = $('#id_gender');
     var chest_or_bust = $('#id_chest_or_bust');
     gender.change(function(e){
@@ -149,19 +151,40 @@
 
 
 
-    country_id.change(function(e){
-                if(country_id.val()=="US")
-                {
-                    state_id.prop('disabled',false);
-                }
-                else
-                {
-                    state_id.prop('disabled',true);
-                    state_id.select2("val",null);
-                }
+{#    country_id.change(function(e){#}
+{#                if(country_id.val()=="US")#}
+{#                {#}
+{#                    state_id.prop('disabled',false);#}
+{#                }#}
+{#                else#}
+{#                {#}
+{#                    state_id.prop('disabled',true);#}
+{#                    state_id.select2("val",null);#}
+{#                }#}
+{#        });#}
+
+    function initialize() {
+
+        var input = document.getElementById('id_loc');
+        var options = {
+            types: ['(cities)'],
+            componentRestrictions: {country:'US'}
+        };
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+        autocomplete.addListener('place_changed', function (e) {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No such place'" + place.name + "'");
+                return false;
+            }
         });
 
+    }
 
-
+    google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
+

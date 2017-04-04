@@ -30,7 +30,8 @@ class PartnerSignUpForm(forms.Form):
     name = forms.CharField(label="Store Name", required=True)
     image = forms.ImageField(required=False, label="Store Image")
     description = forms.CharField(widget=forms.Textarea, label="Store Description")
-    location = forms.ModelChoiceField(label='Location',required=True, queryset=Locations.objects.all() )
+    loc = forms.CharField(label="Location", required=True)
+    # location = forms.ModelChoiceField(label='Location',required=True, queryset=Locations.objects.all() )
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
@@ -62,8 +63,6 @@ class PartnerSignUpForm(forms.Form):
         if password1 is None or password_pattern.match(password1) is None:
             raise forms.ValidationError("Password should have at least 8 characters and one uppercase,"
                                         "lowercase,digit,special character")
-        if self.cleaned_data['location'] is None:
-            raise forms.ValidationError("Please select location.")
         return cleaned_data
 
 

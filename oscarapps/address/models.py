@@ -18,10 +18,14 @@ class States(models.Model):
 
 class Locations(models.Model):
     city = models.CharField(max_length=200, default="", blank=False, null=False, verbose_name=_('City'))
-    state = models.ForeignKey(States, models.SET_NULL, null=True, blank=True, default='', verbose_name=_('State'))
-    country = models.ForeignKey(Country, models.SET_NULL, null=True, blank=False, default="", verbose_name=_('Country'))
+    state = models.CharField(max_length=200, default="", blank=False, null=False, verbose_name=_('State'))
+    country = models.CharField(max_length=200, default="", blank=False, null=False, verbose_name=_('Country'))
+    # state = models.ForeignKey(States, models.SET_NULL, null=True, blank=True, default='', verbose_name=_('State'))
+    # country = models.ForeignKey(Country, models.SET_NULL, null=True, blank=False, default="", verbose_name=_('Country'))
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, verbose_name=_('Latitude'))
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True, verbose_name=_('Longitude'))
+    is_brand_location = models.BooleanField(default=False, verbose_name=_('Brand Location'))
+    is_influencer_location = models.BooleanField(default=False, verbose_name=_('Influencer Location'))
 
     class Meta:
         verbose_name = _('Location')
@@ -44,9 +48,8 @@ class Locations(models.Model):
 
     def save(self, *args, **kwargs):
         address = str(self.city) + ","
-        if self.state:
-            address += str(self.state.name) + ","
-        address += str(self.country.name)
+        address += str(self.state) + ","
+        address += str(self.country)
         self.latitude, self.longitude = self.get_coordinates(address)
         super(Locations, self).save(*args, **kwargs)
 

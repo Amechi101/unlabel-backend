@@ -65,8 +65,8 @@ class InfluencerSignUpView(View):
     def post(self, request, code, *args, **kwargs):
 
         influencer_form = InfluencerSignUpForm(data=request.POST)
-        try :
-            influencer_invite = InfluencerInvite.objects.get(code=code,is_used=False)
+        try:
+            influencer_invite = InfluencerInvite.objects.get(code=code, is_used=False)
             check_date = datetime.datetime.utcnow().replace(tzinfo=utc)
             sent_date = influencer_invite.date_sent
             if (((check_date - sent_date).total_seconds())/60)/60 < 24 and influencer_invite.is_used == False:
@@ -81,15 +81,23 @@ class InfluencerSignUpView(View):
                     influencer_user.save()
                     influencer_user.set_password(influencer_form.cleaned_data['password1'])
                     influencer_user.save()
-                    influencer_location = Locations.objects.get(pk=influencer_form['location'].value())
-                    # influencer_location = Locations()
-                    # influencer_location.city = influencer_form.cleaned_data['city']
-                    # influencer_location.state = influencer_form.cleaned_data['state']
-                    # influencer_location.country = influencer_form.cleaned_data['country']
-                    # influencer_location.save()
+                    location = str(influencer_form['loc'].value()).split(', ')
+                    city = ", ".join(str(x) for x in location[:-2])
+                    state = str(location[-2:-1][0])
+                    if str(location[-1:][0]) == "United States":
+                        country = "USA"
+                    else:
+                        country = str(location[-1:][0])
+                    influencer_location = Locations.objects.create(city=city,
+                                                                state=state,
+                                                                country=country,
+                                                                is_influencer_location=True,
+                                                                )
+                    influencer_location.save()
+                    print(influencer_location)
                     influencer_profile = Influencers()
                     influencer_profile.bio = influencer_form.cleaned_data['bio']
-                    influencer_profile.image = request.FILES['image']
+                    influencer_profile.image = influencer_form.cleaned_data['image']
                     influencer_profile.chest_or_bust = influencer_form.cleaned_data['chest_or_bust']
                     influencer_profile.height = influencer_form.cleaned_data['height']
                     influencer_profile.hips = influencer_form.cleaned_data['hips']

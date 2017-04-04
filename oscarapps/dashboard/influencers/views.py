@@ -139,19 +139,21 @@ class InfluencerCreateView(generic.View):
             influencer_user.save()
             influencer_user.set_password(influencer_form['password1'].value())
             influencer_user.save()
-            # from django.core.exceptions import ObjectDoesNotExist
-            #
-            # try:
-            #     state = States.objects.get(pk=influencer_form['state'].value())
-            # except ObjectDoesNotExist:
-            #     state = None
-            # influencer_location = Locations.objects.create(city=influencer_form['city'].value(),
-            #                                                state=state,
-            #                                                country=Country.objects.get(
-            #                                                    pk=influencer_form['country'].value()),
-            # )
-            # influencer_location.save()
-            influencer_location = Locations.objects.get(pk=influencer_form['location'].value())
+
+            location = str(influencer_form['loc'].value()).split(', ')
+            city = ", ".join(str(x) for x in location[:-2])
+            state = str(location[-2:-1][0])
+            if str(location[-1:][0]) == "United States":
+                country = "USA"
+            else:
+                country = str(location[-1:][0])
+            influencer_location = Locations.objects.create(city=city,
+                                                        state=state,
+                                                        country=country,
+                                                        is_influencer_location=True,
+                                                        )
+            influencer_location.save()
+            print(influencer_location.id, type(influencer_location))
             influencer_profile = Influencers.objects.create(bio=influencer_form['bio'].value(),
                                                             height=influencer_form['height'].value(),
                                                             chest_or_bust=influencer_form['chest_or_bust'].value(),
@@ -162,7 +164,6 @@ class InfluencerCreateView(generic.View):
             )
             if 'image' in request.FILES:
                 influencer_profile.image = request.FILES['image']
-
             influencer_profile.save()
 
             return HttpResponseRedirect("/dashboard/influencers/")
@@ -189,7 +190,7 @@ class InfluencerManageView(generic.UpdateView):
                 # 'city': self.influencer.location.city,
                 # 'state': self.influencer.location.state,
                 # 'country': self.influencer.location.country,
-                'location':self.influencer.location,
+                'loc':self.influencer.location,
                 'email': self.influencer.users.email,
                 'password': self.influencer.users.password,
                 'first_name': self.influencer.users.first_name,
@@ -303,10 +304,10 @@ class InfluencerUserUpdateView(generic.UpdateView):
 
 
 (
-    LocationSearchForm, LocationCreateForm
+    LocationSearchForm, LocationCreateForm, LocationUpdateForm
 ) = get_classes(
     'dashboard.influencers.forms',
-    ['LocationSearchForm', 'LocationCreateForm'], 'oscarapps')
+    ['LocationSearchForm', 'LocationCreateForm', 'LocationUpdateForm'], 'oscarapps')
 
 
 class LocationListView(generic.ListView):
@@ -344,28 +345,45 @@ class LocationListView(generic.ListView):
         return ctx
 
 
-class LocationCreateView(generic.CreateView):
+class LocationCreateView(generic.View):
+
     model = Locations
     template_name = 'dashboard/address/location_form.html'
     form_class = LocationCreateForm
     success_url = reverse_lazy('dashboard:location-list')
 
-    def get_context_data(self, **kwargs):
-        ctx = super(LocationCreateView, self).get_context_data(**kwargs)
-        ctx['title'] = _('Create new brand specialization')
-        return ctx
+    def get(self, request, *args, **kwargs):
+        return render(request, 'dashboard/address/location_form.html', {'form': LocationCreateForm})
 
-    def get_success_url(self):
-        messages.success(self.request,
-                         _("Location '%s' was created successfully.") %
-                         self.object)
-        return reverse('dashboard:location-list')
+    def post(self, request, *args, **kwargs):
+        location_form = LocationCreateForm(data=request.POST)
+        if location_form.is_valid():
+            location = str(location_form['loc'].value()).split(', ')
+            city = ", ".join(str(x) for x in location[:-2])
+            state = str(location[-2:-1][0])
+            print(str(location[-1:][0]))
+            if str(location[-1:][0]) == "United States":
+                country = "USA"
+            else:
+                country = str(location[-1:][0])
+            influencer_location = Locations.objects.create(city=city,
+                                                        state=state,
+                                                        country=country,
+                                                        is_influencer_location=location_form['is_influencer_location'].value(),
+                                                        is_brand_location = location_form['is_brand_location'].value(),
+                                                        )
+            influencer_location.save()
+            return HttpResponseRedirect("/dashboard/influencers/location")
+
+        else:
+            return render(request, 'dashboard/address/location_form.html', {'form': location_form})
+
 
 class LocationManageView(generic.UpdateView):
     """
     """
     template_name = 'dashboard/address/location_manage.html'
-    form_class = LocationCreateForm
+    form_class = LocationUpdateForm
     success_url = reverse_lazy('dashboard:location-list')
 
     def get_object(self, queryset=None):
