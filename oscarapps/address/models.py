@@ -32,7 +32,7 @@ class Locations(models.Model):
         verbose_name_plural = _('Locations')
 
     def __str__(self):
-        location = str(self.city)+","+str(self.state)+","+str(self.country)
+        location = str(self.city)+", "+str(self.state)+", "+str(self.country)
         return location
     """
     Function to find coordinates from address
