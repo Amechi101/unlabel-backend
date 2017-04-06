@@ -210,7 +210,7 @@ class InfluencerManageForm(forms.ModelForm):
             influenecer_location = Locations.objects.create(city=city,
                                             state=state,
                                             country=country,
-                                            is_brand_location=True,
+                                            is_influencer_location=True,
                                             )
             instance.location = influenecer_location
 
