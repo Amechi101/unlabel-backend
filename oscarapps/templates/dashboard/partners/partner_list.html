@@ -110,24 +110,18 @@
                         {% if request.user.is_superuser %}
                             <td>
                                 {% if partner.location %}
-    {#                                 <a href="{% url 'dashboard:partner-manage' pk=partner.pk  %}" title="{% trans "Edit rental address" %}">#}
-                                                        {{ partner.location.city}},
-                                         {% if partner.location.state  %}
-                                             {{partner.location.state }},
-                                         {% endif %}
-                                             {{partner.location.country }}
-                                     </a>
+                            <a href="{% url 'dashboard:location-manage' pk=partner.location.pk %}">{{ partner.location }}</a>
                                 {% endif %}
                             </td>
                         {% endif %}
                         <td>
                             {% if partner.rental_info %}
                                  <a href="{% url 'dashboard:partner-address-manage' pk=partner.pk  %}" title="{% trans "Edit rental address" %}">
-                                                    {{ partner.rental_info.city}},
-                                     {% if partner.rental_info.state  %}
-                                         {{partner.rental_info.state }},
-                                     {% endif %}
-                                         {{partner.rental_info.country }}
+                                         {{ partner.rental_info.post_box}},
+                                         {{ partner.rental_info.zipcode}},
+                                         {{ partner.rental_info.city}},
+                                         {{ partner.rental_info.state }},
+                                         {{ partner.rental_info.country }}
                                  </a>
                             {% endif %}
                         </td>

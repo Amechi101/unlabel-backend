@@ -41,13 +41,44 @@
             </caption>
             {% if locations %}
                 <tr>
-                    <th>{% anchor 'name' _('Name') %}</th>
+                    <th>Name</th>
+                    <th>Owner</th>
                 </tr>
                 {% for location in locations %}
                     <tr>
                         <td>
                             <a href="{% url 'dashboard:location-manage' pk=location.pk %}">{{ location }}</a>
                         </td>
+                        <td>
+
+                            {%if location.is_brand_location %}
+                                {%if location.is_influencer_location %}
+                                    {% if location.partner_location.all.first.pk %}
+                                       <p>Brand : <a href="{% url 'dashboard:partner-manage' pk=location.partner_location.all.first.pk %}">{{location.partner_location.all.first}}</a></p>
+                                    {% else %}
+                                       <p>Brand</p>
+                                    {% endif %}
+                                    {% if location.influencer_location.all.first.pk %}
+                                        Influencer : <a href="{% url 'dashboard:influencer-manage' pk=location.influencer_location.all.first.pk %}">{{ location.influencer_location.all.first}}</a>
+                                    {% else %}
+                                       Influencer
+                                    {% endif %}
+                                {% else%}
+                                    {% if location.partner_location.all.first.pk %}
+                                       Brand : <a href="{% url 'dashboard:partner-manage' pk=location.partner_location.all.first.pk %}">{{location.partner_location.all.first}}</a>
+                                    {% else %}
+                                        Brand
+                                    {% endif %}
+                                {% endif %}
+                            {% elif location.is_influencer_location %}
+                                    {% if location.influencer_location.all.first.pk %}
+                                        Influencer : <a href="{% url 'dashboard:influencer-manage' pk=location.influencer_location.all.first.pk %}">{{ location.influencer_location.all.first}}</a>
+                                    {% else %}
+                                       Influencer
+                                    {% endif %}
+                            {% endif %}
+                        </td>
+
                         <td>
                             <div class="btn-toolbar">
                                 <div class="btn-group">
