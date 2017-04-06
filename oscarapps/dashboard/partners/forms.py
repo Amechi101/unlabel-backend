@@ -85,16 +85,6 @@ class PartnerManageForm(forms.ModelForm):
     is_active = forms.BooleanField(required=False, help_text="Check|Un check to activate|deactivate store")
     # location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
     loc = forms.CharField(label="Location", required=True)
-    # password1 = forms.CharField(
-    #     label=_('Change Password'),
-    #     widget=forms.PasswordInput,
-    #     required=False,
-    #     validators=password_validators)
-    #
-    # password2 = forms.CharField(
-    #     required=False,
-    #     label=_('Confirm Password'),
-    #     widget=forms.PasswordInput)
 
     class Meta:
         model = Partner
@@ -176,14 +166,35 @@ class PartnerRentalInfoForm(forms.ModelForm):
     end_time = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30")
     end_time_period = forms.ChoiceField(label='End Time Period', choices=time_period_choice)
     contact_number = forms.CharField(required=True, label="Contact Number")
+    loc = forms.CharField(label="Location", required=True)
 
     class Meta:
         model = RentalInformation
         fields = ('day', 'start_time', 'start_time_period', 'end_time', 'end_time_period',
                   'contact_number',
-                  'post_box', 'zipcode', 'city', 'country', 'state',)
+                  'post_box', 'zipcode', 'loc')
 
         labels = {'zipcode': 'Zip Code'}
+
+
+
+    def save(self, commit=True):
+        instance = super(PartnerRentalInfoForm, self).save(commit=False)
+        loc = str(self.cleaned_data['loc']).split(', ')
+        instance.city = ", ".join(str(x) for x in loc[:-2])
+        instance.state = str(loc[-2:-1][0])
+        if str(loc[-1:][0]) == "United States":
+            instance.country = "USA"
+        else:
+            instance.country = str(loc[-1:][0])
+        # instance.location.is_brand_location = True
+        if commit:
+            # instance.location.save()
+            instance.save()
+        return instance
+
+
+
 
 #################
 #Brand Styles
