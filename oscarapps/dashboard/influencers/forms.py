@@ -192,14 +192,28 @@ class InfluencerManageForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super(InfluencerManageForm, self).save(commit=False)
         loc = str(self.cleaned_data['loc']).split(', ')
-        instance.location.city = ", ".join(str(x) for x in loc[:-2])
-        instance.location.state = str(loc[-2:-1][0])
-        if str(loc[-1:][0]) == "United States":
-            instance.location.country = "USA"
-        else:
-            instance.location.country = str(loc[-1:][0])
-        instance.location.is_brand_location = True
-        instance.location.is_influencer_location = True
+        try:
+            instance.location.city = ", ".join(str(x) for x in loc[:-2])
+            instance.location.state = str(loc[-2:-1][0])
+            if str(loc[-1:][0]) == "United States":
+                instance.location.country = "USA"
+            else:
+                instance.location.country = str(loc[-1:][0])
+            instance.location.is_influencer_location = True
+        except:
+            city = ", ".join(str(x) for x in loc[:-2])
+            state = str(loc[-2:-1][0])
+            if str(loc[-1:][0]) == "United States":
+                country = "USA"
+            else:
+                country = str(loc[-1:][0])
+            influenecer_location = Locations.objects.create(city=city,
+                                            state=state,
+                                            country=country,
+                                            is_brand_location=True,
+                                            )
+            instance.location = influenecer_location
+
         instance.users.is_active = self.cleaned_data['is_active']
         instance.users.gender = self.cleaned_data['gender']
         if commit:

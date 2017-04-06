@@ -120,19 +120,34 @@ class PartnerManageForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super(PartnerManageForm, self).save(commit=False)
         loc = str(self.cleaned_data['loc']).split(', ')
-        instance.location.city = ", ".join(str(x) for x in loc[:-2])
-        instance.location.state = str(loc[-2:-1][0])
-        if str(loc[-1:][0]) == "United States":
-            instance.location.country = "USA"
-        else:
-            instance.location.country = str(loc[-1:][0])
-        instance.location.is_brand_location = True
+        try:
+            instance.location.city = ", ".join(str(x) for x in loc[:-2])
+            instance.location.state = str(loc[-2:-1][0])
+            if str(loc[-1:][0]) == "United States":
+                instance.location.country = "USA"
+            else:
+                instance.location.country = str(loc[-1:][0])
+            instance.location.is_brand_location = True
+        except:
+            city = ", ".join(str(x) for x in loc[:-2])
+            state = str(loc[-2:-1][0])
+            if str(loc[-1:][0]) == "United States":
+                country = "USA"
+            else:
+                country = str(loc[-1:][0])
+            partner_location = Locations.objects.create(city=city,
+                                            state=state,
+                                            country=country,
+                                            is_brand_location=True,
+                                            )
+            instance.location = partner_location
         instance.is_active = self.cleaned_data['is_active']
         instance.style = self.cleaned_data['style']
         instance.category = self.cleaned_data['category']
         instance.sub_category = self.cleaned_data['sub_category']
         if commit:
             instance.location.save()
+
             instance.save()
         return instance
 
@@ -187,9 +202,7 @@ class PartnerRentalInfoForm(forms.ModelForm):
             instance.country = "USA"
         else:
             instance.country = str(loc[-1:][0])
-        # instance.location.is_brand_location = True
         if commit:
-            # instance.location.save()
             instance.save()
         return instance
 
