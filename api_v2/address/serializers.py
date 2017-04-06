@@ -51,7 +51,7 @@ class BrandLocationsSerializer(serializers.ModelSerializer):
     display_string = serializers.SerializerMethodField()
 
     def get_display_string(self,obj):
-        return obj.city + ", " + obj.city +", " + obj.country
+        return obj.city + ", " + obj.state +", " + obj.country
 
     class Meta:
         model = Locations
