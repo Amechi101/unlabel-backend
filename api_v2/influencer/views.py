@@ -426,6 +426,10 @@ class InfluencerCurrentLocationView(APIView):
                                                         )
                 influencer_profile.location = influencer_location
                 influencer_profile.save()
+                try:
+                    Locations.objects.filter(id=request.data['id']).delete()
+                except:
+                    pass
             # if request.data['country'] is None or request.data['city'] is None:
             #     content = {"message": "Please verify city, state and country."}
             #     return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
