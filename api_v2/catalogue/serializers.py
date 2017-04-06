@@ -218,8 +218,6 @@ class StateSerializer(serializers.ModelSerializer):
 
 
 class RentalInfoSerializer(serializers.ModelSerializer):
-    state = StateSerializer()
-
     class Meta:
         model = RentalInformation
         fields = '__all__'
