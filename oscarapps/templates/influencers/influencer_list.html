@@ -86,7 +86,9 @@
 
                         </td>
                         <td>
-                            {{ influencer.location }}
+                          {% if influencer.location %}
+                            <a href="{% url 'dashboard:location-manage' pk=influencer.location.pk %}">{{ influencer.location }}</a>
+                          {% endif %}
                         </td>
 
                         <td>

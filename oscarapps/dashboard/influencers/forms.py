@@ -39,7 +39,7 @@ class LocationUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Locations
-        fields = ('city', 'state', 'country', 'latitude', 'longitude', 'is_brand_location', 'is_influencer_location')
+        fields = ('city', 'state', 'country', 'latitude', 'longitude')
 
 
 class InfluencerSearchForm(forms.Form):
