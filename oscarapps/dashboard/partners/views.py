@@ -130,22 +130,25 @@ class PartnerCreateView(generic.View):
                 codename='dashboard_access', content_type__app_label='partner')
             partner_user.user_permissions.add(dashboard_access_perm)
             partner_user.save()
-            #
-            # try:
-            #     state = States.objects.get(pk=partner_form['state'].value())
-            # except:
-            #     state = None
-            # partner_location = Locations.objects.create(city=partner_form['city'].value(),
-            #                                             state=state,
-            #                                             country=Country.objects.get(pk=partner_form['country'].value()),
-            #                                             )
-            # partner_location.save()
-            partner_location = Locations.objects.get(pk=partner_form['location'].value())
+
+            location = str(partner_form['loc'].value()).split(', ')
+            city = ", ".join(str(x) for x in location[:-2])
+            state = str(location[-2:-1][0])
+            if str(location[-1:][0]) == "United States":
+                country = "USA"
+            else:
+                country = str(location[-1:][0])
+            partner_location = Locations.objects.create(city=city,
+                                                        state=state,
+                                                        country=country,
+                                                        is_brand_location=True,
+                                                        )
+            partner_location.save()
             partner_profile = Partner.objects.create(name=partner_form['name'].value(),
                                                     description=partner_form['description'].value(),
+                                                    location = partner_location,
                                                     )
             partner_profile.users.add(partner_user)
-            partner_profile.location = partner_location
             partner_profile.style.add(*list(Style.objects.filter(pk__in=partner_form['style'].value())))
             partner_profile.category.add(*list(Category.objects.filter(pk__in=partner_form['category'].value())))
             partner_profile.sub_category.add(*list(SubCategory.objects.filter(pk__in=partner_form['sub_category'].value())))
@@ -176,7 +179,7 @@ class PartnerManageView(CorePartnerManageView, FormView):
             # 'city': self.partner.location.city,
             # 'state': self.partner.location.state,
             # 'country': self.partner.location.country,
-            'location': self.partner.location,
+            'loc': self.partner.location,
             'email': self.partner.users.all().first().email,
             'password': self.partner.users.all().first().password,
             'first_name': self.partner.users.all().first().first_name,

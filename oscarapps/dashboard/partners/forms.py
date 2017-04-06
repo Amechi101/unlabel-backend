@@ -38,15 +38,18 @@ class PartnerCreateForm(forms.Form):
     name = forms.CharField(label="Store Name", required=True)
     image = forms.ImageField(required=False, label="Store Image")
     description = forms.CharField(widget=forms.Textarea, label=" Store Description")
+
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
     #                                help_text="Only select state if your country is USA else leave it unselected")
-    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+    # location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+
     style = forms.ModelMultipleChoiceField(label="Style", queryset=Style.objects.all(), required=True,)
     category = forms.ModelMultipleChoiceField(label="Store Type", queryset=Category.objects.all(), required=True)
     sub_category = forms.ModelMultipleChoiceField(label="Specialization", queryset=SubCategory.objects.all(),
                                                   required=True)
+    loc = forms.CharField(label="Location", required=True)
     is_active = forms.BooleanField(initial=True, help_text="Uncheck to deactivate store")
 
     def clean_password2(self):
@@ -80,8 +83,8 @@ class PartnerManageForm(forms.ModelForm):
     # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
     #                                help_text="Only select state if your country is USA else leave it unselected")
     is_active = forms.BooleanField(required=False, help_text="Check|Un check to activate|deactivate store")
-    location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
-
+    # location = forms.ModelChoiceField(label="Location", queryset=Locations.objects.all(), required=True)
+    loc = forms.CharField(label="Location", required=True)
     # password1 = forms.CharField(
     #     label=_('Change Password'),
     #     widget=forms.PasswordInput,
@@ -98,8 +101,7 @@ class PartnerManageForm(forms.ModelForm):
         fields = (
             'name', 'image', 'description',
             # 'city', 'country', 'state',
-            'location',
-            'style', 'category', 'sub_category', 'is_active',
+            'style', 'category', 'sub_category', 'loc', 'is_active',
             # 'password1', 'password2',
             )
 
@@ -127,23 +129,18 @@ class PartnerManageForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(PartnerManageForm, self).save(commit=False)
-        # instance.location.city = self.cleaned_data['city']
-        # instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
+        loc = str(self.cleaned_data['loc']).split(', ')
+        instance.location.city = ", ".join(str(x) for x in loc[:-2])
+        instance.location.state = str(loc[-2:-1][0])
+        if str(loc[-1:][0]) == "United States":
+            instance.location.country = "USA"
+        else:
+            instance.location.country = str(loc[-1:][0])
+        instance.location.is_brand_location = True
         instance.is_active = self.cleaned_data['is_active']
         instance.style = self.cleaned_data['style']
         instance.category = self.cleaned_data['category']
         instance.sub_category = self.cleaned_data['sub_category']
-
-        # if str(self.cleaned_data['country']) == "United States":
-        #     try:
-        #         state = States.objects.get(name=self.cleaned_data['state'])
-        #     except:
-        #         state = None
-        # else:
-        #     state = None
-        # instance.location.state = state
-        # instance.location.country = Country.objects.get(printable_name=self.cleaned_data['country'])
-        instance.location = self.cleaned_data['location']
         if commit:
             instance.location.save()
             instance.save()

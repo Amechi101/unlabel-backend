@@ -1,0 +1,27 @@
+<head>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+</head>
+
+<h1>Unlabel Partner sign-up</h1>
+
+    <form id="Partner_register_form" method="post" action="." enctype="multipart/form-data">
+
+        {{user_form.as_p}}
+                    {% csrf_token %}
+        <input type="submit" name="submit" value="Register" />
+    </form>
+
+<script>
+    function initialize() {
+
+    var input = document.getElementById('id_loc');
+
+    var options = {
+          types: ['(cities)'],
+          componentRestrictions: {country:'US'}
+       };
+    var autocomplete = new google.maps.places.Autocomplete(input, options);
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
