@@ -27,17 +27,14 @@ Partner = get_model('partner', 'Partner')
 
 
 class LocationSerializer(serializers.ModelSerializer):
-    state = serializers.SerializerMethodField(source='get_state')
+    display_string = serializers.SerializerMethodField()
 
-    def get_state(self, obj):
-        if obj.state is not None:
-            return obj.state.name
-        else:
-            return None
+    def get_display_string(self,obj):
+        return obj.city + ", " + obj.state +", " + obj.country
 
     class Meta:
         model = Locations
-        fields = ('city', 'state', 'country', 'latitude', 'longitude')
+        fields = ('city', 'state', 'country', 'latitude', 'longitude', 'display_string')
 
 
 class PartnerSerializer(OscarModelSerializer):
