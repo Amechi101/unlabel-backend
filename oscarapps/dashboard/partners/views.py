@@ -217,8 +217,12 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         return address
 
     def get_initial(self):
+        try:
+            location_name = self.partner.rental_info.city+", "+ self.partner.rental_info.state+", "+self.partner.rental_info.country
+        except:
+            location_name = ""
         return {'name': self.partner.name,
-                'loc': self.partner.rental_info.city+", "+ self.partner.rental_info.state+", "+self.partner.rental_info.country}
+                'loc': location_name}
 
     def get_context_data(self, **kwargs):
 
