@@ -1,4 +1,5 @@
 <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 </head>
 
@@ -12,16 +13,59 @@
     </form>
 
 <script>
+
+var not_valid=false;
+$('#id_loc').on('input',function(event){
+     not_valid=true;
+});
+
     function initialize() {
 
-    var input = document.getElementById('id_loc');
+        var input = document.getElementById('id_loc');
+        var options = {
+            types: ['(cities)'],
+            componentRestrictions: {country:'US'}
+        };
 
-    var options = {
-          types: ['(cities)'],
-          componentRestrictions: {country:'US'}
-       };
-    var autocomplete = new google.maps.places.Autocomplete(input, options);
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+        autocomplete.addListener('place_changed', function (e) {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                not_valid=true;
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No such place'" + place.name + "'");
+                event.preventDefault();
+                return false;
+            }
+            else{
+                not_valid=false;
+            }
+
+        });
+
     }
+
     google.maps.event.addDomListener(window, 'load', initialize);
+
+
+jQuery.fn.exists = function(){ return this.length > 0; };
+if ($('#id_loc').exists()) {
+    $("#id_save_button").click(function(event){
+       if (not_valid == true){
+           event.preventDefault();
+           setTimeout(function(){
+              var $id_save_button = $('#id_save_button');
+               $id_save_button.text("Save");
+              setTimeout(function() {
+                  $id_save_button.removeClass("disabled");
+                  $id_save_button.removeAttr("disabled");
+              }, 100);
+
+              }, 100);
+           window.alert("Please choose a valid location");
+       }
+});
+}
 
 </script>
