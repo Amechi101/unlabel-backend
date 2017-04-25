@@ -66,6 +66,7 @@ class CommissionConfiguration(BaseApplicationModel):
                                                 verbose_name="Brand commission percentage")
     unlabel_commission = models.DecimalField(max_digits=5, decimal_places=2,
                                                 verbose_name="Unlabel commission percentage")
+    last_payout_date = models.DateTimeField(null=True, blank=True)
 
     def clean(self):
          if float(self.brand_commission+self.influencer_commission+self.unlabel_commission) != float(100):
@@ -90,6 +91,7 @@ class BrandPayout(BaseApplicationModel):
     total_amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Total Amount Transferred", null=True, blank=True)
     reference = models.CharField(max_length=128, blank=True, verbose_name="Reference")
+    brand = models.ForeignKey(Partner, blank=True, null=True, verbose_name="Brand")
 
     def __str__(self):
         return self.stripe_credential.user.email
@@ -100,6 +102,7 @@ class InfluencerPayout(BaseApplicationModel):
     total_amount = models.DecimalField(max_digits=11, decimal_places=8,
                                 verbose_name="Total Amount Transferred", null=True, blank=True)
     reference = models.CharField(max_length=128, blank=True, verbose_name="Reference")
+    influencer = models.ForeignKey(Influencers, blank=True, null=True, verbose_name="Influencer")
 
     def __str__(self):
         return self.stripe_credential.user.email

@@ -184,5 +184,15 @@ OSCAR_DASHBOARD_NAVIGATION = [
             },
         ],
     },
+    {
+        'label': _('Payment'),
+        'icon': 'icon-money',
+        'children': [
+            {
+                'label': _('Payout Now'),
+                'url_name': 'dashboard:payout',
+            },
+        ]
+    },
 
 ]

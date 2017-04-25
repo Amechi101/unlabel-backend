@@ -31,8 +31,8 @@ class DashboardApplication(CoreDashboardApplication):
     shipping_app = get_class('dashboard.shipping.app', 'application')
     stripe_redirect_view = get_class('dashboard.views',
                                  'StripeRedirectView')
-    stripe_view = get_class('dashboard.views',
-                                 'StripeView')
+    payout_view = get_class('dashboard.views',
+                                 'PayoutView')
 
     def get_urls(self):
         urls = [
@@ -61,7 +61,9 @@ class DashboardApplication(CoreDashboardApplication):
             url(r'^stripe-redirect$',
                 self.stripe_redirect_view.as_view(),
                 name='stripe-redirect'),
-
+            url(r'^payout$',
+                self.payout_view.as_view(),
+                name='payout'),
 
 
         ]
