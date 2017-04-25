@@ -7,6 +7,8 @@ import datetime
 from unlabel import base_settings
 from oscar.core.loading import get_model
 
+
+Payout = get_model('payment', 'Payout')
 Influencer = get_model('influencers', 'Influencers')
 InfluencerPayout = get_model('payment', 'InfluencerPayout')
 InfluencerCommission = get_model('payment', 'InfluencerCommission')
@@ -27,10 +29,12 @@ class Command(BaseCommand):
     #     # parser.add_argument('end_date', help='End date')
 
     def handle(self, *args, **options):
-        obj = CommissionConfiguration.objects.all().first()
-        # start_date = obj.last_payout_date
-        end_date = datetime.datetime.now()
-        obj.last_payout_date = end_date
+        try:
+            obj = Payout.objects.all().first()
+            obj.last_payout_date = datetime.datetime.now()
+        except:
+            obj = Payout()
+            obj.last_payout_date = datetime.datetime.now()
         obj.save()
         # start_date, end_date = options['start_date'], options['end_date']
 

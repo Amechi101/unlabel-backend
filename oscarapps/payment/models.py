@@ -66,7 +66,6 @@ class CommissionConfiguration(BaseApplicationModel):
                                                 verbose_name="Brand commission percentage")
     unlabel_commission = models.DecimalField(max_digits=5, decimal_places=2,
                                                 verbose_name="Unlabel commission percentage")
-    last_payout_date = models.DateTimeField(null=True, blank=True)
 
     def clean(self):
          if float(self.brand_commission+self.influencer_commission+self.unlabel_commission) != float(100):
@@ -75,6 +74,13 @@ class CommissionConfiguration(BaseApplicationModel):
     def __str__(self):
         return_string = "BC: "+str(self.brand_commission)+", IC:" + str(self.influencer_commission)+", UC:"+str(self.unlabel_commission)
         return return_string
+
+
+class Payout(BaseApplicationModel):
+    last_payout_date = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.last_payout_date
 
 
 class StripeCredential(BaseApplicationModel):
