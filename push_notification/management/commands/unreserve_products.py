@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 name = product.title
                 if product.structure == "child":
                     base_product = Product.objects.get(pk=product.parent.id)
-                    base_product.status = 'U'
+                    base_product.rental_status = 'U'
                     base_product.save()
                     name = base_product.title
                 product.save()

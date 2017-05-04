@@ -318,18 +318,16 @@ class InfluencerBaseProductListView(generics.ListAPIView):
     # OLD - date oldest to new
     def get_queryset(self, *args, **kwargs):
         display_type = str(self.request.GET.get('display')).strip()
-        print("----------------111=",display_type,"==")
         if display_type == 'FEED':
             brand_id = str(self.request.GET.get('brand','')).strip()
             param = str(self.request.GET.get('param','')).strip()
-            print("-------------==222=",brand_id,"==",param,"==")
             if brand_id == None:
-                queryset = Product.objects.filter(status='U').order_by('created')
+                queryset = Product.objects.filter(rental_status='U').order_by('created')
                 return queryset
             if brand_id != None:
                 if param == 'OLD':
                     prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -338,13 +336,13 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                             products_to_list.append(product.pk)
                         elif product.structure == "parent":
                             products_to_list.append(product.pk)
-                    queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('created')
+                    queryset = Product.objects.filter(pk__in=products_to_list, rental_status='U').order_by('created')
                     return queryset
                 elif param == 'HL':
-                    prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
+                    prod_id_List = Product.objects.filter(brand=brand_id, rental_status='U').values_list('id', flat=True)
                     prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                         '-price_retail').values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -375,10 +373,10 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                     return item_list
 
                 elif param == "LH":
-                    prod_id_List = Product.objects.filter(brand=brand_id, status='U').values_list('id', flat=True)
+                    prod_id_List = Product.objects.filter(brand=brand_id, rental_status='U').values_list('id', flat=True)
                     prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                         'price_retail').values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -410,9 +408,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                     return item_list
                 else:
                     prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                    print("---------prod_Sort_List=",prod_Sort_List,"==")
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List)
-                    print("--------------------products=",products,"==")
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -421,8 +417,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                             products_to_list.append(product.pk)
                         elif product.structure == "parent":
                             products_to_list.append(product.pk)
-                    queryset = Product.objects.filter(pk__in=products_to_list, status='U').order_by('-created')
-                    print("------------------queysset=",queryset,"==")
+                    queryset = Product.objects.filter(pk__in=products_to_list, rental_status='U').order_by('-created')
                     return queryset
         elif display_type == 'FILTER':
             brand_id = str(self.request.GET.get('brand')).strip()
@@ -433,12 +428,12 @@ class InfluencerBaseProductListView(generics.ListAPIView):
             elif gender == 'F':
                 gen = ['F','U']
             if brand_id == None:
-                queryset = Product.objects.filter(status='U').order_by('created')
+                queryset = Product.objects.filter(rental_status='U').order_by('created')
                 return queryset
             if brand_id != None:
                 if param == 'OLD':
                     prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -447,13 +442,13 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                             products_to_list.append(product.pk)
                         elif product.structure == "parent":
                             products_to_list.append(product.pk)
-                    queryset = Product.objects.filter(pk__in=products_to_list, status='U',item_sex_type__in=gen).order_by('created')
+                    queryset = Product.objects.filter(pk__in=products_to_list, rental_status='U',item_sex_type__in=gen).order_by('created')
                     return queryset
                 elif param == 'HL':
-                    prod_id_List = Product.objects.filter(brand=brand_id, status='U',item_sex_type__in=gen).values_list('id', flat=True)
+                    prod_id_List = Product.objects.filter(brand=brand_id, rental_status='U',item_sex_type__in=gen).values_list('id', flat=True)
                     prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                         '-price_retail').values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -484,10 +479,10 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                     return item_list
 
                 elif param == "LH":
-                    prod_id_List = Product.objects.filter(brand=brand_id, status='U',item_sex_type__in=gen).values_list('id', flat=True)
+                    prod_id_List = Product.objects.filter(brand=brand_id, rental_status='U',item_sex_type__in=gen).values_list('id', flat=True)
                     prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                         'price_retail').values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -519,7 +514,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                     return item_list
                 else:
                     prod_Sort_List = StockRecord.objects.filter(partner=brand_id).values_list('product', flat=True)
-                    products = Product.objects.filter(brand=brand_id, status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
+                    products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
                     products_to_list = []
                     for product in products:
                         if product.structure == "child":
@@ -528,7 +523,7 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                             products_to_list.append(product.pk)
                         elif product.structure == "parent":
                             products_to_list.append(product.pk)
-                    queryset = Product.objects.filter(pk__in=products_to_list, status='U',item_sex_type__in=gen).order_by('-created')
+                    queryset = Product.objects.filter(pk__in=products_to_list, rental_status='U',item_sex_type__in=gen).order_by('-created')
                     return queryset
 
 
@@ -611,22 +606,22 @@ class InfluencerReserveProduct(APIView):
             except:
                 content = {"message": "Product does not exist."}
                 return Response(content, status=status.HTTP_303_SEE_OTHER)
-            if product_to_reserve.status == 'U':
+            if product_to_reserve.rental_status == 'U':
                 influencer_product_reserved = InfluencerProductReserve()
                 influencer_product_reserved.influencer = influencer_user
                 influencer_product_reserved.product = product_to_reserve
                 influencer_product_reserved.date_reserved = datetime.now()
 
-                product_to_reserve.status = 'R'
+                product_to_reserve.rental_status = 'R'
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
-                    base_product.status = 'R'
+                    base_product.rental_status = 'R'
                     base_product.save()
                 influencer_product_reserved.save()
                 product_to_reserve.save()
                 content = {"message": "Product reservered successfully."}
                 return Response(content, status=status.HTTP_200_OK)
-            elif product_to_reserve.status == 'R':
+            elif product_to_reserve.rental_status == 'R':
                 try:
                     product_reserved = InfluencerProductReserve.objects.get(influencer=influencer_user,
                                                                             product=id_ser.validated_data['id'])
@@ -642,7 +637,7 @@ class InfluencerReserveProduct(APIView):
                 product_to_reserve.status = "U"
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
-                    base_product.status = 'U'
+                    base_product.rental_status = 'U'
                     base_product.save()
                 product_to_reserve.save()
                 content = {"message": "Product unreservered successfully."}
@@ -653,10 +648,11 @@ class InfluencerReserveProduct(APIView):
 
 
 class InfluencerReservedProducts(APIView):
-    '''
-    View for listing reserved products
-    based on brands for influencer
-    '''
+
+    """
+    View for listing reserved products based on brands for influencer
+    """
+
     pagination_class = pagination.LimitOffsetPagination
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
@@ -668,8 +664,8 @@ class InfluencerReservedProducts(APIView):
             influencer = Influencers.objects.filter(users=request.user)
             reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
                                                                                                         flat=True)
-            products_reserved = Product.objects.filter(pk__in=reserved_items, status='R',
-                                                       rental_status='NON').values_list('id', flat=True)
+            products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='R',
+                                                       status='Draft').values_list('id', flat=True)
             stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
             influencer_reserved_products = []

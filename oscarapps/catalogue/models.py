@@ -74,13 +74,9 @@ class Product(AbstractProduct, BaseApplicationModel):
         (UNISEX, 'Unisex'),
     )
 
-    UNRESERVED = 'U'
-    RESERVED = 'R'
     DRAFT = 'D'
     LIVE = 'L'
     status_choice = (
-        (UNRESERVED, 'Unreserved'),
-        (RESERVED, 'Reserved'),
         (DRAFT, 'Draft'),
         (LIVE, 'Live')
     )
@@ -88,10 +84,13 @@ class Product(AbstractProduct, BaseApplicationModel):
     NONE = "NON"
     RENTED = 'REN'
     RETURNED = 'RET'
+    UNRESERVED = 'U'
+    RESERVED = 'R'
     rental_status_choice = (
-        (NONE, 'None'),
         (RENTED, 'Rented'),
         (RETURNED, 'Returned'),
+        (RESERVED, 'Reserved'),
+        (UNRESERVED, 'Unreserved')
     )
 
     YES = 'Y'
@@ -115,13 +114,13 @@ class Product(AbstractProduct, BaseApplicationModel):
     status = models.CharField(
         max_length=1,
         choices=status_choice,
-        default=UNRESERVED,
+        default=DRAFT,
         verbose_name=_("Status")
     )
     rental_status = models.CharField(
         max_length=3,
         choices=rental_status_choice,
-        default=NONE,
+        default=UNRESERVED,
         verbose_name=_("Rental status")
     )
     requires_shipping = models.CharField(
