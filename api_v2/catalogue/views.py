@@ -672,7 +672,7 @@ class InfluencerReservedProducts(APIView):
             for brand in brands:
                 prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
                     'product', flat=True)
-                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='NON')
+                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='U')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
