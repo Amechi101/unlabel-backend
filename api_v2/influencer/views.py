@@ -264,9 +264,31 @@ class InfluencerProfileUpdate(APIView):
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
                 else:
                     influencer_user.last_name = request.data["last_name"]
+
+                if request.data['ucc_handle']:
+                    influencer_user.ucc_handle = request.data['ucc_handle']
+                else:
+                    content = {"message": "Please enter valid user name"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+                if request.data['image']:
+                    influencer_user.image.delete()
+                    influencer_user.image = request.data['image']
+                else:
+                    content = {"message": "Please select an image"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+                if request.data['influencer_industry']:
+                    influencer_user.influencer_industry = request.data['influencer_industry']
+                else:
+                    content = {"message": "Please enter an influencer insustry"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
                 influencer_user.save();
                 content = {"message": "Influencer profile has been successfully updated."}
                 return Response(content, status=status.HTTP_200_OK)
+
+
             else:
                 content = {"message": "user is not an influencer"}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
@@ -302,8 +324,6 @@ class InfluencerPicAndBio(APIView):
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
             if image_ser.is_valid():
                 influencer.bio = image_ser.data['bio']
-                influencer.image.delete()
-                influencer.image = request.data['image']
                 influencer.save()
                 content = {"message": "successfully updated."}
                 return Response(content, status=status.HTTP_200_OK)

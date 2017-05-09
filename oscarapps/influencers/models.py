@@ -38,7 +38,6 @@ class Influencers(BaseApplicationModel):
     """
     auto_id = models.CharField(unique=True, max_length=16, blank=True, null=True, default="",
                                verbose_name=_('Influencer ID'))
-    image = models.ImageField(upload_to='Influencers', null=True, blank=True)
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
     location = models.ForeignKey(Locations, models.SET_NULL, null=True, blank=True, default="", verbose_name=_('Location'),related_name="influencer_location")
     users = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="influencers", blank=True,
