@@ -4,6 +4,7 @@ from rest_framework import serializers
 from oscarapi.utils import overridable
 from users.models import User
 from oscarapps.influencers.models import Influencers
+from api_v2.catalogue.serializers import LocationSerializer
 
 
 def field_length(fieldname):
@@ -76,6 +77,8 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
+    location = LocationSerializer()
+    user_name = serializers.SerializerMethodField()
 
     def get_email(self,obj):
         try:
@@ -105,6 +108,13 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
         except:
             return None
 
+    def get_user_name(self, obj):
+        try:
+            inf_user = obj.users
+            return inf_user.username
+        except:
+            return None
+
     class Meta:
         model = Influencers
-        fields=['image','auto_id','email','first_name', 'last_name' , 'gender']
+        fields=['image','auto_id','email','first_name', 'last_name' , 'gender', 'location', 'user_name']
