@@ -37,8 +37,15 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ('city', 'state', 'country', 'latitude', 'longitude', 'display_string')
 
 
+class RentalInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RentalInformation
+        fields = '__all__'
+
+
 class PartnerSerializer(OscarModelSerializer):
     location = LocationSerializer()
+    rental_info = RentalInfoSerializer()
     followed = serializers.SerializerMethodField(source='get_followed')
     share_url = serializers.SerializerMethodField()
 
@@ -214,12 +221,6 @@ class StoreTypeSerializer(OscarModelSerializer):
 class StateSerializer(serializers.ModelSerializer):
     class Meta:
         model = States
-        fields = '__all__'
-
-
-class RentalInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RentalInformation
         fields = '__all__'
 
 

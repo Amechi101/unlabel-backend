@@ -580,9 +580,9 @@ class InfluencerChildProductsListView(generics.ListAPIView):
 
 
 class InfluencerReserveProduct(APIView):
-    '''
-    View for influencer to reserve a product
-    '''
+    """
+        View for influencer to reserve a product
+    """
     permission_classes = (permissions.IsAuthenticated,)
     authentication = authentication.SessionAuthentication
     http_method_names = ('post',)
@@ -648,11 +648,9 @@ class InfluencerReserveProduct(APIView):
 
 
 class InfluencerReservedProducts(APIView):
-
     """
-    View for listing reserved products based on brands for influencer
+        View for listing reserved products based on brands for influencer
     """
-
     pagination_class = pagination.LimitOffsetPagination
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
@@ -665,7 +663,7 @@ class InfluencerReservedProducts(APIView):
             reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
                                                                                                         flat=True)
             products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='R',
-                                                       status='Draft').values_list('id', flat=True)
+                                                       status='D').values_list('id', flat=True)
             stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
             brands = Partner.objects.filter(pk__in=stock_brand)
             influencer_reserved_products = []
@@ -681,10 +679,9 @@ class InfluencerReservedProducts(APIView):
 
 
 class InfluencerRentedProducts(APIView):
-    '''
-    View for listing rented products
-    based on brands for influencer
-    '''
+    """
+        View for listing rented products based on brands for influencer
+    """
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get')
@@ -755,10 +752,9 @@ class InfluencerLiveProducts(APIView):
 
 
 class InfluencerProductImagesView(APIView):
-    '''
-    View for influencer to view and
-    add product images
-    '''
+    """
+        View for influencer to view and add product images
+    """
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get', 'post')
