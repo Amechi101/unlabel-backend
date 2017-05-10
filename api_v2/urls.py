@@ -89,11 +89,8 @@ urlpatterns = [
     url(r'^influencer_brand_specialization/$',catalogueViews.InfluencerBrandSpecialization.as_view(),
         name='get_influencer_device_id'),
     url(r'^get_content_links/',influencerViews.InfluencerContentsLink.as_view(), name='influencer-content-links'),
-    url(r'^influencer_get_balance/',influencerViews.InfluencerGetBalance.as_view(), name='influencer-remaining-amount')
-
-
-
-
+    url(r'^influencer_get_balance/',influencerViews.InfluencerGetBalance.as_view(), name='influencer-remaining-amount'),
+    url(r'^influencer_ucc_handle/',influencerViews.InfluencerUniqueUcc.as_view(), name='influencer-remaining-amount')
 ]
 
 ##### address urls  #####

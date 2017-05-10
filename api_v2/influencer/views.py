@@ -529,3 +529,15 @@ class InfluencerGetBalance(APIView):
             influencer_remaining = 999
             content = {'results': {'balance': influencer_remaining}}
             return Response(content, status=status.HTTP_200_OK)
+
+
+class InfluencerUniqueUcc(APIView):
+    """
+    Check the ucc handle for a unique value
+    """
+    def get(self, request, *args, **kwargs):
+        if User.objects.filter(ucc_handle=request.GET.get('ucc_handle')).exists():
+            content = {'message': 'Already exist'}
+        else:
+            content = {'message': 'success'}
+        return Response(content, status=status.HTTP_200_OK)
