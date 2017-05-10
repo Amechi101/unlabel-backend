@@ -70,7 +70,8 @@ class InfluencerPhysicalAttributesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Influencers
-        fields = ['height','chest_or_bust','hips','waist','sex']
+        fields = ['height', 'chest_or_bust', 'hips', 'waist', 'sex']
+
 
 class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField()
@@ -78,7 +79,8 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
     last_name = serializers.SerializerMethodField()
     gender = serializers.SerializerMethodField()
     location = LocationSerializer()
-    user_name = serializers.SerializerMethodField()
+    ucc_handle = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     def get_email(self,obj):
         try:
@@ -108,13 +110,23 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
         except:
             return None
 
-    def get_user_name(self, obj):
+    def get_ucc_handle(self, obj):
         try:
             inf_user = obj.users
-            return inf_user.username
+            return inf_user.ucc_handle
         except:
             return None
 
+    def get_image(self, obj):
+        try:
+            inf_user = obj.users
+            influencer = User.objects.get(pk=inf_user.pk)
+            influencer_image = InfluencerProfileSerializer(influencer)
+            return influencer_image.data['image']
+        except:
+            return None
+
+
     class Meta:
         model = Influencers
-        fields=['image','auto_id','email','first_name', 'last_name' , 'gender', 'location', 'user_name']
+        fields = ['auto_id', 'email', 'first_name', 'last_name', 'gender', 'location', 'ucc_handle', 'image']
