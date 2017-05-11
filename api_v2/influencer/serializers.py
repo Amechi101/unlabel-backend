@@ -130,3 +130,10 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Influencers
         fields = ['auto_id', 'email', 'first_name', 'last_name', 'gender', 'location', 'ucc_handle', 'image']
+
+
+class InfluencerStyleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Influencers
+        fields = ['styles']

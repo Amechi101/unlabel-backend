@@ -18,6 +18,7 @@ from oscarapps.address.models import Locations
 from oscarapps.catalogue.models import Product
 from users.models import User
 from push_notification.models import APNSDevice,NotificationDetails, SNS
+from  oscarapps.partner.models import Style
 
 
 class BaseApplicationModel(models.Model):
@@ -47,6 +48,7 @@ class Influencers(BaseApplicationModel):
                                                 help_text=_('US Measurements'))
     hips = models.PositiveIntegerField(default=0, verbose_name=_('hips'), help_text=_('US Measurements'))
     waist = models.PositiveIntegerField(default=0, verbose_name=_('waist'), help_text=_('US Measurements'))
+    styles = models.ManyToManyField(Style, null=True, blank=True)
 
     def id_generator(self, size=10, chars=string.ascii_uppercase + string.digits):
         auto_id = ''.join(random.choice(chars) for _ in range(size))
