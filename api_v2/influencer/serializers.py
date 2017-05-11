@@ -5,6 +5,7 @@ from oscarapi.utils import overridable
 from users.models import User
 from oscarapps.influencers.models import Influencers
 from api_v2.catalogue.serializers import LocationSerializer
+from oscarapps.partner.models import Style
 
 
 def field_length(fieldname):
@@ -132,7 +133,28 @@ class InflencerProfileDetailsSerializer(serializers.ModelSerializer):
         fields = ['auto_id', 'email', 'first_name', 'last_name', 'gender', 'location', 'ucc_handle', 'image']
 
 
+class StyleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Style
+        fields = ['pk', 'name']
+
+
 class InfluencerStyleSerializer(serializers.ModelSerializer):
+
+    style_data = serializers.SerializerMethodField()
+
+    def get_style_data(self, object):
+        styles = object.styles.all()
+        style_serializer_data = StyleSerializer(styles, many=True)
+        return style_serializer_data.data
+
+    class Meta:
+        model = Influencers
+        fields = ['style_data']
+
+
+class InfluencerPostStyleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Influencers

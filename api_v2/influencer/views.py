@@ -29,7 +29,8 @@ from api_v2.address.serializers import BrandLocationsSerializer
 from users.models import User  # ,UserDevice
 # from scarface.models import Application, Platform, Device, Topic, PushMessage
 from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer, \
-    InfluencerPhysicalAttributesSerializer, InflencerProfileDetailsSerializer, InfluencerStyleSerializer
+    InfluencerPhysicalAttributesSerializer, InflencerProfileDetailsSerializer, InfluencerStyleSerializer, \
+    InfluencerPostStyleSerializer
 from oscarapps.partner.models import PartnerFollow, Partner
 from oscarapps.influencers.models import Influencers
 from push_notification.models import APNSDevice
@@ -552,7 +553,6 @@ class InfluencerProfileStyles(APIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get', 'post')
-    serializer_class = InfluencerStyleSerializer
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
@@ -562,14 +562,14 @@ class InfluencerProfileStyles(APIView):
                 influencer = Influencers()
                 influencer.users = request.user
                 influencer.save()
-            ser = self.serializer_class(influencer, many=False)
+            ser = InfluencerStyleSerializer(influencer, many=False)
             return Response(ser.data)
         content = {"message": "user not authenticated"}
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
-            styles_data = self.serializer_class(data=request.data)
+            styles_data = InfluencerPostStyleSerializer(data=request.data)
             try:
                 influencer = Influencers.objects.get(users=request.user)
             except:
