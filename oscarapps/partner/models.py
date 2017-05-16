@@ -70,6 +70,47 @@ class SubCategory(BaseApplicationModel):
         return "{0}".format(self.name)
 
 
+class RentalTime(models.Model):
+    MONDAY = 'Monday'
+    TUESDAY = 'Tuesday'
+    WEDNESDAY = 'Wednesday'
+    THURSDAY = 'Thursday'
+    FRIDAY = 'Friday'
+    SATURDAY = 'Saturday'
+    SUNDAY = 'Sunday'
+    day_choice = (
+        (MONDAY, 'Monday'),
+        (TUESDAY, 'Tuesday'),
+        (WEDNESDAY, 'Wednesday'),
+        (THURSDAY, 'Thursday'),
+        (FRIDAY, 'Friday'),
+        (SATURDAY, 'Saturday'),
+        (SUNDAY, 'Sunday'),
+    )
+
+    AM = 'AM'
+    PM = 'PM'
+    time_period_choice = (
+        (AM, 'AM'),
+        (PM, 'PM'),
+    )
+    day = models.CharField(choices=day_choice, max_length=120)
+    start_time = models.TimeField(blank=True, null=True, verbose_name=_("Start Time"))
+    start_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
+    end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
+    end_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
+
+    class Meta:
+        verbose_name = _('Rental Time')
+
+    def __str__(self):
+
+        return self.day
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(RentalTime, self).save()
+
+
 class RentalInformation(Locations):
     MONDAY = 'Monday'
     TUESDAY = 'Tuesday'
@@ -104,6 +145,7 @@ class RentalInformation(Locations):
     start_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
     end_time = models.TimeField(blank=True, null=True, verbose_name=_("End Time"))
     end_time_period = models.CharField(max_length=2, null=True, blank=True, choices=time_period_choice, verbose_name=_('Time Period'))
+    rental_time = models.ManyToManyField(RentalTime, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Rental Information')

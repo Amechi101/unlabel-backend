@@ -217,12 +217,28 @@ class PartnerRentalInfoManageView(generic.UpdateView):
         return address
 
     def get_initial(self):
+        days = []
         try:
             location_name = self.partner.rental_info.city+", "+ self.partner.rental_info.state+", "+self.partner.rental_info.country
+            rental_days = self.partner.rental_info.rental_time.all()
+
+            for day in rental_days:
+                days.append(day.day)
         except:
             location_name = ""
-        return {'name': self.partner.name,
-                'loc': location_name}
+            rental_days = ""
+        result = {'name': self.partner.name,
+                  'loc': location_name}
+        if days:
+            result['day'] = [days[0]]
+            for i, day in enumerate(rental_days):
+                result['day_'+str(i+1)] = [days[i]]
+                result['start_time_'+str(i+1)] = day.start_time
+                result['start_time_period_'+str(i+1)] = day.start_time_period
+                result['end_time_'+str(i+1)] = day.end_time
+                result['end_time_period_'+str(i+1)] = day.end_time_period
+
+        return result
 
     def get_context_data(self, **kwargs):
 

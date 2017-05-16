@@ -29,8 +29,8 @@ urlpatterns = [
         customerViews.CustomerForgotPassword.as_view(),name='customer_forgot_password_view'),
     url(r'customer_profile_update/',
         customerViews.CustomerProfileUpdateView.as_view(),name='customer_profile_update_view'),
-    # url(r'^rest-auth/facebook/$',
-    #     customerViews.FacebookLogin.as_view(), name='fb_login'),
+    url(r'^rest-auth/facebook/$',
+        customerViews.FacebookLogin.as_view(), name='fb_login'),
     url(r'^customer_profile_deactivate/$',
         customerViews.CustomerProfileDeleteView.as_view(),name='customer_profile_delete_view'),
     ###-----product apis
@@ -43,7 +43,7 @@ urlpatterns = [
     ###-----Influencer APIS
     url(r'^influencer_forgot_password/',
         influencerViews.InfluencerForgotPassword.as_view(),name='influencer_forgot_password_view'),
-    url(r'^Influencer_partnerList/',catalogueViews.InfluencerBrandListView.as_view(),name='influencer_brand_list_view'),
+    url(r'^Influencer_partnerList/', catalogueViews.InfluencerBrandListView.as_view(), name='influencer_brand_list_view'),
     url(r'^partner_follow/', catalogueViews.PartnerFollowView.as_view(),
         name='Partner_follow_view'),
     url(r'^influencer_reserve_product/',catalogueViews.InfluencerReserveProduct.as_view(),

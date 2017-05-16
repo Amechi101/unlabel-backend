@@ -13,7 +13,7 @@ from oscar.core.compat import existing_user_fields
 from django.contrib.auth.models import Permission
 
 from oscarapps.address.models import Locations, States, Country
-from oscarapps.partner.models import Partner, Category, Style, SubCategory, RentalInformation
+from oscarapps.partner.models import Partner, Category, Style, SubCategory, RentalInformation, RentalTime
 from users.models import User
 
 
@@ -175,11 +175,48 @@ class PartnerRentalInfoForm(forms.ModelForm):
         (AM, 'AM'),
         (PM, 'PM'),
     )
-    day = forms.MultipleChoiceField(label="Days", choices=day_choice, help_text='Choose rental days')
+    day = forms.MultipleChoiceField(label="Day 1", choices=day_choice, help_text='Choose rental days')
     start_time = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30")
     start_time_period = forms.ChoiceField(label='Start Time Period', choices=time_period_choice)
     end_time = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30")
     end_time_period = forms.ChoiceField(label='End Time Period', choices=time_period_choice)
+
+    day_1 = forms.MultipleChoiceField(label="Day 2", choices=day_choice, help_text='Choose rental days', required=False)
+    start_time_1 = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30", required=False)
+    start_time_period_1 = forms.ChoiceField(label='Start Time Period', choices=time_period_choice, required=False)
+    end_time_1 = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30", required=False)
+    end_time_period_1 = forms.ChoiceField(label='End Time Period', choices=time_period_choice, required=False)
+
+    day_2 = forms.MultipleChoiceField(label="Day 3", choices=day_choice, help_text='Choose rental days', required=False)
+    start_time_2 = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30", required=False)
+    start_time_period_2 = forms.ChoiceField(label='Start Time Period', choices=time_period_choice, required=False)
+    end_time_2 = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30", required=False)
+    end_time_period_2 = forms.ChoiceField(label='End Time Period', choices=time_period_choice, required=False)
+
+    day_3 = forms.MultipleChoiceField(label="Day 4", choices=day_choice, help_text='Choose rental days', required=False)
+    start_time_3 = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30", required=False)
+    start_time_period_3 = forms.ChoiceField(label='Start Time Period', choices=time_period_choice, required=False)
+    end_time_3 = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30", required=False)
+    end_time_period_3 = forms.ChoiceField(label='End Time Period', choices=time_period_choice, required=False)
+
+    day_4 = forms.MultipleChoiceField(label="Day 5", choices=day_choice, help_text='Choose rental days', required=False)
+    start_time_4 = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30", required=False)
+    start_time_period_4 = forms.ChoiceField(label='Start Time Period', choices=time_period_choice, required=False)
+    end_time_4 = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30", required=False)
+    end_time_period_4 = forms.ChoiceField(label='End Time Period', choices=time_period_choice, required=False)
+
+    day_5 = forms.MultipleChoiceField(label="Day 6", choices=day_choice, help_text='Choose rental days', required=False)
+    start_time_5 = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30", required=False)
+    start_time_period_5 = forms.ChoiceField(label='Start Time Period', choices=time_period_choice, required=False)
+    end_time_5 = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30", required=False)
+    end_time_period_5 = forms.ChoiceField(label='End Time Period', choices=time_period_choice, required=False)
+
+    day_6 = forms.MultipleChoiceField(label="Day 7", choices=day_choice, help_text='Choose rental days', required=False)
+    start_time_6 = forms.TimeField(label="Start Time", help_text="Enter time in 12 hours format. Ex 11:30", required=False)
+    start_time_period_6 = forms.ChoiceField(label='Start Time Period', choices=time_period_choice, required=False)
+    end_time_6 = forms.TimeField(label="End Time", help_text="Enter time in 12 hours format.  Ex 11:30", required=False)
+    end_time_period_6 = forms.ChoiceField(label='End Time Period', choices=time_period_choice, required=False)
+
     contact_number = forms.CharField(required=True, label="Contact Number")
     loc = forms.CharField(label="Location", required=True)
 
@@ -191,24 +228,73 @@ class PartnerRentalInfoForm(forms.ModelForm):
 
         labels = {'zipcode': 'Zip Code'}
 
-
-
     def save(self, commit=True):
         instance = super(PartnerRentalInfoForm, self).save(commit=False)
         loc = str(self.cleaned_data['loc']).split(', ')
+        rental_day = []
         instance.city = ", ".join(str(x) for x in loc[:-2])
         instance.state = str(loc[-2:-1][0])
         if str(loc[-1:][0]) == "United States":
             instance.country = "USA"
         else:
             instance.country = str(loc[-1:][0])
+
+        if self.cleaned_data['day']:
+            obj = self.rental_days_time(self.cleaned_data['day'][0], self.cleaned_data['start_time'],
+                                        self.cleaned_data['start_time_period'], self.cleaned_data['end_time'],
+                                        self.cleaned_data['end_time_period'])
+            rental_day.append(obj)
+
+        if self.cleaned_data['day_1']:
+            obj = self.rental_days_time(self.cleaned_data['day_1'][0], self.cleaned_data['start_time_1'],
+                                        self.cleaned_data['start_time_period_1'], self.cleaned_data['end_time_1'],
+                                        self.cleaned_data['end_time_period_1'])
+            rental_day.append(obj)
+
+        if self.cleaned_data['day_2']:
+            obj = self.rental_days_time(self.cleaned_data['day_2'][0], self.cleaned_data['start_time_2'],
+                                        self.cleaned_data['start_time_period_2'], self.cleaned_data['end_time_2'],
+                                        self.cleaned_data['end_time_period_2'])
+            rental_day.append(obj)
+
+        if self.cleaned_data['day_3']:
+            obj = self.rental_days_time(self.cleaned_data['day_3'][0], self.cleaned_data['start_time_3'],
+                                        self.cleaned_data['start_time_period_3'], self.cleaned_data['end_time_3'],
+                                        self.cleaned_data['end_time_period_3'])
+            rental_day.append(obj)
+
+        if self.cleaned_data['day_4']:
+            obj = self.rental_days_time(self.cleaned_data['day_4'][0], self.cleaned_data['start_time_4'],
+                                        self.cleaned_data['start_time_period_4'], self.cleaned_data['end_time_4'],
+                                        self.cleaned_data['end_time_period_4'])
+            rental_day.append(obj)
+
+        if self.cleaned_data['day_5']:
+            obj = self.rental_days_time(self.cleaned_data['day_5'][0], self.cleaned_data['start_time_5'],
+                                        self.cleaned_data['start_time_period_5'], self.cleaned_data['end_time_5'],
+                                        self.cleaned_data['end_time_period_5'])
+            rental_day.append(obj)
+
+        if self.cleaned_data['day_6']:
+            obj = self.rental_days_time(self.cleaned_data['day_6'][0], self.cleaned_data['start_time_6'],
+                                        self.cleaned_data['start_time_period_6'], self.cleaned_data['end_time_6'],
+                                        self.cleaned_data['end_time_period_6'])
+            rental_day.append(obj)
+
         if commit:
+            instance.rental_time = rental_day
             instance.save()
         return instance
 
-
-
-
+    def rental_days_time(self, day, start_time, start_time_period, end_time, end_time_period):
+        obj = RentalTime.objects.create()
+        obj.day = day
+        obj.start_time = start_time
+        obj.start_time_period = start_time_period
+        obj.end_time = end_time
+        obj.end_time_period = end_time_period
+        obj.save()
+        return obj
 #################
 #Brand Styles
 #################
