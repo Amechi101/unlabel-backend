@@ -7,7 +7,7 @@ from oscarapi.utils import (
 )
 
 from oscarapps.partner.models import Partner, Style, Category, PartnerFollow, RentalInformation, StockRecord, \
-    SubCategory
+    SubCategory, RentalTime
 from oscarapps.address.models import Locations, States
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from oscar.apps.partner.models import StockRecord
@@ -37,10 +37,24 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ('city', 'state', 'country', 'latitude', 'longitude', 'display_string')
 
 
+class RentalTimesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RentalTime
+        fields = '__all__'
+
+
 class RentalInfoSerializer(serializers.ModelSerializer):
+    rent_time = serializers.SerializerMethodField()
+
     class Meta:
         model = RentalInformation
         fields = '__all__'
+
+    def get_rent_time(self, obj):
+        rental_times = obj.rental_time.all()
+        times = RentalTime.objects.filter(pk__in=rental_times)
+        return RentalTimesSerializer(times, many=True).data
 
 
 class PartnerSerializer(OscarModelSerializer):
