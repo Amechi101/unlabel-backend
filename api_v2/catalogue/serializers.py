@@ -340,12 +340,11 @@ class InfluencerBrandStyleSerializer(serializers.ModelSerializer):
 
 class IdSerializer(serializers.Serializer):
     id = serializers.CharField(required=True, max_length=10)
+    date_picked = serializers.CharField(max_length=120)
+    date_return = serializers.CharField(max_length=120)
 
 
 class InfluecnerBrandSpecializationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
         fields = '__all__'
-
-
-

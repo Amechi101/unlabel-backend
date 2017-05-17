@@ -84,6 +84,8 @@ class InfluencerProductReserve(models.Model):
     date_reserved = models.DateTimeField(null=False, blank=False, verbose_name=_('Product Reserved Date'))
     date_rented = models.DateTimeField(null=True, blank=True, verbose_name=_('Product Rented Date'))
     date_live = models.DateTimeField(null=True, blank=True, verbose_name=_('Product Live Date'))
+    date_picked = models.DateTimeField(null=True, blank=True, verbose_name=_('Product Picked Date'))
+    date_return = models.DateTimeField(null=True, blank=True, verbose_name=_('Product Return Date'))
     is_live = models.BooleanField(default=False)
 
     class Meta:

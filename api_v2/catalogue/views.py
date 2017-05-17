@@ -588,7 +588,6 @@ class InfluencerReserveProduct(APIView):
     http_method_names = ('post',)
     serializer_class = IdSerializer
 
-
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
@@ -611,7 +610,8 @@ class InfluencerReserveProduct(APIView):
                 influencer_product_reserved.influencer = influencer_user
                 influencer_product_reserved.product = product_to_reserve
                 influencer_product_reserved.date_reserved = datetime.now()
-
+                influencer_product_reserved.date_picked = id_ser.validated_data['date_picked']
+                influencer_product_reserved.date_return = id_ser.validated_data['date_return']
                 product_to_reserve.rental_status = 'R'
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
