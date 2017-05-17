@@ -248,6 +248,8 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     material_info = serializers.SerializerMethodField()
     sku = serializers.SerializerMethodField(source='get_sku')
     pick_date = serializers.SerializerMethodField()
+    return_date = serializers.SerializerMethodField()
+    live_date = serializers.SerializerMethodField()
 
     def get_sku(self, obj):
         try:
@@ -296,10 +298,25 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
             return "exception"
         return i.date_picked
 
+    def get_return_date(self, obj):
+        try:
+            i = InfluencerProductReserve.objects.get(product=obj)
+        except:
+            return "exception"
+        return i.date_return
+
+    def get_live_date(self, obj):
+        try:
+            i = InfluencerProductReserve.objects.get(product=obj)
+        except:
+            return "exception"
+        return i.date_live
+
     class Meta:
         model = Product
         fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
-                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes','share_url','sku', 'pick_date']
+                  'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes', 'share_url', 'sku',
+                  'pick_date', 'return_date', 'live_date']
 
 
 class InfluencerBrandSerializer(serializers.ModelSerializer):

@@ -684,7 +684,7 @@ class InfluencerRentedProducts(APIView):
     """
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get')
+    http_method_names = 'get'
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer is True:
