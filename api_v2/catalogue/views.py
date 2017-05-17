@@ -654,7 +654,7 @@ class InfluencerReservedProducts(APIView):
     pagination_class = pagination.LimitOffsetPagination
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
-    http_method_names = ('get')
+    http_method_names = 'get'
     serializer_class = InfluencerBrandProductSerializer
 
     def get(self, request, *args, **kwargs):
@@ -670,7 +670,7 @@ class InfluencerReservedProducts(APIView):
             for brand in brands:
                 prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
                     'product', flat=True)
-                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='U')
+                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='R')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
                 influencer_reserved_products.append(brand_product_ser.data)
