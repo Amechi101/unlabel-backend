@@ -117,13 +117,13 @@ class NotificationDetails(models.Model):
     general_notification = 'general_notification'
 
     type_choice = (
-        (product_rented, 'Producted Rented'),
+        (product_rented, 'Product Rented'),
         (product_reservation_lost, 'Product Reservation Lost'),
         (product_not_live, 'Product Not Live'),
-        (live_not_returned,'Live And Not Returned'),
-        (followed_brand_product_added,'Followed Brand Added Product'),
-        (new_brand_added,'New Brand Added'),
-        (general_notification,'General Notification')
+        (live_not_returned, 'Live And Not Returned'),
+        (followed_brand_product_added, 'Followed Brand Added Product'),
+        (new_brand_added, 'New Brand Added'),
+        (general_notification, 'General Notification')
     )
 
     notification_type = models.CharField(max_length=4, null=True, blank=True,choices=type_choice )

@@ -120,17 +120,17 @@ def update_influencer_product_rental_info(sender, instance, **kwargs):
                 try:
                     influencer_product_reserve = InfluencerProductReserve.objects.get(product=child)
                     influencer_user = Influencers.objects.get(pk=influencer_product_reserve.influencer.id)
-                    if instance.rental_status == "REN" and current_obj.rental_status == "NON":
+                    if instance.rental_status == "REN" and current_obj.rental_status == "R":
                         child.rental_status = "REN"
                         child.save()
                         influencer_product_reserve.date_rented = datetime.now()
                         influencer_product_reserve.save()
                         notification = NotificationDetails()
-                        notification.notification_type='pr'
-                        notification.payload=json.dumps({'type':'pr','product_id':current_obj.pk})
-                        notification.sent=False
-                        notification.text="You have rented " + str(current_obj.title) + "."
-                        notification.user=influencer_user.users
+                        notification.notification_type = 'pr'
+                        notification.payload = json.dumps({'type': 'pr', 'product_id': current_obj.pk})
+                        notification.sent = False
+                        notification.text = "You have rented " + str(current_obj.title) + "."
+                        notification.user = influencer_user.users
                         notification.save()
                 except:
                     print("-->error in signal--> changing status of parent")
@@ -138,15 +138,15 @@ def update_influencer_product_rental_info(sender, instance, **kwargs):
             try:
                 influencer_product_reserve = InfluencerProductReserve.objects.get(product=current_obj)
                 influencer_user = Influencers.objects.get(pk=influencer_product_reserve.influencer)
-                if instance.rental_status == "REN" and current_obj.rental_status == "NON":
+                if instance.rental_status == "REN" and current_obj.rental_status == "R":
                     influencer_product_reserve.date_rented = datetime.now()
                     influencer_product_reserve.save()
                     notification = NotificationDetails()
-                    notification.notification_type='pr'
-                    notification.payload=json.dumps({'type':'pr','product_id':current_obj.pk})
-                    notification.sent=False
-                    notification.text="You have rented " + str(current_obj.title) + "."
-                    notification.user=influencer_user.users
+                    notification.notification_type = 'pr'
+                    notification.payload=json.dumps({'type': 'pr', 'product_id': current_obj.pk})
+                    notification.sent = False
+                    notification.text = "You have rented " + str(current_obj.title) + "."
+                    notification.user = influencer_user.users
                     notification.save()
                 # if instance.rental_status == "RET" and current_obj.rental_status == "REN":
                 #     current_obj.rental_status='RET'
