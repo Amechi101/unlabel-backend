@@ -4,6 +4,7 @@ from haversine import haversine
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import auth
+from django.core.mail.message import EmailMessage
 from django.db.models import Max
 from rest_framework import authentication
 from rest_framework.views import APIView
@@ -612,6 +613,7 @@ class InfluencerReserveProduct(APIView):
                 influencer_product_reserved.date_reserved = datetime.now()
                 influencer_product_reserved.date_picked = id_ser.validated_data['date_picked']
                 influencer_product_reserved.date_return = id_ser.validated_data['date_return']
+                # self.send_email_for_reserved_product(product_to_reserve, influencer_user)  # Email notification when product is reserved
                 product_to_reserve.rental_status = 'R'
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
@@ -645,6 +647,40 @@ class InfluencerReserveProduct(APIView):
         else:
             content = {"message": "Invalid Product id."}
             return Response(content, status=status.HTTP_200_OK)
+
+    def send_email_for_reserved_product(self, product_to_reserve, influencer_user):
+        """
+            Send email when product is reserved
+        """
+        stock_brand = StockRecord.objects.filter(product=product_to_reserve)[0].partner  # partner name
+        brand_user = stock_brand.users.all()[0]  # partner's mail id
+        self.mail_send(brand_user)  # send mail to partner
+        self.mail_send(influencer_user.users)  # send mail to influencer
+
+    def mail_send(self, to_mail):
+        """
+            Send mail to a recipient
+        """
+        mailid = to_mail
+        email = EmailMessage()
+        email.subject = "Product Reserved"
+        email.content_subtype = "html"
+        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                        <body>
+                        <h2>Welcome to unlabel</h2>
+                        <p style = 'font-size:14px;'>Hello,</p>
+                        <p>Product has been succesfully reserved.<br/>
+                        </p>
+                        <br/>
+                        <br/>
+                        Thank you!<br/><br/>
+                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                        </body>
+                        </head>
+                        </html>"""
+        email.from_email = "Unlabel App"
+        email.to = [mailid]
+        email.send()
 
 
 class InfluencerReservedProducts(APIView):
@@ -862,9 +898,9 @@ class InfluencerProductNote(APIView):
 
 
 class InfluencerProductGoLive(APIView):
-    '''
-    API for making producy live
-    '''
+    """
+    API for making product live
+    """
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('post')
@@ -889,6 +925,8 @@ class InfluencerProductGoLive(APIView):
                         original_product.save()
                     reserved_product.status = 'L'
                     reserved_product.save()
+                    influencer_user = Influencers.objects.get(users=request.user)
+                    # self.send_email_for_live_product(reserved_product, influencer_user)  # Email notification when product is Live
                     influencer_product_details = InfluencerProductReserve.objects.get(product=reserved_product)
                     influencer_product_details.is_live=True
                     influencer_product_details.date_live=datetime.now()
@@ -902,6 +940,40 @@ class InfluencerProductGoLive(APIView):
         else:
             content = {'message': 'Please login as influencer'}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+    def send_email_for_live_product(self, product_to_live, influencer_user):
+        """
+            Send email when product is live
+        """
+        stock_brand = StockRecord.objects.filter(product=product_to_live)[0].partner  # partner name
+        brand_user = stock_brand.users.all()[0]  # partner's mail id
+        self.mail_send_live(brand_user)  # send mail to partner
+        self.mail_send_live(influencer_user.users)  # send mail to influencer
+
+    def mail_send_live(self, to_mail):
+        """
+            Send mail to a recipient
+        """
+        mailid = to_mail
+        email = EmailMessage()
+        email.subject = "Product Live"
+        email.content_subtype = "html"
+        email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                        <body>
+                        <h2>Welcome to unlabel</h2>
+                        <p style = 'font-size:14px;'>Hello,</p>
+                        <p>Product has been live.<br/>
+                        </p>
+                        <br/>
+                        <br/>
+                        Thank you!<br/><br/>
+                        <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                        </body>
+                        </head>
+                        </html>"""
+        email.from_email = "Unlabel App"
+        email.to = [mailid]
+        email.send()
 
 
 class InfluencerRemoveProductImage(APIView):

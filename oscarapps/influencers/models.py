@@ -6,6 +6,7 @@ import string
 from datetime import datetime
 from decimal import Decimal
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail.message import EmailMessage
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
@@ -18,7 +19,7 @@ from oscarapps.address.models import Locations
 from oscarapps.catalogue.models import Product
 from users.models import User
 from push_notification.models import APNSDevice,NotificationDetails, SNS
-from  oscarapps.partner.models import Style
+from oscarapps.partner.models import Style, StockRecord
 
 
 class BaseApplicationModel(models.Model):
@@ -150,11 +151,49 @@ def update_influencer_product_rental_info(sender, instance, **kwargs):
                     notification.save()
                 # if instance.rental_status == "RET" and current_obj.rental_status == "REN":
                 #     current_obj.rental_status='RET'
+                #     product_to_return = Product.objects.get(product=current_obj)
+                #     self.send_email_for_reserved_product(product_to_return, influencer_user.users)
                 #     current_obj.save()
             except:
                 print("-->error in signal--> changing status of standalone")
     except:
         pass
+
+
+def send_email_for_reserved_product(self, product_to_return, influencer_user):
+        """
+            Send email when product is returned
+        """
+        stock_brand = StockRecord.objects.filter(product=product_to_return)[0].partner  # partner name
+        brand_user = stock_brand.users.all()[0]  # partner's mail id
+        self.mail_send(brand_user)  # send mail to partner
+        self.mail_send(influencer_user.users)  # send mail to influencer
+
+
+def mail_send(self, to_mail):
+    """
+        Send mail to a recipient
+    """
+    mailid = to_mail
+    email = EmailMessage()
+    email.subject = "Product Returned"
+    email.content_subtype = "html"
+    email.body = """<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'><html><head><META http-equiv='Content-Type' content='text/html; charset=utf-8'></head>
+                    <body>
+                    <h2>Welcome to unlabel</h2>
+                    <p style = 'font-size:14px;'>Hello,</p>
+                    <p>Product has been returned.<br/>
+                    </p>
+                    <br/>
+                    <br/>
+                    Thank you!<br/><br/>
+                    <p style='font-size:11px;'><i>*** This is a system generated email; Please do not reply. ***</i></p>
+                    </body>
+                    </head>
+                    </html>"""
+    email.from_email = "Unlabel App"
+    email.to = [mailid]
+    email.send()
 
 
 pre_save.connect(update_influencer_product_rental_info, sender=Product, dispatch_uid="update_rental_date")
