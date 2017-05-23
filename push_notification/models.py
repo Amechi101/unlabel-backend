@@ -117,7 +117,7 @@ class NotificationDetails(models.Model):
     general_notification = 'general_notification'
 
     type_choice = (
-        (product_rented, 'Product Rented'),
+        (product_rented, 'Producted Rented'),
         (product_reservation_lost, 'Product Reservation Lost'),
         (product_not_live, 'Product Not Live'),
         (live_not_returned, 'Live And Not Returned'),
