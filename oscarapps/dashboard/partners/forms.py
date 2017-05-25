@@ -282,8 +282,9 @@ class PartnerRentalInfoForm(forms.ModelForm):
             rental_day.append(obj)
 
         if commit:
-            instance.rental_time = rental_day
             instance.save()
+            for r_day in rental_day:
+                instance.rental_time.add(r_day)
         return instance
 
     def rental_days_time(self, day, start_time, start_time_period, end_time, end_time_period):
