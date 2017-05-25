@@ -590,6 +590,7 @@ class InfluencerReserveProduct(APIView):
     serializer_class = IdSerializer
 
     def post(self, request, *args, **kwargs):
+
         if request.user.is_authenticated() and request.user.is_influencer is True:
             try:
                 influencer_user = Influencers.objects.get(users=request.user)
@@ -621,7 +622,7 @@ class InfluencerReserveProduct(APIView):
                     base_product.save()
                 influencer_product_reserved.save()
                 product_to_reserve.save()
-                content = {"message": "Product reservered successfully."}
+                content = {"message": "Product reserved successfully."}
                 return Response(content, status=status.HTTP_200_OK)
             elif product_to_reserve.rental_status == 'R':
                 try:
