@@ -637,7 +637,7 @@ class InfluencerReserveProduct(APIView):
                 unreserve_detail.type = 'SELF'
                 unreserve_detail.save()
                 product_reserved.delete()
-                product_to_reserve.status = "U"
+                product_to_reserve.rental_status = 'U'
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
                     base_product.rental_status = 'U'
