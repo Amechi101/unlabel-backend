@@ -709,7 +709,7 @@ class InfluencerReservedProducts(APIView):
                     'product', flat=True)
                 brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='R')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
-                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
+                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd ,context={'request':request})
                 influencer_reserved_products.append(brand_product_ser.data)
             results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)

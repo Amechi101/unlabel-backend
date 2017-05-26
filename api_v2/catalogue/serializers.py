@@ -241,8 +241,7 @@ class StateSerializer(serializers.ModelSerializer):
 class InfluencerProductSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-    attributes = ProductAttributeValueSerializer(
-        many=True, required=False, source="attribute_values")
+    attributes = ProductAttributeValueSerializer(many=True, required=False, source="attribute_values")
     share_url = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     material_info = serializers.SerializerMethodField()
@@ -319,6 +318,48 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
                   'pick_date', 'return_date', 'live_date']
 
 
+class InfluencerBrandInfoSerializer(serializers.ModelSerializer):
+    rental_info = RentalInfoSerializer()
+    soonest_pickup_date = serializers.SerializerMethodField(source='get_soonest_pickup_date')
+    soonest_return_date = serializers.SerializerMethodField()
+    soonest_live_date = serializers.SerializerMethodField()
+
+    def influencer_user(self):
+        request = self.context['request']
+        inf_user = Influencers.objects.get(users=request.user)
+        return inf_user
+
+    def get_soonest_pickup_date(self, obj):
+        try:
+            inf_user = self.influencer_user()
+            i = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj).order_by('date_picked')
+        except:
+            return "exception"
+        return i[0].date_picked
+
+    def get_soonest_return_date(self, obj):
+        try:
+            inf_user = self.influencer_user()
+            i = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj).order_by('date_return')
+        except:
+            return "exception"
+        return i[0].date_return
+
+    def get_soonest_live_date(self, obj):
+        try:
+            inf_user = self.influencer_user()
+            i = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj).order_by('date_live')
+        except:
+            return "exception"
+        return i[0].date_live
+
+    class Meta:
+        model = Partner
+        fields = ['id', 'rental_info', 'code', 'name', 'created', 'modified', 'slug', 'image', 'description',
+                  'is_active', 'location', 'users', 'style', 'category', 'sub_category', 'soonest_pickup_date',
+                  'soonest_return_date', 'soonest_live_date']
+
+
 class InfluencerBrandSerializer(serializers.ModelSerializer):
     rental_info = RentalInfoSerializer()
 
@@ -329,7 +370,7 @@ class InfluencerBrandSerializer(serializers.ModelSerializer):
 
 class InfluencerBrandProductSerializer(serializers.Serializer):
     products = InfluencerProductSerializer(many=True)
-    brand = InfluencerBrandSerializer()
+    brand = InfluencerBrandInfoSerializer()
 
     def validate(self, attrs):
         return attrs
