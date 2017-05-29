@@ -709,7 +709,7 @@ class InfluencerReservedProducts(APIView):
                     'product', flat=True)
                 brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='R')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
-                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd ,context={'request':request})
+                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd, context={'request':request})
                 influencer_reserved_products.append(brand_product_ser.data)
             results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)
@@ -738,7 +738,7 @@ class InfluencerRentedProducts(APIView):
                     'product', flat=True)
                 brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='REN')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
-                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
+                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd, context={'request':request})
                 influencer_rented_products.append(brand_product_ser.data)
             results_dict = {'results': influencer_rented_products}
             return Response(results_dict)
@@ -782,7 +782,7 @@ class InfluencerLiveProducts(APIView):
                     'product', flat=True)
                 brand_prod = Product.objects.filter(pk__in=prod_stock, status='L')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
-                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd)
+                brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd, context={'request':request})
                 influencer_reserved_products.append(brand_product_ser.data)
             results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)
