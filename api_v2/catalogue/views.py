@@ -784,6 +784,7 @@ class InfluencerLiveProducts(APIView):
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd, context={'request':request})
                 influencer_reserved_products.append(brand_product_ser.data)
+
             results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)
 
@@ -850,10 +851,10 @@ class InfluencerProductImagesView(APIView):
 
 
 class InfluencerProductNote(APIView):
-    '''
-    View for adding product note and viewing current
-    product note
-    '''
+    """
+        View for adding product note and viewing current
+        product note
+    """
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get', 'post')
@@ -909,6 +910,7 @@ class InfluencerProductGoLive(APIView):
     def post(self, request, *args, **kwargs):
         if request.user.is_authenticated() and request.user.is_influencer:
             if 'prod_id' in request.data:
+
                 try:
                     reserved_product = Product.objects.get(pk=request.data['prod_id'])
                 except:

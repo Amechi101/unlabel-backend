@@ -351,7 +351,7 @@ class InfluencerBrandInfoSerializer(serializers.ModelSerializer):
             i = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj).order_by('date_live')
         except:
             return "exception"
-        return i[0].date_live
+        return i[0].date_live.strftime("%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Partner
