@@ -153,7 +153,8 @@ INSTALLED_APPS = [
 
     ### for user
     'users',
-    'push_notification'
+    'push_notification',
+    'import_export'
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
