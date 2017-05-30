@@ -76,3 +76,4 @@ static3==0.5.1
 stripe==1.48.1
 tzlocal==1.2.2
 Unidecode==0.4.19
+django-import-export==0.5.1
