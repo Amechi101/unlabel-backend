@@ -6,13 +6,15 @@ from oscar.apps.dashboard.users.forms import UserSearchForm as CoreUserSearchFor
 
 class UserSearchForm(CoreUserSearchForm):
 
-    Influencer = 'Influencers'
+    Influencers = 'Influencers'
     Brands = 'Brands'
     All = 'All'
+    Customers = 'Customers'
     USER_CHOICES = (
         (All, _('All')),
-        (Influencer, _('Influencers')),
+        (Influencers, _('Influencers')),
         (Brands, _('Brands')),
+        (Customers, _('Customers')),
     )
 
     type = forms.ChoiceField(label="Type", choices=USER_CHOICES,required=False)
