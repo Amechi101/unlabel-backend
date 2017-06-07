@@ -24,6 +24,7 @@
         {% endblock %}
 
         {# Block where global CSS will go. #}
+        <link href="{% static 'unlabel/dist/css/bundle.css' %}">
         {% block styles %}{% endblock %}
 
         {# Additional CSS - specific to certain pages #}
@@ -51,6 +52,7 @@
 
         {# Local scripts #}
         {% block scripts %}
+            <script src="{% static 'unlabel/dist/js/bundle.js' %}"></script>
         {% endblock %}
 
         {# Additional JS scripts #}
