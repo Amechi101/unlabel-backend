@@ -11,6 +11,7 @@ from oscar.apps.dashboard.catalogue.forms import ProductForm as CoreProductForm
 from oscar.apps.dashboard.catalogue.forms import StockRecordForm as \
     CoreStockRecordForm
 from oscar.apps.dashboard.catalogue.forms import ProductImageForm
+from oscar.apps.dashboard.catalogue.forms import ProductClassSelectForm as CoreProductClassSelectForm
 
 
 Product = get_model('catalogue', 'Product')
@@ -351,3 +352,11 @@ class SizeOptionCreateForm(forms.ModelForm):
     class Meta:
         model=AttributeOption
         fields = ['group','option']
+
+
+class ProductClassSelectForm(CoreProductClassSelectForm):
+
+    product_class = forms.ModelChoiceField(
+        label=_("Create a new product of department"),
+        empty_label=_("-- Choose type --"),
+        queryset=ProductClass.objects.all())
