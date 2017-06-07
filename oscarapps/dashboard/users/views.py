@@ -99,6 +99,8 @@ class IndexView(BulkEditMixin, FormMixin, SingleTableView):
                 queryset = queryset.filter(is_influencer=True)
             elif data['type'] == 'Brands':
                 queryset = queryset.filter(is_brand=True)
+            elif data['type'] == 'Customers':
+                queryset = queryset.filter(is_brand=False, is_influencer=False, is_staff=False)
 
         return queryset
 
