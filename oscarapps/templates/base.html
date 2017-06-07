@@ -24,11 +24,12 @@
         {% endblock %}
 
         {# Block where global CSS will go. #}
-        <link href="{% static 'unlabel/dist/css/bundle.css' %}">
         {% block styles %}{% endblock %}
 
         {# Additional CSS - specific to certain pages #}
         {% block extrastyles %}{% endblock %}
+
+        <link rel="stylesheet" type="text/css" href="{% static 'unlabel/dist/css/bundle.css' %}" />
 
         {% block extrahead %}{% endblock %}
 
