@@ -32,7 +32,7 @@ class IndexView(BulkEditMixin, FormMixin, SingleTableView):
     form_class = UserSearchForm
     table_class = UserTable
     context_table_name = 'users'
-    desc_template = _('%(main_filter)s %(email_filter)s %(name_filter)s')
+    desc_template = _('%(main_filter)s %(email_filter)s %(name_filter)s ')
     description = ''
 
     def dispatch(self, request, *args, **kwargs):
@@ -94,6 +94,11 @@ class IndexView(BulkEditMixin, FormMixin, SingleTableView):
             queryset = queryset.filter(condition).distinct()
             self.desc_ctx['name_filter'] \
                 = _(" with name matching '%s'") % data['name']
+        if data['type']:
+            if data['type']=='Influencers':
+                queryset = queryset.filter(is_influencer=True)
+            elif data['type'] == 'Brands':
+                queryset = queryset.filter(is_brand=True)
 
         return queryset
 
