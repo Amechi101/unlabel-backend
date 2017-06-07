@@ -157,7 +157,7 @@ class RentalInformation(Locations):
 
 class Partner(AbstractPartner, BaseApplicationModel):
     slug = models.SlugField(max_length=255, default="", blank=True, null=True, verbose_name=_('Brand Slug'))
-    image = models.ImageField(_('Image'), upload_to=_('Brands'), blank=True, null=True, max_length=255)
+    image = models.ImageField(_('Image'), upload_to='Brands', blank=True, null=True, max_length=255)
     location = models.ForeignKey(Locations, models.SET_NULL, null=True, blank=True, default="", related_name=_('partner_location'),
                                  verbose_name=_('Location'))
     description = models.TextField(blank=True, default="", verbose_name=_('Description'))

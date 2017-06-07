@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from oscar.apps.catalogue.models import Category,ProductClass
 from oscarapps.catalogue.models import Product
+from oscarapps.partner.models import Style
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from push_notification.models import APNSDevice, NotificationDetails, SNS
 
@@ -218,3 +219,32 @@ class Command(BaseCommand):
 
         print("")
         print("Product types added. ")
+
+        style_name=["Avant-Garde","Athletic","Bohemian","Casual","Classic","Contemporary","Dressy","Eccentric","Formal",
+                    "Goth + Rocker","Hipster","Minimal","Modern","Preppy + Yacht","Quirky","Skater + Surfer","Streetstyle",
+                    "Vintage"]
+        style_desc = ["Avant-Garde is architectural, edgy and ultramodern and often makes a dramatic statement. The designs are new, unusual or experimental ideas.",
+                      "Designed for athletic workouts at a gymnasium, referred to as active wear. It is designed to keep the activity, comfort and practicality in mind.",
+                      "Bohemian, or boho, style is relaxed and lived in & free-spirited with an emphasis on natural fabrics, earthy tones & gypsy looks. This style is often called hippie-chic, or even boho-chic.",
+                      "A  more informal attire for men and women, worn outside of the formal setting. The clothing are informal and emphasize relaxation.",
+                      "Characterized by tailored & clean cuts, a style that has stood the test of time and never looks out dated.",
+                      "Popular & trendy designs that are in vogue for one season and then are replaced with new fashions that better reflect the fashion market.",
+                      "Ensembles and pieces with sleek clean lines and has an innate sense of formality and elegance.",
+                      "Bold, different and daring define this style. The style is adventurous , risky and meant to stands out.",
+                      "Upscale clothing that is worn at formal social events like weddings or formal parties.",
+                      "Style marked by conspicuously dark, mysterious, antiquated and complex features.",
+                      "Defined by individualism, the style favors unconventional patterns and uncommon trends",
+                      "Extreme simplicity, clean cuts and monotone color pallet with emphasis on’ Less is More’",
+                      "A combination of trends and representative of modern tastes and lifestyles. The modern style is seasonal and changes from one season to the next.",
+                      "Characterized by neat and high class look. The style is very close to classic and favors timeless pieces over trendy.",
+                      "With natural ability to mix and match colors, patterns, and textures, the style type is playful  & stands out.",
+                      "Style that gives a young at heart, easy going and athletic vibe and created with skateboarding and surfing cultures in mind.",
+                      "Style established and made popular by youth culture. The fashion is representative of culture and not created in the studios.",
+                      "Style is retro and hints at a specific period of fashion from a bygone era."]
+
+        for index in range(0,17):
+            style = Style.objects.create(name=style_name[index],description=style_desc[index])
+            style.save()
+        print("")
+        print("Styles added.")
+        print("")
