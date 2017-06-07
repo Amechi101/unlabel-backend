@@ -10,6 +10,7 @@ from django.core import exceptions
 from oscar.apps.dashboard.catalogue.views import ProductSearchForm, ProductClassSelectForm, ProductTable, Product
 from oscar.apps.dashboard.catalogue.views import ProductCreateUpdateView as \
     CoreProductCreateUpdateView
+from oscar.apps.dashboard.catalogue.views import ProductCreateRedirectView as CoreProductCreateRedirectView
 from oscar.apps.dashboard.catalogue.views import ProductListView as CoreProductListView
 from oscar.apps.dashboard.catalogue.views import ProductDeleteView as \
     CoreProductDeleteView
@@ -20,6 +21,7 @@ from oscarapps.dashboard.catalogue.forms import AttributeOptionForm, SizeOptionF
 from oscar.core.loading import get_model
 from oscarapps.dashboard.catalogue.forms import InfluencerProductImageFormSet
 from .forms import ReservedProductSearchForm
+from oscar.apps.dashboard.catalogue.views import ProductClassListView as CoreProductClassListView
 
 InfluencerProductReserve = get_model('influencers', 'InfluencerProductReserve')
 Partner = get_model('partner', 'Partner')
@@ -423,3 +425,17 @@ class ReservedProductsView(ListView):
         ctx['form'] = self.form
         ctx['is_filtered'] = self.is_filtered
         return ctx
+
+# class ProductClassListView(CoreProductClassListView):
+#
+#     def get_context_data(self, *args, **kwargs):
+#         ctx = super(ProductClassListView, self).get_context_data(*args,
+#                                                                  **kwargs)
+#         ctx['title'] = _("Product Departments")
+#         return ctx
+
+class ProductCreateRedirectView(CoreProductCreateRedirectView):
+
+    def get_invalid_product_class_url(self):
+        messages.error(self.request, _("Please choose a product department"))
+        return reverse('dashboard:catalogue-product-list')
