@@ -7,3 +7,15 @@ body {
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
 }
+
+.mobile-only {
+  @media $mq_m {
+    display none !important
+  }
+}
+
+.desktop-only {
+  @media $mq_s_only {
+    display none !important
+  }
+}

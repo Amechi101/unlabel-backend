@@ -1,0 +1,24 @@
+$mq_retina = '(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)'
+$media_m = '(min-width: 640px)'
+$media_m_only = '(min-width: 640px) and (max-width: 1023px)'
+$media_l = '(min-width: 1024px)'
+$media_mobile_only = '(max-width: 639px)'
+$media_desktop_only = $media_m
+$media_xl = '(min-width: 1280px)'
+$media_xxl = '(min-width: 1440px)'
+
+$mq_breakpoints_sizes = 640px 1024px 1280px 1440px
+$mq_breakpoints_name = 's' 'm' 'l' 'xl' 'xxl'
+
+$mq_s_only = '(max-width: '+($mq_breakpoints_sizes[0] - 1)+')'
+
+$mq_m = '(min-width: '+$mq_breakpoints_sizes[0]+')'
+$mq_m_only = '(min-width: '+$mq_breakpoints_sizes[0]+') and (max-width: '+($mq_breakpoints_sizes[1] - 1)+')'
+
+$mq_l = '(min-width: '+$mq_breakpoints_sizes[1]+')'
+$mq_l_only = '(min-width: '+$mq_breakpoints_sizes[1]+') and (max-width: '+($mq_breakpoints_sizes[2] - 1)+')'
+
+$mq_xl = '(min-width: '+$mq_breakpoints_sizes[2]+')'
+$mq_xl_only = '(min-width: '+$mq_breakpoints_sizes[2]+') and (max-width: '+($mq_breakpoints_sizes[3] - 1)+')'
+
+$mq_xxl = '(min-width: '+$mq_breakpoints_sizes[3]+')'
