@@ -1,11 +1,20 @@
-# Es6 Starter
+# Unlabel - Frontend
 
-## Start a project
+## Requirements
+- [Node](https://docs.npmjs.com/getting-started/what-is-npm)
 
+## Install
 ```
-git clone git@github.com:guins/wheel-es6.git PROJECT-NAME
-cd PROJECT-NAME
-git remote set-url origin PROJECT-REMOTE-URL
-git push -u origin --all
-git push -u origin --tags
+	npm install # install all dependencies
+```
+
+## Develop
+```
+	npm run dev # compile css and js files for development and start a local server with hot-reloading proxying (127.0.0.1:8000)[http://127.0.0.1:8000/]
+```
+
+## Deploy
+```
+	npm run prod # compile and compress css and js files for production
+
 ```

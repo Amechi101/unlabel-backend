@@ -1,1 +1,1 @@
-html/build/*.js
+dist/**/*.js
