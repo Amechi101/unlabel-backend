@@ -234,7 +234,7 @@ class Command(BaseCommand):
                       "Upscale clothing that is worn at formal social events like weddings or formal parties.",
                       "Style marked by conspicuously dark, mysterious, antiquated and complex features.",
                       "Defined by individualism, the style favors unconventional patterns and uncommon trends",
-                      "Extreme simplicity, clean cuts and monotone color pallet with emphasis on’ Less is More",
+                      "Extreme simplicity, clean cuts and monotone color pallet with emphasis on Less is More",
                       "A combination of trends and representative of modern tastes and lifestyles. The modern style is seasonal and changes from one season to the next.",
                       "Characterized by neat and high class look. The style is very close to classic and favors timeless pieces over trendy.",
                       "With natural ability to mix and match colors, patterns, and textures, the style type is playful  & stands out.",
