@@ -78,6 +78,10 @@ body {
 }
 a {
   color: #232323;
+  text-decoration: none;
+}
+a:hover {
+  color: #232323;
 }
 .cols {
   display: -webkit-box;
@@ -120,6 +124,33 @@ a {
   -webkit-box-align: end;
       -ms-flex-align: end;
           align-items: flex-end;
+}
+.cta {
+  display: inline-block;
+  padding: 18px 32px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 14px;
+  border: 2px solid #232323;
+  color: #232323;
+}
+.cta:hover {
+  text-decoration: none;
+  color: #232323;
+}
+.cta--dark {
+  color: #fff;
+  background-color: #232323;
+  border-color: #232323;
+}
+.cta--dark:hover {
+  color: #fff;
 }
 .header {
   z-index: 10;
