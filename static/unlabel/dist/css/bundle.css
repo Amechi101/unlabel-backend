@@ -67,11 +67,11 @@ body {
   color: #232323;
 }
 a {
-  color: #232323;
+  color: currentColor;
   text-decoration: none;
 }
 a:hover {
-  color: #232323;
+  color: currentColor;
 }
 .cols {
   display: -webkit-box;
@@ -144,8 +144,8 @@ a:hover {
 }
 @font-face {
   font-family: 'fonticon';
-  src: url("../webfonts/fonticon.eot?bghvtf");
-  src: url("../webfonts/fonticon.eot?bghvtf#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?bghvtf") format('truetype'), url("../webfonts/fonticon.woff?bghvtf") format('woff'), url("../webfonts/fonticon.svg?bghvtf#fonticon") format('svg');
+  src: url("../webfonts/fonticon.eot?d7zpu2");
+  src: url("../webfonts/fonticon.eot?d7zpu2#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?d7zpu2") format('truetype'), url("../webfonts/fonticon.woff?d7zpu2") format('woff'), url("../webfonts/fonticon.svg?d7zpu2#fonticon") format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -160,6 +160,9 @@ a:hover {
 /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.fonticon--instagram:before {
+  content: "\e90b";
 }
 .fonticon--carouselArrowLeft:before {
   content: "\e900";
@@ -197,6 +200,54 @@ a:hover {
 .fonticon {
   vertical-align: middle;
   text-indent: 0;
+  color: currentColor;
+}
+.footer {
+  background-color: #232323;
+  color: #fff;
+}
+.footer__bar {
+  padding: 0 32px;
+}
+.footer__bar--top .footer__nav {
+  position: relative;
+  height: 96px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.footer__bar--top .footer__navList {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.footer__bar--bottom {
+  height: 57px;
+  border-top: 1px solid #3d3d3d;
+}
+.footer__logo {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+}
+.footer__copyrightSymbol {
+  font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;
+}
+.footer__nav--primary {
+  font-family: 'FaroTrial-BoldLucky';
+  text-align: center;
+  margin: 0 auto;
+}
+.footer__nav--primary li + li {
+  margin-left: 46px;
+}
+.footer__navList--legal li + li {
+  margin-left: 32px;
+}
+.footer__navList--social {
+  margin-left: 32px;
 }
 .header {
   z-index: 10;

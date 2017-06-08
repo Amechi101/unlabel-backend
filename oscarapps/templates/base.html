@@ -43,6 +43,55 @@
         {# Main content goes in this 'layout' block #}
         {% block layout %}{% endblock %}
 
+        <footer class="footer">
+            <div class="footer__bar footer__bar--top">
+                <nav class="footer__nav footer__nav--primary nav--inline">
+                    <a class="footer__logo" href="" title="Home">Home<span class="footer__logo fonticon fonticon--logo"></a>
+                    <ul class="footer__navList nav__list">
+                        <li>
+                            <a href="" title="About us">About us</a>
+                        </li>
+                        <li>
+                            <a href="" title="For brands">For brands</a>
+                        </li>
+                        <li>
+                            <a href="" title="For creators">For creators</a>
+                        </li>
+                        <li>
+                            <a href="" title="FAQ">FAQ</a>
+                        </li>
+                        <li>
+                            <a href="" title="Contact us">Contact us</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__bar footer__bar--bottom cols cols--align-middle">
+                <div class="footer__copyright"><span class="footer__copyrightSymbol">©</span> 2017 Unlabel. All rights reserved</div>
+                <nav class="footer__nav footer__nav--secondary nav--inline">
+                    <ul class="footer__navList footer__navList--legal nav__list">
+                        <li>
+                            <a href="" title="Terms">Terms</a>
+                        </li>
+                        <li>
+                            <a href="" title="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                    <ul class="footer__navList footer__navList--social nav__list">
+                        <li>
+                            <a href="" title="Share on Facebook"><span class="fonticon fonticon--facebook"></span></a>
+                        </li>
+                        <li>
+                            <a href="" title="Share on Instagram"><span class="fonticon fonticon--instagram"></span></a>
+                        </li>
+                        <li>
+                            <a href="" title="Share on Pinterest"><span class="fonticon fonticon--pinterest"></span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </footer>
+
         {# Scripts loaded from a CDN. #}
         {% block cdn_scripts %}
             <!-- jQuery -->

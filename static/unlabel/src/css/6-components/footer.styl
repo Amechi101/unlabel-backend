@@ -1,0 +1,59 @@
+.footer {
+  background-color $color_darkGrey
+  color: #fff 
+}
+
+.footer__bar {
+  padding: 0 32px
+  
+  &--top {
+    .footer__nav {
+      position relative
+      height: 96px
+      justify-content center
+    }
+    
+    .footer__navList {
+      justify-content center
+    }
+  }
+  
+  &--bottom {
+    height: 57px
+    border-top: 1px solid #3D3D3D
+  }
+}
+
+.footer__logo {
+  position absolute
+  top: 50%
+  left: 0
+  transform translate(0, -50%)
+}
+
+.footer__copyrightSymbol {
+  font-family Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif // todo: make util ?
+}
+
+.footer__nav {
+  &--primary {
+    font-family $font_bold
+    text-align center
+    margin: 0 auto
+    li + li {
+      margin-left: 46px
+    }
+  }
+}
+
+.footer__navList {
+  &--legal {
+    li + li {
+      margin-left: 32px
+    }
+  }
+
+  &--social {
+    margin-left: 32px
+  } 
+}
