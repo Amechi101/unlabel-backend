@@ -222,6 +222,7 @@ a:hover {
           justify-content: center;
 }
 .footer__bar--bottom {
+  font-size: 11px;
   height: 57px;
   border-top: 1px solid #3d3d3d;
 }
@@ -248,6 +249,7 @@ a:hover {
 }
 .footer__navList--social {
   margin-left: 32px;
+  font-size: 16px;
 }
 .header {
   z-index: 10;
@@ -268,14 +270,31 @@ a:hover {
   font-family: 'FaroTrial-BoldLucky';
 }
 .header__searchBtn {
+  margin-left: -10px;
+}
+.iconlink {
+  position: relative;
   display: inline-block;
   width: 40px;
   height: 40px;
+  font-size: 20px;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  color: currentColor;
   vertical-align: middle;
-  position: relative;
-  margin-left: -10px;
 }
-.header__searchBtn .fonticon {
+.iconlink--small {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  line-height: 16px;
+}
+.iconlink .fonticon {
   position: absolute;
   top: 50%;
   left: 50%;
