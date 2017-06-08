@@ -64,6 +64,7 @@ body {
   font-family: 'FaroTrial-RegularLucky';
   font-size: 14px;
   line-height: 20px;
+  color: #232323;
 }
 @media (min-width: 640px) {
   .mobile-only {
@@ -74,6 +75,9 @@ body {
   .desktop-only {
     display: none !important;
   }
+}
+a {
+  color: #232323;
 }
 .cols {
   display: -webkit-box;
