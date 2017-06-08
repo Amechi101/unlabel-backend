@@ -66,16 +66,6 @@ body {
   line-height: 20px;
   color: #232323;
 }
-@media (min-width: 640px) {
-  .mobile-only {
-    display: none !important;
-  }
-}
-@media (max-width: 639px) {
-  .desktop-only {
-    display: none !important;
-  }
-}
 a {
   color: #232323;
   text-decoration: none;
