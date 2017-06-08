@@ -52,7 +52,8 @@
                     {% endif %}
                     <li><a id="logout_link" href="{% url 'customer:logout' %}"><i class="icon-signout"></i> {% trans "Logout" %}</a></li>
                 {% else %}
-                    <li><a id="login_link" href="{% url 'customer:login' %}"><i class="icon-signin"></i> {% trans "Login or register" %}</a></li>
+                    <li><a id="login_link" href="{% url 'customer:login' %}"><i class="icon-signin"></i> {% trans "Login" %}</a></li>
+                    <li><a id="registration_link" href="{% url 'customer:register' %}"><i class="icon-signin"></i> {% trans "Register" %}</a></li>
                 {% endif %}
             </ul>
         </div>

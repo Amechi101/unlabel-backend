@@ -1,4 +1,5 @@
 from django.db import models
+from oscar.apps.address.models import Country
 import boto3
 from oscar.apps.customer.abstract_models import AbstractUser
 
@@ -25,6 +26,8 @@ class User(AbstractUser):
         blank=True,
         null=True
     )
+    country = models.ForeignKey(Country, null=True, blank=True)
+    dob = models.DateField(null=True, blank=True)
 
     def get_full_name(self):
         full_name = '%s %s' % (self.last_name.upper(), self.first_name)
