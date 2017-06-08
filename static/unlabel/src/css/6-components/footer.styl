@@ -4,32 +4,52 @@
 }
 
 .footer__bar {
-  padding: 0 32px
+  @media $mq_m {
+    padding: 0 32px
+  }
   
   &--top {
+    @media $mq_s_only {
+      padding: 20px 0
+    }
+    
     .footer__nav {
-      position relative
-      height: 96px
-      justify-content center
+      @media $mq_m {
+        position relative
+        height: 96px
+      }
     }
     
     .footer__navList {
-      justify-content center
+      @media $mq_s_only {
+        display block
+      }
     }
   }
   
   &--bottom {
     font-size: 11px
-    height: 57px
     border-top: 1px solid #3D3D3D
+    
+    @media $mq_s_only {
+      padding: 25px
+      display block
+      text-align center
+    }
+
+    @media $mq_m {
+      height: 57px
+    }
   }
 }
 
 .footer__logo {
-  position absolute
-  top: 50%
-  left: 0
-  transform translate(0, -50%)
+  @media $mq_m {
+    position absolute
+    top: 50%
+    left: 0
+    transform translate(0, -50%)
+  }
 }
 
 .footer__copyrightSymbol {
@@ -37,25 +57,58 @@
 }
 
 .footer__nav {
+  @media $mq_m {
+    display flex
+    align-items center
+    justify-content center
+  }
+  
   &--primary {
     font-family $font_bold
     text-align center
-    margin: 0 auto
-    li + li {
-      margin-left: 46px
+    
+    @media $mq_s_only {
+      line-height 32px
+    }
+
+    @media $mq_m {
+      li + li {
+        margin-left: 32px
+      }
+    }
+    
+    @media $mq_l {
+      li + li {
+        margin-left: 46px
+      }
     }
   }
 }
 
 .footer__navList {
+  display flex
+  align-items center
+  justify-content center
+  
   &--legal {
+    @media $mq_s_only {
+      margin-top 8px
+    }
+    
     li + li {
       margin-left: 32px
     }
   }
 
   &--social {
-    margin-left: 32px
     font-size: 16px
+    
+    @media $mq_s_only {
+      margin-top 15px
+    }
+    
+    @media $mq_m {
+      margin-left: 32px
+    }
   }
 }
