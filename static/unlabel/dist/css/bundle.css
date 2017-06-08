@@ -221,4 +221,28 @@ a:hover {
       -ms-flex-align: center;
           align-items: center;
 }
+@media (min-width: 640px) {
+  .u-mobile-only {
+    display: none !important;
+  }
+}
+@media (max-width: 639px) {
+  .u-desktop-only {
+    display: none !important;
+  }
+}
+.u-icon-replace {
+  display: inline-block;
+  position: relative;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+.u-icon-replace .fonticon {
+  text-indent: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
 /*# sourceMappingURL=bundle.css.map */
