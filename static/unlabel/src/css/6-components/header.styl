@@ -10,3 +10,35 @@
   background: #fff
   border-bottom: 1px solid #979797
 }
+
+.header__nav {
+  
+}
+
+.header__navList {
+  li + li {
+    margin-left: 47px
+  }
+  
+  .header__nav--primary & {
+    margin-left: 30px
+    font-family $font_bold
+  }
+}
+
+// todo : create a standard btn with icon
+.header__searchBtn {
+  display inline-block
+  width: size = 40px
+  height: size
+  vertical-align middle
+  position relative
+  margin-left: -10px
+  
+  .fonticon {
+    position absolute
+    top: 50%
+    left 50%
+    transform translate(-50%, -50%) 
+  }
+}

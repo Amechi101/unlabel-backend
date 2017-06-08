@@ -209,7 +209,41 @@ a:hover {
   background: #fff;
   border-bottom: 1px solid #979797;
 }
+.header__navList li + li {
+  margin-left: 47px;
+}
+.header__nav--primary .header__navList {
+  margin-left: 30px;
+  font-family: 'FaroTrial-BoldLucky';
+}
+.header__searchBtn {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  position: relative;
+  margin-left: -10px;
+}
+.header__searchBtn .fonticon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
 .nav--inline {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.nav--inline .nav__list {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
