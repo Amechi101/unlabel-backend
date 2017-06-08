@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% load i18n %}
+{% load socialaccount %}
 
 {% block title %}
     {% trans 'Register' %} | {{ block.super }}
@@ -27,9 +28,8 @@
                 {% include "partials/form_fields.html"  %}
                 <button name="registration_submit" type="submit" value="Register" class="btn btn-primary btn-lg"
                         data-loading-text="{%trans 'Creating...' %}">{% trans 'Create my account' %}</button>
-                {% if cancel_url %}
-                    {% trans "or" %} <a href="{{ cancel_url }}">{% trans "cancel" %}</a>.
-                {% endif %}
+
+                <a class="btn btn-primary btn-lg" href="{% provider_login_url "facebook" method="oauth2" %}">Register with Facebook</a>
             </form>
         </div>
     </div>

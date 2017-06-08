@@ -47,6 +47,7 @@ urlpatterns = [  # admin
                  url(r'^api_v2/', include('api_v2.urls')),
 
                  url(r'^rest-auth/', include('rest_auth.urls')),
+                 url(r'^accounts/', include('allauth.urls')),
 
 
                  # url(r'^pay/', include('oscarapps.checkout.urls')),
