@@ -33,6 +33,27 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+@font-face {
+  font-family: 'FaroTrial-RegularLucky';
+  src: url("../webfonts/FaroTrial-RegularLucky.eot");
+  src: url("../webfonts/FaroTrial-RegularLucky.eot?#iefix") format("embedded-opentype"), url("../webfonts/FaroTrial-RegularLucky.woff") format("woff"), url("../webfonts/FaroTrial-RegularLucky.ttf") format("truetype"), url("../webfonts/FaroTrial-RegularLucky.svg#FaroTrial-RegularLucky") format("svg");
+  font-weight: 'normal';
+  font-style: 'normal';
+}
+@font-face {
+  font-family: 'FaroTrial-BoldLucky';
+  src: url("../webfonts/FaroTrial-BoldLucky.eot");
+  src: url("../webfonts/FaroTrial-BoldLucky.eot?#iefix") format("embedded-opentype"), url("../webfonts/FaroTrial-BoldLucky.woff") format("woff"), url("../webfonts/FaroTrial-BoldLucky.ttf") format("truetype"), url("../webfonts/FaroTrial-BoldLucky.svg#FaroTrial-BoldLucky") format("svg");
+  font-weight: 'normal';
+  font-style: 'normal';
+}
+@font-face {
+  font-family: 'FaroTrial-DisplayLucky';
+  src: url("../webfonts/FaroTrial-DisplayLucky.eot");
+  src: url("../webfonts/FaroTrial-DisplayLucky.eot?#iefix") format("embedded-opentype"), url("../webfonts/FaroTrial-DisplayLucky.woff") format("woff"), url("../webfonts/FaroTrial-DisplayLucky.ttf") format("truetype"), url("../webfonts/FaroTrial-DisplayLucky.svg#FaroTrial-DisplayLucky") format("svg");
+  font-weight: 'normal';
+  font-style: 'normal';
+}
 * {
   box-sizing: border-box;
 }
@@ -40,6 +61,9 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'FaroTrial-RegularLucky';
+  font-size: 14px;
+  line-height: 20px;
 }
 @media (min-width: 640px) {
   .mobile-only {
