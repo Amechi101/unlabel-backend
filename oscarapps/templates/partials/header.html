@@ -1,0 +1,51 @@
+{% load i18n %}
+
+<header class="header">
+    <div class="header__bar cols cols--align-middle">
+        <nav class="header__nav header__nav--primary nav--inline">
+            <a class="logo" href="{{ homepage_url }}" title="{% trans 'Home' %}">
+                <span class="logo__label">{% block brand_title %}{{ shop_name }} <small>{{ shop_tagline }}</small>{% endblock %}</span>
+                <span class="logo__icon fonticon fonticon--logo">
+            </a>
+            <ul class="header__navList nav__list u-desktop-only">
+                <li>
+                    <a href="" title="{% trans 'Women' %}">{% trans 'Women' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'Men' %}">{% trans 'Men' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'Our brands' %}">{% trans 'Our brands' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'Our creators' %}">{% trans 'Our creators' %}</a>
+                </li>
+            </ul>
+        </nav>
+        <nav class="header__nav header__nav--secondary nav--inline">
+            <ul class="header__navList nav__list">
+                <li>
+                    {% if not user.is_authenticated %}
+                        <a href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:summary' %}{% endif %}" title="{% trans 'My Account' %}">
+                            <span class="u-desktop-only">{% trans "My Account" %}</span>
+                            <span class="fonticon fonticon--account u-mobile-only"></span>
+                            {# TODO : style notifications #}
+                            {% if num_unread_notifications > 0 %}
+                                <span>{{ num_unread_notifications }}</span>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'customer:login' %}" title="{% trans 'My Account' %}"><span class="u-desktop-only">{% trans "My Account" %}</span><span class="fonticon fonticon--account u-mobile-only"></span></a>
+                    {% endif %}
+                </li>
+                <li>
+                    <a href="" title="{% trans 'Shopping Bag' %}"><span class="u-desktop-only">{% trans 'Shopping Bag' %}</span><span class="fonticon fonticon--cart u-mobile-only"></span></a>
+                </li>
+                <li>
+                    <a class="iconlink header__searchBtn" href="" title="{% trans 'Search' %}"><span class="fonticon fonticon--magnifyingglass"></span></a>
+                </li>
+            </ul>
+            <a class="u-mobile-only" href="" title="{% trans 'Toggle Menu' %}">{% trans 'Menu' %}<span class="burgerMenu"></span></a>
+        </nav>
+    </div>
+</header>

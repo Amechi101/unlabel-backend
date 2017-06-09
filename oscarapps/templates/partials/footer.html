@@ -1,12 +1,53 @@
 {% load i18n %}
-<footer class="footer container-fluid">
-    {% block footer %}
-        {% comment %}
-            Could be used for displaying links to privacy policy, terms of service, etc.
-            We have a CSS class defined:
-                <ul class="footer_links inline">
-                    ...
-                </ul>
-         {% endcomment %}
-    {% endblock %}
+
+<footer class="footer">
+    <div class="footer__bar footer__bar--top">
+        <nav class="footer__nav footer__nav--primary">
+            <a class="footer__logo logo" href="{{ homepage_url }}" title="{% trans 'Home' %}">
+                <span class="logo__label">{% block brand_title %}{{ shop_name }} <small>{{ shop_tagline }}</small>{% endblock %}</span>
+                <span class="logo__icon fonticon fonticon--logo">
+            </a>
+            <ul class="footer__navList">
+                <li>
+                    <a href="" title="{% trans 'About us' %}">{% trans 'About us' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'For brands' %}">{% trans 'For brands' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'For Creators' %}">{% trans 'For Creators' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'FAQ' %}">{% trans 'FAQ' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'Contact us' %}">{% trans 'Contact us' %}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="footer__bar footer__bar--bottom cols cols--align-middle">
+        <div class="footer__copyright"><span class="footer__copyrightSymbol">©</span> {% trans '2017 Unlabel. All rights reserved' %}</div>
+        <nav class="footer__nav footer__nav--secondary">
+            <ul class="footer__navList footer__navList--legal">
+                <li>
+                    <a href="" title="{% trans 'Terms' %}">{% trans 'Terms' %}</a>
+                </li>
+                <li>
+                    <a href="" title="{% trans 'Privacy' %}">{% trans 'Privacy' %}</a>
+                </li>
+            </ul>
+            <ul class="footer__navList footer__navList--social">
+                <li>
+                    <a class="iconlink iconlink--small" href="" title="{% trans 'Share on Facebook' %}"><span class="fonticon fonticon--facebook"></span></a>
+                </li>
+                <li>
+                    <a class="iconlink iconlink--small" href="" title="{% trans 'Share on Instagram' %}"><span class="fonticon fonticon--instagram"></span></a>
+                </li>
+                <li>
+                    <a class="iconlink iconlink--small" href="" title="{% trans 'Share on Pinterest' %}"><span class="fonticon fonticon--pinterest"></span></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </footer>
