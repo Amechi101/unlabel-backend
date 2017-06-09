@@ -78,3 +78,23 @@ fonticon--twitter = "\e90a"
   vertical-align middle
   text-indent: 0 // prevent disapearing if parent as negative indent to hide label 
   color: currentColor
+  
+  &--box {
+    iconbox-resize(size, font_size) {
+      width: size
+      height: size
+      line-height size
+      font-size: font_size
+    }
+    
+    position relative
+    display inline-block
+    iconbox-resize(40px, 20px)
+    text-decoration: none
+    user-select: none
+    text-align center
+    
+    &.fonticon--small {
+      iconbox-resize(36px, 16px)
+    }
+  }

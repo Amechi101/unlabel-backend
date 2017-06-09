@@ -17,6 +17,8 @@
 
 .header__navList {
   li + li {
+    margin-left: 15px
+    
     @media $mq_m {
       margin-left: 24px
     }
@@ -31,6 +33,22 @@
   .header__nav--primary & {
     margin-left: 30px
     font-family $font_bold
+  }
+}
+
+.header__linkWithNotif {
+  position relative
+  display inline-block
+  .notif {
+    @media $mq_s_only {
+      position absolute
+      bottom: 0
+      right: 0
+    }
+    
+    @media $mq_m {
+      margin-left 5px
+    }
   }
 }
 

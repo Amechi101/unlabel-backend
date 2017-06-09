@@ -67,6 +67,7 @@ body {
   color: #232323;
 }
 a {
+  display: inline-block;
   color: currentColor;
   text-decoration: none;
 }
@@ -202,6 +203,26 @@ a:hover {
   text-indent: 0;
   color: currentColor;
 }
+.fonticon--box {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  text-decoration: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  text-align: center;
+}
+.fonticon--box.fonticon--small {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 16px;
+}
 .footer {
   background-color: #232323;
   color: #fff;
@@ -330,6 +351,9 @@ a:hover {
   background: #fff;
   border-bottom: 1px solid #979797;
 }
+.header__navList li + li {
+  margin-left: 15px;
+}
 @media (min-width: 640px) {
   .header__navList li + li {
     margin-left: 24px;
@@ -349,37 +373,24 @@ a:hover {
   margin-left: 30px;
   font-family: 'FaroTrial-BoldLucky';
 }
-.header__searchBtn {
-  margin-left: -10px;
-}
-.iconlink {
+.header__linkWithNotif {
   position: relative;
   display: inline-block;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  line-height: 20px;
-  text-decoration: none;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  color: currentColor;
-  vertical-align: middle;
 }
-.iconlink--small {
-  width: 36px;
-  height: 36px;
-  font-size: 16px;
-  line-height: 16px;
+@media (max-width: 639px) {
+  .header__linkWithNotif .notif {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 }
-.iconlink .fonticon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+@media (min-width: 640px) {
+  .header__linkWithNotif .notif {
+    margin-left: 5px;
+  }
+}
+.header__searchBtn {
+  margin-left: -10px;
 }
 .nav--inline {
   display: -webkit-box;
@@ -404,6 +415,34 @@ a:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+.notif {
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
+  line-height: 16px;
+  min-width: 18px;
+  border-radius: 9px;
+  padding: 0 3px;
+  background-color: #232323;
+  color: #fff;
+  text-align: center;
+  font-family: 'FaroTrial-BoldLucky';
+  border: 1px solid #fff;
+}
+@media (max-width: 639px) {
+  .notif {
+    font-size: 11px;
+  }
+}
+@media (min-width: 640px) {
+  .notif {
+    height: 25px;
+    line-height: 23px;
+    min-width: 25px;
+    border-radius: 12.5px;
+    padding: 0 5px;
+  }
 }
 @media (min-width: 640px) {
   .u-mobile-only {

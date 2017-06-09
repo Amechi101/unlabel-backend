@@ -1,0 +1,27 @@
+resize-notif(size) {
+  height: size
+  line-height size - 2 // border
+  min-width size
+  border-radius (size/2)
+}
+
+.notif {
+  display inline-block
+  vertical-align middle
+  resize-notif(18px)
+  padding: 0 3px
+  background-color $color_darkGrey
+  color: #fff
+  text-align center
+  font-family $font_bold
+  border: 1px solid #fff
+  
+  @media $mq_s_only {
+    font-size 11px
+  }
+
+  @media $mq_m {
+    resize-notif(25px)
+    padding: 0 5px
+  }
+}
