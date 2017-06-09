@@ -49,8 +49,8 @@ class InfluencerDetailView(SingleObjectMixin, ListView):
         return self.object
 
 
-
 class InfluencerSignUpView(View):
+
     def get(self, request, code, *args, **kwargs):
         try:
             influencer_invite = InfluencerInvite.objects.get(code=code,is_used=False)
@@ -59,11 +59,11 @@ class InfluencerSignUpView(View):
         if influencer_invite.is_used is True:
             return HttpResponse("sorry, The link is already used")
         elif influencer_invite.is_used is False:
-            return render(request, 'influencers/influencer_register.html', {'user_form': InfluencerSignUpForm})
-
+            influencer_list = Influencers.objects.all()[:3]
+            context = {'influencers': influencer_list, 'user_form': InfluencerSignUpForm}
+            return render(request, 'influencers/influencer_register.html', context)
 
     def post(self, request, code, *args, **kwargs):
-
         influencer_form = InfluencerSignUpForm(data=request.POST)
         try:
             influencer_invite = InfluencerInvite.objects.get(code=code, is_used=False)
@@ -89,10 +89,9 @@ class InfluencerSignUpView(View):
                     else:
                         country = str(location[-1:][0])
                     influencer_location = Locations.objects.create(city=city,
-                                                                state=state,
-                                                                country=country,
-                                                                is_influencer_location=True,
-                                                                )
+                                                                   state=state,
+                                                                   country=country,
+                                                                   is_influencer_location=True)
                     influencer_location.save()
                     print(influencer_location)
                     influencer_profile = Influencers()
@@ -110,7 +109,9 @@ class InfluencerSignUpView(View):
 
                     return HttpResponse("Influencer successfully registered.")
                 else:
-                    return render(request, 'influencers/influencer_register.html', {'user_form': influencer_form})
+                    influencer_list = Influencers.objects.all()[:3]
+                    context = {'influencers': influencer_list, 'user_form': InfluencerSignUpForm}
+                    return render(request, 'influencers/influencer_register.html', context)
             else:
                 return HttpResponse("The page you requested is expired.")
         except:
