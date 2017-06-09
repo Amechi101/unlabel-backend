@@ -53,7 +53,11 @@
                     <a class="header__searchBtn" href="" title="{% trans 'Search' %}"><span class="fonticon fonticon--magnifyingglass fonticon--box"></span></a>
                 </li>
             </ul>
-            <a class="u-mobile-only" href="" title="{% trans 'Toggle Menu' %}">{% trans 'Menu' %}<span class="burgerMenu"></span></a>
+            <a class="burgerMenu u-mobile-only" href="" title="{% trans 'Toggle Menu' %}">
+                <span class="burgerMenu__bar burgerMenu__bar--top"></span>
+                <span class="burgerMenu__bar burgerMenu__bar--middle"></span>
+                <span class="burgerMenu__bar burgerMenu__bar--bottom"></span>
+            </a>
         </nav>
     </div>
 </header>
