@@ -66,7 +66,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'url_name': 'dashboard:reserved-products',
             },
             {
-                'label': _('Product Types'),
+                'label': _('Departments'),
                 'url_name': 'dashboard:catalogue-class-list',
             },
 

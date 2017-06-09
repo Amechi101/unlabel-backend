@@ -33,7 +33,6 @@ class HomeView(CoreHomeView):
         influencers = Influencers.objects.filter(users__is_active=True,users__is_staff=False).order_by('-users__date_joined')[:4]
         ctx['influencers'] = influencers
         brands = Partner.objects.all().order_by('-created')
-        print("------------------------- ",brands)
         ctx["brands"] = brands
 
         ctx['user'] = self.request.user

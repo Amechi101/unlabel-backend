@@ -191,6 +191,12 @@ class ProductListView(CoreProductListView):
         if data.get('title'):
             queryset = queryset.filter(title__icontains=data['title'])
 
+        if data.get('rental_Status') and data.get('rental_Status') != 'ALL':
+            queryset = queryset.filter(rental_status=data.get('rental_status'))
+
+        if data.get('status') and data.get('status') != 'ALL':
+            queryset = queryset.filter(status=data.get('status'))
+
         return queryset
 
 

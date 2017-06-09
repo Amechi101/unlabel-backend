@@ -12,6 +12,7 @@ from oscar.apps.dashboard.catalogue.forms import StockRecordForm as \
     CoreStockRecordForm
 from oscar.apps.dashboard.catalogue.forms import ProductImageForm
 from oscar.apps.dashboard.catalogue.forms import ProductClassSelectForm as CoreProductClassSelectForm
+from oscar.apps.dashboard.catalogue.forms import ProductSearchForm as CoreProductSearchForm
 
 
 Product = get_model('catalogue', 'Product')
@@ -58,8 +59,6 @@ class ProductForm(CoreProductForm):
 
             if self.instance.status != "L" or self.instance.status != "D":
                 self.fields["influencer_product_note"].widget = forms.TextInput(attrs={'readonly': 'True'})
-
-
 
 
             # if self.instance.structure == 'parent':
@@ -134,7 +133,7 @@ class ProductForm(CoreProductForm):
 
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'influencer_product_note', 'item_sex_type',
+            'title', 'upc', 'description','influencer_product_note', 'item_sex_type',
             'status', 'rental_status', 'brand',
             'weight', 'on_sale', 'requires_shipping']
         labels = {
@@ -360,3 +359,34 @@ class ProductClassSelectForm(CoreProductClassSelectForm):
         label=_("Create a new product of department"),
         empty_label=_("-- Choose type --"),
         queryset=ProductClass.objects.all())
+
+
+
+
+class ProductSearchForm(CoreProductSearchForm):
+    DRAFT = 'D'
+    LIVE = 'L'
+    ALL = 'ALL'
+    status_choice = (
+        (ALL, 'All'),
+        (DRAFT, 'Draft'),
+        (LIVE, 'Live')
+    )
+
+    NONE = "NON"
+    RENTED = 'REN'
+    RETURNED = 'RET'
+    UNRESERVED = 'U'
+    RESERVED = 'R'
+
+    rental_status_choice = (
+        (ALL, 'All'),
+        (RENTED, 'Rented'),
+        (RETURNED, 'Returned'),
+        (RESERVED, 'Reserved'),
+        (UNRESERVED, 'Unreserved'),
+        )
+
+    rental_Status = forms.ChoiceField(label="Rental Status", choices=rental_status_choice,required=False)
+    status = forms.ChoiceField(label="Status",choices=status_choice,required=False)
+
