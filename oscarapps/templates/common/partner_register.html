@@ -4,14 +4,29 @@
 
 </head>
 
-<h1>Unlabel Partner sign-up</h1>
+<h1> Unlabel For Brands </h1>
 
-    <form id="Partner_register_form" method="post" action="." enctype="multipart/form-data">
-
-        {{user_form.as_p}}
-                    {% csrf_token %}
+<div>
+    <form id="Partner_register_form" method="post" action="../dashboard/partners" enctype="multipart/form-data">
+            {{user_form.as_p}}
+            {% csrf_token %}
         <input type="submit" name="submit" value="Register" />
     </form>
+</div>
+
+
+<div style="display: inline-flex">
+
+{% for brand in brands %}
+    {{ brand.name }}
+    <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
+
+    {% endfor %}
+
+
+</div>
+
+
 
 <script>
 

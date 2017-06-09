@@ -61,8 +61,6 @@ class ProductForm(CoreProductForm):
                 self.fields["influencer_product_note"].widget = forms.TextInput(attrs={'readonly': 'True'})
 
 
-
-
             # if self.instance.structure == 'parent':
             #     child_products = Product.objects.filter(structure='child', parent=self.instance).values_list('pk', flat=True)
             #     if InfluencerProductReserve.objects.filter(product__in=child_products).exists() is False:
@@ -135,7 +133,7 @@ class ProductForm(CoreProductForm):
 
     class Meta(CoreProductForm.Meta):
         fields = [
-            'title', 'upc', 'description', 'material_info', 'influencer_product_note', 'item_sex_type',
+            'title', 'upc', 'description','influencer_product_note', 'item_sex_type',
             'status', 'rental_status', 'brand',
             'weight', 'on_sale', 'requires_shipping']
         labels = {

@@ -172,7 +172,8 @@ INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
         'oscarapps.offer',
         'oscarapps.dashboard.offers',
         'oscarapps.dashboard.ranges',
-        'oscarapps.promotions'
+        'oscarapps.promotions',
+        'oscarapps.search'
     ])
 
 MIDDLEWARE_CLASSES = (
@@ -361,4 +362,5 @@ AWS_SNS_PLATFORM_APP_ARN = "arn:aws:sns:ap-south-1:275431664439:app/APNS_SANDBOX
 AWS_SNS_ACCESS_KEY_ID = "AKIAIWCAMKSI7I763E7A"
 AWS_SNS_SECRET_ACCESS_KEY = "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"
 AWS_DEFAULT_REGION = "ap-south-1"
+
 
