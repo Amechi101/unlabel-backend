@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.conf.urls import include, url
 from oscarapi.app import application as api
+from django.views.generic.base import TemplateView
 
 from unlabel.views import HomePageView, LegalStuffView, PrivacyPolicyView, ContactView, AboutView
 from applications.views import BrandInviteView
@@ -48,6 +49,7 @@ urlpatterns = [  # admin
 
                  url(r'^rest-auth/', include('rest_auth.urls')),
                  url(r'^accounts/', include('allauth.urls')),
+                 url(r'^about-us/$', TemplateView.as_view(template_name='about-us.html'), name="about-us"),
 
 
                  # url(r'^pay/', include('oscarapps.checkout.urls')),
