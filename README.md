@@ -43,5 +43,25 @@ Some of the modules are from Django Oscar which are customized to meet our requi
 https://github.com/Amechi101/unlabel-backend/tree/develop/oscarapps
 
 
+### Setting up the project
+Clone the project from https://github.com/Amechi101/unlabel-backend.git
+Currently the branch used for development is "develop".
+Pull the latest code from the repo.
+Create virtual environment with python 3.
+Install the requirements to the virtual environment (as mentioned in the requirements.txt file)
+Migrate database : python manage.py migrate
+To populate data : python manage.py populate_state_countries.py ,
+                   python manage.py populate_initial_data.py
+       
+                   
+
+**To Update Server**
+    At /home/ubuntu
+    activate virtual environment - source virtual/bin/activate
+    the project is located at  unlabel-backend/
+    make necessary changes
+    ./nginx-restart.sh
+    
+
 
 
