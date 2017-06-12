@@ -98,7 +98,7 @@ a:hover {
   color: currentColor;
 }
 img {
-  display: inline-block;
+  display: block;
   margin: 0;
 }
 
@@ -628,6 +628,18 @@ button.swiper-pagination-bullet {
       -ms-flex-align: end;
           align-items: flex-end;
 }
+@media (max-width: 767px) {
+  .container {
+    padding: 0 24px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    padding: 96px 32px;
+    max-width: 1184px;
+    margin: 0 auto;
+  }
+}
 .cta {
   display: inline-block;
   padding: 18px 32px;
@@ -654,6 +666,12 @@ button.swiper-pagination-bullet {
 }
 .cta--dark:hover {
   color: #fff;
+}
+@media (min-width: 768px) {
+  .desc {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }
 @font-face {
   font-family: 'fonticon';
@@ -923,6 +941,58 @@ button.swiper-pagination-bullet {
 .gallery__thumbs .swiper-slide.is-active {
   opacity: 0.5;
 }
+.grid {
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+@media (min-width: 768px) {
+  .grid {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+  }
+}
+@media (min-width: 768px) {
+  .grid:first-child {
+    border-right: 1px solid #f0f0f0;
+  }
+}
+.grid--borderLess {
+  border: 0 none;
+}
+.grid--borderTopLess {
+  border-top: 0 none;
+}
+.grid--borderBottomLess {
+  border-bottom: 0 none;
+}
+@media (min-width: 768px) {
+  .grid__content {
+    width: calc(100% - 254px);
+    border-left: 1px solid #f0f0f0;
+  }
+}
+@media (min-width: 768px) {
+  .grid--inverted .grid__content {
+    border-right: 1px solid #f0f0f0;
+    border-left: 0 none;
+  }
+}
+@media (max-width: 767px) {
+  .grid__sidebar {
+    border-top: 1px solid #f0f0f0;
+  }
+}
+@media (min-width: 768px) {
+  .grid__sidebar {
+    padding: 24px 32px;
+    width: 254px;
+  }
+}
 .header {
   z-index: 10;
   position: relative;
@@ -932,7 +1002,7 @@ button.swiper-pagination-bullet {
   height: 79px;
   padding: 0 20px;
   background: #fff;
-  border-bottom: 1px solid #979797;
+  border-bottom: 1px solid #f0f0f0;
 }
 .header__navList li + li {
   margin-left: 15px;
@@ -1027,13 +1097,181 @@ button.swiper-pagination-bullet {
     padding: 0 5px;
   }
 }
-.product-detail__galleryContainer {
-  width: 100%;
+@media (min-width: 768px) {
+  .product__overview {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+  }
+}
+@media (max-width: 767px) {
+  .product__galleryContainer {
+    margin: 10px 10px 0;
+  }
 }
 @media (min-width: 768px) {
-  .product-detail__galleryContainer {
-    width: 57.15%;
+  .product__galleryContainer {
+    width: 57%;
   }
+}
+@media (max-width: 767px) {
+  .product__content {
+    padding: 42px 0;
+  }
+}
+@media (min-width: 768px) {
+  .product__content {
+    position: relative;
+    z-index: 1;
+    width: 43%;
+    margin: 0 0 0 32px;
+    padding: 48px 32px 48px 64px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+@media (min-width: 768px) {
+  .product__title {
+    margin-left: -192px;
+  }
+}
+.product__brand {
+  font-family: 'FaroTrial-BoldLucky';
+  text-decoration: underline;
+}
+@media (max-width: 767px) {
+  .product__brand {
+    margin-top: 22px;
+    padding: 0 32px;
+  }
+}
+.product__price {
+  font-family: 'FaroTrial-BoldLucky';
+  font-size: 24px;
+}
+@media (max-width: 767px) {
+  .product__price {
+    margin-top: 10px;
+    padding: 0 32px;
+  }
+}
+@media (max-width: 767px) {
+  .product__actions {
+    margin-top: 26px;
+  }
+}
+@media (min-width: 768px) {
+  .product__details .grid__sidebar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+  }
+}
+.product__descContainer {
+  max-width: 798px;
+  margin: 0 auto;
+}
+@media (max-width: 767px) {
+  .product__descContainer {
+    padding: 40px 20px;
+  }
+}
+@media (min-width: 768px) {
+  .product__descContainer {
+    padding: 80px 32px;
+  }
+}
+.product__descContainer .desc {
+  margin-top: 20px;
+}
+@media (max-width: 767px) {
+  .product__descContainer .desc {
+    padding: 0 40px;
+  }
+}
+@media (min-width: 768px) {
+  .product__descContainer .desc {
+    padding: 0 32px;
+  }
+}
+@media (min-width: 1024px) {
+  .product__descContainer .desc {
+    padding: 0 64px;
+  }
+}
+@media (max-width: 767px) {
+  .product__ref {
+    padding: 12px 24px;
+    text-align: center;
+  }
+}
+@media (max-width: 767px) {
+  .share {
+    border-top: 1px solid #f0f0f0;
+    padding: 24px;
+    text-align: center;
+  }
+}
+@media (min-width: 768px) {
+  .share {
+    margin-top: 96px;
+  }
+}
+.share__title {
+  font-family: 'FaroTrial-BoldLucky';
+}
+.share__list {
+  margin-left: -7px;
+}
+.share__item {
+  display: inline-block;
+}
+.subtitle {
+  font-family: 'FaroTrial-BoldLucky';
+  font-size: 24px;
+  line-height: 32px;
+}
+.title {
+  font-family: 'FaroTrial-DisplayLucky';
+  line-height: 1em;
+  font-size: 36px;
+}
+@media (min-width: 768px) {
+  .title {
+    font-size: 64px;
+  }
+}
+.title--headline {
+  font-size: 128px;
+  text-transform: uppercase;
+}
+.title--internal {
+  font-size: 48px;
 }
 @media (min-width: 768px) {
   .u-mobile-only {

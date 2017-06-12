@@ -1,0 +1,23 @@
+.share {
+  @media $mq_s_only {
+    border-top: 1px solid $color_lightGrey
+    padding: 24px
+    text-align: center
+  }
+  
+  @media $mq_m {
+    margin-top: 96px
+  }
+}
+
+.share__title {
+  font-family: $font_bold
+}
+
+.share__list {
+  margin-left: -7px // better alignement of icons (because they are in a bigger clickable area for accessibility purposes)
+}
+
+.share__item {
+  display: inline-block
+}

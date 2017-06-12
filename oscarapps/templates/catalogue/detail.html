@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
+{% load currency_filters %}
 {% load i18n %}
+{% load purchase_info_tags %}
 
 {% block title %}
     {{ product.title }} | {{ block.super }}
@@ -11,13 +13,63 @@
 {% endblock %}
 
 {% block content %}
-<div class="grid grid--fluid">
-	<div class="cols">
-		<div class="product-detail__galleryContainer">
+<div class="container">
+	<div class="product__overview">
+		<div class="product__galleryContainer">
 			{% block product_gallery %}
 				{% include "catalogue/partials/gallery.html" %}
 			{% endblock %}
 		</div>
+		<div class="product__content">
+			<div>
+				<h1 class="title product__title">{{ product.get_title }}</h1>
+				<h2 class="product__brand">Brand Name</h2> <!-- TODO : add brand name -->
+			</div>
+			<div>
+				{% purchase_info_for_product request product as session %}
+				{% if session.price.exists %}
+                    <!-- TODO : isolate currency symbol for styling pupose -->
+					<p class="product__price">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+				{% endif %}
+			</div>
+            <div>
+                {% block product_basket_form %}
+                    <div class="product__actions">
+                        {% include "catalogue/partials/add_to_basket_form.html" %}
+                    </div>
+                {% endblock %}
+            </div>
+		</div>
 	</div>
 </div>
+
+<div class="product__details">
+    <div class="grid grid--inverted grid--borderBottomLess">
+        <div class="grid__content">
+            {% block product_description %}
+                {% if product.description %}
+                    <div class="product__descContainer">
+                        <p class="subtitle">{% trans 'Description' %}</p>
+                        <div class="desc">{{ product.description|safe }}</div>
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </div>
+        <div class="grid__sidebar">
+            <div>
+                {% block product_info %}
+                    {% if product.upc %}
+                        <div class="product__ref">
+                            ID #{{ product.upc }}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+            </div>
+            <div>
+                {% include "partials/share_menu.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}

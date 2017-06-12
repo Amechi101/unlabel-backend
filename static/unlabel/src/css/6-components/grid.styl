@@ -1,0 +1,53 @@
+grid_borderStyle = 1px solid $color_lightGrey
+grid_sidebarSize = 254px
+
+.grid {
+  border-top: grid_borderStyle
+  border-bottom: grid_borderStyle
+  
+  @media $mq_m {
+    display: flex
+    flex-direction: row
+  }
+  
+  &:first-child {
+    @media $mq_m {
+      border-right: grid_borderStyle
+    }
+  }
+  
+  &--borderLess {
+    border: 0 none
+  }
+  &--borderTopLess {
+    border-top: 0 none
+  }
+  &--borderBottomLess {
+    border-bottom: 0 none
+  }
+}
+
+.grid__content {
+  
+  @media $mq_m {
+    width: "calc(100% - %s)" % grid_sidebarSize
+    border-left: grid_borderStyle
+  }
+  
+  .grid--inverted & {
+    @media $mq_m {
+      border-right: grid_borderStyle
+      border-left: 0 none
+    }
+  }
+}
+
+.grid__sidebar {
+  @media $mq_s_only {
+    border-top: grid_borderStyle
+  }
+  @media $mq_m {
+    padding: 24px 32px
+    width: grid_sidebarSize
+  }
+}
