@@ -698,19 +698,29 @@ button.swiper-pagination-bullet {
   text-decoration: none;
   color: #232323;
 }
-.cta--dark,
-.cta[type="submit"] {
+.cta--dark {
   color: #fff;
   background-color: #232323;
   border-color: #232323;
 }
-.cta--dark:hover,
-.cta[type="submit"]:hover {
+.cta--dark:hover {
   color: #fff;
 }
 .cta[disabled="disabled"] {
   cursor: default;
   opacity: 0.5;
+}
+.cta--inlineIcon {
+  padding: 12px 16px;
+}
+.cta--inlineIcon .fonticon {
+  font-size: 26px;
+}
+.cta--inlineIconLeft .fonticon {
+  margin-right: 16px;
+}
+.cta--inlineIconRight .fonticon {
+  margin-left: 16px;
 }
 @media (min-width: 768px) {
   .desc {
@@ -720,8 +730,8 @@ button.swiper-pagination-bullet {
 }
 @font-face {
   font-family: 'fonticon';
-  src: url("../webfonts/fonticon.eot?og6xcd");
-  src: url("../webfonts/fonticon.eot?og6xcd#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?og6xcd") format('truetype'), url("../webfonts/fonticon.woff?og6xcd") format('woff'), url("../webfonts/fonticon.svg?og6xcd#fonticon") format('svg');
+  src: url("../webfonts/fonticon.eot?7mu1o5");
+  src: url("../webfonts/fonticon.eot?7mu1o5#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?7mu1o5") format('truetype'), url("../webfonts/fonticon.woff?7mu1o5") format('woff'), url("../webfonts/fonticon.svg?7mu1o5#fonticon") format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -736,6 +746,18 @@ button.swiper-pagination-bullet {
 /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.fonticon--cart:before {
+  content: "\e93a";
+}
+.fonticon--account:before {
+  content: "\e971";
+}
+.fonticon--star-empty:before {
+  content: "\e9d7";
+}
+.fonticon--star-full:before {
+  content: "\e9d9";
 }
 .fonticon--unlabelLogo:before {
   content: "\e90c";
@@ -1276,13 +1298,12 @@ button.swiper-pagination-bullet {
 .product .add-to-basket > *:last-child {
   margin-right: 0;
 }
-@media (max-width: 767px) {
-  .product .add-to-basket > * {
-    margin-bottom: 10px;
-  }
-}
 .product .add-to-basket label {
   display: none;
+}
+.product .add-to-basket > *,
+.product .add-to-basket form > * {
+  margin-bottom: 10px;
 }
 @media (min-width: 768px) {
   .product__overview {
@@ -1302,7 +1323,7 @@ button.swiper-pagination-bullet {
 }
 @media (min-width: 768px) {
   .product__galleryContainer {
-    width: 57%;
+    width: 55%;
   }
 }
 @media (max-width: 767px) {
@@ -1314,7 +1335,7 @@ button.swiper-pagination-bullet {
   .product__content {
     position: relative;
     z-index: 1;
-    width: 43%;
+    width: 45%;
     margin: 0 0 0 32px;
     padding: 48px 32px 48px 64px;
     display: -webkit-box;
@@ -1357,6 +1378,11 @@ button.swiper-pagination-bullet {
     padding: 0 32px;
   }
 }
+@media (min-width: 768px) {
+  .product__price {
+    margin-top: 32px;
+  }
+}
 @media (max-width: 767px) {
   .product__actions {
     margin-top: 26px;
@@ -1373,6 +1399,7 @@ button.swiper-pagination-bullet {
             flex-direction: row;
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
+    margin-top: 32px;
   }
   .product__actions > * {
     margin-right: 12px;

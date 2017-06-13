@@ -1,0 +1,39 @@
+{% load i18n %}
+{% load wishlist_tags %}
+
+<!-- TODO : add dynamic star count (nb of users who actually saved this product -->
+
+{% if user.is_authenticated %}
+    {% with wishlists=user.wishlists.all %}
+        {# Select wishlists that contains product #}
+        {% wishlists_containing_product wishlists product as product_wishlists %}
+        
+        {% if wishlists %}
+            {% for wishlist in wishlists %}
+                {% if wishlist not in product_wishlists %}
+                    <form id="add_to_wishlist_form" action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
+                        {% csrf_token %}
+                        <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Adding...' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button></button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+
+        {% else %}
+            <form id="add_to_wishlist_form" action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
+                {% csrf_token %}
+                <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Adding...' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button></button>
+            </form>
+        {% endif %}
+
+
+
+        {% for wishlist in product_wishlists %}
+            <form action="{% url 'customer:wishlists-remove-product' key=wishlist.key product_pk=product.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Removing...' %}"><span class="fonticon fonticon--star-full"></span>{% trans "Unstar" %}</button>
+            </form>
+        {% endfor %}
+    {% endwith %}
+{% else %}
+    <button class="cta cta--inlineIcon cta--inlineIconLeft btn-wishlist" disabled="disabled" title="{% trans 'Please login to add products to a wish list.' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button><br/>
+{% endif %}

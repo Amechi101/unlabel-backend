@@ -10,14 +10,17 @@
       &:last-child {
         margin-right: 0
       }
-      
-      @media $mq_s_only {
-       margin-bottom: 10px 
-      }
     }
 
     label {
       display: none
+    }
+    
+    &,
+    form {
+      & > * {
+        margin-bottom: 10px
+      }
     }
   }
 }
@@ -35,7 +38,7 @@
   }
   
   @media $mq_m {
-    width: 57%
+    width: 55%
   }
 }
 
@@ -47,7 +50,7 @@
   @media $mq_m {
     position: relative
     z-index: 1 // title over gallery
-    width: 43%
+    width: 45%
     margin: 0 0 0 32px
     padding: 48px 32px 48px 64px
     display: flex
@@ -81,6 +84,10 @@
     margin-top: 10px
     padding: 0 32px
   }
+  
+  @media $mq_m {
+    margin-top: 32px
+  }
 }
 
 .product__actions {
@@ -92,6 +99,7 @@
     display: flex
     flex-direction: row
     flex-wrap: wrap
+    margin-top: 32px
     
     & > * {
       margin-right: 12px
