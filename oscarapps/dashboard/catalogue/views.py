@@ -445,3 +445,28 @@ class ProductCreateRedirectView(CoreProductCreateRedirectView):
     def get_invalid_product_class_url(self):
         messages.error(self.request, _("Please choose a product department"))
         return reverse('dashboard:catalogue-product-list')
+
+
+class BrandListView(ListView):
+    """
+    List the brands
+    """
+    context_object_name = "brands"
+    template_name = 'brand/brand_list.html'
+    model = Partner
+    page_title = _('Brands')
+
+    def get(self, request, *args, **kwargs):
+        # user = request.user
+        # user_followed_brands = UserBrandLike.objects.filter(user=request.user)
+
+
+        return super(BrandListView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        qs = Partner.objects.all()
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(BrandListView, self).get_context_data(*args, **kwargs)
+        return ctx
