@@ -269,27 +269,27 @@ class InfluencerBrandListView(generics.ListAPIView):
             search_style = []
             search_specialization = []
 
-            search_text = self.request.GET.get('search', '')
-            if self.request.GET.get('location', '') != '' :
-                search_location = list(map(int, self.request.GET.get('location', '').split(',')))
-            if self.request.GET.get('store_type', '') != '':
-                search_category = list(map(int, self.request.GET.get('store_type', '').split(',')))
-            if self.request.GET.get('specialization', '') != '':
-                search_specialization = list(map(int, self.request.GET.get('specialization', '').split(',')))
-            if self.request.GET.get('style', '') != '':
-                search_style = list(map(int, self.request.GET.get('style').split(',')))
+            # search_text = self.request.GET.get('search', '')
+            # if self.request.GET.get('location', '') != '':
+            #     search_location = list(map(int, self.request.GET.get('location', '').split(',')))
+            # if self.request.GET.get('store_type', '') != '':
+            #     search_category = list(map(int, self.request.GET.get('store_type', '').split(',')))
+            # if self.request.GET.get('specialization', '') != '':
+            #     search_specialization = list(map(int, self.request.GET.get('specialization', '').split(',')))
+            # if self.request.GET.get('style', '') != '':
+            #     search_style = list(map(int, self.request.GET.get('style').split(',')))
 
 
-            if search_text is not None:
-                partner = partner.filter(name__icontains=search_text)
-            if search_location:
-                partner = partner.filter(location__in=search_location)
-            if search_category:
-                partner = partner.filter(category__in=search_category)
-            if search_specialization:
-                partner = partner.filter(sub_category__in=search_specialization)
-            if search_style:
-                partner = partner.filter(style__in=search_style)
+            # if search_text is not None:
+            #     partner = partner.filter(name__icontains=search_text)
+            # if search_location:
+            #     partner = partner.filter(location__in=search_location)
+            # if search_category:
+            #     partner = partner.filter(category__in=search_category)
+            # if search_specialization:
+            #     partner = partner.filter(sub_category__in=search_specialization)
+            # if search_style:
+            #     partner = partner.filter(style__in=search_style)
 
             param = self.request.GET.get('param')
             if param == "ZA":
@@ -425,10 +425,10 @@ class InfluencerBaseProductListView(generics.ListAPIView):
             param = str(self.request.GET.get('param')).strip()
             gender = str(self.request.GET.get('gender')).strip()
             if gender == 'M':
-                gen = ['M','U']
+                gen = ['M', 'U']
             elif gender == 'F':
-                gen = ['F','U']
-            if brand_id == None:
+                gen = ['F', 'U']
+            if brand_id is None:
                 queryset = Product.objects.filter(rental_status='U').order_by('created')
                 return queryset
             if brand_id != None:
@@ -443,10 +443,10 @@ class InfluencerBaseProductListView(generics.ListAPIView):
                             products_to_list.append(product.pk)
                         elif product.structure == "parent":
                             products_to_list.append(product.pk)
-                    queryset = Product.objects.filter(pk__in=products_to_list, rental_status='U',item_sex_type__in=gen).order_by('created')
+                    queryset = Product.objects.filter(pk__in=products_to_list, rental_status='U', item_sex_type__in=gen).order_by('created')
                     return queryset
                 elif param == 'HL':
-                    prod_id_List = Product.objects.filter(brand=brand_id, rental_status='U',item_sex_type__in=gen).values_list('id', flat=True)
+                    prod_id_List = Product.objects.filter(brand=brand_id, rental_status='U', item_sex_type__in=gen).values_list('id', flat=True)
                     prod_Sort_List = StockRecord.objects.filter(product__in=prod_id_List).order_by(
                         '-price_retail').values_list('product', flat=True)
                     products = Product.objects.filter(brand=brand_id, rental_status='U', pk__in=prod_Sort_List,item_sex_type__in=gen)
