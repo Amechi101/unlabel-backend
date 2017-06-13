@@ -1,11 +1,16 @@
 {% load i18n %}
+{% load staticfiles %}
 
 <header class="header">
     <div class="header__bar cols cols--align-middle">
         <nav class="header__nav header__nav--primary nav--inline">
-            <a class="logo" href="{{ homepage_url }}" title="{% trans 'Home' %}">
-                <span class="logo__label">{% block brand_title %}{{ shop_name }} <small>{{ shop_tagline }}</small>{% endblock %}</span>
-                <span class="logo__icon fonticon fonticon--logo">
+            <a href="{{ homepage_url }}" title="{% trans 'Home' %}">
+                <div class="logo">
+                    <span class="logo__label">{% block brand_title %}{{ shop_name }} <small>{{ shop_tagline }}</small>{% endblock %}</span>
+                    <span class="logo__icon">
+                        <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}">
+                    </span>
+                </div>
             </a>
             <ul class="header__navList nav__list u-desktop-only">
                 <li>
