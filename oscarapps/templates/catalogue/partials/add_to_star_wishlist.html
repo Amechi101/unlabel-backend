@@ -13,7 +13,7 @@
                 {% if wishlist not in product_wishlists %}
                     <form id="add_to_wishlist_form" action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
                         {% csrf_token %}
-                        <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Adding...' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button></button>
+                        <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Adding...' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button>
                     </form>
                 {% endif %}
             {% endfor %}
@@ -21,7 +21,7 @@
         {% else %}
             <form id="add_to_wishlist_form" action="{% url 'customer:wishlists-add-product' product_pk=product.pk %}" method="post" class="btn-wishlist">
                 {% csrf_token %}
-                <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Adding...' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button></button>
+                <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Adding...' %}"><span class="fonticon fonticon--star-empty"></span>{% trans 'Star' %}</button>
             </form>
         {% endif %}
 
