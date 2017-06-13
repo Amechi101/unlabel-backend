@@ -95,6 +95,17 @@ class InfluencerProductReserve(models.Model):
     def __str__(self):
         return self.influencer.users.email + "-->" + self.product.title
 
+    def get_product_rental_status(self):
+        rental_status = {'NON':"None",'REN':'Rented','RET':'Returned','U':'Unreserved','R':'Reserved' }
+        if self.product.structure == 'child':
+            product = self.product.parent
+            return rental_status[product.rental_status]
+        else:
+            return rental_status[self.product.rental_status]
+
+
+
+
 
 class InfluencerProductUnreserve(models.Model):
 

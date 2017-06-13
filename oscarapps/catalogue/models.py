@@ -3,9 +3,13 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
 
+from oscar.core.loading import get_class, get_classes, get_model
+
+from django.conf import settings
 from oscarapps.partner.models import Partner
 from oscar.apps.catalogue.abstract_models import AbstractProduct
-from oscarapps.influencers.models import *
+
+
 
 
 class BaseApplicationModel(models.Model):
@@ -131,6 +135,7 @@ class Product(AbstractProduct, BaseApplicationModel):
     )
 
     def save(self, *args, **kwargs):
+        from oscarapps.influencers.models import InfluencerProductReserve,Influencers
         if self.description:
             self.description = strip_tags(self.description)
         if self.material_info:
@@ -155,6 +160,25 @@ class Product(AbstractProduct, BaseApplicationModel):
     @property
     def get_brand_pk(self):
         return self.brand.pk
+
+    def get_brand(self):
+        return self.brand
+
+    def get_influencer(self):
+        from oscarapps.influencers.models import InfluencerProductReserve,Influencers
+        from users.models import User
+        if self.structure == 'child':
+            product = self.parent
+            influencer_reserved = InfluencerProductReserve.objects.get(product = product)
+            influencer_details = Influencers.objects.get(pk=influencer_reserved.pk)
+            influencer_user_details = settings.AUTH_USER_MODEL.objects.get(pk = influencer_details.users )
+            return influencer_user_details
+        else:
+            influencer_reserved = InfluencerProductReserve.objects.get(product = self).influencer
+            influencer_details = Influencers.objects.get(pk=influencer_reserved.pk)
+            influencer_user_details = User.objects.get(pk = influencer_details.users.pk )
+            return influencer_user_details
+
       
       
 from oscar.apps.catalogue.models import *

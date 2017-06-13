@@ -29,7 +29,10 @@
         {% endblock %}
 
         {% block product_title %}
-            <h3><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:4 }}</a></h3>
+            {# will add the address to the corrssponding views once done #}
+            <h3><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:3 }}</a></h3>
+            <h4><a href="">{{ product.get_brand|truncatewords:4 }}</a></h4>
+            <h4><a href="">{{ product.get_influencer.first_name}} {{ product.get_influencer.last_name}}</a></h4>
         {% endblock %}
 
         {% block product_price %}

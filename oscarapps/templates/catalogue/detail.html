@@ -67,6 +67,16 @@
                 <a class="pull-right hidden-xs" href="{% url 'dashboard:catalogue-product' pk=product.id %}"><small><i class="icon-edit"></i> {% trans "Edit this product" %}</small></a>
             {% endif %}
             <h1>{{ product.get_title }}</h1>
+            <h2>Brand : {{ product.get_brand }}</h2>
+            <h2>Influencer : {{ influencer.users.first_name }}</h2>
+                Influencer image : {{ influencer.users.image }}
+                <img class="image-adjust" src="{{ MEDIA_URL }}{{ influencer.users.image }}" style="width:100%">
+            Product not from Influencer : {{ product.influencer_product_note }}
+            Influencer sizes : {{ influencer.height }}
+        {{ influencer.chest_or_bust }}
+        {{ influencer.hips }}
+        {{ influencer.waist }}
+        {{ influencer.location.city }}{{ influencer.location.state }}{{ influencer.location.country }}
 
             {% block product_stock_record %}
                 {% include "catalogue/partials/stock_record.html" with verbose=1 %}
@@ -87,6 +97,11 @@
     </div><!-- /row -->
 
     {% block product_description %}
+
+
+
+
+
         {% if product.description %}
         <div id="product_description" class="sub-header">
             <h2>{% trans "Product Description" %}</h2>
