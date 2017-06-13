@@ -1195,7 +1195,7 @@ button.swiper-pagination-bullet {
   text-indent: 0;
   position: absolute;
   top: 0;
-  rigth: 0;
+  right: 0;
   bottom: 0;
   left: 0;
 }
@@ -1527,10 +1527,12 @@ button.swiper-pagination-bullet {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  align-item: flex-start;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: justify;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
