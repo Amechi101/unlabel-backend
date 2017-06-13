@@ -29,6 +29,10 @@
                                 {{ field.label|safe }}
                                 {% render_field field class+="form-control" %}
                             </label>
+                        {% elif field.widget_type == "AdvancedSelect" %}
+                            <div class="select">
+                                {% render_field field class+="form-control" %}
+                            </div>
                         {% else %}
                             {% render_field field class+="form-control" %}
                         {% endif %}

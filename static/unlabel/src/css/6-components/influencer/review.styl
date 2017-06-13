@@ -1,0 +1,61 @@
+.influencer-review {
+  background-color: $color_product
+  
+  @media $mq_s_only {
+    padding: 45px 0
+  }
+}
+
+.influencer-review__cols {
+  @media $mq_m {
+    display: flex
+    flex-direction: row
+  }
+}
+
+.influencer-review__col {
+  @media $mq_m {
+    width: 50%
+      
+    & + .influencer-review__col {
+      margin-left: 32px
+    }
+  }
+}
+
+.influencer-review__visual {
+  img {
+    width: 100%
+    height: auto
+  }
+}
+
+.influencer-review__content {
+  @media $mq_s_only {
+    margin-top: 42px
+  }
+  @media $mq_m {
+    padding: 96px 32px 0 
+    max-width: (354px + 32px * 2) // max-width + horizontal paddings
+    margin: 0 auto
+  }
+  
+  .desc {
+    @media $mq_s_only {
+      margin-top: 24px
+      padding: 0 40px
+    }
+    @media $mq_m {
+      margin-top: 48px
+    }
+  }
+
+  .sizechart {
+    @media $mq_s_only {
+      margin-top: 42px
+    }
+    @media $mq_m {
+      margin-top: 48px
+    }
+  }
+}

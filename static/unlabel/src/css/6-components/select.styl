@@ -1,0 +1,31 @@
+.select {
+  position: relative
+  
+  &::before {
+    position: absolute
+    top: 50%
+    right: 21px
+    transform: translate(50%, -50%)
+    display: block
+    content: ''
+    width: 0
+    height: 0
+    border-style: solid
+    border-width: 5px 5px 0 5px
+    border-color: $color_darkGrey transparent transparent transparent
+  }
+  
+  select {
+    display inline-block
+    padding: 18px 42px 18px 16px
+    font-size: font_size = 14px
+    line-height font_size
+    border: 2px solid $color_darkGrey
+    color: $color_darkGrey
+    font-family: $font_bold
+    background: transparent
+    border-radius: 0
+    appearance: none
+    cursor: pointer
+  }
+}

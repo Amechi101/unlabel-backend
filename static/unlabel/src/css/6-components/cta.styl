@@ -9,13 +9,18 @@
   line-height font_size
   border: 2px solid $color_darkGrey
   color: $color_darkGrey
+  font-family: $font_bold
+  background: transparent
+  border-radius: 0
+  appearance: none
   
   &:hover {
     text-decoration: none
     color: $color_darkGrey
   }
   
-  &--dark {
+  &--dark,
+  &[type="submit"] {
     color: #fff
     background-color: $color_darkGrey
     border-color: $color_darkGrey
@@ -23,5 +28,14 @@
     &:hover {
       color: #fff
     }
+  }
+  
+  &[type="submit"] {
+    
+  }
+  
+  &[disabled="disabled"] {
+    cursor: default
+    opacity: 0.5
   }
 }
