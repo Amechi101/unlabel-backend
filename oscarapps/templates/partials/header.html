@@ -30,7 +30,7 @@
         <nav class="header__nav header__nav--secondary nav--inline">
             <ul class="header__navList nav__list">
                 <li>
-                    {% if not user.is_authenticated %}
+                    {% if user.is_authenticated %}
                         <a class="header__linkWithNotif" href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:summary' %}{% endif %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
                             <span class="fonticon fonticon--account fonticon--box u-mobile-only"></span>
