@@ -49,17 +49,17 @@ urlpatterns = [  # admin
 
                  url(r'^rest-auth/', include('rest_auth.urls')),
                  url(r'^accounts/', include('allauth.urls')),
-                 url(r'^about-us/$', TemplateView.as_view(template_name='about-us.html'), name="about-us"),
-
+                 url(r'^about-us/$', TemplateView.as_view(template_name='about_us.html'), name="about-us"),
+                 url(r'^faqs/$', TemplateView.as_view(template_name='faq.html'), name="faqs"),
+                 url(r'^contact-us/$', TemplateView.as_view(template_name='contact_us.html'), name="contact-us"),
+                 url(r'^terms-and-conditions/$', TemplateView.as_view(template_name='terms_and_conditions.html'),
+                     name="terms-and-conditions"),
 
                  # url(r'^pay/', include('oscarapps.checkout.urls')),
 
-                url(r'^stripe',
-                  stripe_view.as_view(),
-                  name='stripe'),
-
-
-                 ]  # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+                 url(r'^stripe', stripe_view.as_view(), name='stripe'),
+]
+# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
 # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
