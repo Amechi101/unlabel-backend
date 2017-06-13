@@ -21,7 +21,9 @@ class PartnerSignUpView(View):
             partner_invite = PartnerInvite.objects.get(code=code)
         except:
             return HttpResponse("sorry link is used already")
-        return render(request, 'dashboard/partners/partner_register.html', {'user_form': PartnerSignUpForm})
+        brands_list = Partner.objects.all().order_by('-created')[:3]
+        context = {'brands':brands_list,'user_form': PartnerSignUpForm}
+        return render(request, 'common/partner_register.html', context)
 
     def post(self, request, code, *args, **kwargs):
 
@@ -81,7 +83,10 @@ class PartnerSignUpView(View):
 
                     return HttpResponse("Partner successfully registered.")
                 else:
-                    return render(request, 'dashboard/partners/partner_register.html', {'user_form': partner_form})
+                    brands_list = Partner.objects.all().order_by('-created')[:3]
+                    context = {'brands':brands_list,'user_form': partner_form}
+                    return render(request, 'common/partner_register.html', context)
+                    # return render(request, 'common/partner_register.html', {'user_form': partner_form})
         else:
             return HttpResponse("The link is expired")
         # except:

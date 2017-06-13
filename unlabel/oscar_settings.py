@@ -19,6 +19,40 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'icon': 'icon-th-list',
         'url_name': 'dashboard:index',
     },
+    # {
+    #     'label': _('Catalogue'),
+    #     'icon': 'icon-sitemap',
+    #     'children': [
+    #         {
+    #             'label': _('Products'),
+    #             'url_name': 'dashboard:catalogue-product-list',
+    #         },
+    #         {
+    #             'label': _('Departments'),
+    #             'url_name': 'dashboard:catalogue-class-list',
+    #         },
+    #         {
+    #             'label': _('Categories'),
+    #             'url_name': 'dashboard:catalogue-category-list',
+    #         },
+    #         {
+    #             'label': _('Ranges'),
+    #             'url_name': 'dashboard:range-list',
+    #         },
+    #         {
+    #             'label': _('Low stock alerts'),
+    #             'url_name': 'dashboard:stock-alert-list',
+    #         },
+    #         {
+    #             'label': _('Promoted Items'),
+    #             'url_name': 'dashboard:Promoted-Products',
+    #         },
+    #         {
+    #             'label': _('Excluded From Search'),
+    #             'url_name': 'dashboard:search-excluded-products',
+    #         },
+    #     ]
+    # },
     {
         'label': _('Inventory Management'),
         'icon': 'icon-sitemap',
@@ -32,7 +66,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'url_name': 'dashboard:reserved-products',
             },
             {
-                'label': _('Product Types'),
+                'label': _('Departments'),
                 'url_name': 'dashboard:catalogue-class-list',
             },
 

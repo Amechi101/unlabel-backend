@@ -36,7 +36,10 @@
                 <tr>
                     <th>{% trans 'Product' %}</th>
                     <th>{% trans 'Influencer' %}</th>
-
+                    <th>{% trans 'Product Status' %}</th>
+                    <th>{% trans 'Pick Up Date' %}</th>
+                    <th>{% trans 'Return Date' %}</th>
+                    <th>{% trans 'Live ' %}</th>
                 </tr>
                 {% for item in reservedproducts %}
                     <tr>
@@ -49,6 +52,18 @@
                             {% else %}
                                 {{ item.influencer }}
                            {% endif %}
+                        </td>
+                        <td>
+                            {{ item.get_product_rental_status }}
+                        </td>
+                        <td>
+                            {{ item.date_picked }}
+                        </td>
+                        <td>
+                            {{ item.date_return }}
+                        </td>
+                        <td>
+                            {{ item.is_live }}
                         </td>
                     </tr>
                 {% endfor %}

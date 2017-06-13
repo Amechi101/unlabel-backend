@@ -1,0 +1,43 @@
+{% extends "layout_2_col.html" %}
+{% load i18n %}
+{% load static %}
+{% load thumbnail %}
+{% load product_tags  %}
+
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+    <div><h1>Products</h1></div>
+    {% for product in products %}
+            <li class="col-md-3 col-sm-6">{% render_product product %}</li>
+    {% endfor %}
+
+    <div><h1>Content Creators</h1></div>
+
+    <div style="display: inline-flex;">
+    {% for influencer in influencers %}
+        {{ influencer.users.first_name }}
+        <img class="image-adjust" src="{{ MEDIA_URL }}{{ influencer.users.image }}" class="thumbnail">
+    {% endfor %}
+</div>
+
+    <div><h1>Brands</h1></div>
+<div style="display: inline-flex;">
+    {% for brand in brands %}
+    {{ brand.name }}
+    <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
+
+    {% endfor %}
+</div>
+
+
+
+{% endblock content %}
