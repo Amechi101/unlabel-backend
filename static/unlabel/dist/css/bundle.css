@@ -97,6 +97,23 @@ a {
 a:hover {
   color: currentColor;
 }
+figcaption {
+  margin-top: 12px;
+}
+@media (min-width: 768px) {
+  figcaption {
+    margin-top: 24px;
+  }
+}
+figcaption small {
+  font-size: 11px;
+  font-family: 'FaroTrial-BoldLucky';
+}
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 img {
   display: block;
   margin: 0;
@@ -586,18 +603,6 @@ button.swiper-pagination-bullet {
   -webkit-transform: translate(-50%, 4px);
           transform: translate(-50%, 4px);
 }
-.caption {
-  margin-top: 12px;
-}
-@media (min-width: 768px) {
-  .caption {
-    margin-top: 20px;
-  }
-}
-.caption small {
-  font-size: 11px;
-  font-family: 'FaroTrial-BoldLucky';
-}
 .cols {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -639,6 +644,22 @@ button.swiper-pagination-bullet {
   -webkit-box-align: end;
       -ms-flex-align: end;
           align-items: flex-end;
+}
+@media (max-width: 767px) {
+  .cols--m-3 {
+    display: block;
+  }
+  .cols--m-3 > .col + .col {
+    margin-top: 27px;
+  }
+}
+@media (min-width: 768px) {
+  .cols--m-3 > .col {
+    width: calc(100% / 3);
+  }
+  .cols--m-3 > .col + .col {
+    margin-left: 32px;
+  }
 }
 @media (max-width: 767px) {
   .container {
@@ -1096,10 +1117,6 @@ button.swiper-pagination-bullet {
     margin-left: 32px;
   }
 }
-.influencer-review__visual img {
-  width: 100%;
-  height: auto;
-}
 @media (max-width: 767px) {
   .influencer-review__content {
     margin-top: 42px;
@@ -1485,6 +1502,12 @@ button.swiper-pagination-bullet {
     font-size: 64px;
   }
 }
+.title--oneWordPerLine {
+  word-spacing: 9999rem;
+}
+.title--caps {
+  text-transform: uppercase;
+}
 .title--headline {
   font-size: 128px;
   text-transform: uppercase;
@@ -1550,6 +1573,43 @@ button.swiper-pagination-bullet {
 .toggle__slider.is-right::after {
   -webkit-transform: translate(0%, -50%);
           transform: translate(0%, -50%);
+}
+@media (max-width: 767px) {
+  .triptych {
+    padding: 96px 0;
+  }
+}
+.triptych__wrapper {
+  position: relative;
+  padding: 42px 32px 0;
+}
+@media (min-width: 768px) {
+  .triptych__wrapper {
+    padding: 80px 0 0 192px;
+  }
+}
+.triptych__header {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.triptych__itemLink {
+  display: block;
+}
+.triptych__nav {
+  margin-top: 44px;
+}
+@media (max-width: 767px) {
+  .triptych__nav {
+    text-align: center;
+  }
+}
+@media (min-width: 768px) {
+  .triptych__nav {
+    margin-top: 80px;
+  }
 }
 @media (min-width: 768px) {
   .u-mobile-only {

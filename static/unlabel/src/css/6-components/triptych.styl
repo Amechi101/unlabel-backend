@@ -1,0 +1,38 @@
+.triptych {
+  @media $mq_s_only {
+    padding: 96px 0
+  }
+}
+
+.triptych__wrapper {
+  position: relative
+  padding: 42px 32px 0
+  
+  @media $mq_m {
+    padding: 80px 0 0 192px
+  }
+}
+
+.triptych__header {
+  position: absolute
+  top: -10px // Better alignement considering title line-height
+  left: 0
+  z-index: 1
+  pointer-events: none
+}
+
+.triptych__itemLink {
+  display: block
+}
+
+.triptych__nav {
+  margin-top: 44px
+  
+  @media $mq_s_only {
+    text-align: center
+  }
+
+  @media $mq_m {
+    margin-top: 80px
+  }
+}

@@ -26,4 +26,26 @@
   &--align-bottom {
     align-items: flex-end
   }
+  
+  // TODO: define if it's standard and apply it to existing content
+  &--m-3 {
+    @media $mq_s_only {
+      display: block
+      
+      & > .col {        
+        & + .col {
+          margin-top: 27px
+        }
+      }
+    }
+    @media $mq_m {
+      & > .col {
+        width: calc(100% / 3)
+        
+        & + .col {
+          margin-left: 32px
+        }
+      }
+    }
+  }
 }

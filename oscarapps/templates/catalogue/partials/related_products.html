@@ -1,0 +1,53 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<!-- TODO // dynamic content -->
+<section class="triptych">
+	<div class="container">
+		<div class="triptych__wrapper">
+			<header class="triptych__header">
+				<h1 class="title title--caps title--oneWordPerLine">More products</h1>
+			</header>
+			<div class="triptych__content">
+				<ul class="cols cols--m-3">
+					<li class="col">
+						<a href="" class="triptych__itemLink">
+							<figure>
+								<img src="{% static 'unlabel/dist/img/temp/more-product-1.jpg' %}" alt="">
+								<figcaption>
+									<p>Bonded Wool Parka</p>
+									<p><small>$695.00</small></p>
+								</figcaption>
+							</figure>
+						</a>
+					</li>
+					<li class="col">
+						<a href="" class="triptych__itemLink">
+							<figure>
+								<img src="{% static 'unlabel/dist/img/temp/more-product-2.jpg' %}" alt="">
+								<figcaption>
+									<p>Unisex Bomber</p>
+									<p><small>$345.00</small></p>
+								</figcaption>
+							</figure>
+						</a>
+					</li>
+					<li class="col">
+						<a href="" class="triptych__itemLink">
+							<figure>
+								<img src="{% static 'unlabel/dist/img/temp/more-product-3.jpg' %}" alt="">
+								<figcaption>
+									<p>Petra Long Coat</p>
+									<p><small>$465.00</small></p>
+								</figcaption>
+							</figure>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<nav class="triptych__nav">
+				<a class="cta" href="">{% trans 'See The Arrivals page' %}</a>
+			</nav>
+		</div>
+	</div>
+</section>
