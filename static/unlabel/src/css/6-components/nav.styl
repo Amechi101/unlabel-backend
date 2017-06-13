@@ -1,5 +1,4 @@
 .nav {
-  
   &--inline {
     display flex
     flex-direction row
@@ -10,5 +9,31 @@
       flex-direction row
       align-items: center
     }
+  }
+  
+  &--internal {
+    padding: 38px 24px
+    text-align: center
+    border-bottom: 1px solid $color_lightGrey
+    
+    .nav__item {
+      @media $mq_m {
+        display: inline-block
+      }
+      
+      & + .nav__item {
+        @media $mq_s_only {
+          margin-top: 10px
+        }
+        
+        @media $mq_m {
+          margin-left: 64px
+        }
+        
+        @media $mq_l {
+          margin-left: 96px
+        }
+      }
+    }    
   }
 }

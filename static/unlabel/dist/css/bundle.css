@@ -1133,6 +1133,13 @@ button.swiper-pagination-bullet {
     margin-top: 48px;
   }
 }
+.link {
+  font-family: 'FaroTrial-BoldLucky';
+  text-decoration: underline;
+}
+.link:hover {
+  text-decoration: none;
+}
 .nav--inline {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1156,6 +1163,31 @@ button.swiper-pagination-bullet {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+.nav--internal {
+  padding: 38px 24px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+@media (min-width: 768px) {
+  .nav--internal .nav__item {
+    display: inline-block;
+  }
+}
+@media (max-width: 767px) {
+  .nav--internal .nav__item + .nav__item {
+    margin-top: 10px;
+  }
+}
+@media (min-width: 768px) {
+  .nav--internal .nav__item + .nav__item {
+    margin-left: 64px;
+  }
+}
+@media (min-width: 1024px) {
+  .nav--internal .nav__item + .nav__item {
+    margin-left: 96px;
+  }
 }
 .notif {
   display: inline-block;
