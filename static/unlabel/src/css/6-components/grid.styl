@@ -27,6 +27,40 @@ grid_sidebarSize = 254px
   }
 }
 
+.grid__header {
+  border-bottom: 1px solid $color_lightGrey
+  
+  @media $mq_m {
+    min-height: 96px
+    padding: 32px
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: space-between
+  }
+}
+
+.grid__headerGroup {
+  display: flex
+  flex-direction: row
+  align-items: center
+  
+  @media $mq_s_only {
+    min-height: 85px
+    padding: 16px 24px
+  }
+  
+  & > * + * { // all children except first one
+    margin-left:  32px
+  }
+  
+  & + .grid__headerGroup {
+    @media $mq_s_only {
+      border-top: 1px solid $color_lightGrey
+    }
+  }
+}
+
 .grid__content {
   
   @media $mq_m {
@@ -49,5 +83,56 @@ grid_sidebarSize = 254px
   @media $mq_m {
     padding: 24px 32px
     width: grid_sidebarSize
+  }
+}
+
+.grid__list {
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+
+  margin-bottom: -1px // hack - prevent last items border bottom to be visible
+  overflow: hidden
+}
+
+.grid__item {
+  border_style = 1px solid $color_lightGrey
+    
+  width: 50%
+  border-bottom: border_style
+  &:nth-child(2n + 1) {
+    border-right: border_style
+  }
+  
+  @media $mq_l {
+    width: calc(100% / 3)
+    &:nth-child(2n + 1) {
+      border-right: 0
+    }
+    &:nth-child(3n + 1),
+    &:nth-child(3n + 2) {
+      border-right: border_style
+    }
+  }
+  
+  @media $mq_xxl {
+    width: 25%
+    &:nth-child(3n + 1),
+    &:nth-child(3n + 2) {
+      border-right: 0
+    }
+    &:nth-child(4n + 1),
+    &:nth-child(4n + 2),
+    &:nth-child(4n + 3) {
+      border-right: border_style
+    }
+  }
+}
+
+.grid__itemInner {
+  padding: 16px 16px 18px
+  
+  @media $mq_m {
+    padding: 32px 32px 24px
   }
 }

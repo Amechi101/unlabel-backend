@@ -1,0 +1,28 @@
+.pagination {
+  min-height: 128px
+  padding: 48px 24px
+}
+
+.pagination__list {
+  margin: 0 auto
+  text-align: center
+}
+
+.pagination__item {
+  display: inline-block
+}
+
+.pagination__link {
+  display: block
+  width: size = 30px
+  height: size
+  line-height: (size - 2px) // better alignement
+  border: 2px solid transparent
+  text-align: center
+  vertical-align: middle
+  
+  .pagination__item.is-active & {
+    border-color: currentColor  
+    font-family: $font_bold
+  }
+}

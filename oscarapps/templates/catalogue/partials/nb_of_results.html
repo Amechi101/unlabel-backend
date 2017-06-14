@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<div>
+    {% if paginator.count %}
+        {% blocktrans count num_results=paginator.count %}
+            <strong>{{ num_results }}</strong> result
+        {% plural %}
+            <strong>{{ num_results }}</strong> results
+        {% endblocktrans %}
+    {% else %}
+        {% trans "<strong>0</strong> results" %}
+    {% endif %}
+</div>

@@ -1,45 +1,29 @@
 {% extends "layout.html" %}
-{% load promotion_tags %}
 
-{% comment %}
-Keep the same header and footer as the standard layout template but override the 
-main content area to split it into a sidebar and a content block
-{% endcomment %}
 {% block content_wrapper %}
-<div class="container-fluid page">
-    <div class="page_inner">
-        {% block breadcrumbs %}{% endblock %}
-        <div class="row">
 
-            <aside class="sidebar col-sm-4 col-md-3">
-                {# Render promotions at the top of the left-hand sidebar #}
-                <div id="promotions_left">
-                    {% for promotion in promotions_left %}
-                        {% render_promotion promotion %}
-                    {% endfor %}
-                </div>
-                {% block column_left %}{% endblock %}
-            </aside>
+{% block before_layout %}{% endblock %}
 
-            <div class="col-sm-8 col-md-9">
-                {% block header %}
-                <div class="page-header action">
-                    <h1>{% block headertext %}{% endblock %}</h1>
-                </div>
-                {% endblock %}
-
-                {% include "partials/alert_messages.html" %}
-
-                <div id="promotions">
-                    {% for promotion in promotions_page %}
-                        {% render_promotion promotion %}
-                    {% endfor %}
-                </div>
-
-                {% block content %}{% endblock %}
+<div class="grid {% block layout_extra_classnames %}{% endblock %}">
+    <div class="grid__sidebar {% block layout_sidebar_extra_classnames %}{% endblock %}">
+        {% block column_left %}{% endblock %}
+    </div>
+    <div class="grid__content">
+        {% block grid_header %}
+        <div class="grid__header">
+            <div class="grid__headerGroup">
+                {% block grid_header_title %}{% endblock %}
             </div>
+            <div class="grid__headerGroup">
+                {% block grid_header_nav %}{% endblock %}
+            </div>
+        </div>
+        {% endblock %}
 
-        </div><!-- /row -->
-    </div><!-- /page_inner -->
-</div><!-- /container-fluid -->
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+{% block after_layout %}{% endblock %}
+
 {% endblock %}

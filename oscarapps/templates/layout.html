@@ -13,8 +13,10 @@
         {% include "partials/alert_messages.html" %}
         {% block subnavigation %}{% endblock %}
 
-        {# Div exists for AJAX updates to entire content section #}
-        <main id="content_inner">{% block content %}{% endblock %}</main>
+        {% block content_wrapper %}
+            {# Div exists for AJAX updates to entire content section #}
+            <main id="content_inner">{% block content %}{% endblock %}</main>
+        {% endblock %}
 
         {% include "partials/footer.html" %}
     </div>

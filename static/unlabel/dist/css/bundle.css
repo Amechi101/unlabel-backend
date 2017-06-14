@@ -603,6 +603,12 @@ button.swiper-pagination-bullet {
   -webkit-transform: translate(-50%, 4px);
           transform: translate(-50%, 4px);
 }
+.categories {
+  line-height: 24px;
+}
+.categories .nested-lists__list .nested-lists__list {
+  padding-left: 24px;
+}
 .cols {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1040,6 +1046,54 @@ button.swiper-pagination-bullet {
 .grid--borderBottomLess {
   border-bottom: 0 none;
 }
+.grid__header {
+  border-bottom: 1px solid #f0f0f0;
+}
+@media (min-width: 768px) {
+  .grid__header {
+    min-height: 96px;
+    padding: 32px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+.grid__headerGroup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+@media (max-width: 767px) {
+  .grid__headerGroup {
+    min-height: 85px;
+    padding: 16px 24px;
+  }
+}
+.grid__headerGroup > * + * {
+  margin-left: 32px;
+}
+@media (max-width: 767px) {
+  .grid__headerGroup + .grid__headerGroup {
+    border-top: 1px solid #f0f0f0;
+  }
+}
 @media (min-width: 768px) {
   .grid__content {
     width: calc(100% - 254px);
@@ -1061,6 +1115,60 @@ button.swiper-pagination-bullet {
   .grid__sidebar {
     padding: 24px 32px;
     width: 254px;
+  }
+}
+.grid__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin-bottom: -1px;
+  overflow: hidden;
+}
+.grid__item {
+  width: 50%;
+  border-bottom: 1px solid #f0f0f0;
+}
+.grid__item:nth-child(2n + 1) {
+  border-right: 1px solid #f0f0f0;
+}
+@media (min-width: 1024px) {
+  .grid__item {
+    width: calc(100% / 3);
+  }
+  .grid__item:nth-child(2n + 1) {
+    border-right: 0;
+  }
+  .grid__item:nth-child(3n + 1),
+  .grid__item:nth-child(3n + 2) {
+    border-right: 1px solid #f0f0f0;
+  }
+}
+@media (min-width: 1440px) {
+  .grid__item {
+    width: 25%;
+  }
+  .grid__item:nth-child(3n + 1),
+  .grid__item:nth-child(3n + 2) {
+    border-right: 0;
+  }
+  .grid__item:nth-child(4n + 1),
+  .grid__item:nth-child(4n + 2),
+  .grid__item:nth-child(4n + 3) {
+    border-right: 1px solid #f0f0f0;
+  }
+}
+.grid__itemInner {
+  padding: 16px 16px 18px;
+}
+@media (min-width: 768px) {
+  .grid__itemInner {
+    padding: 32px 32px 24px;
   }
 }
 .header {
@@ -1253,6 +1361,13 @@ button.swiper-pagination-bullet {
     margin-left: 96px;
   }
 }
+.nested-lists__item > .nested-lists__list {
+  max-height: 0;
+  overflow: hidden;
+}
+.nested-lists__item.is-open > .nested-lists__list {
+  max-height: 9999px;
+}
 .notif {
   display: inline-block;
   vertical-align: middle;
@@ -1280,6 +1395,30 @@ button.swiper-pagination-bullet {
     border-radius: 12.5px;
     padding: 0 5px;
   }
+}
+.pagination {
+  min-height: 128px;
+  padding: 48px 24px;
+}
+.pagination__list {
+  margin: 0 auto;
+  text-align: center;
+}
+.pagination__item {
+  display: inline-block;
+}
+.pagination__link {
+  display: block;
+  width: 30px;
+  height: 30px;
+  line-height: 28px;
+  border: 2px solid transparent;
+  text-align: center;
+  vertical-align: middle;
+}
+.pagination__item.is-active .pagination__link {
+  border-color: currentColor;
+  font-family: 'FaroTrial-BoldLucky';
 }
 .product .add-to-basket {
   display: -webkit-box;
@@ -1495,6 +1634,9 @@ button.swiper-pagination-bullet {
           appearance: none;
   cursor: pointer;
 }
+.select--borderLess select {
+  border-color: transparent;
+}
 @media (max-width: 767px) {
   .share {
     border-top: 1px solid #f0f0f0;
@@ -1674,5 +1816,8 @@ button.swiper-pagination-bullet {
   .u-desktop-only {
     display: none !important;
   }
+}
+.u-block {
+  display: block;
 }
 /*# sourceMappingURL=bundle.css.map */

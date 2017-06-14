@@ -1,47 +1,34 @@
-{% load reviews_tags %}
 {% load thumbnail %}
-{% load i18n %}
-{% load display_tags %}
-{% load staticfiles %}
+
+{% load currency_filters %}
+{% load purchase_info_tags %}
 
 {% block product %}
-    <article class="product_pod">
-        {% block product_image %}
-            <div class="image_container">
-                {% with image=product.primary_image %}
-                    {% thumbnail image.original "x155" upscale=False as thumb %}
-                    <a href="{{ product.get_absolute_url }}"><img src="{{ thumb.url }}" alt="{{ product.get_title }}" class="thumbnail"></a>
-                    {% endthumbnail %}
-                {% endwith %}
-            </div>
-        {% endblock %}
-
-        {% block product_review %}
-            {% iffeature "reviews" %}
-                <p class="star-rating {{ product.rating|as_stars }}">
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                    <i class="icon-star"></i>
-                </p>
-            {% endiffeature %}
-        {% endblock %}
-
-        {% block product_title %}
-            {# will add the address to the corrssponding views once done #}
-            <h3><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:3 }}</a></h3>
-            <h4><a href="">{{ product.get_brand|truncatewords:4 }}</a></h4>
-            <h4><a href="">{{ product.get_influencer.first_name}} {{ product.get_influencer.last_name}}</a></h4>
-        {% endblock %}
-
-        {% block product_price %}
-            <div class="product_price">
-                {% include "catalogue/partials/stock_record.html" %}
-                {% if not product.is_parent %}
-                    {% include "catalogue/partials/add_to_basket_form_compact.html" %}
-                {% endif %}
-            </div>
-        {% endblock %}
+    <article>
+        <a class="grid__itemInner u-block" href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">
+            <figure>
+                {% block product_image %}
+                    {% with image=product.primary_image %}
+                        {% thumbnail image.original "284x284" crop="center" upscale=True as thumb %}
+                        <img src="{{ thumb.url }}" alt="{{ product.get_title }}" width="284" height="284">
+                        {% endthumbnail %}
+                    {% endwith %}
+                {% endblock %}
+                <figcaption>
+                    {% block product_title %}
+                        <p>{{ product.get_title|truncatewords:4 }}</p>
+                    {% endblock %}
+                    <p><small>by Influencer Name • Brand Name</small></p>
+                    {% block product_price %}
+                        {% purchase_info_for_product request product as session %}
+                        {% if session.price.exists %}
+                            {% if session.price.is_tax_known %}
+                                <p><small>{{ session.price.incl_tax|currency:session.price.currency }}</small></p>
+                            {% endif %}
+                        {% endif %}
+                    {% endblock %}
+                </figcaption>
+            </figure>
+        </a>
     </article>
 {% endblock %}
