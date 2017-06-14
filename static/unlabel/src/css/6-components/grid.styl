@@ -40,7 +40,13 @@ grid_sidebarSize = 254px
   }
 }
 
-.grid__headerGroup {
+.grid__headerTitle {
+  @media $mq_s_only {
+    padding: 32px 24px
+  }
+}
+
+.grid__headerNav {
   display: flex
   flex-direction: row
   align-items: center
@@ -48,15 +54,20 @@ grid_sidebarSize = 254px
   @media $mq_s_only {
     min-height: 85px
     padding: 16px 24px
+    border-top: 1px solid $color_lightGrey
+    justify-content: space-between
   }
+}
+
+.grid__headerNavGroup {
+  display: flex
+  flex-direction: row
+  align-items: center
   
   & > * + * { // all children except first one
-    margin-left:  32px
-  }
-  
-  & + .grid__headerGroup {
-    @media $mq_s_only {
-      border-top: 1px solid $color_lightGrey
+    margin-left:  16px
+    @media $mq_l {
+      margin-left:  32px
     }
   }
 }

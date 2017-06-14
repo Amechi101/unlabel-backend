@@ -11,11 +11,17 @@
     <div class="grid__content">
         {% block grid_header %}
         <div class="grid__header">
-            <div class="grid__headerGroup">
+            <div class="grid__headerTitle">
                 {% block grid_header_title %}{% endblock %}
             </div>
-            <div class="grid__headerGroup">
-                {% block grid_header_nav %}{% endblock %}
+            <div class="grid__headerNav">
+                <div class="grid__headerNavGroup">
+                    {% block grid_header_filters %}{% endblock %}
+                </div>
+                <div class="grid__headerNavGroup">
+                    {% block grid_header_sortBy %}{% endblock %}
+                    {% block grid_header_results %}{% endblock %}
+                </div>
             </div>
         </div>
         {% endblock %}

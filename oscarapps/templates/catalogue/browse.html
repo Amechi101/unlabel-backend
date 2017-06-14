@@ -17,7 +17,11 @@
     <h1 class="title title--caps">{{ summary }}</h1>
 {% endblock %}
 
-{% block grid_header_nav %}
+{% block grid_header_filters %}
+    <a id="filters_toggler" class="link u-mobile-only" href="">Filters</a>
+{% endblock %}
+
+{% block grid_header_sortBy %}
     <div>
         {# TODO : make it dynamic to actually sort items #}
         <form>
@@ -28,6 +32,9 @@
             </div>
         </form>
     </div>
+{% endblock %}
+
+{% block grid_header_results %}
     {% include "catalogue/partials/nb_of_results.html" %}
 {% endblock %}
 
