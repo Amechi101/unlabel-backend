@@ -16,9 +16,9 @@
                 {% endblock %}
                 <figcaption>
                     {% block product_title %}
-                        <p>{{ product.get_title|truncatewords:4 }}</p>
+                        <h2>{{ product.get_title|truncatewords:4 }}</h2>
                     {% endblock %}
-                    <p><small>by Influencer Name • Brand Name</small></p>
+                    <h3><small>by Influencer Name • Brand Name</small></h3>
                     {% block product_price %}
                         {% purchase_info_for_product request product as session %}
                         {% if session.price.exists %}

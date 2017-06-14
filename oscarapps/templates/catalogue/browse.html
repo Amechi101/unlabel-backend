@@ -46,7 +46,7 @@
                             {% endif %}
                         </a>
 
-                        {% if info.has_children %}<ul class="nested-lists__list">{% else %}</li class="nested-lists__item">{% endif %}
+                        {% if info.has_children %}<ul class="nested-lists__list">{% else %}</li>{% endif %}
                         {% for n in info.num_to_close %}
                             </ul></li>
                         {% endfor %}
