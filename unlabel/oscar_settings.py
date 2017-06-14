@@ -20,7 +20,7 @@ OSCAR_DASHBOARD_NAVIGATION = [
         'url_name': 'dashboard:index',
     },
     {
-        'label': _('Inventory Management'),
+        'label': _('Inventory'),
         'icon': 'icon-sitemap',
         'children': [
             {
@@ -73,6 +73,13 @@ OSCAR_DASHBOARD_NAVIGATION = [
             },
         ]
     },
+
+    {
+        'label': _('Influencers'),
+        'icon': 'icon-group',
+        'url_name': 'dashboard:influencer-list',
+    },
+
     {
         'label': _('Partners'),
         'icon': 'icon-user',
@@ -88,21 +95,6 @@ OSCAR_DASHBOARD_NAVIGATION = [
         ]
     },
 
-    {
-        'label': _('Users'),
-        'icon': 'icon-group',
-        'url_name': 'dashboard:users-index',
-        # 'children': [
-        #     {
-        #         'label': _('Users'),
-        #         'url_name': 'dashboard:users-index',
-        #     },
-        #     {
-        #         'label': _('Stock alert requests'),
-        #         'url_name': 'dashboard:user-alert-list',
-        #     },
-        # ]
-    },
     {
         'label': _('Offers'),
         'icon': 'icon-bullhorn',
