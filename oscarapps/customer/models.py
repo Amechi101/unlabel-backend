@@ -3,6 +3,7 @@ from django.db import models
 # from oscarapps.catalogue.models import *
 from django.utils.translation import gettext as _
 from django.conf import settings
+from oscarapps.partner.models import Partner
 
 
 
@@ -16,6 +17,25 @@ class UserProductLike(models.Model):
 
     def __str__(self):
         return str(self.product_like.likes)
+
+
+class UserBrandLike(models.Model):
+    user = models.ForeignKey( settings.AUTH_USER_MODEL )
+    brand = models.ForeignKey(Partner)
+
+    class Meta:
+        verbose_name = _('Brand Likes')
+        verbose_name_plural = _('Brand Likes')
+
+
+class UserInfluencerLike(models.Model):
+    user = models.ForeignKey( settings.AUTH_USER_MODEL )
+    Influencer = models.ForeignKey(Partner)
+
+    class Meta:
+        verbose_name = _('Influencer Likes')
+        verbose_name_plural = _('Influencer Likes')
+
 
 class UserVerify(models.Model):
     customer = models.ForeignKey( settings.AUTH_USER_MODEL )

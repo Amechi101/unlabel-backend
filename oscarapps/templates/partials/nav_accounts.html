@@ -40,11 +40,11 @@
                                 <span class="label label-important">{{ num_unread_notifications }}</span>
                             </a>
                         {% else %}
-                            {% if not user.is_brand  %}
-                                {% if not user.is_superuser  %}
+{#                            {% if not user.is_brand  %}#}
+{#                                {% if not user.is_superuser  %}#}
                                     <a href="{% url 'customer:summary' %}"><i class="icon-user"></i> {% trans "Account" %}</a>
-                                {% endif %}
-                            {% endif %}
+{#                                {% endif %}#}
+{#                            {% endif %}#}
                         {% endif %}
                     </li>
                     {% if user.is_staff or perms.partner.dashboard_access %}
