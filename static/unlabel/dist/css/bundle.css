@@ -853,8 +853,12 @@ button.swiper-pagination-bullet {
   height: 84px;
   padding: 0 16px;
 }
-.drawer__item {
-  border-bottom: 1px solid #f0f0f0;
+.drawer__item.is-open > .drawer__link--toggle > .drawer__linkIcon::after {
+  -webkit-transform: translate(-50%, -50%) rotate(0deg);
+          transform: translate(-50%, -50%) rotate(0deg);
+}
+.drawer__list .drawer__list .drawer__link {
+  background-color: #dde0ed;
 }
 .drawer__link {
   display: -webkit-box;
@@ -873,6 +877,32 @@ button.swiper-pagination-bullet {
   height: 54px;
   padding: 0 16px;
   font-family: 'FaroTrial-BoldLucky';
+  border-bottom: 1px solid #f0f0f0;
+}
+.drawer__link--toggle > .drawer__linkIcon {
+  position: relative;
+  width: 34px;
+  height: 34px;
+}
+.drawer__link--toggle > .drawer__linkIcon::before,
+.drawer__link--toggle > .drawer__linkIcon::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: '';
+  display: block;
+  width: 14px;
+  height: 2px;
+  background-color: #232323;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+.drawer__link--toggle > .drawer__linkIcon::after {
+  -webkit-transform: translate(-50%, -50%) rotate(-90deg);
+          transform: translate(-50%, -50%) rotate(-90deg);
+  transition: opacity 250ms cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 250ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 250ms cubic-bezier(0.19, 1, 0.22, 1), transform 250ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 250ms cubic-bezier(0.19, 1, 0.22, 1), transform 250ms cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 250ms cubic-bezier(0.19, 1, 0.22, 1);
 }
 .drawer__link > * + * {
   margin-left: 16px;

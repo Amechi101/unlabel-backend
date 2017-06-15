@@ -63,7 +63,18 @@
 }
 
 .drawer__item {
-  border-bottom: 1px solid $color_lightGrey
+  &.is-open > .drawer__link--toggle > .drawer__linkIcon::after {
+    transform: translate(-50%, -50%) rotate(0deg)
+  }
+}
+
+.drawer__list {
+  // sublists
+  .drawer__list {
+    .drawer__link {
+      background-color: $color_product
+    }
+  }
 }
 
 .drawer__link {
@@ -74,6 +85,32 @@
   height: 54px
   padding: 0 16px
   font-family: $font_bold
+  border-bottom: 1px solid $color_lightGrey
+  
+  &--toggle {
+    & > .drawer__linkIcon {
+      position: relative
+      width: size = 34px
+      height: size
+      &::before,
+      &::after {
+        position: absolute
+        top: 50%
+        left: 50%
+        content: ''
+        display: block
+        width: 14px
+        height: 2px
+        background-color: $color_darkGrey
+        transform: translate(-50%, -50%)
+      }
+      
+      &::after {
+        transform: translate(-50%, -50%) rotate(-90deg)
+        transition(opacity transform)
+      }
+    }
+  }
   
   // all children except first one (flexbox gutter)
   & > * + * {

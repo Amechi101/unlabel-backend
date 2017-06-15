@@ -18,7 +18,53 @@
 {% endblock %}
 
 {% block grid_header_filters %}
-    <a id="filters_toggler" class="link u-mobile-only" href="">Filters</a>
+
+    {% category_tree parent=category as tree_categories %}
+    {% if tree_categories %}
+        <a class="link u-mobile-only" href="#mobile-categories-nav">{% trans 'Categories' %}</a>
+
+        <div class="drawer" id="mobile-categories-nav">
+            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Drawer' %}"></a>
+            <div class="drawer__frame">
+                <div class="drawer__header">
+                    <div class="drawer__titleContainer">
+                        <span class="title title--small">{% trans 'Categories' %}</span>
+                    </div>
+                    <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Drawer' %}"></a>
+                </div>
+                <div class="drawer__scroller">
+                    <div class="drawer__content">
+                        <div class="nested-lists">
+                            <ul class="nested-lists__list drawer__list">
+                                {% for tree_category, info in tree_categories %}
+                                    <li class="nested-lists__item drawer__item">
+                                        <a class="drawer__link {% if info.has_children %}drawer__link--toggle{% endif %}" href="{{ tree_category.get_absolute_url }}">
+                                            <span class="drawer__linkLabel">
+                                                {% if tree_category.pk == category.pk %}
+                                                    <strong>{{ tree_category.name }}</strong>
+                                                {% else %}
+                                                    {{ tree_category.name }}
+                                                {% endif %}
+                                            </span>
+                                            <span class="drawer__linkIcon">
+                                            {% if not info.has_children %}
+                                                <span class="fonticon fonticon--box fonticon--small fonticon--carouselArrowRight"></span>
+                                            {% endif %}
+                                            </span>
+                                        </a>
+
+                                        {% if info.has_children %}<ul class="nested-lists__list drawer__list">{% else %}</li>{% endif %}
+                                        {% for n in info.num_to_close %}
+                                            </ul></li>
+                                        {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block grid_header_sortBy %}

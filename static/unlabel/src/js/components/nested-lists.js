@@ -1,4 +1,5 @@
 import Base from './_base'
+import {TweenLite, Power3} from 'gsap'
 
 /**
  * TODO : define better behaviour
@@ -44,13 +45,25 @@ class NestedLists extends Base {
   // ----------------------------------------------------------------------------------------
   handleClickItem(e) {
     const item_el = e.currentTarget
-    const has_nested_list = item_el.querySelector(this.settings.sublistSelector)
+    const nested_list = item_el.querySelector(this.settings.sublistSelector)
 
-    if( has_nested_list ){
+    if( nested_list ){
+      e.preventDefault()
+      e.stopImmediatePropagation()
       if( ! item_el.classList.contains(this.settings.openClassname) ){
-        e.preventDefault()
-        e.stopImmediatePropagation()
-        item_el.classList.add(this.settings.openClassname)
+        let item_min_height = 0
+        const children_arr = [].slice.call(nested_list.children)
+        children_arr.forEach((child_el) => {
+          item_min_height += child_el.getBoundingClientRect().height
+        })
+        TweenLite.to(nested_list, 0.3, {minHeight: item_min_height, clearProps: 'minHeight', ease: Power3.easeOut, onComplete: ()=> {
+          item_el.classList.add(this.settings.openClassname)
+        }})
+      }
+      else {
+        TweenLite.to(nested_list, 0.3, {height: 0, clearProps: 'height', ease: Power3.easeOut, onComplete: ()=> {
+          item_el.classList.remove(this.settings.openClassname)
+        }})
       }
     }
   }
