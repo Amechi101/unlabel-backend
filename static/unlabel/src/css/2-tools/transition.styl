@@ -1,0 +1,22 @@
+/**
+* @mixin transition
+* 
+* @desc Override transition property to have default speed and ease,
+*       but mainly to prevent using the 'all' keyword and instead list all props that should transition together
+*
+* @args
+*   $props  {list}    - list of properties to transition at the same time
+*   $speed  {s|ms}    - transiton speed
+*   $ease   {string}  - transiton ease
+*
+*/
+transition($props, $speed = $transition_default_speed, $ease = $transition_default_ease){
+  $transition = ''
+  for $prop, i in $props {
+    if i > 0 {
+      $transition += ', '
+    }
+    $transition += $prop $speed $ease
+  }
+  transition: unquote($transition)
+}

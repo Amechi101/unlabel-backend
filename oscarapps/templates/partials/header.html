@@ -59,11 +59,62 @@
                     <a class="header__searchBtn" href="" title="{% trans 'Search' %}"><span class="fonticon fonticon--magnifyingglass fonticon--box"></span></a>
                 </li>
             </ul>
-            <a class="burgerMenu u-mobile-only" href="" title="{% trans 'Toggle Menu' %}">
+            <a class="burgerMenu u-mobile-only" href="#mobile-main-nav" title="{% trans 'Toggle Menu' %}">
                 <span class="burgerMenu__bar burgerMenu__bar--top"></span>
                 <span class="burgerMenu__bar burgerMenu__bar--middle"></span>
                 <span class="burgerMenu__bar burgerMenu__bar--bottom"></span>
             </a>
+        </nav>
+        <nav class="drawer" id="mobile-main-nav">
+            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Drawer' %}"></a>
+            <div class="drawer__frame">
+                <div class="drawer__header">
+                    <div class="drawer__titleContainer"></div>
+                    <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Drawer' %}"></a>
+                </div>
+                <div class="drawer__scroller">
+                    <div class="drawer__content">
+                        <ul class="drawer__list">
+                            <li class="drawer__item">
+                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Women' %}">
+                                    <span class="drawer__linkLabel">{% trans 'Women' %}</span>
+                                    <span class="fonticon fonticon--box fonticon--small fonticon--carouselArrowRight"></span>
+                                </a>
+                            </li>
+                            <li class="drawer__item">
+                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Men' %}">
+                                    <span class="drawer__linkLabel">{% trans 'Men' %}</span>
+                                    <span class="fonticon fonticon--box fonticon--small fonticon--carouselArrowRight"></span>
+                                </a>
+                            </li>
+                            <li class="drawer__item">
+                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Our brands' %}">
+                                    <span class="drawer__linkLabel">{% trans 'Our brands' %}</span>
+                                    <span class="fonticon fonticon--box fonticon--small fonticon--carouselArrowRight"></span>
+                                </a>
+                            </li>
+                            <li class="drawer__item">
+                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Our creators' %}">
+                                    <span class="drawer__linkLabel">{% trans 'Our creators' %}</span>
+                                    <span class="fonticon fonticon--box fonticon--small fonticon--carouselArrowRight"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="drawer__footer">
+                        <div class="drawer__branding">
+                            <a href="{{ homepage_url }}" title="{% trans 'Home' %}">
+                                <div class="logo">
+                                    <span class="logo__label">{{ shop_name }}</span>
+                                    <span class="logo__icon">
+                                        <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}" alt="Unlabel Logo">
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </nav>
     </div>
 </header>

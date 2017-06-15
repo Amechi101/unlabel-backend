@@ -2,6 +2,7 @@ import domready from 'domready'
 import Gallery from './components/gallery'
 import SizeChart from './components/sizechart'
 import NestedLists from './components/nested-lists'
+import Drawer from './components/drawer'
 
 class App {
   constructor() {
@@ -31,6 +32,17 @@ class App {
     nested_lists_arr.forEach((el) => {
       new NestedLists({
         el: el
+      })
+    })
+
+    // Drawers
+    const drawers_arr = [].slice.call(document.querySelectorAll('.drawer'))
+    drawers_arr.forEach((el) => {
+      new Drawer({
+        el: el,
+        options: {
+          closeSelector: '.drawer__close, .drawer__backdrop'
+        }
       })
     })
   }

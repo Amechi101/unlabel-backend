@@ -28,7 +28,9 @@
     "debounce": "1.0.2",
     "domready": "1.0.8",
     "events": "1.1.1",
-    "swiper": "3.4.2"
+    "gsap": "1.19.1",
+    "swiper": "3.4.2",
+    "tabbable": "1.0.6"
   },
   "babel": {
     "presets": [

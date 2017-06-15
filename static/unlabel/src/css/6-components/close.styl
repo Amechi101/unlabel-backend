@@ -1,0 +1,47 @@
+.close {
+  position: relative
+  display: inline-block
+  width: size = 34px
+  height: size
+  border: 2px solid $color_darkGrey
+  
+  &::before,
+  &::after {
+    content: ''
+    display: block
+    position: absolute
+    top: 50%
+    left: 50%
+    width: 20px
+    height: 2px
+    background-color: $color_darkGrey
+    transition(transform)
+  }
+  
+  &::before {
+    transform: translate(-50%, -50%) rotate(-45deg)
+  }
+  
+  &::after {
+    transform: translate(-50%, -50%) rotate(45deg)
+  }
+  
+  &:hover {
+    &::before {
+      transform: translate(-50%, -50%) rotate(-135deg)
+    }
+    
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg)
+    }
+  }
+  
+  &--light {
+    border: 2px solid #fff
+    
+    &::before,
+    &::after {
+      background-color: #fff
+    }
+  }
+}
