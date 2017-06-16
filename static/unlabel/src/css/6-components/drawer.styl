@@ -69,8 +69,10 @@
   // sublists
   .drawer__list {
     .drawer__link {
-      background-color: $color_product
-      border-bottom: 0
+      &:not(.drawer__link--toggle) {
+        background-color: $color_product
+        border-bottom: 0
+      }
     }
   }
 }

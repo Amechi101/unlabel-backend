@@ -853,7 +853,7 @@ button.swiper-pagination-bullet {
   height: 84px;
   padding: 0 16px;
 }
-.drawer__list .drawer__list .drawer__link {
+.drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle) {
   background-color: #dde0ed;
   border-bottom: 0;
 }
