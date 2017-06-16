@@ -38,7 +38,7 @@
                             <ul class="nested-lists__list drawer__list">
                                 {% for tree_category, info in tree_categories %}
                                     <li class="nested-lists__item drawer__item">
-                                        <a class="drawer__link {% if info.has_children %}drawer__link--toggle{% endif %}" href="{{ tree_category.get_absolute_url }}">
+                                        <a class="nested-lists__link drawer__link {% if info.has_children %}drawer__link--toggle{% endif %}" href="{{ tree_category.get_absolute_url }}">
                                             <span class="drawer__linkLabel">
                                                 {% if tree_category.pk == category.pk %}
                                                     <strong>{{ tree_category.name }}</strong>
@@ -91,7 +91,7 @@
             <ul class="nested-lists__list">
                 {% for tree_category, info in tree_categories %}
                     <li class="nested-lists__item">
-                        <a href="{{ tree_category.get_absolute_url }}">
+                        <a class="nested-lists__link" href="{{ tree_category.get_absolute_url }}">
                             {% if tree_category.pk == category.pk %}
                                 <strong>{{ tree_category.name }}</strong>
                             {% else %}

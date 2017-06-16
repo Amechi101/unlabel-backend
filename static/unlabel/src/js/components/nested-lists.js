@@ -1,17 +1,12 @@
 import {TweenLite, Power3} from 'gsap'
-
-/**
- * TODO : define better behaviour
- * Allow user to toggle (open/close) sublists
- * Still allow the user to click on each link !
- * Maybe based items selector on link instead of parent item and use closest to retrieve the parent ?
- */
+import closest from 'closest'
 
 class NestedLists {
   constructor({el, options = {}}) {    
     this.el = el
     this.options = {
       itemsSelector: '.nested-lists__item',
+      linksSelector: '.nested-lists__link',
       sublistSelector: '.nested-lists__list',
       openClassname: 'is-open' 
     }
@@ -28,39 +23,41 @@ class NestedLists {
   // Public methods
   // ----------------------------------------------------------------------------------------
   bindMethods() {
-    this.handleClickItem = this.handleClickItem.bind(this)
+    this.handleClickLink = this.handleClickLink.bind(this)
   }
   init() {
-    this.items_arr = [].slice.call(this.el.querySelectorAll(this.options.itemsSelector))
+    this.links_arr = [].slice.call(this.el.querySelectorAll(this.options.linksSelector))
   }
   addEvents() {
-    this.items_arr.forEach((item_el) => {
-      const has_nested_list = !! item_el.querySelector(this.options.sublistSelector)
+    this.links_arr.forEach((link_el) => {
+      const parent_item_el = closest(link_el, this.options.itemsSelector)
+      const has_nested_list = !! parent_item_el.querySelector(this.options.sublistSelector)
       if( has_nested_list ){
-        item_el.addEventListener('click', this.handleClickItem)
+        link_el.addEventListener('click', this.handleClickLink)
       }
     })
   }
-  handleClickItem(e) {
-    const item_el = e.currentTarget
-    const nested_list = item_el.querySelector(this.options.sublistSelector)
+  handleClickLink(e) {
+    const link_el = e.currentTarget
+    const parent_item_el = closest(link_el, this.options.itemsSelector)
+    const nested_list = parent_item_el.querySelector(this.options.sublistSelector)
 
     if( nested_list ){
       e.preventDefault()
       e.stopImmediatePropagation()
-      if( ! item_el.classList.contains(this.options.openClassname) ){
+      if( ! parent_item_el.classList.contains(this.options.openClassname) ){
         let item_min_height = 0
         const children_arr = [].slice.call(nested_list.children)
         children_arr.forEach((child_el) => {
           item_min_height += child_el.getBoundingClientRect().height
         })
         TweenLite.to(nested_list, 0.3, {minHeight: item_min_height, clearProps: 'minHeight', ease: Power3.easeOut, onComplete: ()=> {
-          item_el.classList.add(this.options.openClassname)
+          parent_item_el.classList.add(this.options.openClassname)
         }})
       }
       else {
         TweenLite.to(nested_list, 0.3, {height: 0, clearProps: 'height', ease: Power3.easeOut, onComplete: ()=> {
-          item_el.classList.remove(this.options.openClassname)
+          parent_item_el.classList.remove(this.options.openClassname)
         }})
       }
     }
