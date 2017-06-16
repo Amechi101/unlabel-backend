@@ -16,6 +16,9 @@ class Drawer extends Popin {
     this.backdrop_el = this.el.querySelector('.drawer__backdrop')
     this.frame_el = this.el.querySelector('.drawer__frame')
     this.scroller_el = this.el.querySelector('.drawer__scroller')
+
+    this.anim_axis = this.el.classList.contains('drawer--top') ? 'y' : 'x'
+    this.anim_direction = this.el.classList.contains('drawer--top') ? -1 : 1
   }
   addEvents() {
     super.addEvents(...arguments)
@@ -23,15 +26,29 @@ class Drawer extends Popin {
   }
   beforeShow() {
     super.beforeShow(...arguments)
-    this.scroller_el.scrollTop = 0 // scroller back to top
+    if( this.scroller_el ){
+      this.scroller_el.scrollTop = 0 // scroller back to top
+    }
   }
   transitionIn(speed = 0.5) {
+    const frame_params = {
+      [this.anim_axis]: '0%',
+      opacity: 1,
+      onComplete: this.shown,
+      ease: Power3.easeOut
+    }
     TweenLite.to(this.backdrop_el, speed, {opacity: 0.7, ease: Power3.easeOut})
-    TweenLite.to(this.frame_el, speed, {x: '0%', opacity: 1, onComplete: this.shown, ease: Power3.easeOut})
+    TweenLite.to(this.frame_el, speed, frame_params)
   }
   transitionOut(speed = 0.3) {
+    const frame_params = {
+      [this.anim_axis]: (50 * this.anim_direction) + '%',
+      opacity: 0,
+      onComplete: this.hidden,
+      ease: Power3.easeIn
+    }
     TweenLite.to(this.backdrop_el, speed, {opacity: 0, ease: Power3.easeIn})
-    TweenLite.to(this.frame_el, speed, {x: '50%', opacity: 0, onComplete: this.hidden, ease: Power3.easeIn})
+    TweenLite.to(this.frame_el, speed, frame_params)
   }
   // ----------------------------------------------------------------------------------------
   // Public methods

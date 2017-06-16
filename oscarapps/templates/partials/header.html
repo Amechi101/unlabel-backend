@@ -56,7 +56,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="header__searchBtn" href="" title="{% trans 'Search' %}"><span class="fonticon fonticon--magnifyingglass fonticon--box"></span></a>
+                    <a class="header__searchBtn" href="#search-drawer" title="{% trans 'Search' %}"><span class="fonticon fonticon--magnifyingglass fonticon--box"></span></a>
                 </li>
             </ul>
             <a class="burgerMenu u-mobile-only" href="#mobile-main-nav" title="{% trans 'Toggle Menu' %}">
@@ -65,12 +65,12 @@
                 <span class="burgerMenu__bar burgerMenu__bar--bottom"></span>
             </a>
         </nav>
-        <div class="drawer" id="mobile-main-nav">
-            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Drawer' %}"></a>
+        <div class="drawer drawer--right" id="mobile-main-nav">
+            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Menu' %}"></a>
             <div class="drawer__frame">
                 <div class="drawer__header">
                     <div class="drawer__titleContainer"></div>
-                    <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Drawer' %}"></a>
+                    <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Menu' %}"></a>
                 </div>
                 <div class="drawer__scroller">
                     <div class="drawer__content">
@@ -113,6 +113,20 @@
                                 </div>
                             </a>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="drawer drawer--top drawer--dark" id="search-drawer">
+            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Search' %}"></a>
+            <div class="drawer__frame">
+                <div class="drawer__header">
+                    <div class="drawer__titleContainer"></div>
+                    <a href="#close-drawer" class="drawer__close close close--medium" title="{% trans 'Close Search' %}"></a>
+                </div>
+                <div class="drawer__scroller">
+                    <div class="drawer__content">
+                        {% include "partials/search.html" %}
                     </div>
                 </div>
             </div>

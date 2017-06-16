@@ -21,16 +21,16 @@
 
     {% category_tree parent=category as tree_categories %}
     {% if tree_categories %}
-        <a class="link u-mobile-only" href="#mobile-categories-nav">{% trans 'Categories' %}</a>
+        <a class="link u-mobile-only" href="#drawer-categories">{% trans 'Categories' %}</a>
 
-        <div class="drawer" id="mobile-categories-nav">
-            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Drawer' %}"></a>
+        <div class="drawer drawer--right" id="drawer-categories">
+            <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Categories' %}"></a>
             <div class="drawer__frame">
                 <div class="drawer__header">
                     <div class="drawer__titleContainer">
                         <span class="title title--small">{% trans 'Categories' %}</span>
                     </div>
-                    <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Drawer' %}"></a>
+                    <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Categories' %}"></a>
                 </div>
                 <div class="drawer__scroller">
                     <div class="drawer__content">

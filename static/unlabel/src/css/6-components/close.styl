@@ -37,11 +37,20 @@
   }
   
   &--light {
-    border: 2px solid #fff
+    border-color: #fff
     
     &::before,
     &::after {
       background-color: #fff
+    }
+  }
+  
+  &--medium {
+    border-color: $color_grey
+    
+    &::before,
+    &::after {
+      background-color: $color_grey
     }
   }
 }

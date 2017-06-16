@@ -1,8 +1,15 @@
 {% load i18n %}
 
-<form method="get" action="{% url 'search:search' %}" class="navbar-form navbar-right">
-    <div class="form-group">
-        {{ search_form.q }}
+<form method="get" action="{% url 'search:search' %}" class="search-form">
+	<div class="search-form__wrapper">
+		<fieldset class="search-form__fieldset">
+			<div class="search-form__field">
+				<label for="id_q" class="search-form__label">{% trans 'Type to search' %}</label>
+				{{ search_form.q }}
+			</div>
+			<button type="submit" class="search-form__submit">
+				<span class="fonticon fonticon--box fonticon--magnifyingglass"></span>
+			</button>
+		</fieldset>
     </div>
-    <input type="submit" value="{% trans "Search" %}" class="btn btn-default" />
 </form>
