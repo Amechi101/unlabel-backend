@@ -23,10 +23,10 @@
     {% if brands %}
          <p><b>{{brands.count}} results</b></p>
         {% for brand in brands %}
-            <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
+            <a href="{{ brand.slug }}"><img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
             <h4>Name : {{ brand.name }}</h4>
             <h4>City : {{ brand.location.city }}</h4>
-            <h4>Country : {{ brand.location.country }}</h4>
+            <h4>Country : {{ brand.location.country }}</h4></a>
        {% endfor %}
 
    {% endif %}

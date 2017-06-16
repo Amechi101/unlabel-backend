@@ -7,7 +7,7 @@ from multiselectfield import MultiSelectField
 from oscar.apps.partner.abstract_models import AbstractPartner
 
 from oscarapps.address.models import Locations
-
+from django.template.defaultfilters import slugify
 
 
 class BaseApplicationModel(models.Model):
@@ -175,6 +175,9 @@ class Partner(AbstractPartner, BaseApplicationModel):
         permissions = (('dashboard_access', 'Can access dashboard'), )
         verbose_name = _('Fulfillment partner')
         verbose_name_plural = _('Fulfillment partners')
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Partner, self).save(*args, **kwargs)
 
 
 class PartnerFollow(models.Model):
@@ -197,6 +200,5 @@ class PartnerInvite(models.Model):
 
     def  __str__(self):
         return self.email
-
 
 from oscar.apps.partner.models import *

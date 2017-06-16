@@ -3,6 +3,7 @@ import datetime
 from oscarapps.address.models import Locations
 from oscarapps.partner.forms import PartnerSignUpForm
 from oscarapps.partner.models import PartnerInvite, Partner
+from oscarapps.catalogue.models import Product
 from users.models import User
 
 from django.contrib.auth.models import Permission
@@ -129,3 +130,22 @@ class BrandListView(ListView):
                 ctx['locations'].append(i)
 
         return ctx
+
+
+class BrandDetailView(View):
+    """
+    List the brands
+    """
+    context_object_name = "brand"
+    template_name = 'brand/brand_detail.html'
+    model = Partner
+    page_title = 'Brands'
+
+    def get(self, request, *args, **kwargs):
+        partner_slug = self.kwargs['slug']
+        qs = Partner.objects.get(slug=partner_slug)
+        data = {'brand':qs}
+        products = Product.objects.filter(brand=qs)
+        data.update({'products':products})
+
+        return render(request,self.template_name,data)
