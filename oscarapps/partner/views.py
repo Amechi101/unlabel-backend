@@ -9,7 +9,8 @@ from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import utc
-from django.views.generic import View
+from django.views.generic import View, ListView
+from django.conf import settings
 
 
 class PartnerSignUpView(View):
@@ -93,3 +94,38 @@ class PartnerSignUpView(View):
         #     return HttpResponse("sorry link is used already.")
 
 
+class BrandListView(ListView):
+    """
+    List the brands
+    """
+    context_object_name = "brands"
+    template_name = 'brand/brand_list.html'
+    model = Partner
+    page_title = 'Brands'
+    paginate_by = settings.PAGE_SIZE
+
+    def get(self, request, *args, **kwargs):
+
+        return super(BrandListView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        products_type = self.request.GET.get('products_category')
+        location = self.request.GET.get('location')
+        qs = Partner.objects.all()
+        if products_type != 'all' and products_type == 'Menswear':
+            qs = qs.filter(category__name='Menswear')
+        elif products_type != 'all' and products_type == 'Womenswear':
+            qs = qs.filter(category__name='Womenswear')
+        if location:
+            qs = qs.filter(location__country=location)
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(BrandListView, self).get_context_data(*args, **kwargs)
+        temp = [b.location.country for b in ctx['brands']]
+        ctx['locations'] = []
+        for i in temp:
+            if i not in ctx['locations']:
+                ctx['locations'].append(i)
+
+        return ctx

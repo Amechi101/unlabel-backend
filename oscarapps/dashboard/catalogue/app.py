@@ -72,8 +72,6 @@ class CatalogueApplication(DashboardApplication):
                                     'OptionsCreateView')
     Options_Delete_View = get_class('dashboard.catalogue.views',
                                     'OptionsDeleteView')
-    Brand_List_View = get_class('dashboard.catalogue.views',
-                                    'BrandListView')
 
     def get_urls(self):
         urls = [
@@ -145,7 +143,6 @@ class CatalogueApplication(DashboardApplication):
             url(r'^reserved-products/$',
                 self.reserved_products_view.as_view(),
                 name='reserved-products'),
-            url(r'^brands/$', self.Brand_List_View.as_view(), name='brand-list'),
 
         ]
         return self.post_process_urls(urls)
