@@ -1,20 +1,24 @@
-import Base from './_base'
+import {EventEmitter} from 'events'
 
-class Toggle extends Base {
+class Toggle extends EventEmitter {
+  constructor({el}) {
+    super(...arguments)
+    
+    this.el = el
+    this._value = false
+
+    this.bindMethods()
+    this.init()
+    this.addEvents()
+  }
   // ----------------------------------------------------------------------------------------
-  // Overridden methods
+  // Public methods
   // ----------------------------------------------------------------------------------------
   bindMethods() {
-    super.bindMethods(...arguments)
-
     this.handleClickLabel = this.handleClickLabel.bind(this)
     this.handleClickSlider = this.handleClickSlider.bind(this)
   }
   init() {
-    super.init(...arguments)
-
-    this._value = false
-
     this.labels_arr = [].slice.call(this.el.querySelectorAll('[data-toggle-value]'))
     this.slider_el = this.el.querySelector('.toggle__slider')
     this.values_arr = this.slider_el.getAttribute('data-toggle-values').split(',')
@@ -22,17 +26,12 @@ class Toggle extends Base {
     this.initSate()
   }
   addEvents() {
-    super.addEvents(...arguments)
-
     this.labels_arr.forEach((label) => {
       label.addEventListener('click', this.handleClickLabel)  
     })
 
     this.slider_el.addEventListener('click', this.handleClickSlider)
   }
-  // ----------------------------------------------------------------------------------------
-  // Public methods
-  // ----------------------------------------------------------------------------------------
   initSate() {
     let active_label = false
     // Get active label from dom
@@ -83,6 +82,9 @@ class Toggle extends Base {
       this.slider_el.classList.add('is-right')
     }
   }
+  // ----------------------------------------------------------------------------------------
+  // Getter/Setter methods
+  // ----------------------------------------------------------------------------------------
   set value(value){
     const changed = this._value != value
     this._value = value

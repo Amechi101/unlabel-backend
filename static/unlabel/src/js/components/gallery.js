@@ -1,19 +1,22 @@
-import Base from './_base'
 import Swiper from 'swiper'
 import device from '../utils/device'
 
-class Gallery extends Base {
+class Gallery {
+  constructor({el}) {    
+    this.el = el
+
+    this.bindMethods()
+    this.init()
+    this.addEvents()
+  }
   // ----------------------------------------------------------------------------------------
-  // Overridden methods
+  // Public methods
   // ----------------------------------------------------------------------------------------
   bindMethods() {
-    super.bindMethods(...arguments)
-
+    this.onDeviceChanged = this.onDeviceChanged.bind(this)
     this.handleThumbClick = this.handleThumbClick.bind(this)
   }
   init() {
-    super.init(...arguments)
-
     this.larges_carousel_el = this.el.querySelector('.gallery__larges')
     this.thumbs_carousel_el = this.el.querySelector('.gallery__thumbs')
     this.has_thumbs_carousel = !! this.thumbs_carousel_el
@@ -26,8 +29,8 @@ class Gallery extends Base {
     this.updateUI()
   }
   addEvents() {
-    super.addEvents(...arguments)
-
+    device.on('device_changed', this.onDeviceChanged)
+    
     if( this.has_thumbs_carousel ){
       // Thumbs clicks
       this.thumbs_links_arr.forEach((link_el)=> {
@@ -36,12 +39,8 @@ class Gallery extends Base {
     }
   }
   onDeviceChanged() {
-    super.onDeviceChanged(...arguments)
     this.reset()
   }
-  // ----------------------------------------------------------------------------------------
-  // Public methods
-  // ----------------------------------------------------------------------------------------
   initThumbsCarousel() {
     if( this.has_thumbs_carousel ){
       if(this.thumbs_carousel_ctrl) {

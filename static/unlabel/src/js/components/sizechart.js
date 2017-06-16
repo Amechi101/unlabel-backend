@@ -1,20 +1,22 @@
-import Base from './_base'
 import Toggle from './toggle'
 
-class SizeChart extends Base {
-  // ----------------------------------------------------------------------------------------
-  // Overridden methods
-  // ----------------------------------------------------------------------------------------
-  bindMethods() {
-    super.bindMethods(...arguments)
-
-    this.handleToggleChanged = this.handleToggleChanged.bind(this)
-  }
-  init() {
-    super.init(...arguments)
+class SizeChart {
+  constructor({el}) {    
+    this.el = el
 
     this._unit = false
 
+    this.bindMethods()
+    this.init()
+    this.addEvents()
+  }
+  // ----------------------------------------------------------------------------------------
+  // Public methods
+  // ----------------------------------------------------------------------------------------
+  bindMethods() {
+    this.handleToggleChanged = this.handleToggleChanged.bind(this)
+  }
+  init() {
     this.sizes_arr = [].slice.call(this.el.querySelectorAll('[data-sizechart-unit]'))
 
     // Toggle
@@ -26,13 +28,8 @@ class SizeChart extends Base {
     this.unit = this.toggle_ctrl.value
   }
   addEvents() {
-    super.addEvents(...arguments)
-
     this.toggle_ctrl.on('changed', this.handleToggleChanged)
   }
-  // ----------------------------------------------------------------------------------------
-  // Public methods
-  // ----------------------------------------------------------------------------------------
   handleToggleChanged(value) {
     this.unit = value
   }
@@ -46,6 +43,9 @@ class SizeChart extends Base {
       }
     })
   }
+  // ----------------------------------------------------------------------------------------
+  // Getter/Setter methods
+  // ----------------------------------------------------------------------------------------
   set unit(value) {
     this._unit = value
     this.updateUI()

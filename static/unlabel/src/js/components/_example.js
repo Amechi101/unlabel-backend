@@ -1,16 +1,15 @@
 import {EventEmitter} from 'events'
 import device from '../utils/device'
 
-class Base extends EventEmitter {
-  constructor({el, options = {}, default_options = {}}) {
+class Example extends EventEmitter {
+  constructor({el, options = {}}) {
     super(...arguments)
     
     this.el = el
-    this.options = options
+    this.options = {}
 
-    this.settings = {}
-    Object.keys(default_options).forEach((key) => {
-      this.settings[key] = options[key] || default_options[key]
+    Object.keys(this.options).forEach((key) => {
+      this.options[key] = options[key] || this.options[key]
     })
 
     this.bindMethods()
@@ -33,4 +32,4 @@ class Base extends EventEmitter {
   }
 }
 
-module.exports = Base
+module.exports = Example
