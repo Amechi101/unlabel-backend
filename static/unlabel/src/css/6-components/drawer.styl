@@ -63,9 +63,6 @@
 }
 
 .drawer__item {
-  &.is-open > .drawer__link--toggle > .drawer__linkIcon::after {
-    transform: translate(-50%, -50%) rotate(0deg)
-  }
 }
 
 .drawer__list {
@@ -107,8 +104,14 @@
       }
       
       &::after {
-        transform: translate(-50%, -50%) rotate(-90deg)
+        transform: translate(-50%, -50%) rotate(0deg)
         transition(opacity transform)
+      }
+    }
+    
+    &.is-collapsed {
+      & > .drawer__linkIcon::after {
+        transform: translate(-50%, -50%) rotate(-90deg)
       }
     }
   }

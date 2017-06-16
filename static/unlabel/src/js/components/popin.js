@@ -1,7 +1,7 @@
 import tabbable from 'tabbable'
 
 export default class Popin {
-  constructor({el, options}) {
+  constructor({el, options = {}}) {
     this.el = el
     this.id = this.el.getAttribute('id')
 

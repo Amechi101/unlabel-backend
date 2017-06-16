@@ -1,15 +1,10 @@
 .nested-lists {
 }
 
-.nested-lists__item {
-  & > .nested-lists__list {
-    max-height: 0
-    overflow: hidden
-  }
+.nested-lists__list {
+  overflow: hidden
   
-  &.is-open {
-    & > .nested-lists__list {
-      max-height: 9999px
-    }
+  &.is-collapsed {
+    max-height: 0
   }
 }
