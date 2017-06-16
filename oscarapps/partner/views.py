@@ -74,7 +74,7 @@ class PartnerSignUpView(View):
                     partner_brand.description = partner_form.cleaned_data['description']
                     partner_brand.image = partner_form.cleaned_data['image']
                     partner_brand.location = partner_location
-                    partner_brand.style = partner_form.cleaned_data['style']
+                    # partner_brand.style = partner_form.cleaned_data['style']
                     partner_brand.category = partner_form.cleaned_data['category']
                     partner_brand.sub_category = partner_form.cleaned_data['sub_category']
                     partner_brand.save()

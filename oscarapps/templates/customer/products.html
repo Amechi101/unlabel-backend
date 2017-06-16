@@ -1,0 +1,72 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load thumbnail %}
+{% load i18n %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+{% load widget_tweaks %}
+{% load product_tags  %}
+{% load reviews_tags %}
+{% load display_tags %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
+        </li>
+        <li>
+            <a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a>
+        </li>
+        <li>
+            <a href="{% url 'customer:followed-creators' %}">{% trans 'Liked Products' %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block tabcontent %}
+    {% if products %}
+        {% for product in products %}
+        <div>
+            <li class="col-md-3 col-sm-6">
+                <article class="product_pod">
+                {% block product_image %}
+                    <div class="image_container">
+                        {% with image=product.primary_image %}
+                        {% thumbnail image.original "x155" upscale=False as thumb %}
+                            <a href="{{ product.get_absolute_url }}"><img src="{{ thumb.url }}" alt="{{ product.get_title }}" class="thumbnail"></a>
+                        {% endthumbnail %}
+                        {% endwith %}
+                    </div>
+                    {% endblock %}
+                    {% block product_title %}
+                        {# will add the address to the corrssponding views once done #}
+                        <h3><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:3 }}</a></h3>
+                        <h4><a href="">{{ product.get_brand|truncatewords:4 }}</a></h4>
+                        <h4><a href="">{{ product.get_influencer.first_name}} {{ product.get_influencer.last_name}}</a></h4>
+                {% endblock %}
+                {% block product_price %}
+            <div class="product_price">
+                {% purchase_info_for_product request product as session %}
+
+                        {% if session.price.exists %}
+                            {% if session.price.excl_tax == 0 %}
+                                <p class="price_color">{% trans "Free" %}</p>
+                            {% elif session.price.is_tax_known %}
+                                <p class="price_color">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+                            {% else %}
+                                <p class="price_color">{{ session.price.excl_tax|currency:session.price.currency }}</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="price_color">&nbsp;</p>
+                        {% endif %}
+
+            </div>
+        {% endblock %}
+                </article>
+            </li>
+        </div>
+        {% endfor %}
+{% include "partials/pagination.html" %}
+    {% endif %}
+
+
+{% endblock tabcontent %}

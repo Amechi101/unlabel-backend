@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 import datetime
+
 from django.http import HttpResponse
+from django.db.models import Q
 from django.shortcuts import render
 from django.utils.http import urlsafe_base64_decode
 from django.utils.timezone import utc
@@ -14,18 +16,45 @@ from oscarapps.influencers.models import Influencers,InfluencerInvite
 from oscarapps.influencers.forms import InfluencerSignUpForm
 from oscarapps.address.models import Locations, States, Country
 from users.models import User
+import operator
+from functools import reduce
+from .forms import InfluencerSearchFilterForm
 
 
-class InfluencerListView(ListView):
+class InfluencerListView(View):
     template_name = 'influencers/influencers.html'
-
     model = Influencers
 
-    def get_context_data(self, **kwargs):
-        ctx = super(InfluencerListView, self).get_context_data(**kwargs)
-        ctx['influencer_list'] = Influencers.objects.filter(influencer_isActive=True).order_by('-created')
+    def get(self,request,*args,**kwargs):
+        FilterForm = InfluencerSearchFilterForm()
+        influencers = Influencers.objects.filter(users__is_active=True).order_by('-created')
+        data = {'FilterForm':FilterForm,'influencers':influencers}
+        return render(request, self.template_name , data)
 
-        return ctx
+    def post(self,request,*args,**kwargs):
+
+        FilterForm = InfluencerSearchFilterForm(data=request.POST)
+        if FilterForm.is_valid():
+            style = FilterForm.cleaned_data['style']
+            gender = FilterForm.cleaned_data['gender']
+            location = FilterForm.cleaned_data['location']
+            influencers = Influencers.objects.filter(users__is_active=True)
+            # if style:
+            #     influencers = influencers.filter(styles__in=style)
+            # if gender:
+            #     influencers = influencers.filter(users__gender__in=gender)
+            if location:
+                city_location = Locations.objects.filter(pk__in=location).values_list('city',flat=True)
+                locations = Locations.objects.filter(reduce(operator.or_,(Q(city__icontains=x) for x in city_location)))
+                print("============================== ",locations,"++++",locations.count())
+
+
+            influencers = Influencers.objects.filter(users__is_active=True).order_by('-created')
+            data = {'FilterForm':FilterForm,'influencers':influencers}
+            return render(request, self.template_name , data)
+
+
+
 
 
 class InfluencerDetailView(SingleObjectMixin, ListView):

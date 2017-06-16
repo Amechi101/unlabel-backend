@@ -1,0 +1,124 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load i18n %}
+{% load currency_filters %}
+{% load staticfiles %}
+{% load display_tags %}
+{% load i18n %}
+{% load thumbnail %}
+{% load reviews_tags %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
+        </li>
+        <li>
+            <a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a>
+        </li>
+        <li class="active">{% trans 'Order history' %}</li>
+    </ul>
+{% endblock %}
+
+{% block tabcontent %}
+
+    {% if orders or form.is_bound %}
+        <div class="well">
+            <h2>{% trans "Filter" %}</h2>
+            <form action="." method="get" class="form-horizontal">
+                {% include "partials/form_fields.html" with form=form style='horizontal' %}
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Filtering...' %}">{% trans 'Filter results' %}</button>
+                        <a href="{% url 'customer:order-list' %}" class="btn btn-default">{% trans 'Reset' %}</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if orders %}
+        <h2>{{ form.description }}</h2>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>{% trans "Order number" %}</th>
+                <th>{% trans "Num items" %}</th>
+                <th>{% trans "Total inc tax" %}</th>
+                <th>{% trans "Date submitted" %}</th>
+            </tr>
+            {% for order in orders %}
+                <tr>
+                    <td>
+                        <div onclick="openInNewTab('{% url 'customer:order' order_number=order.number %}');">
+                            <h3>{{ order.number }}</h3>(click to download)</div>
+                    </td>
+                    <td>{{ order.num_items }}</td>
+                    <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                    <td>{{ order.date_placed }}</td>
+                </tr>
+
+            {% for line in order.lines.all %}
+                {% with product=line.product %}
+                    <tr>
+                        <td>
+                            {% if product %}
+                                <p>
+                                    <a href="{{ product.get_absolute_url }}">{{ line.description }}</a>
+                                </p>
+                                {% iffeature "reviews" %}
+                                    {% if product|is_review_permitted:user %}
+                                        <a class="btn btn-default" href="{% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id %}#addreview">{% trans 'Write a review' %}</a>
+                                    {% endif %}
+                                {% endiffeature %}
+                            {% else %}
+                                <p>
+                                    {{ line.description }}
+                                </p>
+                            {% endif %}
+                        </td>
+                        <td>{{ line.est_dispatch_date|default:"-" }}</td>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.line_price_before_discounts_excl_tax|currency:order.currency }}</td>
+                        <td>{{ line.line_price_before_discounts_incl_tax|currency:order.currency }}</td>
+                        <td width="90">
+                            {% if product %}
+                            <div class="image_container">
+                        {% with image=product.primary_image %}
+                        {% thumbnail image.original "x155" upscale=False as thumb %}
+                            <a href="{{ product.get_absolute_url }}"><img src="{{ thumb.url }}" alt="{{ product.get_title }}" class="thumbnail"></a>
+                        {% endthumbnail %}
+                        {% endwith %}
+                    </div>
+                                <form id="line_form_{{ line.id }}" action="{% url 'customer:order-line' order_number=order.number line_id=line.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="reorder" />
+                                    <button id="reorder_line_{{ line.id }}" class="btn btn-success" type="submit" data-loading-text="{% trans 'Re-ordering...' %}">{% trans 'Re-order' %}</button>
+                                </form>
+                            {% else %}
+                                {% trans 'Not available anymore' %}
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% endwith %}
+            {% endfor %}
+
+{% endfor %}
+        </table>
+        {% include "partials/pagination.html" %}
+    {% else %}
+        {% if form.is_bound %}
+            <p>{% trans "No orders match your search." %}</p>
+        {% else %}
+            <p>{% trans "You haven't placed any orders." %}</p>
+        {% endif %}
+    {% endif %}
+
+<script>
+    function openInNewTab(url) {
+        var win = window.open(url, '_blank');
+        win.focus();
+    }
+</script>
+
+
+{% endblock tabcontent %}

@@ -18,23 +18,30 @@ from oscar.core.loading import (
     get_class, get_classes, get_model, get_profile_class)
 from oscar.core.utils import safe_referrer
 from oscar.views.generic import PostActionMixin
+from oscar.apps.customer.views import ChangePasswordView as CoreChangePasswordView
+from oscar.apps.customer.views import AddressCreateView as CoreAddressCreateView
+
 
 PageTitleMixin, RegisterUserMixin = get_classes(
     'customer.mixins', ['PageTitleMixin', 'RegisterUserMixin'])
 
-UserBrandLike = get_class('customer.models','UserBrandLike')
-Partner = get_class('partner.models','Partner')
-
+UserBrandLike = get_model('customer','UserBrandLike')
+UserInfluencerLike = get_model('customer','UserInfluencerLike')
+Partner = get_model('partner','Partner')
+Influencers = get_model('influencers','Influencers')
+Product = get_model('catalogue','Product')
+UserProductLike = get_model('customer','UserProductLike')
+Bankcard = get_model('payment','Bankcard')
 
 class BrandView(PageTitleMixin, generic.ListView):
     """
-    Customer order history
+    My account followed brands view
     """
     context_object_name = "brands"
     template_name = 'customer/brands.html'
-    paginate_by = settings.OSCAR_ORDERS_PER_PAGE
+    paginate_by = settings.ITEMS_PER_PAGE
     model = Partner
-    page_title = _('Brand Follows')
+    page_title = _('Followed Brands')
     active_tab = 'brands'
 
     def get(self, request, *args, **kwargs):
@@ -52,15 +59,10 @@ class BrandView(PageTitleMixin, generic.ListView):
         return ctx
 
 
-
 class BrandUnfollowView(generic.View):
-
-
-    model = UserBrandLike
-    template_name = 'customer/brands.html'
-    active_tab = 'brands'
-    context_object_name = 'brand'
-    success_url = reverse_lazy('customer:followed-brands')
+    """
+    My account followed brands delete view
+    """
 
     def get(self,request,*args,**kwargs):
         brand_id = kwargs.get('pk')
@@ -73,51 +75,113 @@ class BrandUnfollowView(generic.View):
             follow_obj.delete()
         except:
             self.message = "Brand not found"
-            return HttpResponseRedirect(reverse('followed-brands'))
+            return HttpResponseRedirect(reverse('customer:followed-brands'))
         self.message = "Brand "+ brand.name +" Unfollowed"
-        user_followed_brands = UserBrandLike.objects.filter(user=self.request.user).values_list('brand',flat=True)
-        qs = self.model._default_manager.filter(pk__in=user_followed_brands)
         messages.success(self.request,self.message )
         return HttpResponseRedirect(reverse('customer:followed-brands'))
 
 
+class InfluencerView(PageTitleMixin, generic.ListView):
 
-    # def get_queryset(self):
-    #     user_followed_brands = UserBrandLike.objects.filter(user=self.request.user).values_list('brand',flat=True)
-    #     qs = self.model._default_manager.filter(pk__in=user_followed_brands)
-    #     return qs
-    #
-    # def get_success_url(self):
-    #     messages.success(self.request,
-    #                      _("Address '%s' deleted") % self.object.summary)
-    #     return super(BrandUnfollowView, self).get_success_url()
+    def get(self, request, *args, **kwargs):
+        return super(InfluencerView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        user_followed_creators = UserInfluencerLike.objects.filter(user=self.request.user).values_list('influencer',flat=True)
+        qs = self.model._default_manager.filter(pk__in=user_followed_creators)
+
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(InfluencerView, self).get_context_data(*args, **kwargs)
+        return ctx
 
 
 
-    # model = UserBrandLike
-    # template_name = 'customer/brands.html'
-    # active_tab = 'brands'
-    # context_object_name = 'brand'
-    # # success_url = reverse_lazy('customer:followed-brands')
-    #
-    # def get(self, request, *args, **kwargs):
-    #     brand_id = kwargs.get('pk')
-    #     try:
-    #         brand = Partner.objects.get(id=brand_id)
-    #     except:
-    #         self.message = "Brand not found"
-    #     follow_obj = UserBrandLike.objects.get(user=request.user,brand=brand)
-    #     follow_obj.delete()
-    #     self.message = "Brand "+ brand.name +" Unfollowed"
-    #     return super(BrandUnfollowView, self).get(request, *args, **kwargs)
-    #
-    # def get_queryset(self):
-    #     user_followed_brands = UserBrandLike.objects.filter(user=self.request.user).values_list('brand',flat=True)
-    #     qs = self.model._default_manager.filter(pk__in=user_followed_brands)
-    #     return qs
-    #
-    # def get_success_url(self):
-    #     messages.success(self.request,
-    #                      _("brand '%s' unfollowed") % self.object.summary)
-    #     return super(BrandUnfollowView, self).get_success_url()
+class InfluencerUnfollowView(generic.View):
+
+    def get(self,request,*args,**kwargs):
+        brand_id = kwargs.get('pk')
+        try:
+            influencer = Influencers.objects.get(id=brand_id)
+        except:
+            self.message = "Influencer not found"
+        try:
+            follow_obj = UserInfluencerLike.objects.get(user=request.user,influencer=influencer)
+            follow_obj.delete()
+        except:
+            self.message = "Influencer not found"
+            return HttpResponseRedirect(reverse('customer:followed-creators'))
+        self.message = "Influencer "+ influencer.users.get_full_name() +" Unfollowed"
+        messages.success(self.request,self.message )
+        return HttpResponseRedirect(reverse('customer:followed-creators'))
+
+
+class ProductsView(PageTitleMixin, generic.ListView):
+    """
+    Customer order history
+    """
+    context_object_name = "products"
+    template_name = 'customer/products.html'
+    paginate_by = settings.ITEMS_PER_PAGE
+    model = Product
+    page_title = _('Liked Products')
+    active_tab = 'products'
+
+    def get(self, request, *args, **kwargs):
+
+        return super(ProductsView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        user_followed_brands = UserProductLike.objects.filter(user=self.request.user).values_list('product_like',flat=True)
+        qs = self.model._default_manager.filter(pk__in=user_followed_brands)
+
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(ProductsView, self).get_context_data(*args, **kwargs)
+        return ctx
+
+
+class ChangePasswordView(CoreChangePasswordView):
+    active_tab = 'password'
+
+
+
+class BankcardView(PageTitleMixin, generic.ListView):
+    context_object_name = "bankcards"
+    template_name = 'customer/profile/payments.html'
+    paginate_by = settings.ITEMS_PER_PAGE
+    model = Bankcard
+    page_title = _('My payments')
+    active_tab = 'payments'
+
+    def get(self, request, *args, **kwargs):
+        return super(BankcardView, self).get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        qs = self.model._default_manager.filter(user=self.request.user)
+
+        return qs
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(BankcardView, self).get_context_data(*args, **kwargs)
+        return ctx
+
+
+class BankcardDeleteView(PageTitleMixin, generic.View):
+
+    def get(self,request,*args,**kwargs):
+        card_id = kwargs.get('pk')
+        try:
+            bankcard = Bankcard.objects.get(id=card_id)
+            bankcard.delete()
+        except:
+            self.message = "Bankcard not found"
+            return HttpResponseRedirect(reverse('customer:my-payments'))
+        self.message = "Bankcard Deleted."
+        messages.success(self.request,self.message )
+        return HttpResponseRedirect(reverse('customer:my-payments'))
+
+
 

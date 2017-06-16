@@ -73,9 +73,12 @@ class ProductDetailView(DetailView):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.get_object()
         if product.structure != 'child':
-            inf_res = InfluencerProductReserve.objects.get(product=product,is_live=True)
-            inf = Influencers.objects.get(pk=inf_res.influencer.pk)
-            ctx['influencer'] = inf
+            try:
+                inf_res = InfluencerProductReserve.objects.get(product=product,is_live=True)
+                inf = Influencers.objects.get(pk=inf_res.influencer.pk)
+                ctx['influencer'] = inf
+            except:
+                pass
         ctx['alert_form'] = self.get_alert_form()
         ctx['has_active_alert'] = self.get_alert_status()
         return ctx

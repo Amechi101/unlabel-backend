@@ -1,0 +1,35 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load thumbnail %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
+        </li>
+        <li>
+            <a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a>
+        </li>
+        <li>
+            <a href="{% url 'customer:followed-creators' %}">{% trans 'Followed Creators' %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block tabcontent %}
+
+    {% if creators %}
+        {% for creator in creators %}
+        <div>
+            <img class="image-adjust" src="{{ MEDIA_URL }}{{ creator.users.image }}" style="width:100%">
+            <h2>{{ creator.users.get_full_name }}</h2>
+            <h3>{{ creator.location.city }},{{ creator.location.state }},{{ creator.location.country }}</h3>
+            <a href="{% url 'customer:unfollow-creator' pk=creator.id %}" class="btn btn-lg btn-primary" >{% trans "Unfollow" %}</a>
+        </div>
+        {% endfor %}
+{% include "partials/pagination.html" %}
+    {% endif %}
+
+
+{% endblock tabcontent %}

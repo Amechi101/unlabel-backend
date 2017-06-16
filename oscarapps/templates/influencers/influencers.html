@@ -1,81 +1,39 @@
-{% extends "site/site_base.html" %}
+{% extends "layout_2_col.html" %}
 
 {% load staticfiles %}
 {% load i18n %}
 {% load cloudinary %}
 
-{% block social_extra_meta_tags %}
-    <meta property="og:image" content="https://res.cloudinary.com/hqz2myoz0/image/upload/v1474493846/Desktop_HD_uzqle4.png" />
-    <meta property="og:title" content="#UnlabelDiscovery" />
-    <meta property="og:description" content="Take look at the discoveries from influencers in fashion and other creative fields as they share their favorite brand from the Unlabel app." /> 
-    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
-{% endblock %}
 
 {% block head_title %}{% trans "#UnlabelDiscovery" %}{% endblock %}
 
 {% block body_class %}influncers-campaign{% endblock %}
 
-{% block body %}
-    <!-- Influencers Intro -->
-    <section class="intro intro-home">
-        <div class="intro-bg" style="background-image: url(&#39;https://res.cloudinary.com/hqz2myoz0/image/upload/v1474493846/Desktop_HD_uzqle4.png&#39;);"></div>
-        <div class="intro-inner">
-            <h1 class="home">#UnlabelDiscovery</h1>
-            <h6><p>Take look at the discoveries from influencers in fashion and other creative fields as they share their favorite brand from the Unlabel app.</p></h6>
+{% block column_left %}
+    <form method="post" action='/influencers/unlabel-influencers/'>
+        {% csrf_token %}
+        {{ FilterForm.as_p }}
+    <button type="submit" class="btn btn-sm btn-primary" data-loading-text="{% trans 'Filtering...' %}">{% trans "Apply" %}</button>
+
+    </form>
+
+{% endblock %}
+
+{% block content %}
+    <a href="?filter=test">
+        <h2>Influencers</h2></a>
+
+    {% for influencer in influencers %}
+        <div>
+        <h4>{{ influencer.name|title }}</h4>
+        <img class="image-adjust" src="{{ MEDIA_URL }}{{ influencer.users.image }}" class="thumbnail">
+        <h4>{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</h4>
         </div>
-        <a href="#influencers" class="scroll-suggest scroll-to-section">
-            <span class="icon icon-mouse">
-                <span>
-                    <i></i>
-                    <i></i>
-                </span>
-            </span>
-        </a>
-    </section>
-    
-    <!-- Influencers section -->
-    <section id="influencers" class="influencer-container pos-r full-size">           
-        <ul class="influencer-cards">
-        {% for influencer in influencer_list %}
-            <li id="{{ influencer.name|title }}" class="photo-cover" style="background-image:url(&#39;{% cloudinary_url influencer.image %}&#39;);">
-                <div class="influencer-wrapper">
-                    <div class="influencer-personal pos-r clearfix">
-                        
-                        <div class="influencer-name">
-                            <h3>Influencer</h3>
-                            <h4>{{ influencer.name|title }}</h4>
-                        </div>
-                        
-                        <div class="influencer-insta">
-                            <h3>Hometown</h3>
-                            <h4>{{ influencer.hometown }}</h4>
-                        </div>
-                    </div>
-                    <a class="influencer-view" href="{{ influencer.get_absolute_url }}">View Style Profile</a>
-                </div> 
 
-            </li>
-        {% endfor %}
-        </ul>
-    </section>
+    {% endfor %}
 {% endblock %}
 
-{% block extra_script %}
-    <script>
 
-        //Changing the defaults
-        window.sr = ScrollReveal({ reset: false });
-
-        // Customizing a reveal set
-        sr.reveal('#influencers .photo-cover', {   
-            duration: 700, 
-            easing: 'cubic-bezier(0.6, 0.2, 0.1, 1)',
-            scale: 0
-        });
-
-        UnlabelModule.utils.scrollToSection();
-    </script>
-{% endblock %}
 
 
 

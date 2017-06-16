@@ -26,23 +26,17 @@
 {% block column_left %}
     <ul class="nav nav-pills nav-stacked">
         {% block standard_tabs %}
-            <li{% if active_tab == 'profile' %} class="active"{% endif %}>
-                <a href="{% url 'customer:profile-view' %}">{% trans "Profile" %}</a>
+            <li{% if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' %} class="active"{% endif %}>
+                <a href="{% url 'customer:profile-view' %}">{% trans "My Info" %}</a>
             </li>
             <li{% if active_tab == 'orders' %} class="active"{% endif %}>
                 <a href="{% url 'customer:order-list' %}">{% trans "Order History" %}</a>
-            </li>
-            <li{% if active_tab == 'addresses' %} class="active"{% endif %}>
-                <a href="{% url 'customer:address-list' %}">{% trans "Address Book" %}</a>
             </li>
             <li{% if active_tab == 'emails' %} class="active"{% endif %}>
                 <a href="{% url 'customer:email-list' %}">{% trans "Email History" %}</a>
             </li>
             <li{% if active_tab == 'alerts' %} class="active"{% endif %}>
                 <a href="{% url 'customer:alerts-list' %}">{% trans "Product Alerts" %}</a>
-            </li>
-            <li{% if active_tab == 'notifications' %} class="active"{% endif %}>
-                <a href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
             </li>
             <li{% if active_tab == 'wishlists' %} class="active"{% endif %}>
                 <a href="{% url 'customer:wishlists-list' %}">{% trans "Wish Lists" %}</a>
@@ -52,6 +46,24 @@
             </li>
             <li{% if active_tab == 'creators' %} class="active"{% endif %}>
                 <a href="{% url 'customer:followed-creators' %}">{% trans "Followed Creators" %}</a>
+            </li>
+            <li{% if active_tab == 'products' %} class="active"{% endif %}>
+                <a href="{% url 'customer:liked-products' %}">{% trans "My Likes" %}</a>
+            </li>
+            </ul>
+            <br><br><br><br><br><br>
+            <ul class="nav nav-pills nav-stacked">
+            <li{% if active_tab == 'addresses' %} class="active"{% endif %}>
+                <a href="{% url 'customer:address-list' %}">{% trans "Address Book" %}</a>
+            </li>
+            <li{% if active_tab == 'notifications' %} class="active"{% endif %}>
+                <a href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
+            </li>
+            <li{% if active_tab == 'payments' %} class="active"{% endif %}>
+                <a href="{% url 'customer:my-payments' %}">{% trans "My Payment Methods" %}</a>
+            </li>
+            <li{% if active_tab == 'password' %} class="active"{% endif %}>
+                <a href="{% url 'customer:change-password' %}" >{% trans 'Change password' %}</a>
             </li>
         {% endblock %}
     </ul>

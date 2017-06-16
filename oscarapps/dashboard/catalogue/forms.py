@@ -10,6 +10,7 @@ from oscar.forms.widgets import ImageInput
 from oscar.apps.dashboard.catalogue.forms import ProductForm as CoreProductForm
 from oscar.apps.dashboard.catalogue.forms import StockRecordForm as \
     CoreStockRecordForm
+from oscarapps.catalogue.widgets import ImageDisabledInput
 from oscar.apps.dashboard.catalogue.forms import ProductImageForm
 from oscar.apps.dashboard.catalogue.forms import ProductClassSelectForm as CoreProductClassSelectForm
 from oscar.apps.dashboard.catalogue.forms import ProductSearchForm as CoreProductSearchForm
@@ -252,7 +253,7 @@ class InfluencerProductImageForm(forms.ModelForm):
         # actual uploaded image and providing the upload dialog
         # when clicking on the actual image.
         widgets = {
-            'original': ImageInput(),
+            'original': ImageDisabledInput(),
         }
 
     def save(self, *args, **kwargs):

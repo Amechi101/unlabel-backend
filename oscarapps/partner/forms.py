@@ -36,7 +36,7 @@ class PartnerSignUpForm(forms.Form):
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,
     #                                help_text="Only select state if your country is USA else leave it unselected")
-    style = forms.ModelMultipleChoiceField(label="Style", queryset=Style.objects.all(), required=True, )
+    # style = forms.ModelMultipleChoiceField(label="Style", queryset=Style.objects.all(), required=True, )
     category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all(), required=True)
     sub_category = forms.ModelMultipleChoiceField(label="Sub category", queryset=SubCategory.objects.all(),
                                                   required=True)

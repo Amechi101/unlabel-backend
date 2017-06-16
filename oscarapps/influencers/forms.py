@@ -13,6 +13,7 @@ from oscarapps.address.models import Locations, States
 from oscarapps.influencers.models import Influencers
 from oscar.apps.address.models import Country
 from users.models import User
+from oscarapps.partner.models import Category, Style
 
 
 class InfluencerSignUpForm(forms.Form):
@@ -79,6 +80,25 @@ class InfluencerSignUpForm(forms.Form):
                                         "lowercase,digit,special character")
 
         return cleaned_data
+
+
+class InfluencerSearchFilterForm(forms.Form):
+    A_to_Z = "A_to_Z"
+    Z_to_A = 'Z_to_A'
+    Date_descending = 'Date_descending'
+    Date_ascending = 'Date_ascending'
+
+    sort_choices = (
+        (A_to_Z, 'A to Z'),
+        (Z_to_A, 'Z to A'),
+        (Date_descending, 'Date: Descending'),
+        (Date_ascending, 'Date: Ascending'),
+        )
+
+    gender=forms.ModelMultipleChoiceField(label='Gender',required=False,queryset=Category.objects.all())
+    style=forms.ModelMultipleChoiceField(label='Style',required=False,queryset=Style.objects.all())
+    location = forms.ModelMultipleChoiceField(label='Location',required=False,queryset=Locations.objects.all().distinct('city'))
+    sort_by = forms.ChoiceField(label="Sort By",choices=sort_choices, required=False )
 
 
 
