@@ -17,17 +17,17 @@ $mq_xxl = '(min-width: '+$mq_breakpoints_sizes[3]+')'
 $mq_retina = '(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)'
 
 meta[name="device-size"] {
-  font-family: 's'
+  font-family: unquote('s')
   @media $mq_m {
-    font-family: 'm'
+    font-family: unquote('m')
   }
   @media $mq_l {
-    font-family: 'l'
+    font-family: unquote('l')
   }
   @media $mq_xl {
-    font-family: 'xl'
+    font-family: unquote('xl')
   }
   @media $mq_xxl {
-    font-family: 'xxl'
+    font-family: unquote('xxl')
   }
 }

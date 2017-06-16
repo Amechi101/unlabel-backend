@@ -1,24 +1,24 @@
 meta[name="device-size"] {
-  font-family: 's';
+  font-family: s;
 }
 @media (min-width: 768px) {
   meta[name="device-size"] {
-    font-family: 'm';
+    font-family: m;
   }
 }
 @media (min-width: 1024px) {
   meta[name="device-size"] {
-    font-family: 'l';
+    font-family: l;
   }
 }
 @media (min-width: 1280px) {
   meta[name="device-size"] {
-    font-family: 'xl';
+    font-family: xl;
   }
 }
 @media (min-width: 1440px) {
   meta[name="device-size"] {
-    font-family: 'xxl';
+    font-family: xxl;
   }
 }
 
