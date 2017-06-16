@@ -859,6 +859,7 @@ button.swiper-pagination-bullet {
 }
 .drawer__list .drawer__list .drawer__link {
   background-color: #dde0ed;
+  border-bottom: 0;
 }
 .drawer__link {
   display: -webkit-box;
