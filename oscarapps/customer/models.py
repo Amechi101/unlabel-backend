@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django.conf import settings
 from oscarapps.partner.models import Partner
-
+from oscarapps.influencers.models import Influencers
 
 
 class UserProductLike(models.Model):
@@ -14,9 +14,6 @@ class UserProductLike(models.Model):
     class Meta:
         verbose_name = _('Product_Like')
         verbose_name_plural = _('Product_Likes')
-
-    def __str__(self):
-        return str(self.product_like.likes)
 
 
 class UserBrandLike(models.Model):
@@ -30,7 +27,7 @@ class UserBrandLike(models.Model):
 
 class UserInfluencerLike(models.Model):
     user = models.ForeignKey( settings.AUTH_USER_MODEL )
-    Influencer = models.ForeignKey(Partner)
+    influencer = models.ForeignKey(Influencers)
 
     class Meta:
         verbose_name = _('Influencer Likes')
