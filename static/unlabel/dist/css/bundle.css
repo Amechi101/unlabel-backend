@@ -1136,10 +1136,15 @@ button.swiper-pagination-bullet {
   margin: 0;
 }
 .gallery__larges .swiper-slide {
+  position: relative;
+}
+.gallery__largesImgContainer {
+  position: relative;
   width: 100%;
   padding-bottom: 100%;
+  overflow: hidden;
 }
-.gallery__larges .swiper-slide img {
+.gallery__largesImgContainer img {
   position: absolute;
   top: 0;
   left: 0;

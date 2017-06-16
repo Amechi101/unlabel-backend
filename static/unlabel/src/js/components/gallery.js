@@ -36,7 +36,7 @@ class Gallery extends Base {
     }
   }
   onDeviceChanged() {
-    super.onResize(...arguments)
+    super.onDeviceChanged(...arguments)
     this.reset()
   }
   // ----------------------------------------------------------------------------------------
@@ -57,11 +57,12 @@ class Gallery extends Base {
     }
   }
   initPhotosCarousel() {
+    console.log('initPhotosCarousel')
     if(this.larges_carousel_ctlr) {
       this.larges_carousel_ctlr.destroy(true, true)
     }
     this.larges_carousel_ctlr = new Swiper(this.larges_carousel_el, {
-      slidesPerView: 1,
+      slidesPerView: 'auto',
       onSlideChangeEnd: () => {
         this.updateUI()
       }

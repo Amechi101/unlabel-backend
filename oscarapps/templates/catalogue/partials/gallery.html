@@ -6,15 +6,17 @@
 
 <div class="gallery">
 	<div class="swiper-container gallery__larges">
-		<div class="swiper-wrapper">
+		<ul class="swiper-wrapper">
 			{% for image in all_images %}
-				<div class="swiper-slide">
-					{% thumbnail image.original "544x544" crop="center" as thumb %}
-					<img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
-					{% endthumbnail %}
-				</div>
+				<li class="swiper-slide">
+					<div class="gallery__largesImgContainer">
+						{% thumbnail image.original "544x544" crop="center" as thumb %}
+						<img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+						{% endthumbnail %}
+					</div>
+				</li>
 			{% endfor %}
-		</div>
+		</ul>
 	</div>
 	
 	{% if all_images|length > 1 %}
