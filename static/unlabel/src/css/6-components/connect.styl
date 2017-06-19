@@ -1,0 +1,38 @@
+.connect {
+  @media $mq_s_only {
+    padding: 22px 0 46px
+  }
+  
+  .container {
+    @media $mq_m {
+      padding: 72px 32px // TODO : better container with modifiers ?
+    }
+  }
+  
+  .register-push {
+    @media $mq_m {
+      height: 100% // TODO : make util u-fullHeight ?
+    }
+  }
+  
+  .register-push,
+  .login {
+    padding: 42px 32px 50px
+    
+    @media $mq_m {
+      padding: 72px 24px
+    }
+    
+    @media $mq_l {
+      padding: 72px 48px
+    }
+    
+    @media $mq_xl {
+      padding: 72px 96px
+    }
+  }
+  
+  .title {
+    margin-bottom: 42px // TODO form title ?
+  }
+}

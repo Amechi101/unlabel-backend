@@ -1,0 +1,34 @@
+.form__group {
+  margin-top: 32px
+}
+
+.form__label {
+}
+
+.form__field {
+  margin-top: 12px
+}
+
+.form__actions {
+  margin-top: 42px
+  
+  @media $mq_s_only {
+    .cta {
+      display: block
+      width: 100%
+      text-align: center
+    }
+    
+    .cta + .cta {
+      margin-top: 12px
+    }
+  }
+    
+  @media $mq_m {
+    margin-top: 48px
+    
+    .cta + .cta {
+      margin-left: 12px
+    }
+  }
+}

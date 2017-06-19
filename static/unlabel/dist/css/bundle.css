@@ -118,6 +118,18 @@ img {
   display: block;
   margin: 0;
 }
+input[type=text],
+input[type=email],
+input[type=password] {
+  appearence: none;
+  border-radius: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 12px;
+  line-height: 20px;
+  font-size: 14px;
+  width: 100%;
+}
 
 /**
  * Swiper 3.4.2
@@ -671,6 +683,9 @@ button.swiper-pagination-bullet {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
 }
 .cols--align-center {
   -webkit-box-pack: center;
@@ -719,6 +734,56 @@ button.swiper-pagination-bullet {
   }
 }
 @media (max-width: 767px) {
+  .cols--m-2 {
+    display: block;
+  }
+}
+@media (min-width: 768px) {
+  .cols--m-2 > .col {
+    width: 50%;
+  }
+}
+@media (max-width: 767px) {
+  .connect {
+    padding: 22px 0 46px;
+  }
+}
+@media (min-width: 768px) {
+  .connect .container {
+    padding: 72px 32px;
+  }
+}
+@media (min-width: 768px) {
+  .connect .register-push {
+    height: 100%;
+  }
+}
+.connect .register-push,
+.connect .login {
+  padding: 42px 32px 50px;
+}
+@media (min-width: 768px) {
+  .connect .register-push,
+  .connect .login {
+    padding: 72px 24px;
+  }
+}
+@media (min-width: 1024px) {
+  .connect .register-push,
+  .connect .login {
+    padding: 72px 48px;
+  }
+}
+@media (min-width: 1280px) {
+  .connect .register-push,
+  .connect .login {
+    padding: 72px 96px;
+  }
+}
+.connect .title {
+  margin-bottom: 42px;
+}
+@media (max-width: 767px) {
   .container {
     padding: 0 24px;
   }
@@ -762,6 +827,22 @@ button.swiper-pagination-bullet {
 }
 .cta--dark:hover {
   color: #fff;
+}
+.cta--facebook {
+  color: #fff;
+  background-color: #4460a0;
+  border-color: #4460a0;
+  padding: 17px 24px;
+  line-height: 16px;
+}
+.cta--facebook:hover {
+  color: #fff;
+}
+.cta--facebook .fonticon {
+  font-size: 16px;
+  line-height: 16px;
+  margin-right: 24px;
+  vertical-align: middle;
 }
 .cta[disabled="disabled"] {
   cursor: default;
@@ -1152,6 +1233,33 @@ button.swiper-pagination-bullet {
 @media (min-width: 768px) {
   .footer__navList--social {
     margin-left: 32px;
+  }
+}
+.form__group {
+  margin-top: 32px;
+}
+.form__field {
+  margin-top: 12px;
+}
+.form__actions {
+  margin-top: 42px;
+}
+@media (max-width: 767px) {
+  .form__actions .cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  .form__actions .cta + .cta {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 768px) {
+  .form__actions {
+    margin-top: 48px;
+  }
+  .form__actions .cta + .cta {
+    margin-left: 12px;
   }
 }
 .gallery {
@@ -1833,6 +1941,34 @@ button.swiper-pagination-bullet {
   .product__ref {
     padding: 12px 24px;
     text-align: center;
+  }
+}
+.register-push {
+  background-color: #f5e5d9;
+}
+@media (min-width: 768px) {
+  .register-push {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+.register-push__actions {
+  margin-top: 42px;
+}
+@media (min-width: 768px) {
+  .register-push__actions {
+    margin-top: 48px;
   }
 }
 .search-form {
