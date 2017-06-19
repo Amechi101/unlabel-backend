@@ -758,25 +758,21 @@ button.swiper-pagination-bullet {
     height: 100%;
   }
 }
-.connect .register-push,
-.connect .login {
+.connect .connect__option {
   padding: 42px 32px 50px;
 }
 @media (min-width: 768px) {
-  .connect .register-push,
-  .connect .login {
+  .connect .connect__option {
     padding: 72px 24px;
   }
 }
 @media (min-width: 1024px) {
-  .connect .register-push,
-  .connect .login {
+  .connect .connect__option {
     padding: 72px 48px;
   }
 }
 @media (min-width: 1280px) {
-  .connect .register-push,
-  .connect .login {
+  .connect .connect__option {
     padding: 72px 96px;
   }
 }

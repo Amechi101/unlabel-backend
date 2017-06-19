@@ -14,7 +14,7 @@
         <div class="container">
             <div class="cols cols--m-2">
                 <div class="col">
-                    <div class="register-push">
+                    <div class="connect__option register-push">
                         <div>
                             <h2 class="title title--small">{% trans "I’m a new customer" %}</h2>
                             <p>{% trans "Creating an account is simple and easy. An account will allow you to follow brands updates, add products to your wishlist, manage your personal details and more. Follow the next quick steps to set up your account today." %}</p>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <form id="login_form" action="{{ request.get_full_path }}" method="post">
+                    <form class="connect__option" id="login_form" action="{{ request.get_full_path }}" method="post">
                         {% csrf_token %}
                         <h2 class="title title--small">{% trans "I already have an account" %}</h2>
                         {% include "partials/form_fields.html" with form=login_form %}
