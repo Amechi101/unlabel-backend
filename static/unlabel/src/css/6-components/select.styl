@@ -18,10 +18,10 @@
   select {
     position: relative
     display inline-block
-    padding: 16px 42px 18px 16px
     font-size: 14px
+    padding: 13px 42px 13px 16px
     line-height: 18px
-    border: 2px solid $color_darkGrey
+    border: 1px solid $color_formInput
     color: $color_darkGrey
     font-family: $font_bold
     background: transparent
@@ -29,18 +29,20 @@
     appearance: none
     cursor: pointer
     width: 100%
-    
-    // if inside form
-    form & {
-      padding: 13px 16px
-      border: 1px solid $color_formInput
-      font-family: $font_regular
+  }
+  
+  .add-to-basket &,
+  &--cta {
+    select {
+      border: 2px solid $color_darkGrey
+      padding: 15px 42px 18px 16px
+      font-family: $font_bold
     }
   }
   
   &--borderLess {
     select {
-      border-color: transparent
+      border-color: transparent !important
     }
   }
 }

@@ -1885,6 +1885,10 @@ button.swiper-pagination-bullet {
 .product .add-to-basket form > * {
   margin-bottom: 10px;
 }
+.product .add-to-basket .form__group,
+.product .add-to-basket .form__field {
+  margin-top: 0;
+}
 @media (min-width: 768px) {
   .product__overview {
     display: -webkit-box;
@@ -2187,10 +2191,10 @@ button.swiper-pagination-bullet {
 .select select {
   position: relative;
   display: inline-block;
-  padding: 16px 42px 18px 16px;
   font-size: 14px;
+  padding: 13px 42px 13px 16px;
   line-height: 18px;
-  border: 2px solid #232323;
+  border: 1px solid #ccc;
   color: #232323;
   font-family: 'FaroWeb-BoldLucky';
   background: transparent;
@@ -2201,13 +2205,14 @@ button.swiper-pagination-bullet {
   cursor: pointer;
   width: 100%;
 }
-form .select select {
-  padding: 13px 16px;
-  border: 1px solid #ccc;
-  font-family: 'FaroWeb-RegularLucky';
+.add-to-basket .select select,
+.select--cta select {
+  border: 2px solid #232323;
+  padding: 15px 42px 18px 16px;
+  font-family: 'FaroWeb-BoldLucky';
 }
 .select--borderLess select {
-  border-color: transparent;
+  border-color: transparent !important;
 }
 @media (max-width: 767px) {
   .share {
