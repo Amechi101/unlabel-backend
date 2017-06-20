@@ -4,6 +4,7 @@ import datetime
 from django.http import HttpResponse
 from django.db.models import Q
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode
 from django.utils.timezone import utc
 
@@ -15,10 +16,66 @@ from django.core.exceptions import ObjectDoesNotExist
 from oscarapps.influencers.models import Influencers,InfluencerInvite
 from oscarapps.influencers.forms import InfluencerSignUpForm
 from oscarapps.address.models import Locations, States, Country
+from rest_framework import pagination
 from users.models import User
 import operator
 from functools import reduce
+from rest_framework import generics
+from rest_framework.response import Response
 from .forms import InfluencerSearchFilterForm
+from rest_framework.views import APIView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import render
+from oscarapps.partner.models import Category, Style
+import json
+
+
+class InfluencerFilterView(generics.ListAPIView):
+
+    pagination_class = pagination.LimitOffsetPagination
+    http_method_names = ('get',)
+
+    def get_queryset(self, *args, **kwargs):
+        style_selected = self.request.GET.get('style',None)
+        location_selected = self.request.GET.get('location',None)
+        gender_selected = self.request.GET.get('gender',None)
+        order = self.request.GET.get('order')
+
+        influencers_list = Influencers.objects.all()
+
+        print("======== ",style_selected,"===========",location_selected,"============",gender_selected)
+
+        if gender_selected:
+            gender_selected = gender_selected.split(',')
+            influencers_list = influencers_list.filter(users__gender__in=gender_selected)
+        if style_selected:
+            style_selected = style_selected.split(',')
+            styles = Style.objects.filter(id__in=style_selected)
+            influencers_list = influencers_list.filter(styles__in=styles)
+        if location_selected:
+            location_selected = location_selected.split(',')
+            location_citys = Locations.objects.filter(id__in=location_selected).values_list('city',flat=True)
+            locations = Locations.objects.filter(city__in=location_citys)
+            influencers_list = influencers_list.filter(location__in=locations)
+
+        return influencers_list
+
+        # print(">>>>>>>>>>>>>>>>>> ",influencers_list)
+        # paginator = Paginator(influencers_list, 2) # Show 25 contacts per page
+        # page = request.GET.get('page')
+        # try:
+        #     influencers = paginator.page(page)
+        # except PageNotAnInteger:
+        #     # If page is not an integer, deliver first page.
+        #     influencers = paginator.page(1)
+        # except EmptyPage:
+        #     # If page is out of range (e.g. 9999), deliver last page of results.
+        #     influencers = paginator.page(paginator.num_pages)
+        #
+        #
+        # renderedString = render_to_string("influencers/influencer_filter_list.html",{'influencers':influencers})
+        # return Response({'html':renderedString})
+
 
 
 class InfluencerListView(View):
@@ -26,34 +83,23 @@ class InfluencerListView(View):
     model = Influencers
 
     def get(self,request,*args,**kwargs):
-        FilterForm = InfluencerSearchFilterForm()
-        influencers = Influencers.objects.filter(users__is_active=True).order_by('-created')
-        data = {'FilterForm':FilterForm,'influencers':influencers}
+        influencers_list = Influencers.objects.filter(users__is_active=True).order_by('-created')
+
+        paginator = Paginator(influencers_list, 2) # Show 25 contacts per page
+        page = request.GET.get('page')
+        try:
+            influencers = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            influencers = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            influencers = paginator.page(paginator.num_pages)
+
+
+        data = {'influencers':influencers,'styles':Style.objects.all(),
+                'locations':Locations.objects.all().distinct('city') }
         return render(request, self.template_name , data)
-
-    def post(self,request,*args,**kwargs):
-
-        FilterForm = InfluencerSearchFilterForm(data=request.POST)
-        if FilterForm.is_valid():
-            style = FilterForm.cleaned_data['style']
-            gender = FilterForm.cleaned_data['gender']
-            location = FilterForm.cleaned_data['location']
-            influencers = Influencers.objects.filter(users__is_active=True)
-            # if style:
-            #     influencers = influencers.filter(styles__in=style)
-            # if gender:
-            #     influencers = influencers.filter(users__gender__in=gender)
-            if location:
-                city_location = Locations.objects.filter(pk__in=location).values_list('city',flat=True)
-                locations = Locations.objects.filter(reduce(operator.or_,(Q(city__icontains=x) for x in city_location)))
-                print("============================== ",locations,"++++",locations.count())
-
-
-            influencers = Influencers.objects.filter(users__is_active=True).order_by('-created')
-            data = {'FilterForm':FilterForm,'influencers':influencers}
-            return render(request, self.template_name , data)
-
-
 
 
 

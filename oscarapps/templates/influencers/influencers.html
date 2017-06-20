@@ -5,33 +5,124 @@
 {% load cloudinary %}
 
 
-{% block head_title %}{% trans "#UnlabelDiscovery" %}{% endblock %}
-
-{% block body_class %}influncers-campaign{% endblock %}
-
 {% block column_left %}
-    <form method="post" action='/influencers/unlabel-influencers/'>
-        {% csrf_token %}
-        {{ FilterForm.as_p }}
-    <button type="submit" class="btn btn-sm btn-primary" data-loading-text="{% trans 'Filtering...' %}">{% trans "Apply" %}</button>
 
-    </form>
+    <h2>Gender</h2>
+        <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','male')"
+               value="male"> Male
+        <br>
+    <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','female')"
+               value="male"> Female
+    <br>
+
+    <h2>Style</h2>
+    {% for style in styles %}
+        <input type="checkbox" id="style_{{ style.id }}" name="style" onclick="generateFilteredData('style',{{ style.id }})"
+               value="{{ style.id }}"> {{ style }}
+        <br>
+
+    {% endfor %}
+
+    <h2>Location</h2>
+    {% for location in locations %}
+        <input type="checkbox" id="location_{{ location.id }}" name="location" onclick="generateFilteredData('location',{{ location.id }})"
+               value="{{ location.id }}"> {{ location }}
+        <br>
+
+    {% endfor %}
 
 {% endblock %}
 
 {% block content %}
-    <a href="?filter=test">
-        <h2>Influencers</h2></a>
+
+    <h2>Influencers</h2>
+
+    <div id="influencer_list">
 
     {% for influencer in influencers %}
         <div>
-        <h4>{{ influencer.name|title }}</h4>
-        <img class="image-adjust" src="{{ MEDIA_URL }}{{ influencer.users.image }}" class="thumbnail">
+        <h4>{{ influencer.users.first_name|title }}</h4>
+        <h4>{{ influencer.users.last_name|title }}</h4>
+            {% if influencer.users.image %}
+            <img class="image-adjust" src="{{ influencer.users.image.url }}" class="thumbnail">
+             {% else %}
+                <img class="image-adjust" class="thumbnail">
+            {% endif %}
         <h4>{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</h4>
         </div>
-
     {% endfor %}
+
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if influencers.has_previous %}
+                <a href="?page={{ influencers.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ influencers.number }} of {{ influencers.paginator.num_pages }}.
+            </span>
+
+            {% if influencers.has_next %}
+                <a href="?page={{ influencers.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+    </div>
+
+<script>
+
+    {# --------------------------------README-------------------------- #}
+
+{# Send data to the below api link, to get response and replace the div#}
+{# the keys are as follows:#}
+{# Gender : M=male#}
+{#        F=Female#}
+{# Style : id ( comma seperated values, in case of multiple )#}
+{# location : id ( comma seperated values, in case of multiple )#}
+
+{#     ZA - sort by a to z    #}
+{#     AZ - sort by z to a    #}
+{#     ASC - sort by date ascending    #}
+{#     DESC - sort by date descending    #}
+
+    function generateFilteredData(filter_type,id) {
+        alert("--------------");
+        var query;
+
+        if(filter_type=='gender'){
+            query = "?gender="+id+'&location=&style=';
+        }
+        if(filter_type=='location'){
+            query = "?location="+id+'&style=&gender=';
+        }
+        if(filter_type=='style'){
+            query = "?style="+id+'&location=&gender=';
+        }
+
+
+        $.ajax({
+{#            url: "/influencers/influencers-filter/?gender=F&location=60&style=",#}
+            url: "/api_v2/influencer_profile_listing/?gender=F",
+//            data: {
+//                'username': "hai",
+//                'date' : "date",
+//
+//            },
+//            dataType: 'json',
+            success: function (data) {
+                $( "#influencer_list" ).replaceWith( data['html'] );
+
+            }
+        });
+    };
+
+
+</script>
+
+
 {% endblock %}
+
 
 
 

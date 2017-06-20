@@ -14,9 +14,9 @@ from rest_framework import generics
 from django.core.mail.message import EmailMessage
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from .serializers import UserAddressSerializer, CountrySerializer, StateSerializer,BrandLocationsSerializer
+from .serializers import UserAddressSerializer, CountrySerializer, StateSerializer,BrandLocationsSerializer, TeleCodeSerializer
 from oscar.apps.address.models import Country
-from oscarapps.address.models import States, Locations
+from oscarapps.address.models import States, Locations, TelephoneCode
 from oscarapps.partner.models import Partner
 from django.http import HttpResponse
 
@@ -92,3 +92,14 @@ class GetLocations(APIView):
         location_ser = self.serializer_class(locations, many=True)
         results_dict = {'results' : location_ser.data}
         return Response(results_dict)
+
+class CountryCode(APIView):
+    serializer_class = TeleCodeSerializer
+
+    def get(self,request, *args, **kwargs):
+        tc = TelephoneCode.objects.all()
+        telecode_ser = self.serializer_class(tc,many=True)
+        result = {'results':telecode_ser.data}
+        return Response(result)
+
+

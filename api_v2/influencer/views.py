@@ -25,6 +25,7 @@ from oscar.apps.address.models import Country
 from api_v2.catalogue.serializers import PartnerSerializer
 from oscarapps.address.models import Locations, States
 
+from .pagination import InfluencerListPagination
 from api_v2.address.serializers import BrandLocationsSerializer
 from users.models import User  # ,UserDevice
 # from scarface.models import Application, Platform, Device, Topic, PushMessage
@@ -34,6 +35,7 @@ from .serializers import LoginSerializer, InfluencerProfileSerializer, Influence
 from oscarapps.partner.models import PartnerFollow, Partner
 from oscarapps.influencers.models import Influencers
 from push_notification.models import APNSDevice
+from oscarapps.partner.models import Category, Style
 
 
 class LoginView(APIView):
@@ -586,3 +588,51 @@ class InfluencerProfileStyles(APIView):
         else:
             content = {"message": "Please login as influencer and try again."}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+class InfluencerProfileListing(generics.ListAPIView):
+
+    pagination_class = InfluencerListPagination
+    permissions = permissions.AllowAny
+    authentication=None
+    serializer_class = InflencerProfileDetailsSerializer
+    http_method_names = ('get',)
+
+
+    # ZA - sort by a to z
+    # AZ - sort by z to a
+    # ASC - sort by date ascending
+    # DESC - sort by date descending
+
+
+    def get_queryset(self, *args, **kwargs):
+        style_selected = self.request.GET.get('style',None)
+        location_selected = self.request.GET.get('location',None)
+        gender_selected = self.request.GET.get('gender',None)
+        order = self.request.GET.get('order')
+
+        influencers_list = Influencers.objects.all()
+
+        if gender_selected:
+            gender_selected = gender_selected.split(',')
+            influencers_list = influencers_list.filter(users__gender__in=gender_selected)
+        if style_selected:
+            style_selected = style_selected.split(',')
+            styles = Style.objects.filter(id__in=style_selected)
+            influencers_list = influencers_list.filter(styles__in=styles)
+        if location_selected:
+            location_selected = location_selected.split(',')
+            location_citys = Locations.objects.filter(id__in=location_selected).values_list('city',flat=True)
+            locations = Locations.objects.filter(city__in=location_citys)
+            influencers_list = influencers_list.filter(location__in=locations)
+
+        if order:
+            if order == 'ZA':
+                influencers_list = influencers_list.order_by('users.first_name')
+            elif order == 'AZ':
+                influencers_list = influencers_list.order_by('-users.first_name')
+            elif order == 'ASC':
+                influencers_list = influencers_list.order_by('-created')
+            elif order == 'DESC':
+                influencers_list = influencers_list.order_by('created')
+
+        return influencers_list

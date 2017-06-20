@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from oscar.apps.address.models import UserAddress,Country
-from oscarapps.address.models import States, Locations
+from oscarapps.address.models import States, Locations, TelephoneCode
 
 
 class UserAddressSerializer(serializers.ModelSerializer):
@@ -56,3 +56,12 @@ class BrandLocationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Locations
         fields = ['city','latitude','longitude','state','country','id','display_string']
+
+
+class TeleCodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TelephoneCode
+        fields = '__all__'
+
+

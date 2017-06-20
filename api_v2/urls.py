@@ -93,7 +93,11 @@ urlpatterns = [
         name='influencer-remaining-amount'),
     url(r'^influencer_ucc_handle/', influencerViews.InfluencerUniqueUcc.as_view(), name='influencer-ucc-handle'),
     url(r'^influencer_profile_styles/', influencerViews.InfluencerProfileStyles.as_view(),
-        name='influencer-profile-styles')
+        name='influencer-profile-styles'),
+    url(r'^influencer_profile_listing/', influencerViews.InfluencerProfileListing.as_view(),
+        name='influencer-profile-listing'),
+    url(r'^influencer_country_codes/', addressViews.CountryCode.as_view(),
+        name='influencer_country_codes'),
 ]
 
 ##### address urls  #####

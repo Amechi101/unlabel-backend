@@ -41,7 +41,8 @@ class Influencers(BaseApplicationModel):
     auto_id = models.CharField(unique=True, max_length=16, blank=True, null=True, default="",
                                verbose_name=_('Influencer ID'))
     bio = models.TextField(blank=True, default="", verbose_name=_('Bio'))
-    location = models.ForeignKey(Locations, models.SET_NULL, null=True, blank=True, default="", verbose_name=_('Location'),related_name="influencer_location")
+    location = models.ForeignKey(Locations, models.SET_NULL, null=True, blank=True, default="",
+                                 verbose_name=_('Location'),related_name="influencer_location")
     users = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="influencers", blank=True,
                                  verbose_name=_("Users"))
     height = models.PositiveIntegerField(default=0, verbose_name=_('Height'), help_text=_('US Measurements'))

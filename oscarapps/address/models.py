@@ -54,4 +54,14 @@ class Locations(models.Model):
         super(Locations, self).save(*args, **kwargs)
 
 
+class TelephoneCode(models.Model):
+    country = models.CharField(max_length=100)
+    code = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.country+"  "+self.code
+
+
+
+
 from oscar.apps.address.models import *

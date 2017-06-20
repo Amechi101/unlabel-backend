@@ -1,5 +1,7 @@
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
+from rest_framework import pagination
+
 
 from collections import OrderedDict
 
@@ -13,3 +15,4 @@ class CustomPagination(LimitOffsetPagination):
             ('profile', data.get('profile')),
             ('results', data.get('data'))
         ]))
+
