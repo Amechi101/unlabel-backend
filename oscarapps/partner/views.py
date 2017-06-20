@@ -134,7 +134,7 @@ class BrandListView(ListView):
 
 class BrandDetailView(View):
     """
-    List the brands
+    Detail view of brand
     """
     context_object_name = "brand"
     template_name = 'brand/brand_detail.html'
@@ -144,8 +144,8 @@ class BrandDetailView(View):
     def get(self, request, *args, **kwargs):
         partner_slug = self.kwargs['slug']
         qs = Partner.objects.get(slug=partner_slug)
-        data = {'brand':qs}
+        data = {'brand': qs}
         products = Product.objects.filter(brand=qs)
-        data.update({'products':products})
+        data.update({'products': products})
 
-        return render(request,self.template_name,data)
+        return render(request, self.template_name, data)

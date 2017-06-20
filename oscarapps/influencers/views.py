@@ -9,11 +9,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, View
 from django.views.generic.detail import SingleObjectMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
+from users.models import User
 from oscarapps.influencers.models import Influencers,InfluencerInvite
 from oscarapps.influencers.forms import InfluencerSignUpForm
 from oscarapps.address.models import Locations, States, Country
-from users.models import User
+from oscarapps.catalogue.models import Product
+from .models import InfluencerProductReserve
+
 
 
 class InfluencerListView(ListView):
@@ -118,5 +122,25 @@ class InfluencerSignUpView(View):
             return HttpResponse("Sorry, The sign up link you requested is already used.")
 
 
+class UccDetail(View):
+    """
+    Detail view of ucc
+    """
+    context_object_name = "influencer"
+    template_name = 'influencers/ucc_detail.html'
+    model = Influencers
+    page_title = 'Influencer'
 
+    def get(self, request, *args, **kwargs):
+        influencer_id = self.kwargs['id']
+        try:
+            qs = Influencers.objects.get(pk=influencer_id)
+            data = {'influencer': qs}
+            p = InfluencerProductReserve.objects.filter(influencer=influencer_id, is_live=True).values_list('product',
+                                                                                                            flat=True)
+            products = Product.objects.filter(id__in=p)
+            data.update({'products': products})
+        except:
+            return render(request,'404.html', {})
 
+        return render(request,self.template_name,data)
