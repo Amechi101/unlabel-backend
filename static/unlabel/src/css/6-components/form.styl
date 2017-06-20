@@ -1,3 +1,28 @@
+.form {
+}
+
+.form__row {
+  &--m-2 {
+    @media $mq_m {
+      display: flex
+    }
+    
+    // all children form__group
+    & > .form__group {
+      @media $mq_m {
+        width: 50%
+      }
+      
+      // all children form__group except first one
+      & + .form__group {
+        @media $mq_m {
+          margin-left: 32px
+        }
+      }
+    }
+  }
+}
+
 .form__group {
   margin-top: 32px
 }
@@ -7,6 +32,18 @@
 
 .form__field {
   margin-top: 12px
+}
+
+.form__passwordSecurity {
+  margin-top: 12px
+  font-size: 11px
+  font-family: $font_bold
+  
+  .password-security {
+    @media $mq_m {
+      margin-left: 16px
+    }
+  }
 }
 
 .form__actions {
@@ -30,5 +67,13 @@
     .cta + .cta {
       margin-left: 12px
     }
+  }
+}
+
+.form__alternative {
+  margin-top: 42px
+  
+  @media $mq_m {
+    margin-top: 48px
   }
 }

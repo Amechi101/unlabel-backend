@@ -114,6 +114,11 @@ figure img {
   width: 100%;
   height: auto;
 }
+hr {
+  border: 0 none;
+  border-top: 1px solid #f0f0f0;
+  margin: 0;
+}
 img {
   display: block;
   margin: 0;
@@ -129,6 +134,26 @@ input[type=password] {
   line-height: 20px;
   font-size: 14px;
   width: 100%;
+}
+input[type=text]::-webkit-input-placeholder,
+input[type=email]::-webkit-input-placeholder,
+input[type=password]::-webkit-input-placeholder {
+  color: A3A3A3;
+}
+input[type=text]:-moz-placeholder,
+input[type=email]:-moz-placeholder,
+input[type=password]:-moz-placeholder {
+  color: A3A3A3;
+}
+input[type=text]::-moz-placeholder,
+input[type=email]::-moz-placeholder,
+input[type=password]::-moz-placeholder {
+  color: A3A3A3;
+}
+input[type=text]:-ms-input-placeholder,
+input[type=email]:-ms-input-placeholder,
+input[type=password]:-ms-input-placeholder {
+  color: A3A3A3;
 }
 
 /**
@@ -786,9 +811,24 @@ button.swiper-pagination-bullet {
 }
 @media (min-width: 768px) {
   .container {
-    padding: 96px 32px;
+    padding: 0 32px;
     max-width: 1184px;
     margin: 0 auto;
+  }
+}
+@media (min-width: 768px) {
+  .container--m-pad-l {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+}
+.container--narrow {
+  margin: 0 auto;
+  max-width: 320px;
+}
+@media (min-width: 768px) {
+  .container--narrow {
+    max-width: 608px;
   }
 }
 .cta {
@@ -1231,11 +1271,38 @@ button.swiper-pagination-bullet {
     margin-left: 32px;
   }
 }
+@media (min-width: 768px) {
+  .form__row--m-2 {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+@media (min-width: 768px) {
+  .form__row--m-2 > .form__group {
+    width: 50%;
+  }
+}
+@media (min-width: 768px) {
+  .form__row--m-2 > .form__group + .form__group {
+    margin-left: 32px;
+  }
+}
 .form__group {
   margin-top: 32px;
 }
 .form__field {
   margin-top: 12px;
+}
+.form__passwordSecurity {
+  margin-top: 12px;
+  font-size: 11px;
+  font-family: 'FaroWeb-BoldLucky';
+}
+@media (min-width: 768px) {
+  .form__passwordSecurity .password-security {
+    margin-left: 16px;
+  }
 }
 .form__actions {
   margin-top: 42px;
@@ -1256,6 +1323,14 @@ button.swiper-pagination-bullet {
   }
   .form__actions .cta + .cta {
     margin-left: 12px;
+  }
+}
+.form__alternative {
+  margin-top: 42px;
+}
+@media (min-width: 768px) {
+  .form__alternative {
+    margin-top: 48px;
   }
 }
 .gallery {
@@ -1757,6 +1832,35 @@ button.swiper-pagination-bullet {
   border-color: currentColor;
   font-family: 'FaroWeb-BoldLucky';
 }
+.password-security {
+  display: inline-block;
+}
+.password-security[data-password-security-score="0"] .password-security__bar:nth-child(1),
+.password-security[data-password-security-score="1"] .password-security__bar:nth-child(1) {
+  background-color: #f00;
+}
+.password-security[data-password-security-score="2"] .password-security__bar:nth-child(1),
+.password-security[data-password-security-score="2"] .password-security__bar:nth-child(2) {
+  background-color: #ffa500;
+}
+.password-security[data-password-security-score="3"] .password-security__bar:nth-child(1),
+.password-security[data-password-security-score="3"] .password-security__bar:nth-child(2),
+.password-security[data-password-security-score="3"] .password-security__bar:nth-child(3) {
+  background-color: #ff0;
+}
+.password-security[data-password-security-score="4"] .password-security__bar {
+  background-color: #008000;
+}
+.password-security__bar {
+  display: inline-block;
+  width: 24px;
+  height: 4px;
+  background-color: #232323;
+  vertical-align: middle;
+}
+.password-security__bar + .password-security__bar {
+  margin-left: 2px;
+}
 .product .add-to-basket {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1967,6 +2071,28 @@ button.swiper-pagination-bullet {
     margin-top: 48px;
   }
 }
+.register__header {
+  padding: 48px 0;
+}
+@media (min-width: 768px) {
+  .register__header {
+    padding: 96px 0 48px;
+  }
+}
+.register__headerTitle {
+  margin-bottom: 32px;
+}
+@media (min-width: 768px) {
+  .register__headerTitle {
+    margin-bottom: 48px;
+  }
+}
+.register__headerActions {
+  margin-top: 48px;
+}
+.register__main {
+  margin: 48px 0 96px;
+}
 .search-form {
   position: absolute;
   bottom: 0;
@@ -2061,9 +2187,9 @@ button.swiper-pagination-bullet {
 .select select {
   position: relative;
   display: inline-block;
-  padding: 18px 42px 18px 16px;
+  padding: 16px 42px 18px 16px;
   font-size: 14px;
-  line-height: 14px;
+  line-height: 18px;
   border: 2px solid #232323;
   color: #232323;
   font-family: 'FaroWeb-BoldLucky';
@@ -2073,6 +2199,12 @@ button.swiper-pagination-bullet {
      -moz-appearance: none;
           appearance: none;
   cursor: pointer;
+  width: 100%;
+}
+form .select select {
+  padding: 13px 16px;
+  border: 1px solid #ccc;
+  font-family: 'FaroWeb-RegularLucky';
 }
 .select--borderLess select {
   border-color: transparent;

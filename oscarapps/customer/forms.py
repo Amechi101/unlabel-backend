@@ -16,13 +16,13 @@ class EmailUserCreationForm(BaseEmailUserCreationForm):
     country = forms.ModelChoiceField(label="Country ",
                                      queryset=Country.objects.all())
 
-    # def clean_confirm_email(self):
-    #     email = self.clean_email()
-    #     confirm_email = normalise_email(self.cleaned_data['confirm_email'])
-    #     if email != confirm_email:
-    #         raise forms.ValidationError(
-    #             _("The two email fields didn't match."))
-    #     return confirm_email
+    def clean_confirm_email(self):
+        email = self.clean_email()
+        confirm_email = normalise_email(self.cleaned_data['confirm_email'])
+        if email != confirm_email:
+            raise forms.ValidationError(
+                _("The two email fields didn't match."))
+        return confirm_email
 
     def __init__(self, *args, **kwargs):
         super(EmailUserCreationForm, self).__init__(*args, **kwargs)

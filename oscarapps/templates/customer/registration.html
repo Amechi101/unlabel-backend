@@ -7,30 +7,62 @@
     {% trans 'Register' %} | {{ block.super }}
 {% endblock %}
 
-{% block breadcrumbs %}
-    <ul class="breadcrumb">
-        <li>
-            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
-        </li>
-        <li class="active">{% trans 'Register' %}</li>
-    </ul>
-{% endblock %}
-
-{% block headertext %}
-    {% trans "Register" %}
-{% endblock %}
-
 {% block content %}
-    <div class="row">
-        <div class="col-sm-6 register_form">
-            <form id="register_form" action="." method="post" class="form-stacked">
-                {% csrf_token %}
-                {% include "partials/form_fields.html"  %}
-                <button name="registration_submit" type="submit" value="Register" class="btn btn-primary btn-lg"
-                        data-loading-text="{%trans 'Creating...' %}">{% trans 'Create my account' %}</button>
-
-                <a class="btn btn-primary btn-lg" href="{% provider_login_url "facebook" method="oauth2" %}">Register with Facebook</a>
-            </form>
-        </div>
+    <div class="register">
+        <section class="register__header">
+            <div class="container container--narrow">
+                <h2 class="register__headerTitle title title--small">{% trans "Your account on Unlabel" %}</h2>
+                <p>{% trans "Creating an account is simple and easy. An account will allow you to follow brands updates, add products to your wishlist, manage your personal details and more. Follow the next quick steps to set up your account today." %}</p>
+                <div class="register__headerActions">
+                    <a class="cta cta--facebook" href="{% provider_login_url "facebook" method="oauth2" %}"><span class="fonticon fonticon--facebook"></span>{% trans "Register with Facebook" %}</a>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <section class="register__main">
+            <div class="container container--narrow">
+                <form id="register_form" action="." method="post" class="form form--m-2 form-stacked">
+                    {% csrf_token %}
+                    {% include "partials/form_errors.html" %}
+                    <div class="form__row form__row--m-2">
+                        {% include 'partials/form_field.html' with field=form.first_name %}
+                        {% include 'partials/form_field.html' with field=form.last_name %}
+                    </div>
+                    <div class="form__row form__row--m-2">
+                        {% include 'partials/form_field.html' with field=form.email %}
+                        {% include 'partials/form_field.html' with field=form.confirm_email %}
+                    </div>
+                    <div class="form__row form__row--m-2">
+                        {% include 'partials/form_field.html' with field=form.password1 %}
+                        {% include 'partials/form_field.html' with field=form.password2 %}
+                    </div>
+                    <div class="form__passwordSecurity">
+                        <span>{% trans "Security level (at least one capital letter and one number)" %}</span>
+                        <br class="u-mobile-only">
+                        <span class="password-security" data-password-security-id="id_password1">
+                            <span class="password-security__bar"></span>
+                            <span class="password-security__bar"></span>
+                            <span class="password-security__bar"></span>
+                            <span class="password-security__bar"></span>
+                        </span>
+                    </div>
+                    <div class="form__row form__row--m-2">
+                        {% include 'partials/form_field.html' with field=form.dob %}
+                        {% include 'partials/form_field.html' with field=form.country %}
+                    </div>
+                    <p class="form__group">
+                        {# TODO : Make links dynamic #}
+                        By creating an account, you agree to Unlabel’s <a class="link" href="#">Privacy Policy</a> and <a class="link" href="#">Terms of Use</a>
+                    </p>
+                    <div class="form__actions">
+                        <button name="registration_submit" type="submit" value="Register" class="cta cta--dark"
+                                data-loading-text="{%trans 'Creating...' %}">{% trans 'Create my account' %}</button>
+                    </div>
+                    <p class="form__alternative">
+                       Already have an account? <a href="{% url 'customer:login' %}" class="link">Sign in</a>
+                    </p>
+                </form>
+            </div>
+        </section>
     </div>
 {% endblock content %}

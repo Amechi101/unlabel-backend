@@ -18,9 +18,9 @@
   select {
     position: relative
     display inline-block
-    padding: 18px 42px 18px 16px
-    font-size: font_size = 14px
-    line-height font_size
+    padding: 16px 42px 18px 16px
+    font-size: 14px
+    line-height: 18px
     border: 2px solid $color_darkGrey
     color: $color_darkGrey
     font-family: $font_bold
@@ -28,6 +28,14 @@
     border-radius: 0
     appearance: none
     cursor: pointer
+    width: 100%
+    
+    // if inside form
+    form & {
+      padding: 13px 16px
+      border: 1px solid $color_formInput
+      font-family: $font_regular
+    }
   }
   
   &--borderLess {

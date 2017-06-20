@@ -31,7 +31,8 @@
     "events": "1.1.1",
     "gsap": "1.19.1",
     "swiper": "3.4.2",
-    "tabbable": "1.0.6"
+    "tabbable": "1.0.6",
+    "zxcvbn": "4.4.2"
   },
   "babel": {
     "presets": [

@@ -4,8 +4,24 @@
   }
   
   @media $mq_m {
-    padding: 96px 32px
+    padding: 0 32px
     max-width: (1120px + 32px * 2)
     margin: 0 auto
+  }
+  
+  &--m-pad-l {
+    @media $mq_m {
+      padding-top: 96px
+      padding-bottom: 96px
+    }
+  }
+  
+  &--narrow {
+    margin: 0 auto
+    max-width: (256px + 32px * 2)
+    
+    @media $mq_m {
+      max-width: (544px + 32px * 2)
+    }
   }
 }

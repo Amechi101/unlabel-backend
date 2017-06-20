@@ -3,6 +3,7 @@ import Gallery from './components/gallery'
 import SizeChart from './components/sizechart'
 import NestedLists from './components/nested-lists'
 import Drawer from './components/drawer'
+import PasswordSecurity from './components/password-security'
 
 class App {
   constructor() {
@@ -43,6 +44,14 @@ class App {
         options: {
           closeSelector: '.drawer__close, .drawer__backdrop'
         }
+      })
+    })
+
+    // Password Security
+    const passwordSecurity_arr = [].slice.call(document.querySelectorAll('.password-security'))
+    passwordSecurity_arr.forEach((el) => {
+      new PasswordSecurity({
+        el: el
       })
     })
   }

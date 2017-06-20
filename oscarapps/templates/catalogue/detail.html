@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="product">
-<div class="container">
+<div class="container container--m-pad-l">
 	<div class="product__overview">
 		<div class="product__galleryContainer">
 			{% block product_gallery %}
@@ -29,7 +29,6 @@
 			<div>
 				{% purchase_info_for_product request product as session %}
 				{% if session.price.exists %}
-                    <!-- TODO : isolate currency symbol for styling pupose -->
 					<p class="product__price">{{ session.price.incl_tax|currency:session.price.currency }}</p>
 				{% endif %}
 			</div>
