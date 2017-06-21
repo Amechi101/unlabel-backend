@@ -6,6 +6,7 @@ from users.models import User
 from oscarapps.influencers.models import Influencers
 from api_v2.catalogue.serializers import LocationSerializer
 from oscarapps.partner.models import Style
+from oscarapps.address.models import TelephoneCode
 
 
 def field_length(fieldname):
@@ -48,10 +49,21 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 class InfluencerProfileSerializer(serializers.ModelSerializer):
+    telephone_code = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['contact_number', 'email', 'first_name', 'last_name', 'ucc_handle', 'image', 'influencer_industry', 'telephone_code']
+
+    def get_telephone_code(self,obj):
+        code_id = obj.telephone_code.id
+        try:
+            print("=================================== ",code_id)
+            tele_code = TelephoneCode.objects.get(id=code_id)
+            return tele_code.code
+        except:
+            return None
+
 
 class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
 
