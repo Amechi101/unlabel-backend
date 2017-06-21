@@ -56,9 +56,9 @@ class InfluencerProfileSerializer(serializers.ModelSerializer):
         fields = ['contact_number', 'email', 'first_name', 'last_name', 'ucc_handle', 'image', 'influencer_industry', 'telephone_code']
 
     def get_telephone_code(self,obj):
-        code_id = obj.telephone_code.id
+
         try:
-            print("=================================== ",code_id)
+            code_id = obj.telephone_code.id
             tele_code = TelephoneCode.objects.get(id=code_id)
             return tele_code.code
         except:
