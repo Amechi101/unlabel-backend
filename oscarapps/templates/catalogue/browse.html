@@ -122,7 +122,9 @@
 {% endblock content %}
 
 {% block after_layout %}
-    {% include "partials/pagination.html" %}
+    <div class="grid__paginationContainer">
+        {% include "partials/pagination.html" %}
+    </div>
 {% endblock %}
 
 {% block onbodyload %}

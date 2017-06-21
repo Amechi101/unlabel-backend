@@ -1,0 +1,38 @@
+.grid2 { // TODO : use container component instead ?
+  padding: 0 24px
+  max-width: 256px
+  margin: 0 auto
+  
+  @media $mq_m {
+    padding: 0 32px
+    max-width: (732px + 2 * 16px) 
+  }
+}
+.grid2__list {
+  @media $mq_m {
+    display: flex
+    flex-wrap: wrap
+  }
+
+  .grid__itemInner { // TODO : clean override ?
+    padding: 0 0 32px !important
+    @media $mq_m {
+      padding: 0 16px 48px !important
+    }
+  }
+}
+
+.grid2__item {
+  width: 100%
+  
+  &:nth-child(2n + 2) {
+    @media $mq_m {
+      transform: translate(0, -120px)
+    }
+  }
+  
+  @media $mq_m {
+    float: left
+    width: 50%  
+  }
+}

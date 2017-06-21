@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    "{{ query }}" | {{ block.super }}
+{% endblock %}
+
+{% block content_wrapper %}
+
+    <header class="results__header">
+        <div class="container">
+            {% include "partials/search.html" %}
+        </div>
+    </header>
+
+    <nav class="results__nav">
+        <ul class="results__navList">
+            <li class="results__navItem">
+                <a class="results__navLink {% if request.path == '/search/' %} is-active{% endif %}" href="/search/?q={{ query }}">{% trans "Products" %}</a>
+            </li>
+            <li class="results__navItem">
+                <a class="results__navLink {% if request.path == '/search/search-brands/' %} is-active{% endif %}" href="/search/search-brands/?q={{ query }}">{% trans "Brands" %}</a>
+            </li>
+            <li class="results__navItem">
+                <a class="results__navLink {% if request.path == '/search/search-influencers/' %} is-active{% endif %}" href="/search/search-influencers/?q={{ query }}">{% trans "Creators" %}</a>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="results__main">
+        {% block content %}{% endblock %}
+    </section>
+
+{% endblock content_wrapper %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.search.init();
+{% endblock %}

@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<form method="get" action="{% url 'search:search' %}" class="search-form">
+<form method="get" action="{% url 'search:search' %}" class="search-form {% if theme == "dark" %}search-form--dark{% endif %}">
 	<div class="search-form__wrapper">
 		<fieldset class="search-form__fieldset">
 			<div class="search-form__field">

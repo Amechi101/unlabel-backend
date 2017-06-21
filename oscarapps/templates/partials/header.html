@@ -117,7 +117,7 @@
                 </div>
             </div>
         </div>
-        <div class="drawer drawer--top drawer--dark" id="search-drawer">
+        <div class="search-drawer drawer drawer--top drawer--dark" id="search-drawer">
             <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Search' %}"></a>
             <div class="drawer__frame">
                 <div class="drawer__header">
@@ -126,7 +126,11 @@
                 </div>
                 <div class="drawer__scroller">
                     <div class="drawer__content">
-                        {% include "partials/search.html" %}
+                        <div class="search-drawer__contentWrapper">
+                            <div class="container">
+                                {% include "partials/search.html" with theme="dark" %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
