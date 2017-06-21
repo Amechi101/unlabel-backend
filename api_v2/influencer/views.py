@@ -35,6 +35,7 @@ from .serializers import LoginSerializer, InfluencerProfileSerializer, Influence
 from oscarapps.partner.models import PartnerFollow, Partner
 from oscarapps.influencers.models import Influencers
 from push_notification.models import APNSDevice
+from oscarapps.address.models import TelephoneCode
 from oscarapps.partner.models import Category, Style
 
 
@@ -272,6 +273,16 @@ class InfluencerProfileUpdate(APIView):
                     influencer_user.ucc_handle = request.data['ucc_handle']
                 else:
                     content = {"message": "Please enter valid user name"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+                if request.data['telephone_code']:
+                    try:
+                        tele_code_obj = TelephoneCode.objects.get(id=request.data['telephone_code'])
+                    except:
+                        tele_code_obj = None
+                    influencer_user.telephone_code = tele_code_obj
+                else:
+                    content = {"message": "Please enter valid telephone code"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
                 if request.data['image']:
