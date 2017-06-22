@@ -1,0 +1,22 @@
+.carousel {}
+
+.carousel_contentItem {
+  span& { // debug transition on non-block element
+   display: inline-block 
+   max-width: 100%
+  }
+}
+
+.carousel__btn {
+  display: inline-block
+  border: 2px solid currentColor
+  
+  &.swiper-button-disabled {
+    opacity: 0.5
+    cursor: default
+  }
+  
+  &--next {
+    margin-left: 12px
+  }
+}

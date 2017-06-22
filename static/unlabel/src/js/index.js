@@ -4,12 +4,19 @@ import SizeChart from './components/sizechart'
 import NestedLists from './components/nested-lists'
 import Drawer from './components/drawer'
 import PasswordSecurity from './components/password-security'
+import Carousel from './components/carousel'
+import {TweenMax, Power3} from 'gsap'
 
 class App {
   constructor() {
     console.log('[Unlabel App]')
 
+    this.initAnimations()
     this.initComponents()
+  }
+  initAnimations() {
+    // Default easing for all components
+    TweenMax.defaultEase = Power3.easeOut
   }
   initComponents() {
     // Gallery
@@ -51,6 +58,14 @@ class App {
     const passwordSecurity_arr = [].slice.call(document.querySelectorAll('.password-security'))
     passwordSecurity_arr.forEach((el) => {
       new PasswordSecurity({
+        el: el
+      })
+    })
+
+    // Carousel
+    const carousel_arr = [].slice.call(document.querySelectorAll('.carousel'))
+    carousel_arr.forEach((el) => {
+      new Carousel({
         el: el
       })
     })

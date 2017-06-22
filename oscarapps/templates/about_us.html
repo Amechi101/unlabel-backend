@@ -1,17 +1,115 @@
 {% extends "layout.html" %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block content %}
 
-<h2>OUR STORY</h2>
+{# TODO : make everything dynamic ? #}
 
-    <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-        make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-        typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
-        including versions of Lorem Ipsum.
+<div class="about">
+	<div class="container container--m-pad-l">
+		<div class="about__header">
+			<div class="about__titleContainer">
+				<h2 class="title title--caps title--destructured">
+					<span class="u-block">Our</span>
+					<span class="u-block">sto-</span>
+					<span class="u-block">&nbsp;&nbsp;ry</span>
+				</h2>
+				<div class="logo">
+				    <span class="logo__icon">
+				        <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}" alt="Unlabel Logo">
+				    </span>
+				</div>
+			</div>
+			<div class="about__descContainer">
+				<p class="desc">Etiam aliquet erat eget consequat accumsan. Sed vel rhoncus erat. Integer laoreet libero nisl, in mollis justo lobortis vitae. Mauris ullamcorper vel tellus nec maximus. Duis sodales purus magna, sed pellentesque tellus lobortis at. Integer feugiat vel tortor et sollicitudin. Donec orci libero, congue vitae lacinia eu, aliquam ac risus. </p>
+			</div>
+		</div>
 
-    </p>
+		<div class="about__story">
+			<div class="about__storyDesc">
+				<p><strong>Etiam sed semper enim. Mauris nec nulla facilisis arcu sodales iaculis eget non nibh. Proin eu viverra nisl. Praesent tincidunt leo at egestas fringilla. Morbi eget interdum risus. Pellentesque fermentum elementum metus. Quisque faucibus et ligula vitae hendrerit.</strong></p>
+				<p>Praesent ac dapibus libero. Suspendisse tincidunt ipsum ligula, et interdum odio dapibus ac. Praesent aliquam consequat sem eu rutrum. Fusce mollis arcu in enim porttitor aliquam. Maecenas blandit ornare efficitur. Phasellus dictum tellus nunc, quis ultricies dui vulputate vitae. Aliquam erat volutpat. Aliquam scelerisque, ante at gravida finibus, lorem arcu egestas nisl, auctor commodo metus eros ac risus.</p>
+			</div>
+			<div class="about__storyVisual">
+				<img src="{% static 'unlabel/dist/img/temp/about-story.jpg' %}" alt="Unlabel Story Visual">
+			</div>
+		</div>
+
+		<div class="about__carousel carousel">
+			<div class="swiper-container carousel_visualsSlider about__carouselVisualsSlider">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<div class="about__carouselVisualSlide">
+							<img src="{% static 'unlabel/dist/img/temp/about-slide1.jpg' %}" alt="Unlabel Story Slide 1 Visual">
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="about__carouselVisualSlide">
+							<img src="{% static 'unlabel/dist/img/temp/about-slide2.jpg' %}" alt="Unlabel Story Slide 2 Visual">
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="about__carouselVisualSlide">
+							<img src="{% static 'unlabel/dist/img/temp/about-slide3.jpg' %}" alt="Unlabel Story Slide 3 Visual">
+						</div>
+					</div>
+					<div class="swiper-slide">
+						<div class="about__carouselVisualSlide">
+							<img src="{% static 'unlabel/dist/img/temp/about-slide4.jpg' %}" alt="Unlabel Story Slide 4 Visual">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="about__carouselFooter">
+				<div class="swiper-container carousel_contentsSlider about__carouselContentsSlider">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<span class="carousel_contentItem title title--medium">Unlabel, where style<br>is introduced by <a href="#" class="link">Tommy 1</a></span>
+						</div>
+						<div class="swiper-slide">
+							<span class="carousel_contentItem title title--medium">Unlabel, where style<br>is represented by <a href="#" class="link">Another Brand</a></span>
+						</div>
+						<div class="swiper-slide">
+							<span class="carousel_contentItem title title--medium">Unlabel, where style<br>is supported by <a href="#" class="link">all brands</a></span>
+						</div>
+						<div class="swiper-slide">
+							<span class="carousel_contentItem title title--medium">Unlabel, where style<br>is introduced by <a href="#" class="link">Ally</a></span>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-container carousel__backgroundsSlider about__carouselBgSlider">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<div class="about__carouselBgSlide" style="background-color: #EDDDDD;"></div>
+						</div>
+						<div class="swiper-slide">
+							<div class="about__carouselBgSlide" style="background-color: #DEEDEE;"></div>
+						</div>
+						<div class="swiper-slide">
+							<div class="about__carouselBgSlide" style="background-color: #DDE0ED;"></div>
+						</div>
+						<div class="swiper-slide">
+							<div class="about__carouselBgSlide" style="background-color: #F5E5D9;"></div>
+						</div>
+					</div>
+				</div>
+				<div>
+					<a class="carousel__btn carousel__btn--prev" href="#prev"><span class="fonticon fonticon--smallBox fonticon--carouselArrowLeft"></span></a><a class="carousel__btn carousel__btn--next" href="#next"><span class="fonticon fonticon--smallBox fonticon--carouselArrowRight"></span></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="about__footer">
+			<div class="logo">
+			    <span class="logo__icon">
+			        <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}" alt="Unlabel Logo">
+			    </span>
+			</div>
+			<h2 class="title title--small">{% trans "Style, Introduced." %}</h2>
+		</div>
+
+	</div> {# // container #}
+</div>
+
 {% endblock content %}

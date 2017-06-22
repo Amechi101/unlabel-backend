@@ -20,11 +20,27 @@
     text-transform: uppercase
   }
   
+  &--destructured {
+    font-size: 64px
+    
+    @media $mq_m {
+      font-size: 112px  
+    }
+  }
+  
   &--internal {
     font-size: 48px
   }
   
   &--small {
     font-size: 24px
+  }
+  
+  &--medium {
+    font-size: 24px
+    
+    @media $mq_m {
+      font-size: 48px
+    }
   }
 }
