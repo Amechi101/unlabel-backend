@@ -735,10 +735,13 @@ button.swiper-pagination-bullet {
 }
 @media (min-width: 768px) {
   .about__carouselVisualSlide {
-    padding-bottom: 0.555555555555556;
+    padding-bottom: 55.55555555555556%;
   }
 }
 .about__carouselVisualSlide img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
