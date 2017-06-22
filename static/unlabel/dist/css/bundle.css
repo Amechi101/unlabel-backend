@@ -126,7 +126,9 @@ img {
 input[type=text],
 input[type=email],
 input[type=password] {
-  appearence: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   border-radius: 0;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -138,22 +140,22 @@ input[type=password] {
 input[type=text]::-webkit-input-placeholder,
 input[type=email]::-webkit-input-placeholder,
 input[type=password]::-webkit-input-placeholder {
-  color: A3A3A3;
+  color: #a3a3a3;
 }
 input[type=text]:-moz-placeholder,
 input[type=email]:-moz-placeholder,
 input[type=password]:-moz-placeholder {
-  color: A3A3A3;
+  color: #a3a3a3;
 }
 input[type=text]::-moz-placeholder,
 input[type=email]::-moz-placeholder,
 input[type=password]::-moz-placeholder {
-  color: A3A3A3;
+  color: #a3a3a3;
 }
 input[type=text]:-ms-input-placeholder,
 input[type=email]:-ms-input-placeholder,
 input[type=password]:-ms-input-placeholder {
-  color: A3A3A3;
+  color: #a3a3a3;
 }
 
 /**
