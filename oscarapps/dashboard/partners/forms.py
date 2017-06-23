@@ -283,6 +283,9 @@ class PartnerRentalInfoForm(forms.ModelForm):
 
         if commit:
             instance.save()
+            for rental_time in instance.rental_time.all():
+                RT = RentalTime.objects.get(id=rental_time.id)
+                RT.delete()
             for r_day in rental_day:
                 instance.rental_time.add(r_day)
         return instance
