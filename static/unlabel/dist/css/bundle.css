@@ -1017,6 +1017,76 @@ span.carousel_contentItem {
 .connect .title {
   margin-bottom: 42px;
 }
+.contact {
+  padding: 42px 0 96px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .contact {
+    padding: 96px 0 164px;
+  }
+}
+@media (min-width: 768px) {
+  .contact__header {
+    padding-right: 96px;
+  }
+}
+.contact__subtitle {
+  margin-top: 32px;
+}
+@media (max-width: 767px) {
+  .contact__subtitle {
+    margin-right: 24px;
+  }
+}
+.contact__content {
+  margin-top: 42px;
+}
+@media (min-width: 768px) {
+  .contact__content {
+    margin: 96px 0 0 0;
+  }
+}
+.contact__list {
+  background-color: #eddddd;
+  padding: 48px 32px;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .contact__list {
+    padding: 60px 48px;
+  }
+}
+.contact__listItem {
+  position: relative;
+}
+@media (min-width: 768px) {
+  .contact__listItem {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+.contact__listItem + .contact__listItem {
+  margin-top: 32px;
+  padding-top: 32px;
+}
+.contact__listItem + .contact__listItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-family: 'FaroWeb-BoldLucky';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+.contact__emailLabel {
+  font-family: 'FaroWeb-BoldLucky';
+}
 @media (max-width: 767px) {
   .container {
     padding: 0 24px;
@@ -2639,6 +2709,16 @@ span.carousel_contentItem {
   font-family: 'FaroWeb-BoldLucky';
   font-size: 24px;
   line-height: 32px;
+}
+.subtitle--medium {
+  font-size: 18px;
+  line-height: 24px;
+}
+@media (min-width: 768px) {
+  .subtitle--medium {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }
 .title {
   font-family: 'FaroWeb-DisplayLucky';

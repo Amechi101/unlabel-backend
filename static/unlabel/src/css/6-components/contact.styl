@@ -1,0 +1,72 @@
+.contact {
+  padding: 42px 0 96px
+  max-width: 960px
+  margin: 0 auto
+  
+  @media $mq_m {
+    padding: 96px 0 164px
+  }
+}
+
+.contact__header {
+  @media $mq_m {
+    padding-right: 96px
+  }
+}
+
+.contact__subtitle {
+  margin-top: 32px
+  
+  @media $mq_s_only {
+    margin-right 24px
+  }
+}
+
+.contact__content {
+  margin-top: 42px
+  
+  @media $mq_m {
+    margin: 96px 0 0 0
+  }
+}
+
+.contact__list {
+  background-color: $color_brand
+  padding: 48px 32px
+  text-align center
+  
+  @media $mq_m {
+    padding: 60px 48px
+  }
+}
+
+.contact__listItem {
+  position relative
+  
+  @media $mq_m {
+    font-size: 18px
+    line-height: 24px 
+  }
+  
+  & + .contact__listItem {
+    margin-top: 32px
+    padding-top: 32px
+    
+    &::before {
+      content: ''
+      position: absolute
+      top: 0
+      left: 50%
+      transform: translate(-50%, -50%)
+      font-family: $font_bold
+      width: size = 6px
+      height size
+      border-radius: 50%
+      background-color currentColor
+    }
+  }
+}
+
+.contact__emailLabel {
+  font-family: $font_bold
+}
