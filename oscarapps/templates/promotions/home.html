@@ -9,16 +9,18 @@
     <div class="container">
         <div class="home__headerWrapper">
             <div class="visual visual--wideLandscape">
-                <img src="{% static 'unlabel/dist/img/temp/home-visual.jpg' %}">
+                <img src="{% static 'unlabel/dist/img/temp/home-visual.jpg' %}" alt="{% trans 'Header header visual' %}">
             </div>
             <div class="home__headerTitleContainer">
                 <h2 class="title title--headline">
                     <span class="u-block">Unla</span>
-                    <span class="u-block">bel<div class="logo">
-                        <span class="logo__icon">
-                            <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}" alt="Unlabel Logo">
-                        </span>
-                    </div></span>
+                    <div class="u-block">bel
+                        <div class="logo">
+                            <span class="logo__icon">
+                                <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}" alt="{% trans 'Unlabel Logo' %}">
+                            </span>
+                        </div>
+                    </div>
                 </h2>
             </div>
             <div class="cols cols--m home__headerCols">
@@ -36,6 +38,7 @@
 <section class="home__creators">
 
     {# TODO : make all this section dynamic (creators content and links) #}
+    
     <!--
         {% for influencer in influencers %}
             {{ influencer.users.first_name }}
