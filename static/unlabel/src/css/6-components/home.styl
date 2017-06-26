@@ -78,6 +78,146 @@
   }
 }
 
+.home__creators {
+  position relative
+  margin: 92px 0
+  
+  @media $mq_m {
+    margin: 160px 0 120px
+  }
+  
+  .container {
+    position: relative // over .homeCreatorsBg
+  }
+}
+
+.home__CreatorsBg {
+  position absolute
+  left: 0
+  top: 40px
+  bottom: 0
+  width: 100%
+  transform: translate(-25%, 0)
+  background-color: $color_creator
+  
+  @media $mq_m {
+    top: 90px
+    transform: translate(-43%, 0)
+  }
+}
+
+.home__creatorsCols {
+  display: flex
+  align-items: stretch
+}
+
+.home__creatorsCol {
+  @media $mq_m {
+    width: (100%/3)
+  }
+
+  & + .home__creatorsCol {
+    margin-left 32px
+    
+    @media $mq_m {
+      margin-left 64px
+    }
+    
+    @media $mq_l {
+      margin-left 96px
+    }
+  }
+  
+  &--left {
+    padding-bottom: 44px
+    
+    @media $mq_s_only {
+      width: 60%
+    }
+    
+    @media $mq_m {
+      padding-bottom: 80px
+    }
+  }
+
+  &--middle {
+    @media $mq_s_only {
+      width: 40%
+      padding-top: 112px
+    }
+    
+    @media $mq_m {
+      display: flex
+      flex-direction: column
+      align-items: stretch
+      padding-top: 240px
+    }
+    
+    @media $mq_l {
+      padding-top: 0
+      justify-content: center
+    }
+  }
+  
+  &--right {
+    @media $mq_l {
+      display: flex
+      flex-direction: column
+      align-items: stretch
+      justify-content: center
+    }
+    
+    .home_creatorGridItem {
+      & + .home_creatorGridItem {
+        padding-top: 90px
+      }
+    }
+  }
+}
+
+.home__creatorsTitleContainer {
+  margin-top: 42px
+  
+  @media $mq_m {
+    margin-top: 78px
+  }
+}
+
+.home__creatorsCtaContainer {
+  margin-top: 24px
+  
+  @media $mq_m {
+    margin-top: 40px
+  }
+}
+
+.home__creatorsSubtitleContainer {
+  margin-top: 42px
+  
+  @media $mq_m {
+    margin-top: 48px
+  }
+  
+  @media $mq_l {
+    transform: translate(100%, 0)
+    .subtitle {
+      transform: translate(96px, 0) // equals to grid gutter
+    }
+  }
+}
+
+.home_creatorGridItem {
+  @media $mq_s_only {
+    img {
+      max-width 114px
+    }
+  }
+  
+  @media $mq_m {
+    max-width 288px
+  }
+}
+
 .home__brands {
   margin: 92px 0 78px
   overflow-x: hidden
