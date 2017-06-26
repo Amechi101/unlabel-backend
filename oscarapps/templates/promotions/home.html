@@ -161,12 +161,21 @@
     </div>
 </section>
 
+<section class="home__products">
+    <div class="container">
+        <h2 class="title title--caps home__productsTitle">{%trans 'Start<br>shopping' %}</h2>
+    </div>
+    <div class="grid2 home__productsGrid">
+        <ol class="grid2__list">
+            {% for product in products %}
+                <li class="grid2__item">{% render_product product %}</li>
+            {% endfor %}
+        </ol>
+    </div>
+</section>
 
-<!-- <div><h1>Products</h1></div>
-    {% for product in products %}
-            <li class="col-md-3 col-sm-6">{% render_product product %}</li>
-    {% endfor %}
 
+<!-- 
     <div><h1>Content Creators</h1></div>
 
     <div style="display: inline-flex;">

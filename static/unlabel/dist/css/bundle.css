@@ -2188,6 +2188,26 @@ span.carousel_contentItem {
     margin: 21px 64px 0;
   }
 }
+.home__products {
+  margin: 44px 0 96px;
+}
+@media (min-width: 768px) {
+  .home__products {
+    margin: 96px 0;
+  }
+}
+.home__productsTitle {
+  position: relative;
+  z-index: 1;
+}
+.home__productsGrid {
+  margin-top: -18px;
+}
+@media (min-width: 768px) {
+  .home__productsGrid {
+    margin-top: -29px;
+  }
+}
 .influencer-review {
   background-color: #dde0ed;
 }
