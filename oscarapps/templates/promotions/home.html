@@ -1,21 +1,39 @@
-{% extends "layout_2_col.html" %}
+{% extends "layout.html" %}
 {% load i18n %}
 {% load static %}
-{% load thumbnail %}
 {% load product_tags  %}
 
-
-{% block navigation %}
-    {% include "partials/nav_primary.html" with expand_dropdown=1 %}
-{% endblock %}
-
-{% block header %}{% endblock %}
-
-{% block column_left %}
-{% endblock %}
-
 {% block content %}
-    <div><h1>Products</h1></div>
+
+<div class="home__header">
+    <div class="container">
+        <div class="home__headerWrapper">
+            <div class="visual visual--landscape">
+                <img src="{% static 'unlabel/dist/img/temp/home-visual.jpg' %}">
+            </div>
+            <div class="home__headerTitleContainer">
+                <h2 class="title title--headline">
+                    <span class="u-block">Unla</span>
+                    <span class="u-block">bel<div class="logo">
+                        <span class="logo__icon">
+                            <img src="{% static 'unlabel/dist/img/logo_dark.svg' %}" alt="Unlabel Logo">
+                        </span>
+                    </div></span>
+                </h2>
+            </div>
+            <div class="cols cols--m home__headerCols">
+                <div class="col home__headerIntroContainer">
+                    <p class="title title--medium">The best way to shop  nice products from independent brands all over the world.</p>
+                </div>
+                <div class="col home__headerActions">
+                    <a href="{% url 'customer:register' %}" class="cta">{% trans 'Create an account' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div><h1>Products</h1></div>
     {% for product in products %}
             <li class="col-md-3 col-sm-6">{% render_product product %}</li>
     {% endfor %}
@@ -36,8 +54,6 @@
     <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
 
     {% endfor %}
-</div>
-
-
+</div> -->
 
 {% endblock content %}

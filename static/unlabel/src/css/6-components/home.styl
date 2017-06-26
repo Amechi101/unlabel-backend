@@ -1,0 +1,78 @@
+.home__header {
+  margin: 30px 0
+  
+  @media $mq_m {
+    padding: 48px 0 0 0
+  }
+}
+
+.home__headerWrapper {
+  position: relative
+  padding: 92px 0 0 0
+  
+  @media $mq_m {
+    padding: 48px 0 0 0
+  }
+}
+
+.home__headerVisualContainer {
+}
+
+.home__headerCols {
+  position relative // over visual
+}
+
+.home__headerTitleContainer {
+  position: absolute
+  top: 0
+  right: 0
+  z-index 1
+  
+  @media $mq_m {
+    
+  }
+  
+  .title {
+    @media $mq_m {
+      transform: translate(15px, -15px)
+    }
+  }
+  
+  .logo {
+    width: size = 30px
+    height: size
+    transform: translate(0, -20px)
+    
+    @media $mq_m {
+      width: size = 60px
+      height: size
+      transform: translate(0, -40px)
+    }
+  }
+}
+
+.home__headerIntroContainer {  
+  padding: 0 48px 0 24px
+  z-index 2
+  
+  @media $mq_s_only {
+    margin-top: -13px
+  }
+  
+  @media $mq_m {
+    padding: 0 96px
+    transform: translate(0, -76px)
+    max-width (520px + 2 *96px)
+  }
+}
+
+.home__headerActions {
+  @media $mq_s_only {
+    text-align: center
+    margin-top: 42px
+  }
+  
+  @media $mq_m {
+    margin-top: 64px
+  }
+}
