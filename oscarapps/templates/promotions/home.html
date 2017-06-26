@@ -5,10 +5,10 @@
 
 {% block content %}
 
-<div class="home__header">
+<section class="home__header">
     <div class="container">
         <div class="home__headerWrapper">
-            <div class="visual visual--landscape">
+            <div class="visual visual--wideLandscape">
                 <img src="{% static 'unlabel/dist/img/temp/home-visual.jpg' %}">
             </div>
             <div class="home__headerTitleContainer">
@@ -23,7 +23,7 @@
             </div>
             <div class="cols cols--m home__headerCols">
                 <div class="col home__headerIntroContainer">
-                    <p class="title title--medium">The best way to shop  nice products from independent brands all over the world.</p>
+                    <p class="title title--medium">{% trans 'The best way to shop  nice products from independent brands all over the world.' %}</p>
                 </div>
                 <div class="col home__headerActions">
                     <a href="{% url 'customer:register' %}" class="cta">{% trans 'Create an account' %}</a>
@@ -31,7 +31,126 @@
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<section class="home__brands">
+    <div class="container">
+        <h2 class="home__brandsTitle title title--caps">{% trans 'Our<br class="u-desktop-only"/> Brands' %}</h2>
+
+        <div class="home__brandsCarousel carousel">
+            <div class="cols cols--m cols--align-left cols--align-top">
+                <div class="col brands__carouselColLeft">
+                    <div class="swiper-container carousel_visualsSlider home__brandsVisualsSlider">
+                        <div class="swiper-wrapper">
+                            {# TODO : remove static data #}
+                            <div class="swiper-slide">
+                                <div class="visual visual--landscape">
+                                    <img src="{% static 'unlabel/dist/img/temp/home-slide1.jpg' %}" alt="Brands Carousel Slide 1 Visual">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="visual visual--landscape">
+                                    <img src="{% static 'unlabel/dist/img/temp/home-slide2.jpg' %}" alt="Brands Carousel Slide 2 Visual">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="visual visual--landscape">
+                                    <img src="{% static 'unlabel/dist/img/temp/home-slide3.jpg' %}" alt="Brands Carousel Slide 3 Visual">
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="visual visual--landscape">
+                                    <img src="{% static 'unlabel/dist/img/temp/home-slide4.jpg' %}" alt="Brands Carousel Slide 4 Visual">
+                                </div>
+                            </div>
+                            {# TODO : dynamic brands images #}
+                            {% for brand in brands %}
+                                <div class="swiper-slide">
+                                    <div class="visual visual--landscape">
+                                        <img src="{{ MEDIA_URL }}{{ brand.image }}" alt="{{ brand.name }}">
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col brands__carouselColRight">
+                    <div class="swiper-container carousel__backgroundsSlider home__brandsBgsSlider">
+                        <div class="swiper-wrapper">
+                            {# TODO : remove static data #}
+                            <div class="swiper-slide">
+                                <div class="carousel__bgSlide" style="background-color: #EDDDDD;"></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="carousel__bgSlide" style="background-color: #DEEDEE;"></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="carousel__bgSlide" style="background-color: #DDE0ED;"></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="carousel__bgSlide" style="background-color: #F5E5D9;"></div>
+                            </div>
+                            {# TODO : dynamic brands color  #}
+                            {% for brand in brands %}
+                                <div class="swiper-slide">
+                                    <div class="carousel__bgSlide" style="background-color: {{ brand.color|default:'#EDDDDD' }};"></div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="home__brandsCarouselContentWrapper">
+                        <div class="swiper-container carousel_contentsSlider home__brandsContentsSlider">
+                            <div class="swiper-wrapper">
+                                {# TODO : remove static data #}
+                                <div class="swiper-slide">
+                                    <h3 class="carousel_contentItem subtitle">Lily Stan</h3>
+                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <h3 class="carousel_contentItem subtitle">Stan Lily</h3>
+                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <h3 class="carousel_contentItem subtitle">Lily Stan</h3>
+                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
+                                </div>
+                                <div class="swiper-slide">
+                                    <h3 class="carousel_contentItem subtitle">Stan Lily</h3>
+                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
+                                </div>
+                                {# TODO : dynamic brands titles and descriptions #}
+                                {% for brand in brands %}
+                                    <div class="swiper-slide">
+                                        <h3 class="carousel_contentItem subtitle">{{ brand.name|default:'Brand Name' }}</h3>
+                                        <div class="carousel__contentItem desc desc--small">{{ brand.desc|default:'Brand Description' }}</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="home__brandsCarouselNav">
+                            <a class="carousel__btn carousel__btn--prev" href="#prev"><span class="fonticon fonticon--smallBox fonticon--carouselArrowLeft"></span></a><a class="carousel__btn carousel__btn--next" href="#next"><span class="fonticon fonticon--smallBox fonticon--carouselArrowRight"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="home__brandsNav">
+            {# TODO : correct urls #}
+            <ul class="home__brandsNavList">
+                <li class="home__brandsNavItem">
+                    <a href="{% url 'catalogue:index' %}" class="cta">{% trans 'See Women’s apparel' %}</a>
+                </li>
+                <li class="home__brandsNavItem">
+                    <a href="#" class="cta cta--dark">{% trans 'See All Brands' %}</a>
+                </li>
+                <li class="home__brandsNavItem">
+                    <a href="{% url 'catalogue:index' %}" class="cta">{% trans 'See Men’s apparel' %}</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</section>
 
 <!-- <div><h1>Products</h1></div>
     {% for product in products %}
@@ -46,14 +165,6 @@
         <img class="image-adjust" src="{{ MEDIA_URL }}{{ influencer.users.image }}" class="thumbnail">
     {% endfor %}
 </div>
-
-    <div><h1>Brands</h1></div>
-<div style="display: inline-flex;">
-    {% for brand in brands %}
-    {{ brand.name }}
-    <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
-
-    {% endfor %}
-</div> -->
+-->
 
 {% endblock content %}

@@ -52,17 +52,18 @@
 }
 
 .home__headerIntroContainer {  
+  z-index 2 // over .home__headerVisualContainer
   padding: 0 48px 0 24px
-  z-index 2
-  
-  @media $mq_s_only {
-    margin-top: -13px
-  }
+  margin-top: -13px
   
   @media $mq_m {
+    padding: 0 48px
+    margin-top: -76px
+  }
+  
+  @media $mq_l {
     padding: 0 96px
-    transform: translate(0, -76px)
-    max-width (520px + 2 *96px)
+    max-width (520px + 2 * 96px)
   }
 }
 
@@ -74,5 +75,127 @@
   
   @media $mq_m {
     margin-top: 64px
+  }
+}
+
+.home__brands {
+  margin: 92px 0 78px
+  overflow-x: hidden
+  
+  @media $mq_m {
+    margin: 128px 0
+  }
+}
+
+.home__brandsTitle {
+  position relative
+  z-index 3 // over .home__brandsCarousel
+}
+
+.home__brandsCarousel {
+  margin-top: 28px
+  
+  @media $mq_m {
+    margin-top: 48px
+  }
+}
+
+.brands__carouselColLeft {
+  position relative
+  z-index 2 // over .brands__carouselColRight
+  @media $mq_s_only {
+    margin-right 56px
+  }
+  
+  @media $mq_m {
+    width: 50%
+    margin-left: 48px
+  }
+  
+  @media $mq_l {
+    margin-left: 96px
+  }
+}
+
+.brands__carouselColRight {
+  position relative
+  padding 42px 0 48px 32px
+  
+  @media $mq_s_only {
+    margin-left 32px
+    padding-right 32px
+  }
+  
+  @media $mq_m {
+    width: auto
+    max-width (290px + 32px * 2)
+    padding 42px 32px 48px 
+  }
+}
+
+.home__brandsBgsSlider {
+  position absolute
+  top: 0
+  left: 0
+  width: 1000%
+  height calc(100% + 125px)
+  transform: translate(0, -125px)
+  
+  @media $mq_m {
+    height calc(100% + 80px)
+    transform: translate(-220px, -80px)
+  }
+}
+
+.home__brandsCarouselContentWrapper {
+  position relative
+  z-index 2 // over .home__brandsBgsSlider
+}
+
+.home__brandsContentsSlider {  
+  .carousel__contentItem.desc {
+    margin-top: 28px
+
+    @media $mq_m {
+      margin-top: 38px
+    }
+  }
+}
+
+.home__brandsCarouselNav {
+  margin-top: 42px
+}
+
+.home__brandsNav {
+  margin-top: 80px
+  text-align center
+}
+
+.home__brandsNavList {
+  @media $mq_m {
+    display: flex
+    justify-content: center
+  }
+}
+
+.home__brandsNavItem {
+  @media $mq_s_only {
+    text-align: center
+  }
+  
+  & + .home__brandsNavItem {
+    @media $mq_s_only {
+      margin-top: 12px
+    }
+    
+    @media $mq_m {
+      margin-left: 12px
+    }
+  }
+  
+  .cta {
+    display: block
+    max-width 210px
+    margin: 0 auto
   }
 }

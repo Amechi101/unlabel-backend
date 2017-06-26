@@ -1,16 +1,22 @@
 .visual {
+  position relative
+  padding-bottom: 100% // square
+  
+  
+  &--wideLandscape {
+    padding-bottom: unit(1/1.8*100, '%')
+  }
   
   &--landscape {
-    position relative
-    padding-bottom: unit(1/1.8*100, '%')
-    
-    img {
-      position absolute
-      top: 0
-      left: 0
-      width: 100%
-      height: 100%
-      object-fit: cover
-    }
+    padding-bottom: 75%
+  }
+  
+  img {
+    position absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    object-fit: cover
   }
 }

@@ -65,18 +65,21 @@ class Carousel {
       onTransitionStart: (swiper) => {
         const prev_children = [].slice.call(swiper.slides[swiper.previousIndex].children)
         const next_children = [].slice.call(swiper.slides[swiper.activeIndex].children)
-        const is_reverse = swiper.activeIndex < swiper.previousIndex 
+        const is_reverse = swiper.activeIndex < swiper.previousIndex
+        const prev_anim_speed = 0.2
+        const prev_anim_delay = 0.05
         const prev_params_to = {
-          y: is_reverse ? '50%' : '-50%',
+          y: is_reverse ? '20px' : '-20px',
           opacity: 0
         }
         const next_params_from = {
-          y: is_reverse ? '-50%' : '50%',
+          y: is_reverse ? '-20px' : '20px',
           opacity: 0
         }
         const next_params_to = {
           y: '0%',
-          opacity: 1
+          opacity: 1,
+          delay: (prev_anim_speed + prev_anim_delay * prev_children.length)
         }
 
         if( is_reverse ){
@@ -84,8 +87,10 @@ class Carousel {
           next_children.reverse()
         }
         
-        TweenMax.staggerTo(prev_children, 0.3, prev_params_to, 0.1)
-        TweenMax.staggerFromTo(next_children, 0.3, next_params_from, next_params_to)
+        TweenMax.killTweensOf(prev_children)
+        TweenMax.killTweensOf(next_children)
+        TweenMax.staggerTo(prev_children, prev_anim_speed, prev_params_to, prev_anim_delay)
+        TweenMax.staggerFromTo(next_children, 0.5, next_params_from, next_params_to, 0.1)
       }
     })
   }

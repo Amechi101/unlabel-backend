@@ -783,13 +783,6 @@ button.swiper-pagination-bullet {
     width: 55%;
   }
 }
-.about__carouselBgSlide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
 .about__footer {
   text-align: center;
 }
@@ -839,6 +832,13 @@ span.carousel_contentItem {
 }
 .carousel__btn--next {
   margin-left: 12px;
+}
+.carousel__bgSlide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 .categories {
   line-height: 24px;
@@ -1175,6 +1175,12 @@ span.carousel_contentItem {
   .desc {
     font-size: 24px;
     line-height: 32px;
+  }
+}
+@media (min-width: 768px) {
+  .desc--small {
+    font-size: 18px;
+    line-height: 24px;
   }
 }
 .drawer {
@@ -2008,19 +2014,19 @@ span.carousel_contentItem {
   }
 }
 .home__headerIntroContainer {
-  padding: 0 48px 0 24px;
   z-index: 2;
-}
-@media (max-width: 767px) {
-  .home__headerIntroContainer {
-    margin-top: -13px;
-  }
+  padding: 0 48px 0 24px;
+  margin-top: -13px;
 }
 @media (min-width: 768px) {
   .home__headerIntroContainer {
+    padding: 0 48px;
+    margin-top: -76px;
+  }
+}
+@media (min-width: 1024px) {
+  .home__headerIntroContainer {
     padding: 0 96px;
-    -webkit-transform: translate(0, -76px);
-            transform: translate(0, -76px);
     max-width: 712px;
   }
 }
@@ -2034,6 +2040,129 @@ span.carousel_contentItem {
   .home__headerActions {
     margin-top: 64px;
   }
+}
+.home__brands {
+  margin: 92px 0 78px;
+  overflow-x: hidden;
+}
+@media (min-width: 768px) {
+  .home__brands {
+    margin: 128px 0;
+  }
+}
+.home__brandsTitle {
+  position: relative;
+  z-index: 3;
+}
+.home__brandsCarousel {
+  margin-top: 28px;
+}
+@media (min-width: 768px) {
+  .home__brandsCarousel {
+    margin-top: 48px;
+  }
+}
+.brands__carouselColLeft {
+  position: relative;
+  z-index: 2;
+}
+@media (max-width: 767px) {
+  .brands__carouselColLeft {
+    margin-right: 56px;
+  }
+}
+@media (min-width: 768px) {
+  .brands__carouselColLeft {
+    width: 50%;
+    margin-left: 48px;
+  }
+}
+@media (min-width: 1024px) {
+  .brands__carouselColLeft {
+    margin-left: 96px;
+  }
+}
+.brands__carouselColRight {
+  position: relative;
+  padding: 42px 0 48px 32px;
+}
+@media (max-width: 767px) {
+  .brands__carouselColRight {
+    margin-left: 32px;
+    padding-right: 32px;
+  }
+}
+@media (min-width: 768px) {
+  .brands__carouselColRight {
+    width: auto;
+    max-width: 354px;
+    padding: 42px 32px 48px;
+  }
+}
+.home__brandsBgsSlider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1000%;
+  height: calc(100% + 125px);
+  -webkit-transform: translate(0, -125px);
+          transform: translate(0, -125px);
+}
+@media (min-width: 768px) {
+  .home__brandsBgsSlider {
+    height: calc(100% + 80px);
+    -webkit-transform: translate(-220px, -80px);
+            transform: translate(-220px, -80px);
+  }
+}
+.home__brandsCarouselContentWrapper {
+  position: relative;
+  z-index: 2;
+}
+.home__brandsContentsSlider .carousel__contentItem.desc {
+  margin-top: 28px;
+}
+@media (min-width: 768px) {
+  .home__brandsContentsSlider .carousel__contentItem.desc {
+    margin-top: 38px;
+  }
+}
+.home__brandsCarouselNav {
+  margin-top: 42px;
+}
+.home__brandsNav {
+  margin-top: 80px;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .home__brandsNavList {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+@media (max-width: 767px) {
+  .home__brandsNavItem {
+    text-align: center;
+  }
+}
+@media (max-width: 767px) {
+  .home__brandsNavItem + .home__brandsNavItem {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 768px) {
+  .home__brandsNavItem + .home__brandsNavItem {
+    margin-left: 12px;
+  }
+}
+.home__brandsNavItem .cta {
+  display: block;
+  max-width: 210px;
+  margin: 0 auto;
 }
 .influencer-review {
   background-color: #dde0ed;
@@ -2929,11 +3058,17 @@ span.carousel_contentItem {
     margin-top: 80px;
   }
 }
-.visual--landscape {
+.visual {
   position: relative;
+  padding-bottom: 100%;
+}
+.visual--wideLandscape {
   padding-bottom: 55.55555555555556%;
 }
-.visual--landscape img {
+.visual--landscape {
+  padding-bottom: 75%;
+}
+.visual img {
   position: absolute;
   top: 0;
   left: 0;
