@@ -2164,6 +2164,30 @@ span.carousel_contentItem {
   max-width: 210px;
   margin: 0 auto;
 }
+.home__story {
+  padding: 42px 0;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 78px 0 44px;
+}
+@media (min-width: 768px) {
+  .home__story {
+    padding: 72px 0;
+    margin: 124px 0 90px;
+  }
+}
+.home__storyWrapper {
+  max-width: 898px;
+  margin: 0 auto;
+}
+.home__storyDesc {
+  margin: 21px 36px 0;
+}
+@media (min-width: 768px) {
+  .home__storyDesc {
+    margin: 21px 64px 0;
+  }
+}
 .influencer-review {
   background-color: #dde0ed;
 }
