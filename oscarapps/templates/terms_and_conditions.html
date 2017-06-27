@@ -1,14 +1,28 @@
-{% extends "layout.html" %}
+{% extends "layout_1_col.html" %}
 {% load i18n %}
 
+{% block layout_header %}
+<div class="container container--medium">
+	<h1 class="title">{% trans 'TERMS&nbsp;AND<br>CONDITIONS' %}</h1>
+</div>
+{% endblock layout_header %}
+
 {% block content %}
-<h1>TERMS AND CONDITIONS</h1>
-    <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-        make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-        typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset
-        sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
-        including versions of Lorem Ipsum.
-    </p>
+{# TODO : Make content dynamic #}
+<div class="container container--medium">
+	<div class="textual">
+		<p>This page (together with the documents mentioned herein) describes the terms for using our website to browse products made available by Bang &amp; Olufsen America, Inc. ("B&amp;O”) and our product ordering service ("Service"), and the terms by which we supply such products. Please read these terms of use carefully before you start to use the B&amp;O Play Store and/or the Service. By registering on the B&amp;O Play Store, you accept these terms of use and sale (these “Terms”) and agree to abide by them. Please understand that if you refuse to accept these Terms, you will not be able to order any products from the B&amp;O Play Store. If you have any questions regarding these Terms (including any technical questions) please contact our Customer Support Team at ecom-support-US@beoplay.com.</p>
+
+		<h2 class="title title--small">1. Informations about us</h2>
+		<p>The website http://beoplay.com (the “Site” or “B&amp;O Play Store”) is operated by Arvato Digital Services LLC ("we", "us", "our" or “Arvato”), which has a principle place of business is 29011 Commerce Center Drive Valencia, CA 91355, USA. We are an authorized B&amp;O reseller.</p>
+
+		<h2 class="title title--small">2. Accessing the Unlabel Shop</h2>
+		<p>2.1. To use the B&amp;O Play Store services, you need to register and log in to the Site using a B&amp;O Play Store account which can be created here: http://beoplay.com.</p>
+		<p>2.2. Please log into the B&amp;O Play Store and browse the shop. To order an item, simply click the shopping cart icon to add the Product to your shopping cart. Once you have finished shopping, please click on the shopping trolley icon in the top right hand corner of the screen. Please click on the button marked "Checkout" and follow the instructions on screen to complete your order. </p>
+		<p>2.3. Access to the B&amp;O Play Store is permitted on a discretionary basis, and we reserve the right to withdraw or amend the Service we provide via the B&amp;O Play Store without notice. We will not be liable to you if for any reason the B&amp;O Play Store or the Service is temporarily unavailable at any time.</p>
+		<p>2.4. From time to time, we may restrict access to some or all parts of the B&amp;O Play Store and/or the Service.</p>
+		<p>2.5. If you choose, or you are provided with, a B&amp;O Play Store account or such other user identification code, password or any other piece of information as part of our security procedures, you must treat such information as confidential, and you must not disclose it to any third party. We have the right to disable any user identification code or password, whether chosen by you or allocated by us, at any time, if in our sole opinion you have failed to comply with any of the provisions of these Terms. You are responsible for all activity occurring when this Site is accessed through your account, whether authorized by you or not. Therefore, be sure to protect the confidentiality of your account password. We are not liable for any loss or damage arising from your failure to protect your password or account information. </p>
+		<p>2.6. You are responsible for making all arrangements necessary for you to have access to the B&amp;O Play Store and/or our Service. You are also responsible for ensuring that all persons who access the B&amp;O Play Store through your internet connection are aware of these Terms, and that they comply with them.</p>
+	</div>
+</div>
 {% endblock content %}

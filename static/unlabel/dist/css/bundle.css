@@ -1115,6 +1115,17 @@ span.carousel_contentItem {
     max-width: 608px;
   }
 }
+.container--medium {
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .container--medium {
+    max-width: 800px;
+  }
+}
+.container--leftAligned {
+  margin-left: 0 !important;
+}
 .cta {
   display: inline-block;
   padding: 18px 32px;
@@ -2438,6 +2449,14 @@ span.carousel_contentItem {
     margin-top: 48px;
   }
 }
+.layout--1col .layout__header {
+  padding: 24px 0;
+}
+@media (min-width: 768px) {
+  .layout--1col .layout__header {
+    padding: 32px 0;
+  }
+}
 .link {
   font-family: 'FaroWeb-BoldLucky';
   text-decoration: underline;
@@ -3134,13 +3153,8 @@ span.carousel_contentItem {
   line-height: 20px;
 }
 .textual {
-  margin: 42px 24px 96px;
-}
-@media (min-width: 768px) {
-  .textual {
-    max-width: 736px;
-    margin: 0 32px 96px;
-  }
+  margin-top: 42px;
+  margin-bottom: 96px;
 }
 .textual .title {
   margin: 48px 0 30px;

@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block grid_header_title %}
-<h1 class="title">FAQ</h1>
+<h1 class="title">{% trans 'FAQ' %}</h1>
 {% endblock %}
 
 {% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
@@ -33,42 +33,44 @@
 
 {% block content %}
 {# TODO : Make content dynamic #}
-<div class="textual">
-	<section class="textual__section" id="shipping">
-		<h3 class="title title--small">Shipping on Unlabel</h3>
-		<h2 class="subtitle subtitle--small">Shipping within US and US Territories</h3>
-		<div>
-			<p>All items you purchase on Unlabel will be shipped to you for free. However, each brand on Unlabel has its own shipping method, so your delivery provider and delivery time will vary accordingly from brand to brand.</p>
-		</div>
-		<h2 class="subtitle subtitle--small">International Shipping</h3>
-		<div>
-			<p>All items you purchase on Unlabel will be shipped to you for free. However, each brand on Unlabel has its own shipping method, so your delivery provider and delivery time will vary accordingly from brand to brand.</p>
-		</div>
-	</section>
-	<section class="textual__section" id="orders">
-		<h3 class="title title--small">Expected delivery times </h3>
-		<div>
-			<p>Nulla nisl enim, malesuada ut elit sit amet, tincidunt posuere enim. Sed at neque elit. Pellentesque varius, magna nec ultricies tristique, turpis augue vulputate neque, sit amet dictum massa arcu sollicitudin massa. Morbi blandit eget sapien nec faucibus.</p>
-		</div>
-	</section>
-	<section class="textual__section" id="orders">
-		<h3 class="title title--small">What are your delivery status</h3>
-		<h2 class="subtitle subtitle--small">In-Process</h3>
-		<div>
-			<p>Duis non tincidunt ex. Duis sit amet nisi at sapien aliquet porttitor a sed sem. Ut ultrices maximus arcu, at feugiat nibh pellentesque faucibus.</p>
-		</div>
-		<h2 class="subtitle subtitle--small">Shipped</h3>
-		<div>
-			<p>Curabitur posuere dui id orci tempus venenatis. Aenean pulvinar finibus eros ac tempus. Duis scelerisque ultrices arcu non auctor. Morbi at magna vitae augue congue interdum in sit amet nisi.</p>
-		</div>
-		<h2 class="subtitle subtitle--small">In Transit</h3>
-		<div>
-			<p>Duis non tincidunt ex. Duis sit amet nisi at sapien aliquet porttitor a sed sem. Ut ultrices maximus arcu, at feugiat nibh pellentesque faucibus.</p>
-		</div>
-		<h2 class="subtitle subtitle--small">Out for Delivery</h3>
-		<div>
-			<p>Curabitur posuere dui id orci tempus venenatis. Aenean pulvinar finibus eros ac tempus. Duis scelerisque ultrices arcu non auctor. Morbi at magna vitae augue congue interdum in sit amet nisi.</p>
-		</div>
-	</section>
+<div class="container container--medium container--leftAligned">
+	<div class="textual">
+		<section class="textual__section" id="shipping">
+			<h2 class="title title--small">Shipping on Unlabel</h2>
+			<h3 class="subtitle subtitle--small">Shipping within US and US Territories</h3>
+			<div>
+				<p>All items you purchase on Unlabel will be shipped to you for free. However, each brand on Unlabel has its own shipping method, so your delivery provider and delivery time will vary accordingly from brand to brand.</p>
+			</div>
+			<h3 class="subtitle subtitle--small">International Shipping</h3>
+			<div>
+				<p>All items you purchase on Unlabel will be shipped to you for free. However, each brand on Unlabel has its own shipping method, so your delivery provider and delivery time will vary accordingly from brand to brand.</p>
+			</div>
+		</section>
+		<section class="textual__section" id="orders">
+			<h2 class="title title--small">Expected delivery times </h2>
+			<div>
+				<p>Nulla nisl enim, malesuada ut elit sit amet, tincidunt posuere enim. Sed at neque elit. Pellentesque varius, magna nec ultricies tristique, turpis augue vulputate neque, sit amet dictum massa arcu sollicitudin massa. Morbi blandit eget sapien nec faucibus.</p>
+			</div>
+		</section>
+		<section class="textual__section">
+			<h2 class="title title--small">What are your delivery status</h2>
+			<h3 class="subtitle subtitle--small">In-Process</h3>
+			<div>
+				<p>Duis non tincidunt ex. Duis sit amet nisi at sapien aliquet porttitor a sed sem. Ut ultrices maximus arcu, at feugiat nibh pellentesque faucibus.</p>
+			</div>
+			<h3 class="subtitle subtitle--small">Shipped</h3>
+			<div>
+				<p>Curabitur posuere dui id orci tempus venenatis. Aenean pulvinar finibus eros ac tempus. Duis scelerisque ultrices arcu non auctor. Morbi at magna vitae augue congue interdum in sit amet nisi.</p>
+			</div>
+			<h3 class="subtitle subtitle--small">In Transit</h3>
+			<div>
+				<p>Duis non tincidunt ex. Duis sit amet nisi at sapien aliquet porttitor a sed sem. Ut ultrices maximus arcu, at feugiat nibh pellentesque faucibus.</p>
+			</div>
+			<h3 class="subtitle subtitle--small">Out for Delivery</h3>
+			<div>
+				<p>Curabitur posuere dui id orci tempus venenatis. Aenean pulvinar finibus eros ac tempus. Duis scelerisque ultrices arcu non auctor. Morbi at magna vitae augue congue interdum in sit amet nisi.</p>
+			</div>
+		</section>
+	</div>
 </div>
 {% endblock content %}

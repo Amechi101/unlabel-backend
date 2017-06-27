@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content_wrapper %}
+
+<div class="layout layout--1col">
+    <div class="layout__header">
+        {% block layout_header %}{% endblock %}
+    </div>
+    <hr>
+    <div class="layout__content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+{% endblock %}
