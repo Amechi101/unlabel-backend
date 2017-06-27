@@ -1,24 +1,38 @@
 {% extends "layout_2_col.html" %}
 {% load i18n %}
 
-{% block grid_header_title %}<h1 class="title">FAQ</h1>{% endblock %}
+{% block grid_header_title %}
+<h1 class="title">FAQ</h1>
+{% endblock %}
 
 {% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
 
 {% block column_left %}
-	<nav class="anchors-nav">
-		<ul>
-			<li>
-				<a class="anchors-nav__link smoothscroll" href="#shipping">Shipping &amp; Returns</a>
-			</li>
-			<li>
-				<a class="anchors-nav__link smoothscroll" href="#orders">Orders</a>
-			</li>
-		</ul>
-	</nav>
+{# TODO : Make nav dynamic #}
+<nav class="anchors-nav">
+	<ul>
+		<li>
+			<a class="anchors-nav__link smoothscroll" href="#shipping">Shipping &amp; Returns</a>
+		</li>
+		<li>
+			<a class="anchors-nav__link smoothscroll" href="#orders">Orders</a>
+		</li>
+	</ul>
+</nav>
+{% endblock %}
+
+{% block grid_header_filters %}
+{# TODO : Make select options dynamic #}
+<div class="select select--borderLess">
+	<select class="smoothscroll">
+		<option value="#shipping">Shipping &amp; Returns</option>
+		<option value="#orders">Orders</option>
+	</select>
+</div>
 {% endblock %}
 
 {% block content %}
+{# TODO : Make content dynamic #}
 <div class="textual">
 	<section class="textual__section" id="shipping">
 		<h3 class="title title--small">Shipping on Unlabel</h3>

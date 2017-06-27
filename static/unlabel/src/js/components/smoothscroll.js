@@ -13,23 +13,34 @@ class Smoothscroll {
       this.options[key] = options[key] || this.options[key]
     })
 
-    this.target_selector = this.el.getAttribute('href')
-    this.target_el = document.querySelector(this.target_selector)
-
-    if( this.target_el ){
-      this.bindMethods()
-      this.addEvents()
-    }
+    this.bindMethods()
+    this.addEvents()
   }
   bindMethods(){
     this.onClick = this.onClick.bind(this)
+    this.onChange = this.onChange.bind(this)
   }
   addEvents() {
-    this.el.addEventListener('click', this.onClick)
+    if( this.el.nodeName == 'A' ) {
+      this.el.addEventListener('click', this.onClick)
+    }
+    else if ( this.el.nodeName == 'SELECT' ) {
+      this.el.addEventListener('change', this.onChange)
+    }
   }
   onClick(e) {
     e.preventDefault()
-    TweenLite.to(window, 0.3, {scrollTo: this.target_el.offsetTop - this.options.offsetTop})
+    this.scrollTo(this.el.getAttribute('href'))
+  }
+  onChange() {
+    this.scrollTo(this.el.value)
+  }
+  scrollTo(target_selector) {
+    const target_el = document.querySelector(target_selector)
+
+    if( target_el ){
+      TweenLite.to(window, 0.3, {scrollTo: target_el.offsetTop - this.options.offsetTop})
+    }
   }
 }
 
