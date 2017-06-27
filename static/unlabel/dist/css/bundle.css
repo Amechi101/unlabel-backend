@@ -3120,6 +3120,31 @@ span.carousel_contentItem {
     line-height: 32px;
   }
 }
+.subtitle--small {
+  font-size: 14px;
+  line-height: 20px;
+}
+.textual {
+  margin: 42px 24px 96px;
+}
+@media (min-width: 768px) {
+  .textual {
+    max-width: 736px;
+    margin: 0 32px 96px;
+  }
+}
+.textual .title {
+  margin: 48px 0 30px;
+}
+.textual .subtitle {
+  margin: 20px 0;
+}
+.textual p {
+  margin: 20px 0;
+}
+.textual__section + .textual__section {
+  margin-top: 72px;
+}
 .title {
   font-family: 'FaroWeb-DisplayLucky';
   line-height: 1em;
