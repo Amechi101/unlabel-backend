@@ -2,7 +2,7 @@ import device from '../utils/device'
 import ScrollMagic from 'scrollmagic'
 // import {} from 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addindicators.js' // for debugging
 
-class Example {
+class AnchorsNav {
   constructor({el}) {    
     this.el = el
 
@@ -105,4 +105,4 @@ class Example {
   }
 }
 
-module.exports = Example
+module.exports = AnchorsNav

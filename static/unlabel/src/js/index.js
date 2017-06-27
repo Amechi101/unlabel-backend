@@ -6,6 +6,7 @@ import Drawer from './components/drawer'
 import PasswordSecurity from './components/password-security'
 import Carousel from './components/carousel'
 import AnchorsNav from './components/anchors-nav'
+import Smoothscroll from './components/smoothscroll'
 import {TweenMax, Power3} from 'gsap'
 
 class App {
@@ -76,6 +77,17 @@ class App {
     anchorsNav_arr.forEach((el) => {
       new AnchorsNav({
         el: el
+      })
+    })
+
+    // Smoothscroll
+    const smoothscroll_arr = [].slice.call(document.querySelectorAll('.smoothscroll'))
+    smoothscroll_arr.forEach((el) => {
+      new Smoothscroll({
+        el: el,
+        options: {
+          offsetTop: 32
+        }
       })
     })
   }
