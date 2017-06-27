@@ -5,6 +5,7 @@ import NestedLists from './components/nested-lists'
 import Drawer from './components/drawer'
 import PasswordSecurity from './components/password-security'
 import Carousel from './components/carousel'
+import AnchorsNav from './components/anchors-nav'
 import {TweenMax, Power3} from 'gsap'
 
 class App {
@@ -66,6 +67,14 @@ class App {
     const carousel_arr = [].slice.call(document.querySelectorAll('.carousel'))
     carousel_arr.forEach((el) => {
       new Carousel({
+        el: el
+      })
+    })
+
+    // Anchors Nav
+    const anchorsNav_arr = [].slice.call(document.querySelectorAll('.anchors-nav'))
+    anchorsNav_arr.forEach((el) => {
+      new AnchorsNav({
         el: el
       })
     })

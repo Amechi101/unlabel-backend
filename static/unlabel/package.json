@@ -30,6 +30,7 @@
     "domready": "1.0.8",
     "events": "1.1.1",
     "gsap": "1.19.1",
+    "scrollmagic": "2.0.5",
     "swiper": "3.4.2",
     "tabbable": "1.0.6",
     "zxcvbn": "4.4.2"

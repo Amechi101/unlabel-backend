@@ -791,6 +791,15 @@ button.swiper-pagination-bullet {
   width: 60px;
   height: 60px;
 }
+.anchors-nav {
+  position: relative;
+}
+.anchors-nav.is-fixed {
+  position: fixed;
+}
+.anchors-nav__link.is-active {
+  font-family: 'FaroWeb-BoldLucky';
+}
 .burgerMenu {
   position: relative;
   display: inline-block;
