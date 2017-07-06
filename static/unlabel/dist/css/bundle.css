@@ -1362,8 +1362,8 @@ span.carousel_contentItem {
 }
 @font-face {
   font-family: 'fonticon';
-  src: url("../webfonts/fonticon.eot?7mu1o5");
-  src: url("../webfonts/fonticon.eot?7mu1o5#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?7mu1o5") format('truetype'), url("../webfonts/fonticon.woff?7mu1o5") format('woff'), url("../webfonts/fonticon.svg?7mu1o5#fonticon") format('svg');
+  src: url("../webfonts/fonticon.eot?k9ewqa");
+  src: url("../webfonts/fonticon.eot?k9ewqa#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?k9ewqa") format('truetype'), url("../webfonts/fonticon.woff?k9ewqa") format('woff'), url("../webfonts/fonticon.svg?k9ewqa#fonticon") format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -1379,17 +1379,17 @@ span.carousel_contentItem {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.fonticon--cart:before {
-  content: "\e93a";
-}
-.fonticon--account:before {
-  content: "\e971";
-}
 .fonticon--star-empty:before {
   content: "\e9d7";
 }
 .fonticon--star-full:before {
   content: "\e9d9";
+}
+.fonticon--profile:before {
+  content: "\e90d";
+}
+.fonticon--shoppingBag:before {
+  content: "\e90e";
 }
 .fonticon--unlabelLogo:before {
   content: "\e90c";

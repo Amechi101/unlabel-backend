@@ -34,7 +34,7 @@
                     {% if user.is_authenticated %}
                         <a class="header__linkWithNotif" href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:summary' %}{% endif %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
-                            <span class="fonticon fonticon--account fonticon--box u-mobile-only"></span>
+                            <span class="fonticon fonticon--profile fonticon--box u-mobile-only"></span>
                             {% if num_unread_notifications > 0 %}
                                 <span class="notif">{{ num_unread_notifications }}</span>
                             {% endif %}
@@ -42,14 +42,14 @@
                     {% else %}
                         <a class="header__linkWithNotif" href="{% url 'customer:login' %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
-                            <span class="fonticon fonticon--account fonticon--box u-mobile-only"></span>
+                            <span class="fonticon fonticon--profile fonticon--box u-mobile-only"></span>
                         </a>
                     {% endif %}
                 </li>
                 <li>
                     <a class="header__linkWithNotif" href="{% url 'basket:summary' %}" title="{% trans 'Shopping Bag' %}">
                         <span class="u-desktop-only">{% trans 'Shopping Bag' %}</span>
-                        <span class="fonticon fonticon--cart fonticon--box u-mobile-only"></span>
+                        <span class="fonticon fonticon--shoppingBag fonticon--box u-mobile-only"></span>
                         {% if request.basket.num_lines %}
                             <span class="notif">{{ request.basket.num_lines }}</span>
                         {% endif %}
