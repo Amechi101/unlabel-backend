@@ -2525,7 +2525,7 @@ span.carousel_contentItem {
 }
 @media (max-width: 767px) {
   .nav--internal .nav__item + .nav__item {
-    margin-top: 10px;
+    margin-top: 32px;
   }
 }
 @media (min-width: 768px) {
