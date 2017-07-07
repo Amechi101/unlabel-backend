@@ -82,7 +82,7 @@
             <a href="" class="link">{% trans 'Shipping Info' %}</a>
         </li>
         <li class="nav__item">
-            <a href="" class="link">{% trans 'Returns Policy' %}</a>
+            <a href="#returns-drawer" class="link">{% trans 'Returns Policy' %}</a>
         </li>
         <li class="nav__item">
             <a href="" class="link">{% trans 'About Jessi' %}</a>
@@ -92,6 +92,8 @@
 
 <!-- TODO // dynamic related products content -->
 {% include "catalogue/partials/related_products.html" %}
+
+{% include "catalogue/partials/returns_policy.html" %}
 
 </div>
 

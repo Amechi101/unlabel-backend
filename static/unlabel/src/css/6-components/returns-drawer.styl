@@ -1,0 +1,19 @@
+.returns-drawer {
+}
+
+.returns-drawer__listItem {
+  & + .returns-drawer__listItem {
+    margin-top: 20px
+  }
+  
+  &::before {
+    display: inline-block
+    content: ''
+    width: size = 6px
+    height: size
+    border-radius: 50%
+    background-color currentColor
+    vertical-align middle
+    margin-right: 8px
+  }
+}

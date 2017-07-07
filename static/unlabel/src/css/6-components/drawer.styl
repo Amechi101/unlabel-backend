@@ -29,6 +29,12 @@
     height: 100%
   }
   
+  .drawer--right.drawer--small & {
+    @media $mq_m {
+     max-width 320px 
+    } 
+  }
+  
   .drawer--top & {
     top: 0
     right: 0
@@ -36,8 +42,8 @@
     min-height: 228px
     
     @media $mq_m {
-      height: 50%
-    } 
+      min-height: 50%
+    }
   }
   
   .drawer--dark & {
@@ -52,26 +58,60 @@
   top: 0
   left: 0
   width: 100%
-  display: flex
-  align-items: center
-  flex-direction: row
-  justify-content: space-between
-  height: 83px
-  padding: 0 16px
   background-color: #fff
   
-  .drawer--right & {
+  .drawer--right:not(.drawer--dark) & {
     border-bottom: 1px solid $color_lightGrey
+  }
+  
+  .drawer--right.drawer--dark & {
+    border-bottom: 1px solid #333333
   }
   
   .drawer--dark & {
     background-color: $color_darkGrey
+  }
+  
+  .drawer--bigHeader & {
+    padding: 96px 0 0 0
+  }
+}
+
+.drawer__headerContent {
+  display: flex
+  align-items: center
+  min-height: 83px
+  padding: 16px (10px + 34px + 16px) 16px 16px // padding right to prevent overlapping close btn (gutter + btn size + right padding)
+  
+  .drawer--bigHeader & {
+    padding: 24px 32px
+  }
+}
+
+.drawer__close {
+  position: absolute
+  top: 16px
+  right: 16px
+
+  @media $mq_m {
+    top: 32px
+    right: 32px
+  }
+  
+  .drawer__header--bar & {
+    top: 50% !important
+    right: 16px !important
+    transform: translate(0, -50%)
   }
 }
 
 .drawer__scroller {
   padding: 84px 0 0 // header height
   overflow-y: auto
+  
+  .drawer--bigHeader & {
+    padding: 180px 0 0 // header height
+  }
   
   .drawer--right & {
     height: calc(100vh)
@@ -81,6 +121,10 @@
 .drawer__content {
   .drawer--right & {
     min-height: calc(100vh - 2 * 84px) // drawer height - header and footer heights -> allow footer to always be at the bottom
+  }
+  
+  &--padded {
+    padding: 32px
   }
 }
 
