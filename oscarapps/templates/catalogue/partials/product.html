@@ -1,5 +1,6 @@
 {% load thumbnail %}
 
+{% load i18n %}
 {% load currency_filters %}
 {% load purchase_info_tags %}
 
@@ -18,7 +19,20 @@
                     {% block product_title %}
                         <h2>{{ product.get_title|truncatewords:4 }}</h2>
                     {% endblock %}
-                    <h3><small>by Influencer Name • Brand Name</small></h3>
+                    {# TODO : make sure this works once products are suggested by influencers #}
+                    {% if product.get_influencer or product.get_brand %}
+                        <h3><small>
+                            {% if product.get_influencer %}
+                                {% trans 'by' %} {{ product.get_influencer.first_name}} {{ product.get_influencer.last_name}}
+                            {% endif %}
+                            {% if product.get_influencer and product.get_brand %}
+                                &nbsp;•&nbsp;
+                            {% endif %}
+                            {% if product.get_brand %}
+                                {{ product.get_brand}}
+                            {% endif %}
+                        </small></h3>    
+                    {% endif %}
                     {% block product_price %}
                         {% purchase_info_for_product request product as session %}
                         {% if session.price.exists %}
