@@ -95,8 +95,7 @@ a {
   text-decoration: none;
 }
 a:hover {
-  color: currentColor;
-  text-decoration: underline;
+  color: #945454;
 }
 figcaption {
   margin-top: 12px;
@@ -2525,6 +2524,9 @@ span.carousel_contentItem {
   -webkit-transform: translate(0%, 0);
           transform: translate(0%, 0);
 }
+.link:hover {
+  color: inherit;
+}
 .link:hover::after {
   -webkit-transform: translate(101%, 0);
           transform: translate(101%, 0);
@@ -2665,9 +2667,6 @@ span.carousel_contentItem {
 .pagination__item.is-active .pagination__link {
   border-color: currentColor;
   font-family: 'FaroWeb-BoldLucky';
-}
-.pagination__link:hover {
-  color: #945454;
 }
 .password-security {
   display: inline-block;
