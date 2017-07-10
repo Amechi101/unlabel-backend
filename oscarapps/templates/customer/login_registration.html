@@ -35,7 +35,7 @@
                         <div class="form__actions">
                             <button name="login_submit" type="submit" value="Log In" class="cta cta--dark"
                                     data-loading-text="{% trans "Signing in..." %}">{% trans 'Sign in' %}</button>
-                            <a class="cta cta--facebook" href="{% provider_login_url "facebook" method="oauth2" %}"><span class="fonticon fonticon--facebook"></span>{% trans "Log in with Facebook" %}</a>
+                            <a class="cta cta--facebook cta--inlineIcon cta--inlineIconLeft" href="{% provider_login_url "facebook" method="oauth2" %}"><span class="fonticon fonticon--facebook"></span>{% trans "Log in with Facebook" %}</a>
                         </div>
                     </form>
                 </div>

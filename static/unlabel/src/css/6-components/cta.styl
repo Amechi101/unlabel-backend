@@ -1,74 +1,71 @@
+// Change all cta colors in one mixin
+cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false) {
+  border-color: border_default
+  background-image: linear-gradient(to right, text_hover 50%, text_default 50%), linear-gradient(to right, bg_hover 50%, bg_default 50%)
+  
+  &:hover {
+    if border_hover {
+      border-color: border_hover
+    }
+  } 
+}
+
 .cta {
   display inline-block
-  padding: 18px 32px 
-  text-decoration: none
+  padding: 17px 32px 
+  text-decoration: none !important
   cursor: pointer
   user-select: none
   white-space: nowrap
-  font-size: font_size = 14px
-  line-height font_size
+  font-size: 14px
+  line-height: 16px
   border: 2px solid $color_darkGrey
-  color: $color_darkGrey
+  color: transparent
   font-family: $font_bold
   background: transparent
   border-radius: 0
   appearance: none
   vertical-align middle
+  background-repeat: no-repeat
+  background-size: 200% 100%
+  background-position: 100% 0, 100% 0
+  transition(background-position)
+  background-clip: text, border-box
+  -webkit-background-clip: text, border-box
+  
+  cta-colors($color_darkGrey, #fff, transparent, $color_darkGrey, $color_darkGrey)
 
   &:hover {
-    text-decoration: none
-    color: $color_darkGrey
+    color: transparent
+    background-position: 0% 0, 0% 0
   }
   
   &--dark {
-    color: #fff
-    background-color: $color_darkGrey
-    border-color: $color_darkGrey
-    
-    &:hover {
-      color: #fff
-    }
+    // cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false)
+    cta-colors(#fff, $color_darkGrey, $color_darkGrey, transparent, $color_darkGrey)
   }
   
   &--product {
-    color: $color_darkGrey
-    background-color: $color_product
-    border-color: $color_product
-    
-    &:hover {
-      color: $color_darkGrey
-    }
+    // cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false)
+    cta-colors($color_darkGrey, $color_product, $color_product, transparent, $color_product)
   }
   
   &--facebook {
-    color: #fff
-    background-color: color_facebook = #4460A0
-    border-color: color_facebook
-    padding: 17px 24px 
-    line-height: 16px
-    
-    &:hover {
-      color: #fff
-    }
-    
-    .fonticon {
-      font-size: 16px
-      line-height: 16px
-      margin-right: 24px
-      vertical-align: middle
-    }
+    // cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false)
+    cta-colors(#fff, $color_facebook, $color_facebook, transparent, $color_facebook)
   }
   
   &[disabled="disabled"] {
     cursor: default
-    opacity: 0.5
+    opacity: 0.67
+    &:hover {
+      background-position: 100% 0, 100% 0
+    }
   }
   
-  &--inlineIcon {
-    padding: 15px 16px
-    
+  &--inlineIcon {    
     .fonticon {
-      font-size: 20px
+      font-size: 16px
       vertical-align middle
     }
   }
