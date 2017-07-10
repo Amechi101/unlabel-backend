@@ -24,7 +24,7 @@
 		<div class="product__content">
 			<div>
 				<h1 class="title product__title">{{ product.get_title }}</h1>
-				<h2 class="product__brand">Brand Name</h2> <!-- TODO : add brand name -->
+				<h2 class="product__brand">{{product.get_brand}}</h2>
 			</div>
 			<div>
 				{% purchase_info_for_product request product as session %}

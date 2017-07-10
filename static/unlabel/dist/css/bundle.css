@@ -1394,8 +1394,8 @@ span.carousel_contentItem {
 }
 @font-face {
   font-family: 'fonticon';
-  src: url("../webfonts/fonticon.eot?k9ewqa");
-  src: url("../webfonts/fonticon.eot?k9ewqa#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?k9ewqa") format('truetype'), url("../webfonts/fonticon.woff?k9ewqa") format('woff'), url("../webfonts/fonticon.svg?k9ewqa#fonticon") format('svg');
+  src: url("../webfonts/fonticon.eot?k14rzb");
+  src: url("../webfonts/fonticon.eot?k14rzb#iefix") format('embedded-opentype'), url("../webfonts/fonticon.ttf?k14rzb") format('truetype'), url("../webfonts/fonticon.woff?k14rzb") format('woff'), url("../webfonts/fonticon.svg?k14rzb#fonticon") format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -1411,11 +1411,11 @@ span.carousel_contentItem {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.fonticon--star-empty:before {
-  content: "\e9d7";
+.fonticon--starFull:before {
+  content: "\e90f";
 }
-.fonticon--star-full:before {
-  content: "\e9d9";
+.fonticon--starStroke:before {
+  content: "\e910";
 }
 .fonticon--profile:before {
   content: "\e90d";

@@ -9,8 +9,8 @@
                 <figure>
                     <img src="{% static 'unlabel/dist/img/temp/influencer-review-visual.jpg' %}" alt="">
                     <figcaption>
-                        <p>Unisex Bomber</p>
-                        <p><small>$345.00</small></p>
+                        <p>Inluencer Name {# {{ influencer.users.first_name }} #}</p>
+                        <p><small>Influencer City, Sate, Country {# {{ influencer.location.city }}, {{ influencer.location.state }}, {{ influencer.location.country }} #}</small></p>
                     </figcaption>
                 </figure>
             </div>
@@ -22,15 +22,28 @@
                     </div>
                     <div class="sizechart">
                         <ul class="sizechart__list">
-                            <li class="sizechart__item">{% trans 'Height' %}: <span data-sizechart-unit="cm">167</span> <span data-sizechart-unit="inch">65</span></li>
-                            <li class="sizechart__item">{% trans 'Hips' %}: <span data-sizechart-unit="cm">91</span> <span data-sizechart-unit="inch">35</span></li>
-                            <li class="sizechart__item">{% trans 'Chest' %}: <span data-sizechart-unit="cm">88</span> <span data-sizechart-unit="inch">34</span></li>
-                            <li class="sizechart__item">{% trans 'Waist' %}: <span data-sizechart-unit="cm">66</span> <span data-sizechart-unit="inch">25</span></li>
+                            {# {{ influencer.height }} #}
+                            <li class="sizechart__item">{% trans 'Height' %}: <span data-sizechart-unit="cm">167 cm</span> <span data-sizechart-unit="inch">65"</span></li>
+                            {# {{ influencer.hips }} #}
+                            <li class="sizechart__item">{% trans 'Hips' %}: <span data-sizechart-unit="cm">91 cm</span> <span data-sizechart-unit="inch">35"</span></li>
+                            {# {{ influencer.chest_or_bust }} #}
+                            <li class="sizechart__item">{% trans 'Chest' %}: <span data-sizechart-unit="cm">88 cm</span> <span data-sizechart-unit="inch">34"</span></li>
+                            {# {{ influencer.waist }} #}
+                            <li class="sizechart__item">{% trans 'Waist' %}: <span data-sizechart-unit="cm">66 cm</span> <span data-sizechart-unit="inch">25"</span></li>
+                            {# {{ influencer.weight }} #}
+                            <li class="sizechart__item">{% trans 'Weight' %}: <span data-sizechart-unit="kg">52 kg</span> <span data-sizechart-unit="lb">114 lb</span></li>
+                            {# {{ influencer.age }} #}
+                            <li class="sizechart__item">{% trans 'Age' %}: 23 yo</li>
                         </ul>
                         <div class="toggle">
                             <a href="#" class="toggle__label toggle__label--left" data-toggle-value="cm">{% trans 'Centimeters' %}</a>
                             <a href="#" class="toggle__slider" data-toggle-values="cm,inch"></a>
                             <a href="#" class="toggle__label toggle__label--right" data-toggle-value="inch">{% trans 'Inches' %}</a>
+                        </div>
+                        <div class="toggle">
+                            <a href="#" class="toggle__label toggle__label--left" data-toggle-value="kg">{% trans 'Kilograms' %}</a>
+                            <a href="#" class="toggle__slider" data-toggle-values="kg,lb"></a>
+                            <a href="#" class="toggle__label toggle__label--right" data-toggle-value="lb">{% trans 'Pounds' %}</a>
                         </div>
                     </div>
                 </div>

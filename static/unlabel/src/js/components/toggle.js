@@ -90,7 +90,7 @@ class Toggle extends EventEmitter {
     this._value = value
     this.updateUI()
     if( changed ){
-      this.emit('changed', this._value)
+      this.emit('changed', this._value, this.values_arr)
     }
   }
   get value(){
