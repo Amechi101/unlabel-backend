@@ -2660,10 +2660,14 @@ span.carousel_contentItem {
   border: 2px solid transparent;
   text-align: center;
   vertical-align: middle;
+  text-decoration: none !important;
 }
 .pagination__item.is-active .pagination__link {
   border-color: currentColor;
   font-family: 'FaroWeb-BoldLucky';
+}
+.pagination__link:hover {
+  color: #945454;
 }
 .password-security {
   display: inline-block;
