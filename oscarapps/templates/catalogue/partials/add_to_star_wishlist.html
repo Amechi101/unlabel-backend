@@ -30,7 +30,7 @@
         {% for wishlist in product_wishlists %}
             <form action="{% url 'customer:wishlists-remove-product' key=wishlist.key product_pk=product.id %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="cta cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Removing...' %}"><span class="fonticon fonticon--starFull"></span>{% trans "Unstar" %}</button>
+                <button type="submit" class="cta cta--product cta--inlineIcon cta--inlineIconLeft" data-loading-text="{% trans 'Removing...' %}"><span class="fonticon fonticon--starFull"></span>{% trans "Unstar" %}</button>
             </form>
         {% endfor %}
     {% endwith %}

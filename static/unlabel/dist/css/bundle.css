@@ -1159,6 +1159,14 @@ span.carousel_contentItem {
 .cta--dark:hover {
   color: #fff;
 }
+.cta--product {
+  color: #232323;
+  background-color: #dde0ed;
+  border-color: #dde0ed;
+}
+.cta--product:hover {
+  color: #232323;
+}
 .cta--facebook {
   color: #fff;
   background-color: #4460a0;
@@ -1180,16 +1188,17 @@ span.carousel_contentItem {
   opacity: 0.5;
 }
 .cta--inlineIcon {
-  padding: 12px 16px;
+  padding: 15px 16px;
 }
 .cta--inlineIcon .fonticon {
-  font-size: 26px;
+  font-size: 20px;
+  vertical-align: middle;
 }
 .cta--inlineIconLeft .fonticon {
-  margin-right: 16px;
+  margin-right: 12px;
 }
 .cta--inlineIconRight .fonticon {
-  margin-left: 16px;
+  margin-left: 12px;
 }
 @media (min-width: 768px) {
   .desc {
@@ -2776,6 +2785,9 @@ span.carousel_contentItem {
     -ms-flex-wrap: wrap;
         flex-wrap: wrap;
     margin-top: 32px;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
   }
   .product__actions > * {
     margin-right: 12px;
