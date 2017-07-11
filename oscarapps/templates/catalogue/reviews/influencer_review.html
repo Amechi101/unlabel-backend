@@ -2,17 +2,20 @@
 {% load i18n %}
 
 <!-- TODO // dynamic content -->
-<article class="influencer-review">
+<article class="influencer-review color-context color-context--product">
     <div class="container container--m-pad-l">
         <div class="influencer-review__cols">
             <div class="influencer-review__col">
-                <figure>
-                    <img src="{% static 'unlabel/dist/img/temp/influencer-review-visual.jpg' %}" alt="">
-                    <figcaption>
-                        <p>Inluencer Name {# {{ influencer.users.first_name }} #}</p>
-                        <p><small>Influencer City, Sate, Country {# {{ influencer.location.city }}, {{ influencer.location.state }}, {{ influencer.location.country }} #}</small></p>
-                    </figcaption>
-                </figure>
+                {# TODO : redirect to creator's page #}
+                <a href="#">
+                    <figure>
+                        <img src="{% static 'unlabel/dist/img/temp/influencer-review-visual.jpg' %}" alt="">
+                        <figcaption>
+                            <p>Inluencer Name {# {{ influencer.users.first_name }} {{ influencer.users.last_name }} #}</p>
+                            <p><small>Influencer City, Sate, Country {# {{ influencer.location.city }}, {{ influencer.location.state }}, {{ influencer.location.country }} #}</small></p>
+                        </figcaption>
+                    </figure>
+                </a>
             </div>
             <div class="influencer-review__col">
                 <div class="influencer-review__content">
@@ -35,15 +38,17 @@
                             {# {{ influencer.age }} #}
                             <li class="sizechart__item">{% trans 'Age' %}: 23 yo</li>
                         </ul>
-                        <div class="toggle">
-                            <a href="#" class="toggle__label toggle__label--left" data-toggle-value="cm">{% trans 'Centimeters' %}</a>
-                            <a href="#" class="toggle__slider" data-toggle-values="cm,inch"></a>
-                            <a href="#" class="toggle__label toggle__label--right" data-toggle-value="inch">{% trans 'Inches' %}</a>
-                        </div>
-                        <div class="toggle">
-                            <a href="#" class="toggle__label toggle__label--left" data-toggle-value="kg">{% trans 'Kilograms' %}</a>
-                            <a href="#" class="toggle__slider" data-toggle-values="kg,lb"></a>
-                            <a href="#" class="toggle__label toggle__label--right" data-toggle-value="lb">{% trans 'Pounds' %}</a>
+                        <div class="sizechart__toggles">
+                            <div class="toggle">
+                                <a href="#" class="toggle__label toggle__label--left" data-toggle-value="cm">{% trans 'Centimeters' %}</a>
+                                <a href="#" class="toggle__slider" data-toggle-values="cm,inch"></a>
+                                <a href="#" class="toggle__label toggle__label--right" data-toggle-value="inch">{% trans 'Inches' %}</a>
+                            </div>
+                            <div class="toggle">
+                                <a href="#" class="toggle__label toggle__label--left" data-toggle-value="kg">{% trans 'Kilograms' %}</a>
+                                <a href="#" class="toggle__slider" data-toggle-values="kg,lb"></a>
+                                <a href="#" class="toggle__label toggle__label--right" data-toggle-value="lb">{% trans 'Pounds' %}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
