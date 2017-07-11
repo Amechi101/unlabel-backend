@@ -904,6 +904,22 @@ span.carousel_contentItem {
 .close--medium::after {
   background-color: #a3a3a3;
 }
+.color-context--account a:hover,
+.color-context--accounts a:hover {
+  color: #a76939;
+}
+.color-context--creator a:hover,
+.color-context--creators a:hover {
+  color: #549294;
+}
+.color-context--brand a:hover,
+.color-context--brands a:hover {
+  color: #945454;
+}
+.color-context--product a:hover,
+.color-context--products a:hover {
+  color: #546094;
+}
 .cols {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1137,7 +1153,7 @@ span.carousel_contentItem {
   font-size: 14px;
   line-height: 16px;
   border: 2px solid #232323;
-  color: transparent;
+  color: transparent !important;
   font-family: 'FaroWeb-BoldLucky';
   background: transparent;
   border-radius: 0;

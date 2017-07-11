@@ -2,34 +2,38 @@
 
 {% block content_wrapper %}
 
-{% block before_layout %}{% endblock %}
+<main id="content_inner" class="{% block content_classnames %}{% endblock %}">
 
-<div class="grid {% block layout_extra_classnames %}{% endblock %}">
-    <div class="grid__sidebar {% block layout_sidebar_extra_classnames %}{% endblock %}">
-        {% block column_left %}{% endblock %}
-    </div>
-    <div class="grid__content">
-        {% block grid_header %}
-        <div class="grid__header">
-            <div class="grid__headerTitle">
-                {% block grid_header_title %}{% endblock %}
-            </div>
-            <div class="grid__headerNav">
-                <div class="grid__headerNavGroup">
-                    {% block grid_header_filters %}{% endblock %}
-                </div>
-                <div class="grid__headerNavGroup">
-                    {% block grid_header_sortBy %}{% endblock %}
-                    {% block grid_header_results %}{% endblock %}
-                </div>
-            </div>
+    {% block before_layout %}{% endblock %}
+
+    <div class="grid {% block layout_extra_classnames %}{% endblock %}">
+        <div class="grid__sidebar {% block layout_sidebar_extra_classnames %}{% endblock %}">
+            {% block column_left %}{% endblock %}
         </div>
-        {% endblock %}
+        <div class="grid__content">
+            {% block grid_header %}
+            <div class="grid__header">
+                <div class="grid__headerTitle">
+                    {% block grid_header_title %}{% endblock %}
+                </div>
+                <div class="grid__headerNav">
+                    <div class="grid__headerNavGroup">
+                        {% block grid_header_filters %}{% endblock %}
+                    </div>
+                    <div class="grid__headerNavGroup">
+                        {% block grid_header_sortBy %}{% endblock %}
+                        {% block grid_header_results %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            {% endblock %}
 
-        {% block content %}{% endblock %}
+            {% block content %}{% endblock %}
+        </div>
     </div>
-</div>
 
-{% block after_layout %}{% endblock %}
+    {% block after_layout %}{% endblock %}
+
+</main>
 
 {% endblock %}

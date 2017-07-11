@@ -2,14 +2,16 @@
 
 {% block content_wrapper %}
 
-<div class="layout layout--1col">
-    <div class="layout__header">
-        {% block layout_header %}{% endblock %}
-    </div>
-    <hr>
-    <div class="layout__content">
-        {% block content %}{% endblock %}
-    </div>
-</div>
+<main id="content_inner" class="{% block content_classnames %}{% endblock %}">
+	<div class="layout layout--1col">
+	    <div class="layout__header">
+	        {% block layout_header %}{% endblock %}
+	    </div>
+	    <hr>
+	    <div class="layout__content">
+	        {% block content %}{% endblock %}
+	    </div>
+	</div>
+</main>
 
 {% endblock %}

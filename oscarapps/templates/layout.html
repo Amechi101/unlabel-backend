@@ -15,7 +15,7 @@
 
         {% block content_wrapper %}
             {# Div exists for AJAX updates to entire content section #}
-            <main id="content_inner">{% block content %}{% endblock %}</main>
+            <main id="content_inner" class="{% block content_classnames %}{% endblock %}">{% block content %}{% endblock %}</main>
         {% endblock %}
 
         {% include "partials/footer.html" %}

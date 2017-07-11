@@ -10,6 +10,8 @@
     {% if summary %}{{ summary }} |{% endif %} {{ block.super }}
 {% endblock %}
 
+{% block content_classnames %}color-context color-context--products{% endblock %}
+
 {% block layout_extra_classnames %}grid--borderTopLess{% endblock %}
 {% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
 
