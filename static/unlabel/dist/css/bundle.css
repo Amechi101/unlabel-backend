@@ -2508,9 +2508,9 @@ span.carousel_contentItem {
   font-family: 'FaroWeb-BoldLucky';
   text-decoration: none !important;
   display: inline-block;
-  vertical-align: middle;
   position: relative;
   overflow: hidden;
+  vertical-align: top;
   white-space: nowrap;
   padding-bottom: 5px;
 }
