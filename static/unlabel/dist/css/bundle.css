@@ -1407,6 +1407,21 @@ span.carousel_contentItem {
 .drawer__link--large {
   height: 84px;
 }
+.img-container {
+  position: relative;
+  overflow: hidden;
+}
+a .img-container img {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  transition: -webkit-transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+a:hover .img-container img {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
 @font-face {
   font-family: 'fonticon';
   src: url("../webfonts/fonticon.eot?k14rzb");

@@ -11,7 +11,9 @@
                 {% block product_image %}
                     {% with image=product.primary_image %}
                         {% thumbnail image.original "284x284" crop="center" upscale=True as thumb %}
-                        <img src="{{ thumb.url }}" alt="{{ product.get_title }}" width="284" height="284">
+                        <div class="img-container">
+                            <img src="{{ thumb.url }}" alt="{{ product.get_title }}" width="284" height="284">
+                        </div>
                         {% endthumbnail %}
                     {% endwith %}
                 {% endblock %}

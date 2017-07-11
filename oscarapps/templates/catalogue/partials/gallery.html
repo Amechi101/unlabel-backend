@@ -26,7 +26,9 @@
 				{% for image in all_images %}
 					<a href="" class="gallery__link swiper-slide" data-slide-to="{{ forloop.counter0 }}">
 						{% thumbnail image.original "64x64" crop="center" as thumb %}
-						<img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+						<div class="img-container">
+							<img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+						</div>
 						{% endthumbnail %}
 					</a>
 				{% endfor %}
