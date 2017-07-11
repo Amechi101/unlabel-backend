@@ -1407,21 +1407,6 @@ span.carousel_contentItem {
 .drawer__link--large {
   height: 84px;
 }
-.img-container {
-  position: relative;
-  overflow: hidden;
-}
-a .img-container img {
-  -webkit-transform: scale(1);
-          transform: scale(1);
-  transition: -webkit-transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-}
-a:hover .img-container img {
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
-}
 @font-face {
   font-family: 'fonticon';
   src: url("../webfonts/fonticon.eot?k14rzb");
@@ -2451,6 +2436,21 @@ a:hover .img-container img {
     margin-top: -29px;
   }
 }
+.img-container {
+  position: relative;
+  overflow: hidden;
+}
+a .img-container img {
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  transition: -webkit-transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+a:hover .img-container img {
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
 .influencer-review {
   background-color: #dde0ed;
 }
@@ -2767,7 +2767,7 @@ a:hover .img-container img {
 }
 @media (min-width: 768px) {
   .product__galleryContainer {
-    width: 55%;
+    width: 56%;
   }
 }
 @media (max-width: 767px) {
@@ -2779,7 +2779,7 @@ a:hover .img-container img {
   .product__content {
     position: relative;
     z-index: 1;
-    width: 45%;
+    width: 44%;
     margin: 0 0 0 32px;
     padding: 48px 32px 48px 64px;
     display: -webkit-box;
