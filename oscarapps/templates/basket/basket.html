@@ -27,7 +27,7 @@
     {% include 'basket/partials/basket_content.html' %}
 
     {% trans 'You may also like' as triptych_title %}
-    {% include "catalogue/partials/related_products.html" with triptych_title=triptych_title triptych_isWrapperWider=True %}
+    {% include "catalogue/partials/products_triptych.html" with triptych_title=triptych_title triptych_isWrapperWider=True %}
 {% endblock content %}
 
 {% block onbodyload %}
