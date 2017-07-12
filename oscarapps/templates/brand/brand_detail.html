@@ -17,4 +17,7 @@
     {% endfor %}
     {% endif %}
 
+{% trans "More bra- nds" as related_brands_title %}
+{% include "brand/partials/related_brands.html" with related_brands_title=related_brands_title related_brands_isBigTitle=True related_brands_isWrapperThinner=True %}
+
 {% endblock content %}
