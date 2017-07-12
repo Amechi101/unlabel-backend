@@ -1,0 +1,15 @@
+{% load thumbnail %}
+
+<article>
+    <a class="grid__itemInner u-block" href="{{ brand.slug }}" title="{{ brand.name }}">
+        <figure>
+            <div class="img-container">
+                <img src="{{ MEDIA_URL }}{{ brand.image }}" alt="{{ brand.name }}">
+            </div>
+            <figcaption>
+                <h2>{{ brand.name }}</h2>
+                <p>{{ brand.location.city }}, {{ brand.location.country }}</p>
+            </figcaption>
+        </figure>
+    </a>
+</article>

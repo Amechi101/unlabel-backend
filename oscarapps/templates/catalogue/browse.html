@@ -70,20 +70,11 @@
 {% endblock %}
 
 {% block grid_header_sortBy %}
-    <div>
-        {# TODO : make it dynamic to actually sort items #}
-        <form>
-            <div class="select select--borderLess">
-                <select>
-                    <option value="" disabled selected="">Sort By</option>
-                </select>
-            </div>
-        </form>
-    </div>
+    {% include "partials/grid_sort_by.html" %}
 {% endblock %}
 
 {% block grid_header_results %}
-    {% include "catalogue/partials/nb_of_results.html" %}
+    {% include "partials/number_of_results.html" %}
 {% endblock %}
 
 {% block column_left %}

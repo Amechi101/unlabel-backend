@@ -1,60 +1,69 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load i18n %}
 
+{% block body_class %}brands{% endblock %}
+
+{% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
+
+{% block before_layout %}
+  {% trans "Our bra- nds" as triptych_title %}
+  {% include "brand/partials/brand_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True triptych_isContentDesktopOnly=True %}
+{% endblock before_layout %}
+
+{% block content_classnames %}color-context color-context--brands{% endblock %}
+
+{# TODO : makes styles dynamic #}
+{% block column_left %}
+  <h3 class="subtitle">{% trans "Style" %}</h3>
+  <ul>
+    <li>
+      <a href="?products_category=all">All</a>
+    </li>
+    <li>
+      <a href="?products_category=Menswear">Mens apparel</a>
+    </li>
+    <li>
+      <a href="?products_category=Womenswear">Womens apparel</a>
+    </li>
+  </ul>
+
+  {% if locations %}
+    <h3 class="subtitle">{% trans "Location" %}</h3>
+    <ul>
+      {% for location in locations %}
+        <li>
+          <a href="?location={{ location }}">{{ location }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock column_left %}
+
+{% block grid_header_sortBy %}
+    {% include "partials/grid_sort_by.html" %}
+{% endblock %}
+
+{% block grid_header_results %}
+    {% include "partials/number_of_results.html" %}
+{% endblock %}
 
 {% block content %}
-
-{% trans "Our bra- nds" as triptych_title %}
-{% include "brand/partials/brand_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True triptych_isContentDesktopOnly=True %}
-
-<h1>OUR BRANDS</h1>
-<h3>Products</h3>
-    <ul>
-    <li><a href="?products_category=all">All</a></li>
-    <li><a href="?products_category=Menswear">Mens apparel</a></li>
-    <li><a href="?products_category=Womenswear">Womens apparel</a></li>
-    </ul>
-<h3>Location</h3>
-
-    {% if locations %}
-         <ul>
-            {% for l in locations %}
-                <li><a href="?location={{ l }}">{{ l }}</a></li>
-            {% endfor %}
-         </ul>
-    {% endif %}
-
-    {% if brands %}
-         <p><b>{{brands.count}} results</b></p>
-        {% for brand in brands %}
-            <a href="{{ brand.slug }}"><img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
-            <h4>Name : {{ brand.name }}</h4>
-            <h4>City : {{ brand.location.city }}</h4>
-            <h4>Country : {{ brand.location.country }}</h4></a>
-       {% endfor %}
-
+   {% if brands %}
+       <ol class="grid__list">
+           {% for brand in brands %}
+               <li class="grid__item">
+                 {% include "brand/partials/brand.html" %}
+               </li>
+           {% endfor %}
+       </ol>
+   {% else %}
+       <p>{% trans "No Brands found." %}</p>
    {% endif %}
 
-    {% if is_paginated %}
-  <ul class="pagination">
-    {% if page_obj.has_previous %}
-      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in paginator.page_range %}
-      {% if page_obj.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if page_obj.has_next %}
-      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
-
 {% endblock content %}
+
+{% block after_layout %}
+    <div class="grid__paginationContainer">
+        {% include "partials/pagination.html" %}
+    </div>
+{% endblock %}
