@@ -1,0 +1,20 @@
+<section class="triptych {% if triptych_isContentDesktopOnly %} triptych--contentDesktopOnly{% endif %} {% block triptych_extraClasses %}{% endblock %}">
+	{% block triptych_bg %}
+		<div class="triptych__bg"></div>
+	{% endblock %}
+	<div class="container container--m-pad-l">
+		<div class="triptych__wrapper{% if triptych_isWrapperThinner %} triptych__wrapper--thinner{% elif triptych_isWrapperWider %} triptych__wrapper--wider{% endif %}{% if not triptych_isBigTitle %} triptych__wrapper--taller{% endif %}">
+			<header class="triptych__header">
+				<h2 class="title{% if triptych_isBigTitle %} title--destructured{% endif %} title--caps title--oneWordPerLine">{% block triptych_title %}{{triptych_title}}{% endblock %}</h2>
+			</header>
+			<div class="triptych__content {% if triptych_isContentDesktopOnly %} u-desktop-only{% endif %}">
+				{% block triptych_content %}{% endblock %}
+			</div>
+			{% block triptych_nav %}
+				<nav class="triptych__nav">
+					{% block triptych_navContent %}{% endblock %}
+				</nav>
+			{% endblock %}
+		</div>
+	</div>
+</section>
