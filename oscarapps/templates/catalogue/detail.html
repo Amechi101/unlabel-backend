@@ -91,7 +91,8 @@
 </nav>
 
 <!-- TODO // dynamic related products content -->
-{% include "catalogue/partials/related_products.html" %}
+{% trans 'Mores products' as triptych_title %}
+{% include "catalogue/partials/related_products.html" with triptych_title=triptych_title %}
 
 {% include "catalogue/partials/returns_policy.html" %}
 

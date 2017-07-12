@@ -3401,6 +3401,11 @@ a:hover .img-container img {
     padding: 96px 0;
   }
 }
+@media (max-width: 767px) {
+  .triptych--contentDesktopOnly {
+    padding: 42px 0;
+  }
+}
 .triptych__wrapper {
   position: relative;
   padding: 42px 32px 0;
@@ -3417,12 +3422,17 @@ a:hover .img-container img {
 }
 @media (min-width: 768px) {
   .triptych__wrapper--wider {
-    padding-left: 96px;
+    padding-left: 112px;
   }
 }
 @media (min-width: 768px) {
   .triptych__wrapper--taller {
     padding-top: 80px;
+  }
+}
+@media (max-width: 767px) {
+  .triptych--contentDesktopOnly .triptych__wrapper {
+    padding: 0;
   }
 }
 .triptych__bg {
@@ -3454,10 +3464,24 @@ a:hover .img-container img {
 }
 .triptych__header {
   position: absolute;
-  top: -10px;
+  top: 0;
   left: 0;
   z-index: 1;
   pointer-events: none;
+}
+.triptych__header .title {
+  margin-top: -10px;
+}
+.triptych__header .title--destructured {
+  margin-top: 0;
+}
+@media (max-width: 767px) {
+  .triptych--contentDesktopOnly .triptych__header {
+    position: relative;
+  }
+}
+.triptych--contentDesktopOnly .triptych__header .title {
+  margin-top: 0 !important;
 }
 .triptych__itemLink {
   display: block;

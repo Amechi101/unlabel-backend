@@ -4,6 +4,12 @@
   @media $mq_s_only {
     padding: 96px 0
   }
+  
+  &--contentDesktopOnly {
+    @media $mq_s_only {
+      padding: 42px 0
+    }
+  }
 }
 
 .triptych__wrapper {
@@ -22,13 +28,19 @@
   
   &--wider {    
     @media $mq_m {
-      padding-left: 96px
+      padding-left: 112px
     }
   }
   
   &--taller {    
     @media $mq_m {
       padding-top: 80px
+    }
+  }
+  
+  .triptych--contentDesktopOnly & {
+    @media $mq_s_only {
+      padding: 0
     }
   }
 }
@@ -62,10 +74,28 @@
 
 .triptych__header {
   position: absolute
-  top: -10px // Better alignement considering title line-height
+  top: 0
   left: 0
   z-index: 1
   pointer-events: none
+  
+  .title {
+    margin-top: -10px // Better alignement considering title line-height
+    
+    &--destructured {
+      margin-top: 0
+    } 
+  }
+  
+  .triptych--contentDesktopOnly & {
+    @media $mq_s_only {
+      position: relative
+    }
+    
+    .title {
+      margin-top: 0 !important
+    }
+  }
 }
 
 .triptych__itemLink {

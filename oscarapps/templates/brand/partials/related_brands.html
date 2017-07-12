@@ -2,14 +2,14 @@
 {% load i18n %}
 
 <!-- TODO // dynamic content -->
-<section class="triptych color-context color-context--brands">
+<section class="triptych color-context color-context--brands{% if related_brands_isContentDesktopOnly %} triptych--contentDesktopOnly{% endif %}">
 	<div class="triptych__bg"></div>
 	<div class="container container--m-pad-l">
 		<div class="triptych__wrapper{% if related_brands_isWrapperThinner %} triptych__wrapper--thinner{% elif related_brands_isWrapperWider %} triptych__wrapper--wider{% endif %}{% if not related_brands_isBigTitle %} triptych__wrapper--taller{% endif %}">
 			<header class="triptych__header">
-				<h2 class="title {% if related_brands_isBigTitle %} title--headline{% endif %} title--caps title--oneWordPerLine">{{ related_brands_title }}</h2>
+				<h2 class="title {% if related_brands_isBigTitle %} title--destructured{% endif %} title--caps title--oneWordPerLine">{{ related_brands_title }}</h2>
 			</header>
-			<div class="triptych__content u-desktop-only">
+			<div class="triptych__content{% if related_brands_isContentDesktopOnly %} u-desktop-only{% endif %}">
 				<ul class="cols cols--m-3">
 					<li class="col">
 						<a href="#" class="triptych__itemLink">

@@ -4,9 +4,9 @@
 <!-- TODO // dynamic content -->
 <section class="triptych color-context color-context--products">
 	<div class="container container--m-pad-l">
-		<div class="triptych__wrapper">
+		<div class="triptych__wrapper{% if triptych_isWrapperThinner %} triptych__wrapper--thinner{% elif triptych_isWrapperWider %} triptych__wrapper--wider{% endif %}{% if not triptych_isBigTitle %} triptych__wrapper--taller{% endif %}">
 			<header class="triptych__header">
-				<h2 class="title title--caps title--oneWordPerLine">More products</h2>
+				<h2 class="title{% if triptych_isBigTitle %} title--destructured{% endif %} title--caps title--oneWordPerLine">{{triptych_title}}</h2>
 			</header>
 			<div class="triptych__content">
 				<ul class="cols cols--m-3">
