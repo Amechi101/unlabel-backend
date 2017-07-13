@@ -2460,6 +2460,26 @@ a:hover .img-container img {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
 }
+.img-container--square img,
+.img-container--landscape img,
+.img-container--portrait img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.img-container--square {
+  padding-bottom: 100%;
+}
+.img-container--landscape {
+  padding-bottom: 75%;
+}
+.img-container--portrait {
+  padding-bottom: 150%;
+}
 .influencer-review {
   background-color: #dde0ed;
 }
