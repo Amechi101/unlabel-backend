@@ -14,29 +14,35 @@
 
 {# TODO : makes styles dynamic #}
 {% block column_left %}
-  <h3 class="subtitle">{% trans "Style" %}</h3>
-  <ul>
-    <li>
-      <a href="?products_category=all">All</a>
-    </li>
-    <li>
-      <a href="?products_category=Menswear">Mens apparel</a>
-    </li>
-    <li>
-      <a href="?products_category=Womenswear">Womens apparel</a>
-    </li>
-  </ul>
-
-  {% if locations %}
-    <h3 class="subtitle">{% trans "Location" %}</h3>
-    <ul>
-      {% for location in locations %}
-        <li>
-          <a href="?location={{ location }}">{{ location }}</a>
+  <div class="filters">
+    <div class="filters__category">
+      <h3 class="subtitle">{% trans "Style" %}</h3>
+      <ul class="filters__list">
+        <li class="filters__item">
+          <a href="?products_category=all">All</a>
         </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+        <li class="filters__item">
+          <a href="?products_category=Menswear">Mens apparel</a>
+        </li>
+        <li class="filters__item">
+          <a href="?products_category=Womenswear">Womens apparel</a>
+        </li>
+      </ul>
+    </div>
+
+    {% if locations %}
+      <div class="filters__category">
+        <h3 class="subtitle">{% trans "Location" %}</h3>
+        <ul class="filters__list">
+          {% for location in locations %}
+            <li class="filters__item">
+              <a href="?location={{ location }}">{{ location }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
 {% endblock column_left %}
 
 {% block grid_header_sortBy %}

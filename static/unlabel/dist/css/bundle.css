@@ -1407,6 +1407,15 @@ span.carousel_contentItem {
 .drawer__link--large {
   height: 84px;
 }
+.filters__category + .filters__category {
+  margin-top: 36px;
+}
+.filters__list {
+  margin-top: 10px;
+}
+.filters__item {
+  line-height: 24px;
+}
 @font-face {
   font-family: 'fonticon';
   src: url("../webfonts/fonticon.eot?k14rzb");
