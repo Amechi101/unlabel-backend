@@ -97,7 +97,7 @@ class CountryCode(APIView):
     serializer_class = TeleCodeSerializer
 
     def get(self,request, *args, **kwargs):
-        tc = TelephoneCode.objects.all()
+        tc = TelephoneCode.objects.all().order_by('country')
         telecode_ser = self.serializer_class(tc,many=True)
         result = {'results':telecode_ser.data}
         return Response(result)

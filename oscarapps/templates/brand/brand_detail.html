@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% load product_tags  %}
+
+
+{% block content %}
+
+    {% if brand %}
+            <h1>Name : {{ brand.name }}</h1>
+        <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
+            <h4>City : {{ brand.location.city }}</h4>
+            <h4>Country : {{ brand.location.country }}</h4>
+    {% endif %}
+
+    {% if products %}
+    {% for product in products %}
+            <li class="col-md-3 col-sm-6">{% render_product product %}</li>
+    {% endfor %}
+    {% endif %}
+
+{% endblock content %}

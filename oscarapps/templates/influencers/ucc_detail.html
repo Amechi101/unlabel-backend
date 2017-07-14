@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% load i18n %}
+{% load product_tags %}
+
+
+{% block content %}
+
+    {% if influencer %}
+        <h1>Name : {{ influencer }}</h1>
+        {% if influencer.users.image %}
+            <img class="image-adjust" src="{{ influencer.users.image.url }}" class="thumbnail">
+        {% else %}
+            <img class="image-adjust" class="thumbnail">
+        {% endif %}
+        <h4>City : {{ influencer.location.city }}</h4>
+        <h4>Country : {{ influencer.location.country }}</h4>
+    {% endif %}
+
+    {% if products %}
+        <h1>Products - Results : {{ products|length }}</h1>
+        {% for product in products %}
+            <li class="col-md-3 col-sm-6">{% render_product product %}</li>
+        {% endfor %}
+    {% else %}
+        <h2>*****There is no products*****</h2>
+    {% endif %}
+
+{% endblock content %}
