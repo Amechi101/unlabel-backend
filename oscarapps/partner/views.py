@@ -128,7 +128,7 @@ class BrandListView(ListView):
         for i in temp:
             if i not in ctx['locations']:
                 ctx['locations'].append(i)
-
+        ctx['styles'] = ['all', 'Menswear', 'Womenswear'] # Make this list dynamic
         return ctx
 
 

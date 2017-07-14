@@ -1189,6 +1189,10 @@ span.carousel_contentItem {
   border-color: #4460a0;
   background-image: linear-gradient(to right, #4460a0 50%, #fff 50%), linear-gradient(to right, transparent 50%, #4460a0 50%);
 }
+.cta--block {
+  text-align: center;
+  display: block;
+}
 .cta[disabled="disabled"] {
   cursor: default;
   opacity: 0.67;
@@ -1331,6 +1335,9 @@ span.carousel_contentItem {
 }
 .drawer__content--padded {
   padding: 32px;
+}
+.drawer__actions {
+  padding: 16px;
 }
 .drawer__footer {
   display: -webkit-box;
