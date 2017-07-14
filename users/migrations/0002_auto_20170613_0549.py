@@ -12,24 +12,24 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='user',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to='Influencers'),
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='influencer_industry',
-            field=models.CharField(blank=True, max_length=120, null=True),
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='is_brand',
-            field=models.BooleanField(default=False),
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='ucc_handle',
-            field=models.CharField(blank=True, max_length=120, null=True),
-        ),
+        # migrations.AddField(
+        #     model_name='user',
+        #     name='image',
+        #     field=models.ImageField(blank=True, null=True, upload_to='Influencers'),
+        # ),
+        # migrations.AddField(
+        #     model_name='user',
+        #     name='influencer_industry',
+        #     field=models.CharField(blank=True, max_length=120, null=True),
+        # ),
+        # migrations.AddField(
+        #     model_name='user',
+        #     name='is_brand',
+        #     field=models.BooleanField(default=False),
+        # ),
+        # migrations.AddField(
+        #     model_name='user',
+        #     name='ucc_handle',
+        #     field=models.CharField(blank=True, max_length=120, null=True),
+        # ),
     ]
