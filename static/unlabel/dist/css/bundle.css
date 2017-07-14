@@ -1360,6 +1360,22 @@ span.carousel_contentItem {
   background-color: #dde0ed;
   border-bottom: 0;
 }
+.color-context--account .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle),
+.color-context--accounts .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle) {
+  background-color: #f5e5d9;
+}
+.color-context--creator .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle),
+.color-context--creators .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle) {
+  background-color: #deedee;
+}
+.color-context--brand .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle),
+.color-context--brands .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle) {
+  background-color: #eddddd;
+}
+.color-context--product .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle),
+.color-context--products .drawer__list .drawer__list .drawer__link:not(.drawer__link--toggle) {
+  background-color: #dde0ed;
+}
 .drawer__link {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -3490,13 +3506,21 @@ a:hover .img-container img {
     left: 464px;
   }
 }
-.color-context--brands .triptych__bg,
-.color-context--brand .triptych__bg {
+.color-context--account .triptych__bg,
+.color-context--accounts .triptych__bg {
+  background-color: #f5e5d9;
+}
+.color-context--creator .triptych__bg,
+.color-context--creators .triptych__bg {
+  background-color: #deedee;
+}
+.color-context--brand .triptych__bg,
+.color-context--brands .triptych__bg {
   background-color: #eddddd;
 }
-.color-context--creators .triptych__bg,
-.color-context--creator .triptych__bg {
-  background-color: #deedee;
+.color-context--product .triptych__bg,
+.color-context--products .triptych__bg {
+  background-color: #dde0ed;
 }
 .triptych__header {
   position: absolute;

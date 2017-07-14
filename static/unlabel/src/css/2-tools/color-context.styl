@@ -1,0 +1,37 @@
+/**
+* @mixin color-context
+* 
+* @desc Set propertie(s) color depending on parent 'color-context' class
+*
+* @args
+*   $props  {list} - list of properties to set the color
+*
+*/
+color-context($props)
+  .color-context--account &,
+  .color-context--accounts &, {
+    for $prop, i in $props {
+      {$prop}: $color_account
+    }
+  }
+  
+  .color-context--creator &,
+  .color-context--creators &, {
+    for $prop, i in $props {
+      {$prop}: $color_creator
+    }
+  }
+  
+  .color-context--brand &,
+  .color-context--brands &, {
+    for $prop, i in $props {
+      {$prop}: $color_brand
+    }
+  }
+  
+  .color-context--product &,
+  .color-context--products &, {
+    for $prop, i in $props {
+      {$prop}: $color_product
+    }
+  }
