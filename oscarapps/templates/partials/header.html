@@ -1,4 +1,4 @@
-{% load i18n %}
+`{% load i18n %}
 {% load staticfiles %}
 
 <header class="header">
@@ -24,7 +24,7 @@
                     <a class="link link--discrete" href="{% url 'brand-list' %}" title="{% trans 'Our brands' %}">{% trans 'Our brands' %}</a>
                 </li>
                 <li>
-                    <a class="link link--discrete" href="" title="{% trans 'Our creators' %}">{% trans 'Our creators' %}</a>
+                    <a class="link link--discrete" href="{% url 'influencers' %}" title="{% trans 'Our creators' %}">{% trans 'Our creators' %}</a>
                 </li>
             </ul>
         </nav>
@@ -77,25 +77,25 @@
                         <!-- TODO : add dynamic links -->
                         <ul class="drawer__list">
                             <li class="drawer__item">
-                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Women' %}">
+                                <a class="drawer__link drawer__link--large" href="{% url 'catalogue:index' %}" title="{% trans 'Women' %}">
                                     <span class="drawer__linkLabel">{% trans 'Women' %}</span>
                                     <span class="fonticon fonticon--smallBox fonticon--carouselArrowRight"></span>
                                 </a>
                             </li>
                             <li class="drawer__item">
-                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Men' %}">
+                                <a class="drawer__link drawer__link--large" href="{% url 'catalogue:index' %}" title="{% trans 'Men' %}">
                                     <span class="drawer__linkLabel">{% trans 'Men' %}</span>
                                     <span class="fonticon fonticon--smallBox fonticon--carouselArrowRight"></span>
                                 </a>
                             </li>
                             <li class="drawer__item">
-                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Our brands' %}">
+                                <a class="drawer__link drawer__link--large" href="{% url 'brand-list' %}" title="{% trans 'Our brands' %}">
                                     <span class="drawer__linkLabel">{% trans 'Our brands' %}</span>
                                     <span class="fonticon fonticon--smallBox fonticon--carouselArrowRight"></span>
                                 </a>
                             </li>
                             <li class="drawer__item">
-                                <a class="drawer__link drawer__link--large" href="" title="{% trans 'Our creators' %}">
+                                <a class="drawer__link drawer__link--large" href="{% url 'influencers' %}" title="{% trans 'Our creators' %}">
                                     <span class="drawer__linkLabel">{% trans 'Our creators' %}</span>
                                     <span class="fonticon fonticon--smallBox fonticon--carouselArrowRight"></span>
                                 </a>
