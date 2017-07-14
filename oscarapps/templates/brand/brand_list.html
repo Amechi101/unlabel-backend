@@ -3,14 +3,14 @@
 
 {% block body_class %}brands{% endblock %}
 
-{% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
-
 {% block before_layout %}
   {% trans "Our bra- nds" as triptych_title %}
   {% include "brand/partials/brand_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True triptych_isContentDesktopOnly=True %}
 {% endblock before_layout %}
 
 {% block content_classnames %}color-context color-context--brands{% endblock %}
+
+{% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
 
 {# TODO : makes styles dynamic #}
 {% block column_left %}

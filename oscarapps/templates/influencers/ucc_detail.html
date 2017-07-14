@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load i18n %}
 {% load product_tags %}
 
@@ -26,3 +26,10 @@
     {% endif %}
 
 {% endblock content %}
+
+{% block after_layout %}
+    <div class="u-desktop-only">
+      {% trans "More crea tors" as triptych_title %}
+      {% include "influencers/partials/influencers_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True %}
+    </div>
+{% endblock after_layout %}

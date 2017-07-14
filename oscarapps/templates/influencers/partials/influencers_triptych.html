@@ -1,0 +1,51 @@
+{% extends "partials/triptych.html" %}
+{% load staticfiles %}
+
+{% block triptych_extraClasses %}color-context color-context--creators{% endblock %}
+
+{# TODO : dynamic content #}
+{% block triptych_content %}
+	<ul class="cols cols--m-3">
+		<li class="col">
+			<a href="#" class="triptych__itemLink">
+				<figure>
+					<div class="img-container img-container--portrait">
+						<img src="{% static 'unlabel/dist/img/temp/more-creator1.jpg' %}" alt="">
+					</div>
+					<figcaption>
+						<p>Caitlin Miyako Taylor</p>
+						<p><small>Los Angeles, USA</small></p>
+					</figcaption>
+				</figure>
+			</a>
+		</li>
+		<li class="col">
+			<a href="#" class="triptych__itemLink">
+				<figure>
+					<div class="img-container img-container--portrait">
+						<img src="{% static 'unlabel/dist/img/temp/more-creator2.jpg' %}" alt="">
+					</div>
+					<figcaption>
+						<p>Rich Bhatia</p>
+						<p><small>New York City, USA</small></p>
+					</figcaption>
+				</figure>
+			</a>
+		</li>
+		<li class="col">
+			<a href="#" class="triptych__itemLink">
+				<figure>
+					<div class="img-container img-container--portrait">
+						<img src="{% static 'unlabel/dist/img/temp/more-creator3.jpg' %}" alt="">
+					</div>
+					<figcaption>
+						<p>Luca Deasti</p>
+						<p><small>Stockholm, Sw</small></p>
+					</figcaption>
+				</figure>
+			</a>
+		</li>
+	</ul>
+{% endblock %}
+
+{% block triptych_nav %}{# No nav #}{% endblock %}

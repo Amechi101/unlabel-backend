@@ -4,6 +4,16 @@
 {% load i18n %}
 {% load cloudinary %}
 
+{% block body_class %}creators{% endblock %}
+
+{% block before_layout %}
+  {% trans "Our crea tors" as triptych_title %}
+  {% include "influencers/partials/influencers_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True triptych_isContentDesktopOnly=True %}
+{% endblock before_layout %}
+
+{% block content_classnames %}color-context color-context--creators{% endblock %}
+
+{% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
 
 {% block column_left %}
 
