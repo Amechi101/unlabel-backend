@@ -147,5 +147,6 @@ class BrandDetailView(View):
         data = {'brand': qs}
         products = Product.objects.filter(brand=qs)
         data.update({'products': products})
+        data.update({'filters': ['all', 'Menswear', 'Womenswear']}) # Make this list dynamic
 
         return render(request, self.template_name, data)

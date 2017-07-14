@@ -40,16 +40,16 @@
     <div id="influencer_list">
 
     {% for influencer in influencers %}
-        <div>
-        <h4>{{ influencer.users.first_name|title }}</h4>
-        <h4>{{ influencer.users.last_name|title }}</h4>
-            {% if influencer.users.image %}
-            <img class="image-adjust" src="{{ influencer.users.image.url }}" class="thumbnail">
-             {% else %}
-                <img class="image-adjust" class="thumbnail">
-            {% endif %}
-        <h4>{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</h4>
-        </div>
+        <a class="u-block" href="{% url 'ucc_detail' id=influencer.id %}">
+            <h4>{{ influencer.users.first_name|title }}</h4>
+            <h4>{{ influencer.users.last_name|title }}</h4>
+                {% if influencer.users.image %}
+                <img class="image-adjust" src="{{ influencer.users.image.url }}" class="thumbnail">
+                 {% else %}
+                    <img class="image-adjust" class="thumbnail">
+                {% endif %}
+            <h4>{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</h4>
+        </a>
     {% endfor %}
 
 

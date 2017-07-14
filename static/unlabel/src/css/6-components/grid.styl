@@ -44,6 +44,12 @@ grid_sidebarSize = 254px
   @media $mq_s_only {
     padding: 32px 24px
   }
+  
+  &:empty {
+    @media $mq_s_only {
+      display: none
+    }
+  }
 }
 
 .grid__headerNav {
@@ -90,10 +96,26 @@ grid_sidebarSize = 254px
 .grid__sidebar {
   @media $mq_s_only {
     border-top: grid_borderStyle
+    margin-top: -1px // hack - prevent double border if grid has border has well
   }
   @media $mq_m {
     padding: 24px 32px
     width: grid_sidebarSize
+  }
+}
+
+.grid__sidebarWidget {
+  @media $mq_s_only {
+    padding: 24px  
+  }
+  
+  & + .grid__sidebarWidget {
+    @media $mq_s_only {
+      border-top: 1px solid $color_lightGrey
+    }
+    @media $mq_m {
+      margin-top 96px
+    }
   }
 }
 

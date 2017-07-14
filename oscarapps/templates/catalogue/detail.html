@@ -56,7 +56,7 @@
             {% endblock %}
         </div>
         <div class="grid__sidebar">
-            <div>
+            <div class="grid__sidebarWidget">
                 {% block product_info %}
                     {% if product.upc %}
                         <div class="product__ref">
@@ -65,7 +65,7 @@
                     {% endif %}
                 {% endblock %}
             </div>
-            <div>
+            <div class="grid__sidebarWidget">
                 {% include "partials/share_menu.html" %}
             </div>
         </div>

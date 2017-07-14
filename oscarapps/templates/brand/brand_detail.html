@@ -1,25 +1,89 @@
-{% extends "layout.html" %}
+{% extends "layout_2_col.html" %}
 {% load i18n %}
 {% load product_tags  %}
 
+{% block body_class %}brand{% endblock %}
+
+{% block before_layout %}
+    <div class="container container--s-pad-m container--m-pad-l">
+        <div class="cols cols--m-2 cols--m-gutter32">
+            <div class="col">
+                <figure>
+                    <div class="img-container img-container--landscape">
+                        <img src="{{ MEDIA_URL }}{{ brand.image }}" alt="{{ brand.name }}">
+                    </div>
+                </figure>
+            </div>
+            <div class="col">
+                <div class="brand__info">
+                    <div class="brand__infoHeader">
+                        <h2 class="title">{{ brand.name }}</h2>
+                        <p class="brand__location">{{ brand.location.city }}, {{ brand.location.country }}</p>
+                    </div>
+                    <div class="brand__infoContent">
+                        <form class="brand__followForm">
+                            <button class="cta cta--dark">Follow brand</button> {# TODO - add follow brand functionality #}
+                        </form>
+                        <p class="brand__nbOfFollowers">X followers</p> {# TODO - make number of followers it dynamic #}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock before_layout %}
+
+{% block column_left %}
+    <div class="grid__sidebarWidget">
+        {{ brand.description }}
+    </div>
+
+    <div class="grid__sidebarWidget u-desktop-only">
+        <div class="filters">
+            <div class="filters__category">
+              <h3 class="subtitle">{% trans "Filters" %}</h3>
+              <ul class="filters__list">
+                {% for f in filters %}
+                  <li class="filters__item">
+                    <a href="?products_category={{ f }}">{{ f }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+        </div>
+    </div>
+    <div class="grid__sidebarWidget">
+        {% include "partials/share_menu.html" %}
+    </div>
+{% endblock column_left %}
+
+{% block grid_header_sortBy %}
+    {% include "partials/grid_sort_by.html" %}
+{% endblock %}
+
+{% block grid_header_results %}
+    {# TODO - make number of results work #}
+    {% include "partials/number_of_results.html" %}
+{% endblock %}
+
+{% block content_classnames %}color-context color-context--brand{% endblock %}
+
 {% block content %}
-
-    {% if brand %}
-            <h1>Name : {{ brand.name }}</h1>
-        <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
-            <h4>City : {{ brand.location.city }}</h4>
-            <h4>Country : {{ brand.location.country }}</h4>
-    {% endif %}
-
     {% if products %}
-    {% for product in products %}
-            <li class="col-md-3 col-sm-6">{% render_product product %}</li>
-    {% endfor %}
+        <ol class="grid__list">
+            {% for product in products %}
+                <li class="grid__item">
+                  {% render_product product %}
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>{% trans "No Products found." %}</p>
     {% endif %}
-
-<div class="u-desktop-only">
-  {% trans "More bra- nds" as triptych_title %}
-  {% include "brand/partials/brand_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True %}
-</div>
-
 {% endblock content %}
+
+{% block after_layout %}
+    <div class="u-desktop-only">
+      {% trans "More bra- nds" as triptych_title %}
+      {% include "brand/partials/brand_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True %}
+    </div>
+{% endblock after_layout %}
