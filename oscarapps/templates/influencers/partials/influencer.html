@@ -1,0 +1,17 @@
+{% load thumbnail %}
+
+<article>
+    <a class="grid__itemInner u-block" href="{% url 'ucc_detail' id=influencer.id %}" title="{{ influencer.users.first_name|title }} {{ influencer.users.last_name|title }}">
+        <figure>
+            <div class="img-container img-container--portrait">
+                {% if influencer.users.image %}
+                    <img src="{{ influencer.users.image.url }}" alt="{{ influencer.users.first_name|title }} {{ influencer.users.last_name|title }}">
+                {% endif %}
+            </div>
+            <figcaption>
+                <h2>{{ influencer.users.first_name|title }} {{ influencer.users.last_name|title }}</h2>
+                <p>{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</p>
+            </figcaption>
+        </figure>
+    </a>
+</article>

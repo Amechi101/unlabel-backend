@@ -16,54 +16,72 @@
 {% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
 
 {% block column_left %}
-
-    <h2>Gender</h2>
-        <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','male')"
-               value="male"> Male
-        <br>
-    <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','female')"
+    <div class="filters">
+        <div class="filters__category">
+          <h3 class="subtitle">{% trans "Gender" %}</h3>
+          <ul class="filters__list">
+              <li class="filters__item">
+                <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','male')"
+                   value="male"> Male
+              </li>
+              <li class="filters__item">
+                <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','female')"
                value="male"> Female
-    <br>
+              </li>
+          </ul>
+        </div>
 
-    <h2>Style</h2>
-    {% for style in styles %}
-        <input type="checkbox" id="style_{{ style.id }}" name="style" onclick="generateFilteredData('style',{{ style.id }})"
+        <div class="filters__category">
+          <h3 class="subtitle">{% trans "Style" %}</h3>
+          <ul class="filters__list">
+            {% for style in styles %}
+              <li class="filters__item">
+                <input type="checkbox" id="style_{{ style.id }}" name="style" onclick="generateFilteredData('style',{{ style.id }})"
                value="{{ style.id }}"> {{ style }}
-        <br>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
 
-    {% endfor %}
-
-    <h2>Location</h2>
-    {% for location in locations %}
-        <input type="checkbox" id="location_{{ location.id }}" name="location" onclick="generateFilteredData('location',{{ location.id }})"
+        <div class="filters__category">
+          <h3 class="subtitle">{% trans "Location" %}</h3>
+          <ul class="filters__list">
+            {% for location in locations %}
+              <li class="filters__item">
+                <input type="checkbox" id="location_{{ location.id }}" name="location" onclick="generateFilteredData('location',{{ location.id }})"
                value="{{ location.id }}"> {{ location }}
-        <br>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+    </div>
+{% endblock column_left %}
 
-    {% endfor %}
+{% block grid_header_sortBy %}
+    {% include "partials/grid_sort_by.html" %}
+{% endblock %}
 
+{% block grid_header_results %}
+    {% include "partials/number_of_results.html" %} {# TODO : make it work with number of influencers #}
 {% endblock %}
 
 {% block content %}
+    {% if influencers %}
+        <ol class="grid__list">
+            {% for influencer in influencers %}
+                <li class="grid__item">
+                  {% include "influencers/partials/influencer.html" %}
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>{% trans "No Creators found." %}</p>
+    {% endif %}
+{% endblock content %}
 
-    <h2>Influencers</h2>
-
-    <div id="influencer_list">
-
-    {% for influencer in influencers %}
-        <a class="u-block" href="{% url 'ucc_detail' id=influencer.id %}">
-            <h4>{{ influencer.users.first_name|title }}</h4>
-            <h4>{{ influencer.users.last_name|title }}</h4>
-                {% if influencer.users.image %}
-                <img class="image-adjust" src="{{ influencer.users.image.url }}" class="thumbnail">
-                 {% else %}
-                    <img class="image-adjust" class="thumbnail">
-                {% endif %}
-            <h4>{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</h4>
-        </a>
-    {% endfor %}
-
-
-    <div class="pagination">
+{% block after_layout %}
+    {# TODO : make pagination work with partial then remove this #}
+    <!-- <div class="pagination">
         <span class="step-links">
             {% if influencers.has_previous %}
                 <a href="?page={{ influencers.previous_page_number }}">previous</a>
@@ -77,62 +95,65 @@
                 <a href="?page={{ influencers.next_page_number }}">next</a>
             {% endif %}
         </span>
+    </div> -->
+    <div class="grid__paginationContainer">
+        {% include "partials/pagination.html" %}
     </div>
-    </div>
-
-<script>
-
-    {# --------------------------------README-------------------------- #}
-
-{# Send data to the below api link, to get response and replace the div#}
-{# the keys are as follows:#}
-{# Gender : M=male#}
-{#        F=Female#}
-{# Style : id ( comma seperated values, in case of multiple )#}
-{# location : id ( comma seperated values, in case of multiple )#}
-
-{#     ZA - sort by a to z    #}
-{#     AZ - sort by z to a    #}
-{#     ASC - sort by date ascending    #}
-{#     DESC - sort by date descending    #}
-
-    function generateFilteredData(filter_type,id) {
-        alert("--------------");
-        var query;
-
-        if(filter_type=='gender'){
-            query = "?gender="+id+'&location=&style=';
-        }
-        if(filter_type=='location'){
-            query = "?location="+id+'&style=&gender=';
-        }
-        if(filter_type=='style'){
-            query = "?style="+id+'&location=&gender=';
-        }
-
-
-        $.ajax({
-{#            url: "/influencers/influencers-filter/?gender=F&location=60&style=",#}
-            url: "/api_v2/influencer_profile_listing/?gender=F",
-//            data: {
-//                'username': "hai",
-//                'date' : "date",
-//
-//            },
-//            dataType: 'json',
-            success: function (data) {
-                $( "#influencer_list" ).replaceWith( data['html'] );
-
-            }
-        });
-    };
-
-
-</script>
-
-
 {% endblock %}
 
+
+{% block extrascripts %}
+    {# TODO : create js component #}
+    <script>
+
+        {# --------------------------------README-------------------------- #}
+
+    {# Send data to the below api link, to get response and replace the div#}
+    {# the keys are as follows:#}
+    {# Gender : M=male#}
+    {#        F=Female#}
+    {# Style : id ( comma seperated values, in case of multiple )#}
+    {# location : id ( comma seperated values, in case of multiple )#}
+
+    {#     ZA - sort by a to z    #}
+    {#     AZ - sort by z to a    #}
+    {#     ASC - sort by date ascending    #}
+    {#     DESC - sort by date descending    #}
+
+        function generateFilteredData(filter_type,id) {
+            alert("--------------");
+            var query;
+
+            if(filter_type=='gender'){
+                query = "?gender="+id+'&location=&style=';
+            }
+            if(filter_type=='location'){
+                query = "?location="+id+'&style=&gender=';
+            }
+            if(filter_type=='style'){
+                query = "?style="+id+'&location=&gender=';
+            }
+
+
+            $.ajax({
+    {#            url: "/influencers/influencers-filter/?gender=F&location=60&style=",#}
+                url: "/api_v2/influencer_profile_listing/?gender=F",
+    //            data: {
+    //                'username': "hai",
+    //                'date' : "date",
+    //
+    //            },
+    //            dataType: 'json',
+                success: function (data) {
+                    $( "#influencer_list" ).replaceWith( data['html'] );
+
+                }
+            });
+        };
+
+
+    </script>
+{% endblock %}
 
 
 
