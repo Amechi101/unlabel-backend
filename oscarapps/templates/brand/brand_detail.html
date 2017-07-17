@@ -7,25 +7,23 @@
 {% block before_layout %}
     <div class="container container--s-pad-m container--m-pad-l">
         <div class="cols cols--m-2 cols--m-gutter32">
-            <div class="col">
+            <div class="col brand__overviewCol">
                 <figure>
                     <div class="img-container img-container--landscape">
                         <img src="{{ MEDIA_URL }}{{ brand.image }}" alt="{{ brand.name }}">
                     </div>
                 </figure>
             </div>
-            <div class="col">
-                <div class="brand__info">
-                    <div class="brand__infoHeader">
-                        <h2 class="title">{{ brand.name }}</h2>
-                        <p class="brand__location">{{ brand.location.city }}, {{ brand.location.country }}</p>
-                    </div>
-                    <div class="brand__infoContent">
-                        <form class="brand__followForm">
-                            <button class="cta cta--dark">Follow brand</button> {# TODO - add follow brand functionality #}
-                        </form>
-                        <p class="brand__nbOfFollowers">X followers</p> {# TODO - make number of followers it dynamic #}
-                    </div>
+            <div class="col brand__overviewCol brand__overviewCol--info">
+                <div class="brand__infoHeader">
+                    <h2 class="title">{{ brand.name }}</h2>
+                    <p class="brand__location">{{ brand.location.city }}, {{ brand.location.country }}</p>
+                </div>
+                <div class="brand__infoContent">
+                    <form class="brand__followForm">
+                        <button class="cta cta--dark">Follow brand</button> {# TODO - add follow brand functionality #}
+                    </form>
+                    <p class="brand__nbOfFollowers">X followers</p> {# TODO - make number of followers it dynamic #}
                 </div>
             </div>
         </div>

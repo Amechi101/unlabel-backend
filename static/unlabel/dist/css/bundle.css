@@ -799,14 +799,13 @@ button.swiper-pagination-bullet {
   font-family: 'FaroWeb-BoldLucky';
 }
 @media (max-width: 767px) {
-  .brand__info {
+  .brand__overviewCol--info {
     text-align: center;
   }
 }
 @media (min-width: 768px) {
-  .brand__info {
+  .brand__overviewCol--info {
     padding: 48px 64px;
-    height: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
