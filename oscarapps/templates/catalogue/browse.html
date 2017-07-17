@@ -110,7 +110,9 @@
             {% endfor %}
         </ol>
     {% else %}
-        <p>{% trans "No products found." %}</p>
+        <div class="grid__emptyMessage">
+            <p class="missing">{% trans "No products found." %}</p>
+        </div>
     {% endif %}
 {% endblock content %}
 

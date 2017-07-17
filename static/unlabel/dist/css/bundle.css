@@ -1967,14 +1967,17 @@ span.carousel_contentItem {
     margin-left: 32px;
   }
 }
+.grid__main {
+  position: relative;
+}
 @media (min-width: 768px) {
-  .grid__content {
+  .grid__main {
     width: calc(100% - 254px);
     border-left: 1px solid #f0f0f0;
   }
 }
 @media (min-width: 768px) {
-  .grid--inverted .grid__content {
+  .grid--inverted .grid__main {
     border-right: 1px solid #f0f0f0;
     border-left: 0 none;
   }
@@ -2058,6 +2061,14 @@ span.carousel_contentItem {
 @media (min-width: 768px) {
   .grid__itemInner {
     padding: 32px 32px 24px;
+  }
+}
+.grid__emptyMessage {
+  padding: 48px 24px;
+}
+@media (min-width: 768px) {
+  .grid__emptyMessage {
+    padding: 96px 32px;
   }
 }
 .grid__paginationContainer {
@@ -2737,6 +2748,17 @@ a:hover .img-container img {
   display: block;
   width: 100%;
   height: 100%;
+}
+.missing {
+  font-family: 'FaroWeb-BoldLucky';
+  color: #a3a3a3;
+  font-size: 18px;
+}
+@media (min-width: 768px) {
+  .missing {
+    font-family: 'FaroWeb-DisplayLucky';
+    font-size: 24px;
+  }
 }
 .nav--inline {
   display: -webkit-box;

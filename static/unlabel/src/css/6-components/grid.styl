@@ -78,7 +78,8 @@ grid_sidebarSize = 254px
   }
 }
 
-.grid__content {
+.grid__main {
+  position relative
   
   @media $mq_m {
     width: "calc(100% - %s)" % grid_sidebarSize
@@ -117,6 +118,9 @@ grid_sidebarSize = 254px
       margin-top 96px
     }
   }
+}
+
+.grid__content {
 }
 
 .grid__list {
@@ -167,6 +171,14 @@ grid_sidebarSize = 254px
   
   @media $mq_m {
     padding: 32px 32px 24px
+  }
+}
+
+.grid__emptyMessage {
+  padding: 48px 24px
+  
+  @media $mq_m {
+    padding: 96px 32px  
   }
 }
 

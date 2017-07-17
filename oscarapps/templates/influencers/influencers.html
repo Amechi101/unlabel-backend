@@ -75,7 +75,9 @@
             {% endfor %}
         </ol>
     {% else %}
-        <p>{% trans "No Creators found." %}</p>
+      <div class="grid__emptyMessage">
+        <p class="missing">{% trans "No Creators found." %}</p>
+      </div>
     {% endif %}
 {% endblock content %}
 

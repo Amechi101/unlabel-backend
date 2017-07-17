@@ -10,7 +10,7 @@
         <div class="grid__sidebar {% block layout_sidebar_extra_classnames %}{% endblock %}">
             {% block column_left %}{% endblock %}
         </div>
-        <div class="grid__content">
+        <div class="grid__main">
             {% block grid_header %}
             <div class="grid__header">
                 <div class="grid__headerTitle">{% block grid_header_title %}{% endblock %}</div>
@@ -26,7 +26,7 @@
             </div>
             {% endblock %}
 
-            {% block content %}{% endblock %}
+            <div class="grid__content">{% block content %}{% endblock %}</div>
         </div>
     </div>
 
