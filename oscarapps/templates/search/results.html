@@ -1,5 +1,22 @@
 {% extends "search/layout_results.html" %}
 
+{% load product_tags %}
+{% load i18n %}
+
 {% block content %}
-    {% include "search/partials/results_content.html" with result_type="product" paginator=paginator %}
+
+	<div class="grid2 color-context color-context--products">
+		{% trans 'product' as result_type %}
+		{% include "search/partials/results_count.html" with result_type=result_type paginator=paginator %}
+
+		{% if page.object_list %}
+			<ol class="grid2__list">
+				{% for result in page.object_list %}
+					<li class="grid2__item">{% render_product result.object %}</li>
+				{% endfor %}
+			</ol>
+
+			{% include "partials/pagination.html" with page_obj=page %}
+		{% endif %}
+	</div>
 {% endblock %}

@@ -1,14 +1,20 @@
 {% extends "search/layout_results.html" %}
 
-{% block content %}
-    {% include "search/partials/results_content.html" with result_type="influencer" paginator=influencers.paginator %}
-{% endblock %}
+{% load i18n %}
 
-{# TODO: make it work #}
-{#
-{% for influencer in influencers %}
-    {{ influencer.users.first_name|upper }}<br />
-    <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" class="thumbnail">
-    ...
-{% endfor %}
-#}
+{% block content %}
+	<div class="grid2 color-context color-context--creators">
+		{% trans 'creator' as result_type %}
+		{% include "search/partials/results_count.html" with result_type=result_type paginator=influencers.paginator %}
+
+		<ol class="grid2__list">
+			{% for influencer in influencers %}
+				<li class="grid2__item">
+				{% include "influencers/partials/influencer.html" %}
+				</li>
+			{% endfor %}
+		</ol>
+
+		{% include "partials/pagination.html" with page_obj=page %} {# TODO : make sur pagination works #}
+	</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load product_tags %}
+
+{% if paginator.count %}
+    <p class="results__count">
+        {% blocktrans count num_results=paginator.count %}
+            <strong>{{ num_results }}</strong> <span>{{ result_type }} found</span>
+        {% plural %}
+            <strong>{{ num_results }}</strong> <span>{{ result_type }}s found</span>
+        {% endblocktrans %}
+    </p>
+{% else %}
+    <p class="missing">
+    {% blocktrans %}
+        No {{ result_type }}s found for "<strong>{{ query }}</strong>"
+    {% endblocktrans %}
+    </p>
+{% endif %}
