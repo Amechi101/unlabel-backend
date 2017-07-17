@@ -800,10 +800,19 @@ button.swiper-pagination-bullet {
 }
 .basket__header {
   padding: 42px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 @media (min-width: 768px) {
   .basket__header {
     padding: 96px 0 48px;
+  }
+}
+.basket__empty {
+  padding: 32px 0;
+}
+@media (min-width: 768px) {
+  .basket__empty {
+    padding: 42px 0;
   }
 }
 @media (max-width: 767px) {
