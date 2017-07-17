@@ -1,0 +1,105 @@
+.creator {}
+
+.creator__detailContainer {
+  @media $mq_m {
+    max-width (928px + 32 * 2) !important
+  }
+}
+
+.creator__detailCols {
+  @media $mq_s_only {
+    display: block
+  }
+}
+
+.creator__detailCol {  
+  &--visual {
+    @media $mq_m {
+      width: 50%
+      max-width: 288px
+    }
+  }
+  &--info {
+    @media $mq_s_only {
+      text-align: center
+      margin-top: 42px
+    }
+    @media $mq_m {
+      width: 100%
+      padding: 48px 64px
+      display: flex
+      flex-direction: column
+      align-items: stretch
+      justify-content: space-between
+    }
+  }
+}
+
+.creator__detailVisualCols {
+  @media $mq_s_only {
+    display: flex
+  }
+}
+
+.creator__detailVisualCol {
+  @media $mq_s_only {
+    width: 50%
+  }
+  
+  & + .creator__detailVisualCol {
+    @media $mq_s_only {
+      margin-left 30px
+    }
+  }
+  
+  &--info {
+    @media $mq_s_only {
+      padding-top: 30px
+    }
+    
+    figcaption {
+      margin: 0
+    }
+  }
+}
+
+.creator__location {
+  margin-top: 16px
+  
+  @media $mq_m {
+    margin-top: 32px
+  }
+}
+
+.creator__infoContent {
+  @media $mq_m {
+    margin-top 48px
+  }
+}
+
+.creator__followForm {
+  @media $mq_m {
+    display: inline-block
+  }
+}
+
+.creator__nbOfFollowers {
+  font-family: $font_bold
+  
+  @media $mq_s_only {
+    margin-top: 16px
+  }
+  
+  @media $mq_m {
+    display: inline-block
+    margin-left: 24px
+  }
+}
+
+.creator__bio {
+  margin-top: 24px
+  
+  @media $mq_m {
+    margin-top: 42px  
+  }
+}

@@ -2,29 +2,87 @@
 {% load i18n %}
 {% load product_tags %}
 
+{% block body_class %}creator{% endblock %}
+
+{% block before_layout %}
+    <div class="container container--s-pad-m container--m-pad-l creator__detailContainer">
+        <div class="cols cols--m-gutter32 creator__detailCols">
+            <div class="col creator__detailCol creator__detailCol--visual">
+                <figure class="creator__detailVisualCols">
+                    <div class="creator__detailVisualCol creator__detailVisualCol--left">
+                        <div class="img-container img-container--portrait">
+                            {% if influencer.users.image %}
+                                <img src="{{ influencer.users.image.url }}" alt="{{ influencer }}">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="creator__detailVisualCol creator__detailVisualCol--info u-mobile-only">
+                        <figcaption>
+                            <p class="title">{{ influencer.users.first_name }} {{ influencer.users.last_name }}</p>
+                            <p class="creator__location">{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</p>
+                        </figcaption>
+                    </div>
+                </figure>
+            </div>
+            <div class="col creator__detailCol creator__detailCol--info">
+                <div class="creator__infoHeader u-desktop-only">
+                    <h2 class="title">{{ influencer.users.first_name }} {{ influencer.users.last_name }}</h2>
+                    <p class="creator__location">{{ influencer.location.city }},{{ influencer.location.state }},{{ influencer.location.country }}</p>
+                </div>
+                <div class="creator__infoContent">
+                    <form class="creator__followForm">
+                        <button class="cta cta--dark">{% trans "Follow creator" %}</button> {# TODO - add "follow influencer" functionality #}
+                    </form>
+                    <p class="creator__nbOfFollowers">X {% trans "followers" %}</p> {# TODO - make "number of followers" dynamic #}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock before_layout %}
+
+{% block column_left %}
+    <div class="grid__sidebarWidget">
+        <ul>
+            <li class="tag">Bohemian</li>
+            <li class="tag">Contemporary</li>
+            <li class="tag">Streetstyle</li>
+            <li class="tag">Vintage</li>
+        </ul>
+        <div class="creator__bio">
+            {{ influencer.bio }}
+        </div>
+    </div>
+
+    <div class="grid__sidebarWidget">
+        {% include "partials/share_menu.html" %}
+    </div>
+{% endblock column_left %}
+
+{% block grid_header_sortBy %}
+    {% include "partials/grid_sort_by.html" %}
+{% endblock %}
+
+{% block grid_header_results %}
+    {# TODO - make number of results work #}
+    {% include "partials/number_of_results.html" %}
+{% endblock %}
+
+{% block content_classnames %}color-context color-context--creator{% endblock %}
 
 {% block content %}
-
-    {% if influencer %}
-        <h1>Name : {{ influencer }}</h1>
-        {% if influencer.users.image %}
-            <img class="image-adjust" src="{{ influencer.users.image.url }}" class="thumbnail">
-        {% else %}
-            <img class="image-adjust" class="thumbnail">
-        {% endif %}
-        <h4>City : {{ influencer.location.city }}</h4>
-        <h4>Country : {{ influencer.location.country }}</h4>
-    {% endif %}
-
     {% if products %}
-        <h1>Products - Results : {{ products|length }}</h1>
-        {% for product in products %}
-            <li class="col-md-3 col-sm-6">{% render_product product %}</li>
-        {% endfor %}
+        <ol class="grid__list">
+            {% for product in products %}
+                <li class="grid__item">
+                  {% render_product product %}
+                </li>
+            {% endfor %}
+        </ol>
     {% else %}
-        <h2>*****There is no products*****</h2>
+        <div class="grid__emptyMessage">
+            <p class="missing">{% trans "No products for now." %}</p>
+        </div>
     {% endif %}
-
 {% endblock content %}
 
 {% block after_layout %}
