@@ -1212,29 +1212,29 @@ span.carousel_contentItem {
   margin-left: 0 !important;
 }
 @media (min-width: 768px) {
-  .creator__detailContainer {
+  .creator__overviewContainer {
     max-width: 992px !important;
   }
 }
 @media (max-width: 767px) {
-  .creator__detailCols {
+  .creator__overviewCols {
     display: block;
   }
 }
 @media (min-width: 768px) {
-  .creator__detailCol--visual {
+  .creator__overviewCol--visual {
     width: 50%;
     max-width: 288px;
   }
 }
 @media (max-width: 767px) {
-  .creator__detailCol--info {
+  .creator__overviewCol--info {
     text-align: center;
     margin-top: 42px;
   }
 }
 @media (min-width: 768px) {
-  .creator__detailCol--info {
+  .creator__overviewCol--info {
     width: 100%;
     padding: 48px 64px;
     display: -webkit-box;
@@ -1253,28 +1253,28 @@ span.carousel_contentItem {
   }
 }
 @media (max-width: 767px) {
-  .creator__detailVisualCols {
+  .creator__overviewVisualCols {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
   }
 }
 @media (max-width: 767px) {
-  .creator__detailVisualCol {
+  .creator__overviewVisualCol {
     width: 50%;
   }
 }
 @media (max-width: 767px) {
-  .creator__detailVisualCol + .creator__detailVisualCol {
+  .creator__overviewVisualCol + .creator__overviewVisualCol {
     margin-left: 30px;
   }
 }
 @media (max-width: 767px) {
-  .creator__detailVisualCol--info {
+  .creator__overviewVisualCol--info {
     padding-top: 30px;
   }
 }
-.creator__detailVisualCol--info figcaption {
+.creator__overviewVisualCol--info figcaption {
   margin: 0;
 }
 .creator__location {

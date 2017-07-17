@@ -1,18 +1,18 @@
 .creator {}
 
-.creator__detailContainer {
+.creator__overviewContainer {
   @media $mq_m {
     max-width (928px + 32 * 2) !important
   }
 }
 
-.creator__detailCols {
+.creator__overviewCols {
   @media $mq_s_only {
     display: block
   }
 }
 
-.creator__detailCol {  
+.creator__overviewCol {  
   &--visual {
     @media $mq_m {
       width: 50%
@@ -35,18 +35,18 @@
   }
 }
 
-.creator__detailVisualCols {
+.creator__overviewVisualCols {
   @media $mq_s_only {
     display: flex
   }
 }
 
-.creator__detailVisualCol {
+.creator__overviewVisualCol {
   @media $mq_s_only {
     width: 50%
   }
   
-  & + .creator__detailVisualCol {
+  & + .creator__overviewVisualCol {
     @media $mq_s_only {
       margin-left 30px
     }
