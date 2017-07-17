@@ -2717,66 +2717,6 @@ a:hover .img-container img {
 .img-container--portrait {
   padding-bottom: 150%;
 }
-.influencer-review {
-  background-color: #dde0ed;
-}
-@media (max-width: 767px) {
-  .influencer-review {
-    padding: 45px 0;
-  }
-}
-@media (min-width: 768px) {
-  .influencer-review__cols {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: row;
-            flex-direction: row;
-  }
-}
-@media (min-width: 768px) {
-  .influencer-review__col {
-    width: 50%;
-  }
-  .influencer-review__col + .influencer-review__col {
-    margin-left: 32px;
-  }
-}
-@media (max-width: 767px) {
-  .influencer-review__content {
-    margin-top: 42px;
-  }
-}
-@media (min-width: 768px) {
-  .influencer-review__content {
-    padding: 96px 32px 0;
-    max-width: 418px;
-    margin: 0 auto;
-  }
-}
-@media (max-width: 767px) {
-  .influencer-review__content .desc {
-    margin-top: 24px;
-    padding: 0 40px;
-  }
-}
-@media (min-width: 768px) {
-  .influencer-review__content .desc {
-    margin-top: 48px;
-  }
-}
-@media (max-width: 767px) {
-  .influencer-review__content .sizechart {
-    margin-top: 42px;
-  }
-}
-@media (min-width: 768px) {
-  .influencer-review__content .sizechart {
-    margin-top: 48px;
-  }
-}
 .layout--1col .layout__header {
   padding: 24px 0;
 }
@@ -3357,6 +3297,42 @@ a:hover .img-container img {
   background-color: currentColor;
   vertical-align: middle;
   margin-right: 8px;
+}
+.review {
+  background-color: #dde0ed;
+}
+@media (max-width: 767px) {
+  .review__content {
+    margin-top: 42px;
+  }
+}
+@media (min-width: 768px) {
+  .review__content {
+    padding: 96px 32px 0;
+    max-width: 418px;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 767px) {
+  .review__content .desc {
+    margin-top: 24px;
+    padding: 0 40px;
+  }
+}
+@media (min-width: 768px) {
+  .review__content .desc {
+    margin-top: 48px;
+  }
+}
+@media (max-width: 767px) {
+  .review__content .sizechart {
+    margin-top: 42px;
+  }
+}
+@media (min-width: 768px) {
+  .review__content .sizechart {
+    margin-top: 48px;
+  }
 }
 .search-drawer__contentWrapper {
   position: absolute;

@@ -2,10 +2,10 @@
 {% load i18n %}
 
 <!-- TODO // dynamic content -->
-<article class="influencer-review color-context color-context--product">
-    <div class="container container--m-pad-l">
-        <div class="influencer-review__cols">
-            <div class="influencer-review__col">
+<article class="review">
+    <div class="container container--s-pad-m container--m-pad-l">
+        <div class="cols cols--m-2 cols--m-gutter32">
+            <div class="col">
                 {# TODO : redirect to creator's page #}
                 <a class="u-block" href="#">
                     <figure>
@@ -19,10 +19,11 @@
                     </figure>
                 </a>
             </div>
-            <div class="influencer-review__col">
-                <div class="influencer-review__content">
+            <div class="col">
+                <div class="review__content">
                     <h2 class="subtitle">{% trans 'Product Review' %}</h2>
                     <div class="desc">
+                        {# {{ influencer.users.bio }} #}
                         Milo is a streamlined wool bomber, evolved from a softly structured silhouette with minimal, elevated street details. Milo features an in-seam kangaroo pocket, hidden wind placket, and fitted rib knit accents for optimized utility and comfort.
                     </div>
                     <div class="sizechart">
