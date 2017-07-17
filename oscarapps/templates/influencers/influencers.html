@@ -57,6 +57,95 @@
     </div>
 {% endblock column_left %}
 
+{% block grid_header_filters %}
+  <a class="link u-mobile-only" href="#drawer-filters">{% trans 'Filters' %}</a>
+
+  <div class="drawer drawer--right" id="drawer-filters">
+      <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Filters' %}"></a>
+      <div class="drawer__frame">
+          <div class="drawer__header drawer__header--bar">
+              <div class="drawer__headerContent">
+                  <span class="title title--small">{% trans 'Filters' %}</span>
+              </div>
+              <a href="#close-drawer" class="drawer__close close" title="{% trans 'Close Filters' %}"></a>
+          </div>
+          <div class="drawer__scroller">
+              <div class="drawer__content">
+                  <div class="nested-lists">
+                      <ul class="nested-lists__list drawer__list">
+                        <li class="nested-lists__item">
+                          <a class="nested-lists__link drawer__link drawer__link--toggle" href="#">
+                            <span class="drawer__linkLabel">
+                              <strong>{% trans "Gender" %}</strong>
+                            </span>
+                            <span class="drawer__linkIcon"></span>
+                          </a>
+                          <ul class="nested-lists__list drawer__list">
+                            <li class="nested-lists__item">
+                              <a class="nested-lists__link drawer__link" href="#male">
+                                <span class="drawer__linkLabel">{% trans "Male" %}</span>
+                                <span class="drawer__linkIcon"></span>
+                              </a>
+                            </li>
+                            <li class="nested-lists__item">
+                              <a class="nested-lists__link drawer__link" href="#female">
+                                <span class="drawer__linkLabel">{% trans "Female" %}</span>
+                                <span class="drawer__linkIcon"></span>
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                        {% if styles %}
+                          <li class="nested-lists__item">
+                            <a class="nested-lists__link drawer__link drawer__link--toggle" href="#">
+                              <span class="drawer__linkLabel">
+                                <strong>{% trans "Style" %}</strong>
+                              </span>
+                              <span class="drawer__linkIcon"></span>
+                            </a>
+                            <ul class="nested-lists__list drawer__list">
+                              {% for style in styles %}
+                                <li class="nested-lists__item">
+                                  <a class="nested-lists__link drawer__link" href="#{{ style }}">
+                                    <span class="drawer__linkLabel">{{ style }}</span>
+                                    <span class="drawer__linkIcon"></span>
+                                  </a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </li>
+                        {% endif %}
+                        {% if locations %}
+                          <li class="nested-lists__item">
+                            <a class="nested-lists__link drawer__link drawer__link--toggle" href="#">
+                              <span class="drawer__linkLabel">
+                                <strong>{% trans "Locations" %}</strong>
+                              </span>
+                              <span class="drawer__linkIcon"></span>
+                            </a>
+                            <ul class="nested-lists__list drawer__list">
+                              {% for location in locations %}
+                                <li class="nested-lists__item">
+                                  <a class="nested-lists__link drawer__link" href="#{{ location }}">
+                                    <span class="drawer__linkLabel">{{ location }}</span>
+                                    <span class="drawer__linkIcon"></span>
+                                  </a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          </li>
+                        {% endif %}
+                      </ul>
+                  </div>
+                  <div class="drawer__actions">
+                    <a class="cta cta--dark cta--block">Apply Filters</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+{% endblock %}
+
 {% block grid_header_sortBy %}
     {% include "partials/grid_sort_by.html" %}
 {% endblock %}
