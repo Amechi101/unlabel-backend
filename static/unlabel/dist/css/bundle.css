@@ -798,6 +798,14 @@ button.swiper-pagination-bullet {
 .anchors-nav__link.is-active {
   font-family: 'FaroWeb-BoldLucky';
 }
+.basket__header {
+  padding: 42px 0;
+}
+@media (min-width: 768px) {
+  .basket__header {
+    padding: 96px 0 48px;
+  }
+}
 @media (max-width: 767px) {
   .brand__overviewCol--info {
     text-align: center;

@@ -18,11 +18,13 @@
 {# Hide mini-basket so we don't have two baskets to keep in sync #}
 {% block mini_basket %}{% endblock %}
 
-{% block headertext %}
-    {% trans "Basket" %}
-{% endblock %}
-
 {% block content %}
+    <div class="basket__header">
+        <div class="container">
+            <h2 class="title title--small">{% trans "Your shopping bag" %}</h2>
+        </div>
+    </div>
+
     {# Use a partial template so that AJAX can be used to re-render basket #}
     {% include 'basket/partials/basket_content.html' %}
 
