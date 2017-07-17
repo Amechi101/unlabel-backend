@@ -25,7 +25,7 @@
                    value="male"> Male
               </li>
               <li class="filters__item">
-                <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender','female')"
+                <input type="checkbox" id="gender_female" name="gender" onclick="generateFilteredData('gender','female')"
                value="male"> Female
               </li>
           </ul>
@@ -82,16 +82,22 @@
                           </a>
                           <ul class="nested-lists__list drawer__list">
                             <li class="nested-lists__item">
-                              <a class="nested-lists__link drawer__link" href="#male">
-                                <span class="drawer__linkLabel">{% trans "Male" %}</span>
+                              <div class="nested-lists__link drawer__link">
+                                <span class="drawer__linkLabel">
+                                  <input type="checkbox" id="gender_male" name="gender" onclick="generateFilteredData('gender', 'male')" value="male">
+                                  {% trans 'Male' %}
+                                </span>
                                 <span class="drawer__linkIcon"></span>
-                              </a>
+                              </div>
                             </li>
                             <li class="nested-lists__item">
-                              <a class="nested-lists__link drawer__link" href="#female">
-                                <span class="drawer__linkLabel">{% trans "Female" %}</span>
+                              <div class="nested-lists__link drawer__link">
+                                <span class="drawer__linkLabel">
+                                  <input type="checkbox" id="gender_female" name="gender" onclick="generateFilteredData('gender', 'female')" value="female">
+                                  {% trans 'Female' %}
+                                </span>
                                 <span class="drawer__linkIcon"></span>
-                              </a>
+                              </div>
                             </li>
                           </ul>
                         </li>
@@ -106,10 +112,13 @@
                             <ul class="nested-lists__list drawer__list">
                               {% for style in styles %}
                                 <li class="nested-lists__item">
-                                  <a class="nested-lists__link drawer__link" href="#{{ style }}">
-                                    <span class="drawer__linkLabel">{{ style }}</span>
+                                  <div class="nested-lists__link drawer__link">
+                                    <span class="drawer__linkLabel">
+                                      <input type="checkbox" id="style_{{ style.id }}" name="style" onclick="generateFilteredData('style',{{ style.id }})" value="{{ style.id }}">
+                                      {{ style }}
+                                    </span>
                                     <span class="drawer__linkIcon"></span>
-                                  </a>
+                                  </div>
                                 </li>
                               {% endfor %}
                             </ul>
@@ -126,10 +135,13 @@
                             <ul class="nested-lists__list drawer__list">
                               {% for location in locations %}
                                 <li class="nested-lists__item">
-                                  <a class="nested-lists__link drawer__link" href="#{{ location }}">
-                                    <span class="drawer__linkLabel">{{ location }}</span>
+                                  <div class="nested-lists__link drawer__link">
+                                    <span class="drawer__linkLabel">
+                                      <input type="checkbox" id="location_{{ location.id }}" name="location" onclick="generateFilteredData('location',{{ location.id }})" value="{{ location.id }}">
+                                      {{ location }}
+                                    </span>
                                     <span class="drawer__linkIcon"></span>
-                                  </a>
+                                  </div>
                                 </li>
                               {% endfor %}
                             </ul>
