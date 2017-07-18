@@ -17,3 +17,103 @@
     padding: 42px 0
   }
 }
+
+.basket__footer {
+  overflow: hidden
+}
+
+.basket__footerRow {
+  @media $mq_m {
+    display: flex
+    align-items: flex-start
+    justify-content: center
+  }
+}
+
+.basket__footerCol {
+  position relative
+  padding: 32px 24px
+  
+  &::before {
+    position: absolute
+    content: ''
+    display: block
+    width: 100%
+    height: 100%
+    top: 0
+    
+    @media $mq_m {
+      width: 200% // in order to reach the page borders
+    }
+  }
+  
+  &--left {
+    background-color: $color_product
+    
+    &::before {
+      right: 0
+      background-color: $color_product
+    }
+    .basket__footerColContent {
+      @media $mq_m {
+        display: flex
+        align-items: center
+        justify-content: space-between
+      } 
+    }
+    @media $mq_m {
+      width: 72%
+      max-width: round(1120px * 72 / 100 + 32px)
+      padding: 32px
+    }
+  }
+  &--right {
+    color: #fff
+    background-color: $color_darkGrey
+    
+    &::before {
+      left: 0
+      background-color: $color_darkGrey
+    }
+    
+    @media $mq_m {
+      width: 28%
+      max-width: round(1120px * 28 / 100 + 32px)
+      padding: 32px 32px 32px 48px
+    }
+  }
+}
+
+.basket__footerColContent {
+  position relative
+}
+
+.basket__couponFormContainer {
+  width: 100%
+  
+  @media $mq_m {
+    max-width: 256px
+  }
+}
+
+.basket__footerAsterix {
+  @media $mq_s_only {
+    margin-top: 12px
+  }
+}
+
+.basket__totalLabel {
+  font-family: $font_bold
+}
+
+.basket__total {
+  margin-top: 5px
+}
+
+.basket__totalAction {
+  margin-top: 24px
+  
+  @media $mq_m {
+    margin-top: 32px
+  }
+}

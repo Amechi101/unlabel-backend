@@ -917,6 +917,111 @@ button.swiper-pagination-bullet {
     padding: 42px 0;
   }
 }
+.basket__footer {
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .basket__footerRow {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+.basket__footerCol {
+  position: relative;
+  padding: 32px 24px;
+}
+.basket__footerCol::before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+@media (min-width: 768px) {
+  .basket__footerCol::before {
+    width: 200%;
+  }
+}
+.basket__footerCol--left {
+  background-color: #dde0ed;
+}
+.basket__footerCol--left::before {
+  right: 0;
+  background-color: #dde0ed;
+}
+@media (min-width: 768px) {
+  .basket__footerCol--left .basket__footerColContent {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+@media (min-width: 768px) {
+  .basket__footerCol--left {
+    width: 72%;
+    max-width: 838px;
+    padding: 32px;
+  }
+}
+.basket__footerCol--right {
+  color: #fff;
+  background-color: #232323;
+}
+.basket__footerCol--right::before {
+  left: 0;
+  background-color: #232323;
+}
+@media (min-width: 768px) {
+  .basket__footerCol--right {
+    width: 28%;
+    max-width: 346px;
+    padding: 32px 32px 32px 48px;
+  }
+}
+.basket__footerColContent {
+  position: relative;
+}
+.basket__couponFormContainer {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .basket__couponFormContainer {
+    max-width: 256px;
+  }
+}
+@media (max-width: 767px) {
+  .basket__footerAsterix {
+    margin-top: 12px;
+  }
+}
+.basket__totalLabel {
+  font-family: 'FaroWeb-BoldLucky';
+}
+.basket__total {
+  margin-top: 5px;
+}
+.basket__totalAction {
+  margin-top: 24px;
+}
+@media (min-width: 768px) {
+  .basket__totalAction {
+    margin-top: 32px;
+  }
+}
 @media (max-width: 767px) {
   .brand__overviewCol--info {
     text-align: center;
@@ -1330,6 +1435,30 @@ span.carousel_contentItem {
 .container--leftAligned {
   margin-left: 0 !important;
 }
+.coupon-form {
+  position: relative;
+  width: 100%;
+}
+.coupon-form .form-group,
+.coupon-form .form__field {
+  margin: 0;
+}
+.coupon-form label {
+  display: none;
+}
+.coupon-form .form-control {
+  padding-right: 60px;
+}
+.cta.coupon-form__submit {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  left: auto;
+  width: auto;
+  padding: 0 12px;
+  height: auto;
+}
 @media (min-width: 768px) {
   .creator__overviewContainer {
     max-width: 992px !important;
@@ -1473,6 +1602,10 @@ span.carousel_contentItem {
 .cta--dark {
   border-color: #232323;
   background-image: linear-gradient(to right, #232323 50%, #fff 50%), linear-gradient(to right, transparent 50%, #232323 50%);
+}
+.cta--light {
+  border-color: #fff;
+  background-image: linear-gradient(to right, #232323 50%, #fff 50%), linear-gradient(to right, #fff 50%, transparent 50%);
 }
 .cta--product {
   border-color: #dde0ed;
@@ -2984,6 +3117,9 @@ a:hover .img-container img {
 }
 .nested-lists__list.is-collapsed {
   max-height: 0;
+}
+.note {
+  font-size: 11px;
 }
 .notif {
   display: inline-block;
