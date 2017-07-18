@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<div class="basket-item__quantity">
+    <div class="quantity">
+        <div class="quantity__controls u-desktop-only">
+            <a href="#" class="quantity__btn quantity__btn--less"><span class="fonticon fonticon--box fonticon--less"></span></a>
+            <input type="text" class="quantity__input" value="{{form.quantity.value}}">
+            <a href="#" class="quantity__btn quantity__btn--more"><span class="fonticon fonticon--box fonticon--more"></span></a>
+        </div>
+        <div class="quantity__selectContainer select select--borderLess u-mobile-only">
+            <select class="quantity__select">
+                {% for i in '123456789' %}
+                    <option value="{{forloop.counter0}}" {% if forloop.counter0 == form.quantity.value %}selected="selected"{% endif %}>{{forloop.counter0}}</option>
+                {% endfor  %}
+            </select>
+        </div>
+    </div>
+</div>

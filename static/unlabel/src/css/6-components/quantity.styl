@@ -1,0 +1,36 @@
+.quantity {
+  position relative
+}
+
+.quantity__controls {
+  display: flex
+}
+
+.quantity__btn {
+  margin-top 2px // better alignment
+  
+  & > * {
+    pointer-events: none // prevent children from being the target of the click instead of the btn itself
+  }
+
+  &--less {
+    margin-right: 8px
+  }
+  &--more {
+    margin-left: 8px
+  }
+}
+
+.quantity__input {
+  width: 44px !important
+  text-align: center
+}
+
+.quantity__selectContainer {
+  width: 40px
+  display: inline-block
+}
+
+.quantity__submit {
+  display: none
+}

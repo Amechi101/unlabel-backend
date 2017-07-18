@@ -1,0 +1,11 @@
+{% load i18n %}
+
+<div class="basket-item__delete">
+    <a href="#" data-id="{{ forloop.counter0 }}" data-behaviours="remove">
+        <div style="display: none;">{% trans "Remove" %}</div>
+        <span class="fonticon fonticon--trash fonticon--box"></span>
+    </a>
+    <div style="display:none;">
+        {{ form.DELETE }}
+    </div>
+</div>

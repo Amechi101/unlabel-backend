@@ -8,6 +8,7 @@ import Carousel from './components/carousel'
 import AnchorsNav from './components/anchors-nav'
 import Smoothscroll from './components/smoothscroll'
 import {TweenMax, Power3} from 'gsap'
+import Basket from './components/basket'
 
 class App {
   constructor() {
@@ -90,6 +91,9 @@ class App {
         }
       })
     })
+
+    // Basket
+    new Basket()
   }
 }
 

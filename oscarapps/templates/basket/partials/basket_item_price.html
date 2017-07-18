@@ -1,0 +1,13 @@
+{% load currency_filters %}
+
+<p class="basket-item__price">
+    {% if not line.line_price_incl_tax and not line_price_excl_tax %}
+        &mdash;
+    {% else %}
+        {% if line.is_tax_known %}
+            {{ line.line_price_incl_tax|currency:line.price_currency }}
+        {% else %}
+            {{ line.line_price_excl_tax|currency:line.price_currency }}
+        {% endif %}
+    {% endif %}
+</p>

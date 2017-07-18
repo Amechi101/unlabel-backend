@@ -41,8 +41,14 @@
   }
   
   &--borderLess {
+    &::before {
+      right: 0
+      transform: translate(0, -50%)
+    }
     select {
       border-color: transparent !important
+      padding-left: 0
+      padding-right: 12px
     }
   }
 }
