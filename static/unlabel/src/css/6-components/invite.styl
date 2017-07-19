@@ -1,0 +1,130 @@
+.invite {
+  
+}
+
+.invite__header {
+  margin: 24px 0
+  
+  @media $mq_m {
+    margin: 48px 0
+  }
+}
+
+.invite__headerWrapper {
+  position relative
+  padding-top: 52px
+  
+  @media $mq_m {
+    padding-top: 96px
+  }
+}
+
+.invite__headerTitleContainer {
+  position absolute
+  top: 0
+  left: 42px
+  
+  @media $mq_m {
+    left: 48px
+  }
+  
+  @media $mq_l {
+    left: 96px
+  }
+}
+
+.invite__descContainer {
+  margin: 42px 0
+  
+  @media $mq_m {
+    margin: 75px 0
+  }
+}
+
+.invite__contact {
+  position relative
+  margin: 42px 0
+  
+  &::before {
+    position absolute
+    top: 40%
+    left: 0
+    content: ''
+    display: block
+    width: 100%
+    height: 1px
+    background-color $color_lightGrey
+  }
+  
+  @media $mq_m {
+    margin: 75px 0
+  }
+}
+
+.invite__contactWrapper {
+  position: relative
+  padding: 32px 24px
+  text-align: center
+  
+  color-context(background-color)
+  
+  @media $mq_m {
+    max-width: 488px
+    padding: 64px 48px
+    margin: 0 0 0 auto
+    font-size: 18px
+    line-height: 24px
+  }
+}
+
+.invite__contactLabel {
+  font-family: $font_bold
+}
+
+.invite__list {
+  margin: 42px 0
+  
+  .col {
+    &--right {
+      @media $mq_m {
+        margin-top: 116px
+      }
+    }
+    
+    & + .col {
+      @media $mq_s_only {
+        margin-top: 32px
+      }
+    }
+  }
+  
+  @media $mq_m {
+    margin: 96px 0
+  }
+}
+
+.invite__listItem {
+  & + .invite__listItem {
+    margin-top: 32px
+    
+    @media $mq_m {
+      margin-top: 72px
+    }
+  }
+}
+
+.invite__listItemDesc {
+  margin-top: 20px
+}
+
+.invite__register {
+  
+}
+
+.invite__registerTitleContainer {
+  @media $mq_m {
+    margin-left: -56px
+  }
+}
+
+

@@ -21,6 +21,13 @@
     transform: translate(0%, 0)
   }
   
+  &:focus {
+    &::after {
+      transform: translate(50%, 0)
+    }
+  }
+  
+  &.is-active,
   &:hover {
     color: inherit // prevent default hover color
     &::after {

@@ -3,6 +3,8 @@ cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, borde
   border-color: border_default
   background-image: linear-gradient(to right, text_hover 50%, text_default 50%), linear-gradient(to right, bg_hover 50%, bg_default 50%)
   
+  &.is-active,
+  &:focus,
   &:hover {
     if border_hover {
       border-color: border_hover
@@ -12,7 +14,7 @@ cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, borde
 
 .cta {
   display inline-block
-  padding: 17px 32px 
+  padding: 17px 32px
   text-decoration: none !important
   cursor: pointer
   user-select: none
@@ -35,9 +37,22 @@ cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, borde
   
   cta-colors($color_darkGrey, #fff, transparent, $color_darkGrey, $color_darkGrey)
 
+  &:focus {
+    background-position: 50% 0, 50% 0
+  }
+  
+  &.is-active,
   &:hover {
     color: transparent
     background-position: 0% 0, 0% 0
+  }
+  
+  // In order to match form input elements
+  &--input {
+    // cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false)
+    cta-colors($color_darkGrey, #fff, $color_lightGrey, $color_darkGrey, $color_formInput, $color_darkGrey)
+    border-width: 1px
+    padding: 15px 32px
   }
   
   &--dark {

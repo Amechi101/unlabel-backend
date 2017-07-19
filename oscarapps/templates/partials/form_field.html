@@ -1,5 +1,6 @@
 {% load form_tags %}
 {% load widget_tweaks %}
+{% load i18n %}
 
 {% if field.is_hidden %}
     {{ field }}
@@ -33,6 +34,12 @@
                             <div class="select">
                                 {% render_field field class+="form-control" %}
                             </div>
+                        {% elif field.widget_type == "ClearableFileInput" %}
+                            <label for="{{ field.auto_id }}" class="fileinput" data-multiple-caption="{% trans '%files_count% files selected' %}" data-multiple-count-placeholder="%files_count%">
+                                {% render_field field class+="form-control fileinput__input" %}
+                                <span class="fileinput__btn cta cta--input">{% trans 'Select File' %}</span>
+                                <div class="fileinput__filename">&nbsp;</div>
+                            </label>
                         {% else %}
                             {% render_field field class+="form-control" %}
                         {% endif %}

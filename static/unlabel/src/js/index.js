@@ -9,6 +9,7 @@ import AnchorsNav from './components/anchors-nav'
 import Smoothscroll from './components/smoothscroll'
 import {TweenMax, Power3} from 'gsap'
 import Basket from './components/basket'
+import FileInput from './components/fileinput'
 
 class App {
   constructor() {
@@ -94,6 +95,14 @@ class App {
 
     // Basket
     new Basket()
+
+    // FileInput
+    const fileinput_arr = [].slice.call(document.querySelectorAll('.fileinput'))
+    fileinput_arr.forEach((el) => {
+      new FileInput({
+        el: el
+      })
+    })
   }
 }
 

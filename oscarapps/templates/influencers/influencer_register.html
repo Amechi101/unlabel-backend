@@ -1,124 +1,276 @@
 {% extends "layout.html" %}
 
 {% load i18n %}
-<head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBn2qzmwi0Ei1IpsLGEkwLQHDwPRJLrtUk"></script>
+{% load staticfiles %}
 
-</head>
+{% block content_classnames %}color-context color-context--creator{% endblock %}
+
 {% block content %}
-<h1>Unlabel For  Content Creators</h1>
-    <div style="display: inline-flex;">
-     {% for influencer in influencers %}
-        {{ influencer.users.first_name }}
-         {{ influencer.users.country }}
-        <img class="image-adjust" src="{{ MEDIA_URL }}{{ influencer.users.image }}" >
-         <br><br>
-    {% endfor %}
+    <header class="invite__header">
+        <div class="container">
+            <div class="invite__headerWrapper">
+                <div class="invite__headerTitleContainer">
+                    <h1 class="title title--caps">{% trans "Unlabel<br> for CONTENT<br> CREATORS" %}</h1>
+                </div>
+                <div class="invite__headerVisualContainer">
+                    <img src="{% static 'unlabel/dist/img/temp/invite-creator-header.jpg' %}" alt="{% trans 'Unlabel for CONTENT CREATORS visual' %}">
+                </div>
+            </div>
         </div>
-    <form id="Influencer_register_form" method="post" action="" enctype="multipart/form-data">
+    </header>
 
-        {{user_form.as_p}}
-                    {% csrf_token %}
-        <input type="submit" name="submit" value="Register" />
-    </form>
+    <div class="invite__descContainer">
+        <div class="container container--medium">
+            <div class="desc">
+                Nullam maximus faucibus volutpat. Morbi ut erat nunc. Nulla cursus erat vitae dui dictum facilisis. Maecenas vel erat orci. Cras fringilla nunc in nibh tempor, et feugiat quam pellentesque.<br>
+                Vivamus blandit bibendum pellentesque. Cras imperdiet commodo diam at hendrerit. Vivamus at semper erat, vel interdum lectus. Proin sagittis est sed interdum finibus. Suspendisse id vulputate est. Cras sed ligula nec nisl vehicula ultricies.
+            </div>
+        </div>
+    </div>
 
+    <div class="invite__contact">
+        <div class="container container--medium">
+            <p class="invite__contactWrapper">
+                <span class="invite__contactLabel">{% trans "For any question regarding<br> Creator inquiries, please contact" %}</span>
+                <br>
+                <a href="mailto:ucc@unlabel.us">ucc@unlabel.us</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="invite__list">
+        <div class="container container--medium">
+            <div class="cols cols--m-2 cols--m-gutter32">
+                <div class="col">
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">BRAND DIRECTORY</h3>
+                        <div class="invite__listItemDesc">
+                            Our Brand Directory allows you to publish details on your brand, or project so influencer can message you with their interest in partnering with you.
+                        </div>
+                    </div>
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">COMPILED STATS</h3>
+                        <div class="invite__listItemDesc">
+                            By connecting your social accounts (Instagram, Twitter, Tumblr, Google Analytics, Pinterest, Facebook and Youtube) we are able to pull stats, engagement and growth numbers and complie them all in one place.
+                        </div>
+                    </div>
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">EDUCATION</h3>
+                        <div class="invite__listItemDesc">
+                            We are constantly putting out content and putting on events to try and help our infleuncers learn and grow.
+                        </div>
+                    </div>
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">PROFILES</h3>
+                        <div class="invite__listItemDesc">
+                            Each influencer creates their own profile which we update daily. Including stats across platfrom reach, growth and engagement, as well as contact information, recent posts, collaborations and press coverage.
+                        </div>
+                    </div>
+                </div>
+                <div class="col col--right">
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">DEMOGRAPHICS</h3>
+                        <div class="invite__listItemDesc">
+                            We provide demographic information on an influencers following, so you get gender, location, age and language breakdowns for each platform.
+                        </div>
+                    </div>
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">BRAND WORK AND PRESS</h3>
+                        <div class="invite__listItemDesc">
+                            Insight into which brands they have worked with, the types of collaboratiosn they are proud of, and their level of stardom/popularity.
+                        </div>
+                    </div>
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">PRESS KIT</h3>
+                        <div class="invite__listItemDesc">
+                            As an Unlabel member you get a private link that you can share with anyone that will give them access to your full profile and stats even if they don't have a membership, no more updating press kits.
+                        </div>
+                    </div>
+                    <div class="invite__listItem">
+                        <h3 class="title title--small">INSIGHTS</h3>
+                        <div class="invite__listItemDesc">
+                            Because we store and track your progress, we can tell you growth rates, average engagement rates and let you know if those numbers are going up or down month to month.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% trans "Join them now" as triptych_title %}
+    {% include "influencers/partials/influencers_triptych.html" with triptych_title=triptych_title triptych_isWrapperWider=True %}
+
+    <div class="invite__register">
+        <div class="container container--narrow container--s-pad-m container--m-pad-l">
+            <div class="invite__registerTitleContainer">
+                <h2 class="title title--small">{% trans "Join Unlabel in few steps" %}</h2>
+            </div>
+            
+            <form class="invite__registerForm" id="Influencer_register_form" method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% include "partials/form_errors.html" %}
+
+                <div class="form__row form__row--m-2">
+                    {% include 'partials/form_field.html' with field=user_form.first_name %}
+                    {% include 'partials/form_field.html' with field=user_form.last_name %}
+                </div>
+
+                <div class="form__row form__row--m-2">
+                    {% include 'partials/form_field.html' with field=user_form.contact_number %}
+                    {% include 'partials/form_field.html' with field=user_form.email %}
+                </div>
+
+                <div class="form__row form__row--m-2">
+                    {% include 'partials/form_field.html' with field=user_form.password1 %}
+                    {% include 'partials/form_field.html' with field=user_form.password2 %}
+                </div>
+
+                <div class="form__row">
+                    {% include 'partials/form_field.html' with field=user_form.image %}
+                </div>
+
+                <div class="form__row">
+                    {% include 'partials/form_field.html' with field=user_form.bio %}
+                </div>
+
+                <div class="form__row">
+                    {% include 'partials/form_field.html' with field=user_form.loc %}
+                </div>
+
+                <div class="form__row form__row--m-2">
+                    {% include 'partials/form_field.html' with field=user_form.gender %}
+                    <div class="form__group"></div>
+                </div>
+
+                <div class="form__row form__row--m-2">
+                    {% include 'partials/form_field.html' with field=user_form.height %}
+                    {% include 'partials/form_field.html' with field=user_form.chest_or_bust %}
+                </div>
+
+                <div class="form__row form__row--m-2">
+                    {% include 'partials/form_field.html' with field=user_form.hips %}
+                    {% include 'partials/form_field.html' with field=user_form.waist %}
+                </div>
+
+                <div class="form__group">
+                    <p class="invite__registerInfo">
+                        {% url 'terms-and-conditions' as terms_url %}
+                        {% blocktrans %}
+                            By creating an account, you agree to Unlabel’s <a class="link" href="#">Privacy Policy</a> and <a class="link" href="{{terms_url}}">Terms of Use</a>
+                        {% endblocktrans %}
+                    </p>
+                </div>
+
+                <div class="form__actions">
+                    <button class="cta cta--dark" type="submit" name="submit">Get a creator access</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock content %}
 
+{% block extrascripts %}
+    {{ block.super }}
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBn2qzmwi0Ei1IpsLGEkwLQHDwPRJLrtUk"></script>
 
-<script>
-    $(document).ready(function(){
-            var gender = $('#id_gender');
-            var chest_or_bust = $('#id_chest_or_bust');
-            if(gender.val()=="M")
-                {
-                    $("label[for='id_chest_or_bust']").text("Chest *");
-                }
-                else
-                {
-                    $("label[for='id_chest_or_bust']").text("Bust *");
-                }
-
-    });
-    var country_id = $('#id_country');
-    var state_id = $('#id_state');
-     country_id.change(function(e){
-                if(country_id.val()=="US")
-                {
-                    state_id.prop('disabled',false);
-                }
-                else
-                {
-                    state_id.prop('disabled',true);
-{#                    state_id.select2("val",null);#}
-                }
-        });
-    var gender = $('#id_gender');
-    var chest_or_bust = $('#id_chest_or_bust');
-    gender.change(function(e){
+    <script>
+        $(document).ready(function(){
+                var gender = $('#id_gender');
+                var chest_or_bust = $('#id_chest_or_bust');
                 if(gender.val()=="M")
-                {
-                    $("label[for='id_chest_or_bust']").text("Chest *");
-                }
-                else
-                {
-                    $("label[for='id_chest_or_bust']").text("Bust *");
-                }
-        });
-
-
-var not_valid=false;
-$('#id_loc').on('input',function(event){
-     not_valid=true;
-});
-
-    function initialize() {
-
-        var input = document.getElementById('id_loc');
-        var options = {
-            types: ['(cities)'],
-            componentRestrictions: {country:'US'}
-        };
-
-        var autocomplete = new google.maps.places.Autocomplete(input, options);
-        autocomplete.addListener('place_changed', function (e) {
-            var place = autocomplete.getPlace();
-            if (!place.geometry) {
-                not_valid=true;
-                // User entered the name of a Place that was not suggested and
-                // pressed the Enter key, or the Place Details request failed.
-                window.alert("No such place'" + place.name + "'");
-                event.preventDefault();
-                return false;
-            }
-            else{
-                not_valid=false;
-            }
+                    {
+                        $("label[for='id_chest_or_bust']").text("Chest *");
+                    }
+                    else
+                    {
+                        $("label[for='id_chest_or_bust']").text("Bust *");
+                    }
 
         });
+        var country_id = $('#id_country');
+        var state_id = $('#id_state');
+         country_id.change(function(e){
+                    if(country_id.val()=="US")
+                    {
+                        state_id.prop('disabled',false);
+                    }
+                    else
+                    {
+                        state_id.prop('disabled',true);
+    {#                    state_id.select2("val",null);#}
+                    }
+            });
+        var gender = $('#id_gender');
+        var chest_or_bust = $('#id_chest_or_bust');
+        gender.change(function(e){
+                    if(gender.val()=="M")
+                    {
+                        $("label[for='id_chest_or_bust']").text("Chest *");
+                    }
+                    else
+                    {
+                        $("label[for='id_chest_or_bust']").text("Bust *");
+                    }
+            });
 
+
+    var not_valid=false;
+    $('#id_loc').on('input',function(event){
+         not_valid=true;
+    });
+
+        function initialize() {
+
+            var input = document.getElementById('id_loc');
+            var options = {
+                types: ['(cities)'],
+                componentRestrictions: {country:'US'}
+            };
+
+            var autocomplete = new google.maps.places.Autocomplete(input, options);
+            autocomplete.addListener('place_changed', function (e) {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    not_valid=true;
+                    // User entered the name of a Place that was not suggested and
+                    // pressed the Enter key, or the Place Details request failed.
+                    window.alert("No such place'" + place.name + "'");
+                    event.preventDefault();
+                    return false;
+                }
+                else{
+                    not_valid=false;
+                }
+
+            });
+
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+
+    jQuery.fn.exists = function(){ return this.length > 0; };
+    if ($('#id_loc').exists()) {
+        $("#id_save_button").click(function(event){
+           if (not_valid == true){
+               event.preventDefault();
+               setTimeout(function(){
+                  var $id_save_button = $('#id_save_button');
+                   $id_save_button.text("Save");
+                  setTimeout(function() {
+                      $id_save_button.removeClass("disabled");
+                      $id_save_button.removeAttr("disabled");
+                  }, 100);
+
+                  }, 100);
+               window.alert("Please choose a valid location");
+           }
+    });
     }
 
-    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+{% endblock %}
 
 
-jQuery.fn.exists = function(){ return this.length > 0; };
-if ($('#id_loc').exists()) {
-    $("#id_save_button").click(function(event){
-       if (not_valid == true){
-           event.preventDefault();
-           setTimeout(function(){
-              var $id_save_button = $('#id_save_button');
-               $id_save_button.text("Save");
-              setTimeout(function() {
-                  $id_save_button.removeClass("disabled");
-                  $id_save_button.removeAttr("disabled");
-              }, 100);
 
-              }, 100);
-           window.alert("Please choose a valid location");
-       }
-});
-}
-
-</script>
