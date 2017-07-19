@@ -82,13 +82,19 @@ class BrandUnfollowView(generic.View):
 
 
 class InfluencerView(PageTitleMixin, generic.ListView):
+    context_object_name = "creators"
+    template_name = 'customer/creators.html'
+    paginate_by = settings.ITEMS_PER_PAGE
+    model = Partner
+    page_title = _('Followed Creators')
+    active_tab = 'creators'
 
     def get(self, request, *args, **kwargs):
         return super(InfluencerView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
         user_followed_creators = UserInfluencerLike.objects.filter(user=self.request.user).values_list('influencer',flat=True)
-        qs = self.model._default_manager.filter(pk__in=user_followed_creators)
+        qs = Influencers.objects.filter(pk__in=user_followed_creators)
 
         return qs
 
