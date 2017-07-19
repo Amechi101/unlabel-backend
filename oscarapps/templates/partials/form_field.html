@@ -30,8 +30,8 @@
                                 {{ field.label|safe }}
                                 {% render_field field class+="form-control" %}
                             </label>
-                        {% elif field.widget_type == "Select" or field.widget_type == "AdvancedSelect" %}
-                            <div class="select">
+                        {% elif field.widget_type == "Select" or field.widget_type == "AdvancedSelect" or field.widget_type == "SelectMultiple" %}
+                            <div class="select {% if field.widget_type == "SelectMultiple" %}select--multiple{% endif %}">
                                 {% render_field field class+="form-control" %}
                             </div>
                         {% elif field.widget_type == "ClearableFileInput" %}
