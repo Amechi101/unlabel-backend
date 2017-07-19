@@ -2,6 +2,19 @@
 }
 
 .form__row {
+  &--s-2 {
+    display: flex
+    
+    // all children form__group
+    & > .form__group {
+      width: 50%
+      
+      // all children form__group except first one
+      & + .form__group {
+        margin-left: 24px
+      }
+    }
+  }
   &--m-2 {
     @media $mq_m {
       display: flex
@@ -24,7 +37,11 @@
 }
 
 .form__group {
-  margin-top: 32px
+  margin-top: 24px
+  
+  @media $mq_m {
+    margin-top: 32px
+  }
 }
 
 .form__label {

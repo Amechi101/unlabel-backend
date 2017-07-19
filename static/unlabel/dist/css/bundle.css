@@ -2175,6 +2175,17 @@ span.carousel_contentItem {
     margin-left: 32px;
   }
 }
+.form__row--s-2 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.form__row--s-2 > .form__group {
+  width: 50%;
+}
+.form__row--s-2 > .form__group + .form__group {
+  margin-left: 24px;
+}
 @media (min-width: 768px) {
   .form__row--m-2 {
     display: -webkit-box;
@@ -2193,7 +2204,12 @@ span.carousel_contentItem {
   }
 }
 .form__group {
-  margin-top: 32px;
+  margin-top: 24px;
+}
+@media (min-width: 768px) {
+  .form__group {
+    margin-top: 32px;
+  }
 }
 .form__field {
   margin-top: 12px;
