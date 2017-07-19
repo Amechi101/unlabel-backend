@@ -1923,6 +1923,7 @@ span.carousel_contentItem {
   height: 100%;
 }
 .fileinput__filename {
+  display: block;
   background-color: #fff;
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
