@@ -12,7 +12,6 @@
 {% endblock %}
 
 {% block content %}
-
     {% if brands %}
         <ol class="grid__list">
             {% for brand in brands %}
@@ -32,7 +31,10 @@
             </p>
         </div>
     {% endif %}
-
-        {% include "partials/pagination.html" %}
-
 {% endblock content %}
+
+{% block after_layout %}
+    <div class="grid__paginationContainer">
+        {% include "partials/pagination.html" %}
+    </div>
+{% endblock after_layout %}
