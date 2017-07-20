@@ -6,67 +6,49 @@
     {{ page_title }} | {% trans 'Account' %} | {{ block.super }}
 {% endblock %}
 
-{% block body_class %}account-profile{% endblock %}
-
-{% block breadcrumbs %}
-    <ul class="breadcrumb">
-        <li>
-            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
-        </li>
-        <li>
-            <a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a>
-        </li>
-        {% block extra_breadcrumbs %}{% endblock %}
-        <li class="active">{{ page_title }}</li>
-    </ul>
-{% endblock %}
+{% block body_class %}account{% endblock %}
 
 {% block headertext %}{{ page_title }}{% endblock %}
 
+{% block layout_sidebar_extra_classnames %}color-context color-context--account{% endblock %}
+
 {% block column_left %}
-    <ul class="nav nav-pills nav-stacked">
-        {% block standard_tabs %}
-            <li{% if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' %} class="active"{% endif %}>
-                <a href="{% url 'customer:profile-view' %}">{% trans "My Info" %}</a>
+    <div class="categories nested-lists">
+        <ul class="nested-lists__list">
+            <li class="nested-lists__item">
+                <a class="categories__link {% if active_tab == 'brands' %} is-active{% endif %}" href="{% url 'customer:followed-brands' %}">{% trans "Followed Brands" %}</a>
             </li>
-            <li{% if active_tab == 'orders' %} class="active"{% endif %}>
-                <a href="{% url 'customer:order-list' %}">{% trans "Order History" %}</a>
+            <li class="nested-lists__item">
+                <a class="categories__link {% if active_tab == 'creators' %} is-active{% endif %}" href="{% url 'customer:followed-creators' %}">{% trans "Followed Creators" %}</a>
             </li>
-            <li{% if active_tab == 'emails' %} class="active"{% endif %}>
-                <a href="{% url 'customer:email-list' %}">{% trans "Email History" %}</a>
+            <li class="nested-lists__item">
+                <a class="categories__link {% if active_tab == 'products' %} is-active{% endif %}" href="{% url 'customer:liked-products' %}">{% trans "My Likes" %}</a>
             </li>
-            <li{% if active_tab == 'alerts' %} class="active"{% endif %}>
-                <a href="{% url 'customer:alerts-list' %}">{% trans "Product Alerts" %}</a>
+            <li class="nested-lists__item">
+                <a class="categories__link {% if active_tab == 'orders' %} is-active{% endif %}" href="{% url 'customer:order-list' %}">{% trans "My Orders" %}</a>
             </li>
-            <li{% if active_tab == 'wishlists' %} class="active"{% endif %}>
-                <a href="{% url 'customer:wishlists-list' %}">{% trans "Wish Lists" %}</a>
+            <li class="nested-lists__item">
+                <a class="nested-lists__link categories__link {% if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' %} is-active{% endif %}" href="{% url 'customer:profile-view' %}">{% trans "My Settings" %}</a>
+                <ul class="nested-lists__list">
+                    <li class="nested-lists__item">
+                        <a class="categories__link {% if active_tab == 'profile' %} is-active{% endif %}" href="{% url 'customer:profile-view' %}">{% trans "My Informations" %}</a>
+                    </li>
+                    <li class="nested-lists__item">
+                        <a class="categories__link {% if active_tab == 'addresses' %} is-active{% endif %}" href="{% url 'customer:address-list' %}">{% trans "My Address Book" %}</a>
+                    </li>
+                    <li class="nested-lists__item">
+                        <a class="categories__link {% if active_tab == 'payments' %} is-active{% endif %}" href="{% url 'customer:my-payments' %}">{% trans "My Payment Methods" %}</a>
+                    </li>
+                    <li class="nested-lists__item">
+                        <a class="categories__link {% if active_tab == 'password' %} is-active{% endif %}" href="{% url 'customer:change-password' %}">{% trans "Password" %}</a>
+                    </li>
+                    <li class="nested-lists__item">
+                        <a class="categories__link {% if active_tab == 'notifications' %} is-active{% endif %}" href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
+                    </li>
+                </ul>
             </li>
-            <li{% if active_tab == 'brands' %} class="active"{% endif %}>
-                <a href="{% url 'customer:followed-brands' %}">{% trans "Followed Brands" %}</a>
-            </li>
-            <li{% if active_tab == 'creators' %} class="active"{% endif %}>
-                <a href="{% url 'customer:followed-creators' %}">{% trans "Followed Creators" %}</a>
-            </li>
-            <li{% if active_tab == 'products' %} class="active"{% endif %}>
-                <a href="{% url 'customer:liked-products' %}">{% trans "My Likes" %}</a>
-            </li>
-            </ul>
-            <br><br><br><br><br><br>
-            <ul class="nav nav-pills nav-stacked">
-            <li{% if active_tab == 'addresses' %} class="active"{% endif %}>
-                <a href="{% url 'customer:address-list' %}">{% trans "Address Book" %}</a>
-            </li>
-            <li{% if active_tab == 'notifications' %} class="active"{% endif %}>
-                <a href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
-            </li>
-            <li{% if active_tab == 'payments' %} class="active"{% endif %}>
-                <a href="{% url 'customer:my-payments' %}">{% trans "My Payment Methods" %}</a>
-            </li>
-            <li{% if active_tab == 'password' %} class="active"{% endif %}>
-                <a href="{% url 'customer:change-password' %}" >{% trans 'Change password' %}</a>
-            </li>
-        {% endblock %}
-    </ul>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block content %}

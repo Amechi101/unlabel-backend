@@ -11,7 +11,7 @@ class NestedLists {
     }
 
     Object.keys(this.options).forEach((key) => {
-      this.options[key] = options[key] || this.options[key]
+      this.options[key] = (Object.keys(options).indexOf(key) > -1) ? options[key] : this.options[key]
     })
 
     this.init()
@@ -28,7 +28,10 @@ class NestedLists {
         const list_toggler = parent_el.querySelector(this.options.togglerSelector)
         new Collapsible({
           el: list_el,
-          toggler_el: list_toggler
+          toggler_el: list_toggler,
+          options: {
+            collapsedOnInit: list_toggler.classList.contains('is-active') ? false : true
+          }
         })
       }
     })

@@ -16,7 +16,7 @@ export default class Popin {
       preventBodyScroll: true
     }
     Object.keys(this.options).forEach((key) => {
-      this.options[key] = options[key] || this.options[key]
+      this.options[key] = (Object.keys(options).indexOf(key) > -1) ? options[key] : this.options[key]
     })
 
     this.is_visible = null

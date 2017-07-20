@@ -1161,6 +1161,9 @@ span.carousel_contentItem {
 .categories .nested-lists__list .nested-lists__list {
   padding-left: 24px;
 }
+.categories__link.is-active {
+  font-family: 'FaroWeb-BoldLucky';
+}
 .close {
   position: relative;
   display: inline-block;
@@ -3257,6 +3260,10 @@ a:hover .img-container img {
 .link--discrete:hover::after {
   -webkit-transform: translate(0%, 0);
           transform: translate(0%, 0);
+}
+.link--discrete:focus::after {
+  -webkit-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
 }
 .title .link {
   font-family: inherit;
