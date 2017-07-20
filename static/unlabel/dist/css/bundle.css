@@ -2372,21 +2372,21 @@ span.carousel_contentItem {
 .grid--borderBottomLess {
   border-bottom: 0 none;
 }
-.grid__topHeader {
+.grid__banner {
   border-bottom: 1px solid #f0f0f0;
   padding: 24px;
 }
 @media (max-width: 767px) {
-  .grid__topHeader {
+  .grid__banner {
     border-bottom: 0;
   }
 }
 @media (min-width: 768px) {
-  .grid__topHeader {
+  .grid__banner {
     padding: 24px 32px;
   }
 }
-.grid__topHeader:empty {
+.grid__banner:empty {
   display: none;
 }
 .grid__header {
