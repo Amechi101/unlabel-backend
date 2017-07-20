@@ -13,7 +13,7 @@
 
 {% block content %}
     {% if brands %}
-        <ol class="grid__list">
+        <ol class="grid__list color-context color-context--brands">
             {% for brand in brands %}
                 <li class="grid__item">
                   {% include "brand/partials/brand.html" with unfollow=True %}
@@ -34,7 +34,9 @@
 {% endblock content %}
 
 {% block after_layout %}
-    <div class="grid__paginationContainer">
-        {% include "partials/pagination.html" %}
-    </div>
+    {% if brands %}
+        <div class="grid__paginationContainer color-context color-context--brands">
+            {% include "partials/pagination.html" %}
+        </div>
+    {% endif %}
 {% endblock after_layout %}

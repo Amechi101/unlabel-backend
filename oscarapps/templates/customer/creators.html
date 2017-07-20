@@ -13,7 +13,7 @@
 
 {% block content %}
     {% if creators %}
-        <ol class="grid__list">
+        <ol class="grid__list color-context color-context--creators">
             {% for creator in creators %}
                 <li class="grid__item">
                   {% include "influencers/partials/influencer.html" with influencer=creator unfollow=True %}
@@ -34,7 +34,9 @@
 {% endblock content %}
 
 {% block after_layout %}
-    <div class="grid__paginationContainer">
-        {% include "partials/pagination.html" %}
-    </div>
+    {% if creators %}
+        <div class="grid__paginationContainer color-context color-context--creators">
+            {% include "partials/pagination.html" %}
+        </div>
+    {% endif %}
 {% endblock after_layout %}
