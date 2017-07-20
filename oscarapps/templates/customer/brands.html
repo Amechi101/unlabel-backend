@@ -3,32 +3,36 @@
 {% load i18n %}
 {% load widget_tweaks %}
 
-{% block breadcrumbs %}
-    <ul class="breadcrumb">
-        <li>
-            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
-        </li>
-        <li>
-            <a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a>
-        </li>
-        <li>
-            <a href="{% url 'customer:followed-brands' %}">{% trans 'Followed Brands' %}</a>
-        </li>
-    </ul>
+{% block grid_header_titleContent %}
+    <h2 class="title title--small">{% trans "Followed brands" %}</h2>
 {% endblock %}
 
-{% block tabcontent %}
+{% block grid_header_results %}
+    {% include "partials/number_of_results.html" %}
+{% endblock %}
+
+{% block content %}
 
     {% if brands %}
-        {% for brand in brands %}
-        <div>
-            <img class="image-adjust" src="{{ MEDIA_URL }}{{ brand.image }}" style="width:100%">
-            <h2>{{ brand.name }}</h2>
-            <h3>{{ brand.location.city }},{{ brand.location.state }},{{ brand.location.country }}</h3>
-            <a href="{% url 'customer:unfollow-brand' pk=brand.id %}" class="btn btn-lg btn-primary" >{% trans "Unfollow" %}</a>
+        <ol class="grid__list">
+            {% for brand in brands %}
+                <li class="grid__item">
+                  {% include "brand/partials/brand.html" with unfollow=True %}
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <div class="grid__emptyMessage">
+            <p class="missing">
+                {% url 'brand-list' as redirect_url %}
+                {% blocktrans %}
+                    You don’t follow any brand.<br>
+                    Go to <a class="link link--discrete link--matchFont" href="{{redirect_url}}">Brands</a> list to discover some.
+                {% endblocktrans %}
+            </p>
         </div>
-        {% endfor %}
-        {% include "partials/pagination.html" %}
     {% endif %}
 
-{% endblock tabcontent %}
+        {% include "partials/pagination.html" %}
+
+{% endblock content %}

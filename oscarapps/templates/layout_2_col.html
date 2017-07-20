@@ -11,9 +11,12 @@
             {% block column_left %}{% endblock %}
         </div>
         <div class="grid__main">
+            <div class="grid__topHeader">{% block grid_top_header %}{% endblock %}</div>
             {% block grid_header %}
             <div class="grid__header">
-                <div class="grid__headerTitle">{% block grid_header_title %}{% endblock %}</div>
+                {% block grid_header_title %}
+                    <div class="grid__headerTitle">{% block grid_header_titleContent %}{% endblock %}</div>
+                {% endblock %}
                 <div class="grid__headerNav">
                     <div class="grid__headerNavGroup">
                         {% block grid_header_filters %}{% endblock %}

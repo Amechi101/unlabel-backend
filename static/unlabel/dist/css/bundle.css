@@ -1619,6 +1619,7 @@ span.carousel_contentItem {
   transition: background-position 250ms cubic-bezier(0.19, 1, 0.22, 1), border-color 250ms cubic-bezier(0.19, 1, 0.22, 1);
   background-clip: text, border-box;
   -webkit-background-clip: text, border-box;
+  text-align: center;
   border-color: #232323;
   background-image: linear-gradient(to right, #fff 50%, #232323 50%), linear-gradient(to right, #232323 50%, transparent 50%);
 }
@@ -1648,6 +1649,15 @@ span.carousel_contentItem {
 .cta--light {
   border-color: #fff;
   background-image: linear-gradient(to right, #232323 50%, #fff 50%), linear-gradient(to right, #fff 50%, transparent 50%);
+}
+.cta--mild {
+  border-color: #a3a3a3;
+  background-image: linear-gradient(to right, #fff 50%, #a3a3a3 50%), linear-gradient(to right, #232323 50%, transparent 50%);
+}
+.cta--mild.is-active,
+.cta--mild:focus,
+.cta--mild:hover {
+  border-color: #232323;
 }
 .cta--product {
   border-color: #dde0ed;
@@ -2362,6 +2372,23 @@ span.carousel_contentItem {
 .grid--borderBottomLess {
   border-bottom: 0 none;
 }
+.grid__topHeader {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 24px;
+}
+@media (max-width: 767px) {
+  .grid__topHeader {
+    border-bottom: 0;
+  }
+}
+@media (min-width: 768px) {
+  .grid__topHeader {
+    padding: 24px 32px;
+  }
+}
+.grid__topHeader:empty {
+  display: none;
+}
 .grid__header {
   border-bottom: 1px solid #f0f0f0;
 }
@@ -2530,6 +2557,19 @@ span.carousel_contentItem {
 @media (min-width: 768px) {
   .grid__itemInner {
     padding: 32px 32px 24px;
+  }
+}
+.grid__itemAction {
+  margin-top: 20px;
+}
+@media (max-width: 767px) {
+  .grid__itemAction {
+    display: block;
+  }
+}
+@media (min-width: 768px) {
+  .grid__itemAction {
+    margin-top: 24px;
   }
 }
 .grid__emptyMessage {
@@ -3265,6 +3305,9 @@ a:hover .img-container img {
   -webkit-transform: translate(-50%, 0);
           transform: translate(-50%, 0);
 }
+.link--matchFont {
+  font-family: inherit;
+}
 .title .link {
   font-family: inherit;
 }
@@ -3303,6 +3346,7 @@ a:hover .img-container img {
   .missing {
     font-family: 'FaroWeb-DisplayLucky';
     font-size: 24px;
+    line-height: 28px;
   }
 }
 .nav--inline {

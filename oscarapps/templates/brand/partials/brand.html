@@ -1,15 +1,21 @@
 {% load thumbnail %}
+{% load i18n %}
 
 <article>
-    <a class="grid__itemInner u-block" href="{{ brand.slug }}" title="{{ brand.name }}">
-        <figure>
-            <div class="img-container img-container--landscape">
-                <img src="{{ MEDIA_URL }}{{ brand.image }}" alt="{{ brand.name }}">
-            </div>
-            <figcaption>
-                <h2>{{ brand.name }}</h2>
-                <p>{{ brand.location.city }}, {{ brand.location.state }}, {{ brand.location.country }}</p>
-            </figcaption>
-        </figure>
-    </a>
+    <div class="grid__itemInner">
+        <a class="u-block" href="{{ brand.slug }}" title="{{ brand.name }}">
+            <figure>
+                <div class="img-container img-container--landscape">
+                    <img src="{{ MEDIA_URL }}{{ brand.image }}" alt="{{ brand.name }}">
+                </div>
+                <figcaption>
+                    <h2>{{ brand.name }}</h2>
+                    <p>{{ brand.location.city }}, {{ brand.location.state }}, {{ brand.location.country }}</p>
+                </figcaption>
+            </figure>
+        </a>
+        {% if unfollow %}
+            <a href="{% url 'customer:unfollow-brand' pk=brand.id %}" class="cta cta--mild grid__itemAction">{% trans "Unfollow brand" %}</a>
+        {% endif %}
+    </div>
 </article>

@@ -34,6 +34,7 @@ cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, borde
   transition(background-position border-color)
   background-clip: text, border-box
   -webkit-background-clip: text, border-box
+  text-align: center
   
   cta-colors($color_darkGrey, #fff, transparent, $color_darkGrey, $color_darkGrey)
 
@@ -63,6 +64,11 @@ cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, borde
   &--light {
     // cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false)
     cta-colors(#fff, $color_darkGrey, transparent, #fff, #fff)
+  }
+  
+  &--mild {
+    // cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, border_hover = false)
+    cta-colors($color_grey, #fff, transparent, $color_darkGrey, $color_grey, $color_darkGrey)
   }
   
   &--product {

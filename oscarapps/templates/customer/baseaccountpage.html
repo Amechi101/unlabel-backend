@@ -10,7 +10,17 @@
 
 {% block headertext %}{{ page_title }}{% endblock %}
 
-{% block layout_sidebar_extra_classnames %}color-context color-context--account{% endblock %}
+{% block layout_extra_classnames %}grid--borderTopLess{% endblock %}
+
+{% block layout_sidebar_extra_classnames %}color-context color-context--account u-desktop-only{% endblock %}
+
+{% block grid_top_header %}
+    <h1 class="title title--caps">{{user.first_name}}<br>{{user.last_name}}</h1>
+{% endblock %}
+
+{% block grid_header_title %}
+    <div class="grid__headerTitle u-desktop-only">{% block grid_header_titleContent %}{% endblock %}</div>
+{% endblock %}
 
 {% block column_left %}
     <div class="categories nested-lists">
@@ -48,6 +58,24 @@
                 </ul>
             </li>
         </ul>
+    </div>
+{% endblock %}
+
+{% block grid_header_filters %}
+    <div class="select select--borderLess u-mobile-only">
+        <select class="select-nav">
+            <option value="{% url 'customer:followed-brands' %}" {% if active_tab == 'brands' %} selected="selected"{% endif %}>{% trans "Followed Brands" %}</option>
+            <option value="{% url 'customer:followed-creators' %}" {% if active_tab == 'creators' %} selected="selected"{% endif %}>{% trans "Followed Creators" %}</option>
+            <option value="{% url 'customer:liked-products' %}" {% if active_tab == 'products' %} selected="selected"{% endif %}>{% trans "My Likes" %}</option>
+            <option value="{% url 'customer:order-list' %}" {% if active_tab == 'orders' %} selected="selected"{% endif %}>{% trans "My Orders" %}</option>
+            <optgroup label="{% trans "My Settings" %}">
+                <option value="{% url 'customer:profile-view' %}" {% if active_tab == 'profile' %} selected="selected"{% endif %}>{% trans "My Informations" %}</option>
+                <option value="{% url 'customer:address-list' %}" {% if active_tab == 'addresses' %} selected="selected"{% endif %}>{% trans "My Address Book" %}</option>
+                <option value="{% url 'customer:my-payments' %}" {% if active_tab == 'payments' %} selected="selected"{% endif %}>{% trans "My Payment Methods" %}</option>
+                <option value="{% url 'customer:change-password' %}" {% if active_tab == 'password' %} selected="selected"{% endif %}>{% trans "Password" %}</option>
+                <option value="{% url 'customer:notifications-inbox' %}" {% if active_tab == 'notifications' %} selected="selected"{% endif %}>{% trans "Notifications" %}</option>
+            </optgroup>
+        </select>
     </div>
 {% endblock %}
 

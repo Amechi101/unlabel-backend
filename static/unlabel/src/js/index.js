@@ -10,6 +10,7 @@ import Smoothscroll from './components/smoothscroll'
 import {TweenMax, Power3} from 'gsap'
 import Basket from './components/basket'
 import FileInput from './components/fileinput'
+import SelectNav from './components/select-nav'
 
 class App {
   constructor() {
@@ -100,6 +101,14 @@ class App {
     const fileinput_arr = [].slice.call(document.querySelectorAll('.fileinput'))
     fileinput_arr.forEach((el) => {
       new FileInput({
+        el: el
+      })
+    })
+
+    // SelectNav
+    const selectNav_arr = [].slice.call(document.querySelectorAll('.select-nav'))
+    selectNav_arr.forEach((el) => {
+      new SelectNav({
         el: el
       })
     })
