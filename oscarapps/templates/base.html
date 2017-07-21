@@ -37,6 +37,8 @@
             {# Default to using Google analytics #}
             {% include "partials/google_analytics.html" %}
         {% endblock %}
+
+        <script src="{% static 'unlabel/dist/js/vendors/modernizr-custom.js' %}"></script>
     </head>
 
     <body id="{% block body_id %}default{% endblock %}" class="{% block body_class %}default{% endblock %}">

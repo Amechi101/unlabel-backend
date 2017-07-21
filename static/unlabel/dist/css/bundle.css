@@ -1605,7 +1605,6 @@ span.carousel_contentItem {
   font-size: 14px;
   line-height: 16px;
   border: 2px solid #232323;
-  color: transparent !important;
   font-family: 'FaroWeb-BoldLucky';
   background: transparent;
   border-radius: 0;
@@ -1616,61 +1615,118 @@ span.carousel_contentItem {
   background-repeat: no-repeat;
   background-size: 201% 100%;
   background-position: 100% 0, 100% 0;
-  transition: background-position 250ms cubic-bezier(0.19, 1, 0.22, 1), border-color 250ms cubic-bezier(0.19, 1, 0.22, 1);
-  background-clip: text, border-box;
-  -webkit-background-clip: text, border-box;
+  transition: background-position 250ms cubic-bezier(0.19, 1, 0.22, 1), color 250ms cubic-bezier(0.19, 1, 0.22, 1), border-color 250ms cubic-bezier(0.19, 1, 0.22, 1);
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
   text-align: center;
   border-color: #232323;
+  background-image: linear-gradient(to right, #232323 50%, transparent 50%);
+  color: #232323;
+}
+html.webkit .cta:not(button) {
+  text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+  background-clip: text, border-box;
+  -webkit-background-clip: text, border-box;
+}
+html.webkit .cta:not(button) {
   background-image: linear-gradient(to right, #fff 50%, #232323 50%), linear-gradient(to right, #232323 50%, transparent 50%);
+}
+.cta.is-active,
+.cta:focus,
+.cta:hover {
+  color: #fff !important;
 }
 .cta:focus {
   background-position: 50% 0, 50% 0;
 }
 .cta.is-active,
 .cta:hover {
-  color: transparent;
   background-position: 0% 0, 0% 0;
 }
 .cta--input {
   border-color: #ccc;
-  background-image: linear-gradient(to right, #fff 50%, #232323 50%), linear-gradient(to right, #232323 50%, #f0f0f0 50%);
+  background-image: linear-gradient(to right, #232323 50%, #f0f0f0 50%);
+  color: #232323;
   border-width: 1px;
   padding: 15px 32px;
+}
+html.webkit .cta--input:not(button) {
+  background-image: linear-gradient(to right, #fff 50%, #232323 50%), linear-gradient(to right, #232323 50%, #f0f0f0 50%);
 }
 .cta--input.is-active,
 .cta--input:focus,
 .cta--input:hover {
+  color: #fff !important;
   border-color: #232323;
 }
 .cta--dark {
   border-color: #232323;
+  background-image: linear-gradient(to right, transparent 50%, #232323 50%);
+  color: #fff;
+}
+html.webkit .cta--dark:not(button) {
   background-image: linear-gradient(to right, #232323 50%, #fff 50%), linear-gradient(to right, transparent 50%, #232323 50%);
+}
+.cta--dark.is-active,
+.cta--dark:focus,
+.cta--dark:hover {
+  color: #232323 !important;
 }
 .cta--light {
   border-color: #fff;
+  background-image: linear-gradient(to right, #fff 50%, transparent 50%);
+  color: #fff;
+}
+html.webkit .cta--light:not(button) {
   background-image: linear-gradient(to right, #232323 50%, #fff 50%), linear-gradient(to right, #fff 50%, transparent 50%);
+}
+.cta--light.is-active,
+.cta--light:focus,
+.cta--light:hover {
+  color: #232323 !important;
 }
 .cta--mild {
   border-color: #a3a3a3;
+  background-image: linear-gradient(to right, #232323 50%, transparent 50%);
+  color: #a3a3a3;
+}
+html.webkit .cta--mild:not(button) {
   background-image: linear-gradient(to right, #fff 50%, #a3a3a3 50%), linear-gradient(to right, #232323 50%, transparent 50%);
 }
 .cta--mild.is-active,
 .cta--mild:focus,
 .cta--mild:hover {
+  color: #fff !important;
   border-color: #232323;
 }
 .cta--product {
   border-color: #dde0ed;
+  background-image: linear-gradient(to right, transparent 50%, #dde0ed 50%);
+  color: #232323;
+}
+html.webkit .cta--product:not(button) {
   background-image: linear-gradient(to right, #232323 50%, #232323 50%), linear-gradient(to right, transparent 50%, #dde0ed 50%);
 }
 .cta--product.is-active,
 .cta--product:focus,
 .cta--product:hover {
+  color: #232323 !important;
   border-color: #232323;
 }
 .cta--facebook {
   border-color: #4460a0;
+  background-image: linear-gradient(to right, transparent 50%, #4460a0 50%);
+  color: #fff;
+}
+html.webkit .cta--facebook:not(button) {
   background-image: linear-gradient(to right, #4460a0 50%, #fff 50%), linear-gradient(to right, transparent 50%, #4460a0 50%);
+}
+.cta--facebook.is-active,
+.cta--facebook:focus,
+.cta--facebook:hover {
+  color: #4460a0 !important;
 }
 .cta--block {
   text-align: center;

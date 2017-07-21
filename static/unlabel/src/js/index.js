@@ -16,8 +16,12 @@ class App {
   constructor() {
     console.log('[Unlabel App]')
 
+    this.browserCheck()
     this.initAnimations()
     this.initComponents()
+  }
+  browserCheck() {
+    window.Modernizr.addTest('webkit', 'WebkitAppearance' in document.documentElement.style)
   }
   initAnimations() {
     // Default easing for all components
