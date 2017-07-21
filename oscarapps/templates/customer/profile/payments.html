@@ -5,18 +5,47 @@
 
 {% block tabcontent %}
 
-    {% if bankcards %}
-        {% for bankcard in bankcards %}
-        <div>
-            <h2>{{ bankcard.card_type }}</h2>
-            <h3>{{ bankcard.name}}</h3>
-            <h3>{{ bankcard.number}}</h3>
-            <h3>{{ bankcard.expiry_date}}</h3>
-            <a href="{% url 'customer:my-payments-delete' pk=bankcard.id %}" class="btn btn-lg btn-primary" >{% trans "Delete" %}</a>
-        </div>
-            <br><br>
-        {% endfor %}
-        {% include "partials/pagination.html" %}
-    {% endif %}
+    <div class="container container--left">
+        {% if bankcards %}
+            <ul class="payment__cardsList">
+                {% for bankcard in bankcards %}
+                    <div class="payment__cardsListItem">
+                        <div class="bankcard bankcard--{{ bankcard.card_type|lower|cut:' ' }}">
+                            <div class="bankcard__bg"></div>
+                            <div class="bankcard__wrapper">
+                                <div class="bankcard__content">
+                                    <div class="bankcard__header">
+                                        <div class="bankcard__brand"></div>
+                                    </div>
+                                    <div class="bankcard__number">
+                                        <span>****</span><span>****</span><span>****</span><span>{{ bankcard.number|cut:'-'|cut:'X'}}</span>
+                                    </div>
+                                    <div class="bankcard__footer">
+                                        <div>
+                                            <div class="bankcard__label">{% trans "Card Holder" %}</div>
+                                            <div class="bankcard__info">{{ bankcard.name|truncatechars:22}}</div>
+                                        </div>
+                                        <div>
+                                            <div class="bankcard__label">{% trans "Expires" %}</div>
+                                            <div class="bankcard__info">{{ bankcard.expiry_date}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="payment__delete" href="{% url 'customer:my-payments-delete' pk=bankcard.id %}">{% trans "Delete" %}</a>
+                    </div>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="missing">
+                {# TODO : debug "add payment" url #}
+                {% url 'customer:my-payments-add' as redirect_url %}
+                {% blocktrans %}
+                    You don't have any. <a class="link link--discrete link--matchFont" href="{{redirect_url}}">Add a card</a> ! 
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+    </div>
 
 {% endblock tabcontent %}
