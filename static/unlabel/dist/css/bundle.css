@@ -822,6 +822,14 @@ button.swiper-pagination-bullet {
   width: 60px;
   height: 60px;
 }
+.account__settingsContent {
+  padding: 48px 0 96px;
+}
+@media (min-width: 768px) {
+  .account__settingsContent {
+    padding: 24px 0 96px;
+  }
+}
 .anchors-nav {
   position: relative;
 }

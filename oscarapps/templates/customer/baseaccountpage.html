@@ -2,6 +2,8 @@
 
 {% load i18n %}
 
+{# TODO : create variable (such as is_settings_subpage) to know if it's a setting subpage instead of using the following very verbose if statement : if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' #}
+
 {% block title %}
     {{ page_title }} | {% trans 'Account' %} | {{ block.super }}
 {% endblock %}
@@ -109,5 +111,13 @@
 {% endblock %}
 
 {% block content %}
+    {% if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' %}
+        <div class="account__settingsContent">
+    {% endif %}
+
     {% block tabcontent %}{% endblock tabcontent %}
+    
+    {% if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' %}
+        </div>{# // profile__settingContent #}
+    {% endif %}
 {% endblock content %}
