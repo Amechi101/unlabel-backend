@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block grid_header_results %}
+    {% trans 'creator' as result_type_singular %}
+    {% trans 'creators' as result_type_plural %}
     {% include "partials/number_of_results.html" %}
 {% endblock %}
 

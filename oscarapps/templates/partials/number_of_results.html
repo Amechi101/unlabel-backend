@@ -1,13 +1,17 @@
 {% load i18n %}
 
 <div>
-    {% if paginator.count %}
-        {% blocktrans count num_results=paginator.count %}
-            <strong>{{ num_results }}</strong>&nbsp;result
-        {% plural %}
-            <strong>{{ num_results }}</strong>&nbsp;results
-        {% endblocktrans %}
-    {% else %}
-        {% trans "<strong>0</strong>&nbsp;results" %}
-    {% endif %}
+	{% with result_type_singular|default:'result' as result_type_singular and result_type_plural|default:'results' as result_type_plural %}
+	    {% if paginator.count %}
+	        {% blocktrans count num_results=paginator.count %}
+	            <strong>{{ num_results }}</strong>&nbsp;{{result_type_singular}}
+	        {% plural %}
+	            <strong>{{ num_results }}</strong>&nbsp;{{result_type_plural}}
+	        {% endblocktrans %}
+	    {% else %}
+	    	{% blocktrans %}
+	        	<strong>0</strong>&nbsp;{{result_type_plural}}
+	        {% endblocktrans %}
+	    {% endif %}
+    {% endwith %}
 </div>
