@@ -1,0 +1,11 @@
+<ol class="grid__list color-context color-context--brands">
+    {% for brand in brands %}
+        <li class="grid__item grid__item--m-2 grid__item--l-3 grid__item--xl-4">
+        	{% if unfollow %}
+          		{% include "brand/partials/brand.html" with unfollow=True %}
+          	{% else %}
+          		{% include "brand/partials/brand.html" %}
+        	{% endif %}
+        </li>
+    {% endfor %}
+</ol>

@@ -1,0 +1,11 @@
+<ol class="grid__list color-context color-context--creators">
+    {% for influencer in influencers %}
+        <li class="grid__item grid__item--s-2 grid__item--l-3 grid__item--xl-4 grid__item--xxl-5">
+			{% if unfollow %}
+				{% include "influencers/partials/influencer.html" with unfollow=True %}
+			{% else %}
+				{% include "influencers/partials/influencer.html" %}
+			{% endif %}
+        </li>
+    {% endfor %}
+</ol>

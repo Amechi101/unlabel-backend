@@ -168,13 +168,7 @@
 
 {% block content %}
     {% if influencers %}
-        <ol class="grid__list">
-            {% for influencer in influencers %}
-                <li class="grid__item">
-                  {% include "influencers/partials/influencer.html" %}
-                </li>
-            {% endfor %}
-        </ol>
+        {% include "influencers/partials/influencers_gridList.html" %}
     {% else %}
       <div class="grid__emptyMessage">
         <p class="missing">{% trans "No Creators found." %}</p>

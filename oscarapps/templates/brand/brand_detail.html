@@ -114,13 +114,7 @@
 
 {% block content %}
     {% if products %}
-        <ol class="grid__list">
-            {% for product in products %}
-                <li class="grid__item">
-                  {% render_product product %}
-                </li>
-            {% endfor %}
-        </ol>
+        {% include "catalogue/partials/products_gridList.html" %}
     {% else %}
         <div class="grid__emptyMessage">
             <p class="missing">{% trans "No products for now." %}</p>

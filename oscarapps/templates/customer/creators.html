@@ -13,13 +13,7 @@
 
 {% block content %}
     {% if creators %}
-        <ol class="grid__list color-context color-context--creators">
-            {% for creator in creators %}
-                <li class="grid__item">
-                  {% include "influencers/partials/influencer.html" with influencer=creator unfollow=True %}
-                </li>
-            {% endfor %}
-        </ol>
+        {% include "influencers/partials/influencers_gridList.html" with influencers=creators unfollow=True %}
     {% else %}
         <div class="grid__emptyMessage">
             <p class="missing">

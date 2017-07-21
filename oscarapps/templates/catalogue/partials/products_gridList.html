@@ -1,0 +1,9 @@
+{% load product_tags  %}
+
+<ol class="grid__list color-context color-context--products">
+    {% for product in products %}
+        <li class="grid__item grid__item--s-2 grid__item--l-3 grid__item--xl-4 grid__item--xxl-5">
+            {% render_product product %}
+        </li>
+    {% endfor %}
+</ol>

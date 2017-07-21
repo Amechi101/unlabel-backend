@@ -17,7 +17,7 @@
             </figure>
         </a>
         {% if unfollow %}
-            <a href="{% url 'customer:unfollow-creator' pk=creator.id %}" class="cta cta--mild cta--block grid__itemAction">{% trans "Unfollow" %}</a>
+            <a href="{% url 'customer:unfollow-creator' pk=influencer.id %}" class="cta cta--mild cta--block grid__itemAction">{% trans "Unfollow" %}</a>
         {% endif %}
     </div>
 </article>

@@ -149,36 +149,94 @@ grid_sidebarSize = 254px
   overflow: hidden
 }
 
-.grid__item {
+
+
+gridItemStyles(numberOfItemsPerRow = 1) {
+  maxItemsPerRow = 5
   border_style = 1px solid $color_lightGrey
-    
-  width: 50%
+  
   border-bottom: border_style
-  &:nth-child(2n + 1) {
-    border-right: border_style
-  }
+  width: s('calc(100% / %s)', numberOfItemsPerRow)
   
-  @media $mq_l {
-    width: calc(100% / 3)
-    &:nth-child(2n + 1) {
-      border-right: 0
-    }
-    &:nth-child(3n + 1),
-    &:nth-child(3n + 2) {
-      border-right: border_style
+  // reset
+  for i in (2..maxItemsPerRow){
+    $selectors = ''
+    for j in (1...i) {
+      &:nth-child({i}n + {j}) {
+        border-right: 0
+      }
     }
   }
   
-  @media $mq_xxl {
-    width: 25%
-    &:nth-child(3n + 1),
-    &:nth-child(3n + 2) {
-      border-right: 0
-    }
-    &:nth-child(4n + 1),
-    &:nth-child(4n + 2),
-    &:nth-child(4n + 3) {
+  for k in (1...numberOfItemsPerRow) {
+    &:nth-child({numberOfItemsPerRow}n + {k}) {
       border-right: border_style
+    }
+  }
+}
+
+.grid__item {
+  gridItemStyles(1)
+  
+  &--s-1 {
+    gridItemStyles(1)
+  }
+
+  &--s-2 {
+    gridItemStyles(2)
+  }
+  
+  &--m-2 {
+    @media $mq_m {
+      gridItemStyles(2)
+    }
+  }
+  
+  &--m-3 {
+    @media $mq_m {
+      gridItemStyles(3)
+    }
+  }
+  
+  &--l-3 {
+    @media $mq_l {
+      gridItemStyles(3) 
+    }
+  }
+  
+  &--l-4 {
+    @media $mq_l {
+      gridItemStyles(4) 
+    }
+  }
+  
+  &--xl-4 {
+    @media $mq_xl {
+      gridItemStyles(4) 
+    }
+  }
+  
+  &--xl-5 {
+    @media $mq_xl {
+      gridItemStyles(5) 
+    }
+  }
+  
+  &--xxl-4 {
+    @media $mq_xxl {
+      gridItemStyles(4) 
+    }
+  }
+  
+  &--xxl-5 {
+    @media $mq_xxl {
+      gridItemStyles(5) 
+    }
+  }
+  
+  &--xxl-6 {
+    @media $mq_xxl {
+      gridItemStyles(6) 
     }
   }
 }

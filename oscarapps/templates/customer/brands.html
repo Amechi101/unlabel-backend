@@ -13,13 +13,7 @@
 
 {% block content %}
     {% if brands %}
-        <ol class="grid__list color-context color-context--brands">
-            {% for brand in brands %}
-                <li class="grid__item">
-                  {% include "brand/partials/brand.html" with unfollow=True %}
-                </li>
-            {% endfor %}
-        </ol>
+        {% include "brand/partials/brands_gridList.html" with unfollow=True %}
     {% else %}
         <div class="grid__emptyMessage">
             <p class="missing">

@@ -119,13 +119,7 @@
 
 {% block content %}
    {% if brands %}
-       <ol class="grid__list">
-           {% for brand in brands %}
-               <li class="grid__item">
-                 {% include "brand/partials/brand.html" %}
-               </li>
-           {% endfor %}
-       </ol>
+       {% include "brand/partials/brands_gridList.html" %}
    {% else %}
       <div class="grid__emptyMessage">
         <p class="missing">{% trans "No Brands found." %}</p>

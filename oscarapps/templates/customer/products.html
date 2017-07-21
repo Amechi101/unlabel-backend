@@ -13,13 +13,7 @@
 
 {% block content %}
     {% if products %}
-        <ol class="grid__list color-context color-context--products">
-            {% for product in products %}
-                <li class="grid__item">
-                  {% include "catalogue/partials/product.html" %}
-                </li>
-            {% endfor %}
-        </ol>
+        {% include "catalogue/partials/products_gridList.html" %}
     {% else %}
         <div class="grid__emptyMessage">
             <p class="missing">
