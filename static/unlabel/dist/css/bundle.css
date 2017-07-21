@@ -823,11 +823,12 @@ button.swiper-pagination-bullet {
   height: 60px;
 }
 .account__settingsContent {
-  padding: 48px 0 96px;
+  margin-top: 48px;
+  padding-bottom: 96px;
 }
 @media (min-width: 768px) {
   .account__settingsContent {
-    padding: 24px 0 96px;
+    margin-top: 24px;
   }
 }
 .anchors-nav {
