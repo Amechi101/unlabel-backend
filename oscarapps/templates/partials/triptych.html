@@ -2,7 +2,7 @@
 	{% block triptych_bg %}
 		<div class="triptych__bg"></div>
 	{% endblock %}
-	<div class="container container--m-pad-l">
+	<div class="container container--m-pad">
 		<div class="triptych__wrapper{% if triptych_isWrapperThinner %} triptych__wrapper--thinner{% elif triptych_isWrapperWider %} triptych__wrapper--wider{% endif %}{% if not triptych_isBigTitle %} triptych__wrapper--taller{% endif %}">
 			<header class="triptych__header">
 				<h2 class="title{% if triptych_isBigTitle %} title--destructured{% endif %} title--caps title--oneWordPerLine">{% block triptych_title %}{{triptych_title}}{% endblock %}</h2>

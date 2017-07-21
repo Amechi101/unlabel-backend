@@ -1418,6 +1418,9 @@ span.carousel_contentItem {
 .contact__emailLabel {
   font-family: 'FaroWeb-BoldLucky';
 }
+.container {
+  margin: 0 auto;
+}
 @media (max-width: 767px) {
   .container {
     padding: 0 24px;
@@ -1427,40 +1430,126 @@ span.carousel_contentItem {
   .container {
     padding: 0 32px;
     max-width: 1184px;
-    margin: 0 auto;
+  }
+}
+.container--pad {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+@media (min-width: 768px) {
+  .container--pad {
+    padding-top: 96px;
+    padding-bottom: 96px;
   }
 }
 @media (max-width: 767px) {
-  .container--s-pad-m {
+  .container--s-pad {
     padding-top: 48px;
     padding-bottom: 48px;
   }
 }
 @media (min-width: 768px) {
-  .container--m-pad-l {
+  .container--m-pad {
     padding-top: 96px;
     padding-bottom: 96px;
   }
 }
+.container--pad48 {
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+.container--pad48Top {
+  padding-top: 48px;
+}
+.container--pad48Bottom {
+  padding-bottom: 48px;
+}
+@media (max-width: 767px) {
+  .container--s-pad48 {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+  .container--s-pad48Top {
+    padding-top: 48px;
+  }
+  .container--s-pad48Bottom {
+    padding-bottom: 48px;
+  }
+}
+@media (min-width: 768px) {
+  .container--m-pad48 {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+  .container--m-pad48Top {
+    padding-top: 48px;
+  }
+  .container--m-pad48Bottom {
+    padding-bottom: 48px;
+  }
+}
+.container--pad96 {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+.container--pad96Top {
+  padding-top: 96px;
+}
+.container--pad96Bottom {
+  padding-bottom: 96px;
+}
+@media (max-width: 767px) {
+  .container--s-pad96 {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+  .container--s-pad96Top {
+    padding-top: 96px;
+  }
+  .container--s-pad96Bottom {
+    padding-bottom: 96px;
+  }
+}
+@media (min-width: 768px) {
+  .container--m-pad96 {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+  .container--m-pad96Top {
+    padding-top: 96px;
+  }
+  .container--m-pad96Bottom {
+    padding-bottom: 96px;
+  }
+}
 .container--narrow {
-  margin: 0 auto;
-  max-width: 320px;
+  max-width: 304px;
 }
 @media (min-width: 768px) {
   .container--narrow {
     max-width: 608px;
   }
 }
-.container--medium {
-  margin: 0 auto;
+@media (max-width: 767px) {
+  .container--s-narrow {
+    max-width: 304px;
+  }
+}
+@media (min-width: 768px) {
+  .container--m-narrow {
+    max-width: 608px;
+  }
 }
 @media (min-width: 768px) {
   .container--medium {
     max-width: 800px;
   }
 }
-.container--leftAligned {
-  margin-left: 0 !important;
+.container--left {
+  margin-left: 0;
+}
+.container--right {
+  margin-right: 0;
 }
 .coupon-form {
   position: relative;
