@@ -38,16 +38,7 @@
                         {% include 'partials/form_field.html' with field=form.password1 %}
                         {% include 'partials/form_field.html' with field=form.password2 %}
                     </div>
-                    <div class="form__passwordSecurity">
-                        <span>{% trans "Security level (at least one capital letter and one number)" %}</span>
-                        <br class="u-mobile-only">
-                        <span class="password-security" data-password-security-id="id_password1">
-                            <span class="password-security__bar"></span>
-                            <span class="password-security__bar"></span>
-                            <span class="password-security__bar"></span>
-                            <span class="password-security__bar"></span>
-                        </span>
-                    </div>
+                    {% include 'partials/form_password_security.html' with field_id="id_password1" %}
                     <div class="form__row form__row--m-2">
                         {% include 'partials/form_field.html' with field=form.dob %}
                         {% include 'partials/form_field.html' with field=form.country %}
