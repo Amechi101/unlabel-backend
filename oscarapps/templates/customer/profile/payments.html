@@ -3,20 +3,6 @@
 {% load i18n %}
 {% load widget_tweaks %}
 
-{% block breadcrumbs %}
-    <ul class="breadcrumb">
-        <li>
-            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
-        </li>
-        <li>
-            <a href="{% url 'customer:summary' %}">{% trans 'Account' %}</a>
-        </li>
-        <li>
-            <a href="{% url 'customer:my-payments' %}">{% trans 'My Payments' %}</a>
-        </li>
-    </ul>
-{% endblock %}
-
 {% block tabcontent %}
 
     {% if bankcards %}

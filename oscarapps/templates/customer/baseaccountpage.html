@@ -22,6 +22,35 @@
     <div class="grid__headerTitle u-desktop-only">{% block grid_header_titleContent %}{% endblock %}</div>
 {% endblock %}
 
+{% block grid_header %}
+    {% if active_tab == 'profile' or active_tab == 'addresses' or active_tab == 'notifications' or active_tab == 'password'  or active_tab == 'payments' %}
+        <div class="u-mobile-only">
+            {{block.super}}
+        </div>
+        <div class="grid__subNav u-desktop-only">
+            <ul class="grid__subNavList">
+                <li class="grid__subNavListItem">
+                    <a class="grid__subNavListLink {% if active_tab == 'profile' %} is-active{% endif %}" href="{% url 'customer:profile-view' %}">{% trans "My Informations" %}</a>
+                </li>
+                <li class="grid__subNavListItem">
+                    <a class="grid__subNavListLink {% if active_tab == 'addresses' %} is-active{% endif %}" href="{% url 'customer:address-list' %}">{% trans "My Address Book" %}</a>
+                </li>
+                <li class="grid__subNavListItem">
+                    <a class="grid__subNavListLink {% if active_tab == 'payments' %} is-active{% endif %}" href="{% url 'customer:my-payments' %}">{% trans "My Payment Methods" %}</a>
+                </li>
+                <li class="grid__subNavListItem">
+                    <a class="grid__subNavListLink {% if active_tab == 'password' %} is-active{% endif %}" href="{% url 'customer:change-password' %}">{% trans "Password" %}</a>
+                </li>
+                <li class="grid__subNavListItem">
+                    <a class="grid__subNavListLink {% if active_tab == 'notifications' %} is-active{% endif %}" href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
+                </li>
+            </ul>
+        </div>
+    {% else %}
+        {{block.super}}
+    {% endif %}
+{% endblock %}
+
 {% block column_left %}
     <div class="categories nested-lists">
         <ul class="nested-lists__list">
