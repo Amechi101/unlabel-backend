@@ -15,5 +15,7 @@
 {% endif %}
 
 {% for field in form %}
-    {% include 'partials/form_field.html' with field=field style=style %}
+	<div class="form__row">
+    	{% include 'partials/form_field.html' with field=field style=style %}
+    </div>
 {% endfor %}

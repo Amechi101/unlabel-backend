@@ -42,13 +42,46 @@
   @media $mq_m {
     margin-top: 32px
   }
+  
+  .form--stacked & {
+    @media $mq_m {
+      display: flex
+      align-items: center
+    }
+  }
 }
 
 .form__label {
+  
+  .form--stacked & {
+    font-family: $font_bold
+    
+    
+    @media $mq_m {
+      width: 150px
+      text-align: right
+      margin-right: 32px
+    }
+  }
 }
 
 .form__field {
   margin-top: 12px
+  
+  .form--stacked & {
+    @media $mq_m {
+      margin-top: 0
+      flex-grow: 1
+    }
+    
+    input[type=text]
+    input[type=number],
+    select {
+      @media $mq_m {
+        width: 50%
+      }
+    }
+  }
 }
 
 .form__passwordSecurity {
@@ -83,6 +116,12 @@
     
     .cta + .cta {
       margin-left: 12px
+    }
+  }
+  
+  .form--stacked & {
+    @media $mq_m {
+      padding-left: 150px + 32px // label width + gutter
     }
   }
 }

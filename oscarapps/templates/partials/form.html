@@ -5,11 +5,10 @@
     {% if includes_files %}enctype="multipart/form-data"{% endif %}>
 
     {% if not method == "get" %}{% csrf_token %}{% endif %}
+    
     {% include 'partials/form_fields.html' %}
-    <div class="form-group">
-        <div class="{% if style == 'horizontal' %}col-sm-offset-4 col-sm-8{% endif %}">
-            <button class="btn btn-lg btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
-            {% trans "or" %} <a href="#" onclick="window.history.go(-1);return false" >{% trans "cancel" %}</a>.
-        </div>
+
+    <div class="form-group form__actions">
+        <button class="cta cta--dark" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save Changes" %}</button> {% if cancelable %} {% trans "or" %} <a href="#" onclick="window.history.go(-1);return false" >{% trans "cancel" %}</a>.{% endif %}
     </div>
 </form>

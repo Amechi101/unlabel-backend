@@ -2503,8 +2503,43 @@ html.webkit .cta--facebook:not(button) {
     margin-top: 32px;
   }
 }
+@media (min-width: 768px) {
+  .form--stacked .form__group {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+.form--stacked .form__label {
+  font-family: 'FaroWeb-BoldLucky';
+}
+@media (min-width: 768px) {
+  .form--stacked .form__label {
+    width: 150px;
+    text-align: right;
+    margin-right: 32px;
+  }
+}
 .form__field {
   margin-top: 12px;
+}
+@media (min-width: 768px) {
+  .form--stacked .form__field {
+    margin-top: 0;
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+  }
+}
+@media (min-width: 768px) {
+  .form--stacked .form__field input[type=text],
+  .form--stacked .form__field input[type=number],
+  .form--stacked .form__field select {
+    width: 50%;
+  }
 }
 .form__passwordSecurity {
   margin-top: 12px;
@@ -2535,6 +2570,11 @@ html.webkit .cta--facebook:not(button) {
   }
   .form__actions .cta + .cta {
     margin-left: 12px;
+  }
+}
+@media (min-width: 768px) {
+  .form--stacked .form__actions {
+    padding-left: 182px;
   }
 }
 .form__alternative {

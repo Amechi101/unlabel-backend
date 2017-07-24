@@ -2,5 +2,7 @@
 {% load i18n %}
 
 {% block tabcontent %}
-    {% include 'partials/form.html' with form_id="profile_form" action="." %}
+	<div class="container container--medium container--left">
+    	{% include 'partials/form.html' with form_id="profile_form" action="." class='form--stacked' %}
+    </div>
 {% endblock tabcontent %}
