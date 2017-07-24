@@ -1,0 +1,34 @@
+{% extends "customer/baseaccountpage.html" %}
+
+{% load i18n %}
+
+{% block tabcontent %}
+	<div class="container container--left">
+		<form>
+			<p>{% trans "Mute Notifications from:" %}</p>
+			<div class="form__group">
+				<ul>
+					<li>
+						<label class="checkbox">
+							<input class="checkbox__input" type="checkbox" name="brands"><span class="checkbox__label">{% trans "Brands I follow" %}</span>
+						</label>
+					</li>
+					<li>
+						<label class="checkbox">
+							<input type="checkbox" name="creators"><span class="checkbox__label">{% trans "Content creators I follow" %}</span>
+						</label>
+					</li>
+					<li>
+						<label class="checkbox">
+							<input type="checkbox" name="News"><span class="checkbox__label">{% trans "News from Unlabel" %}</span>
+						</label>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="form__actions">
+				<button type="submit" class="cta cta--dark">{% trans 'Save Changes' %}</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}

@@ -44,7 +44,7 @@
                     <a class="grid__subNavListLink {% if active_tab == 'password' %} is-active{% endif %}" href="{% url 'customer:change-password' %}">{% trans "Password" %}</a>
                 </li>
                 <li class="grid__subNavListItem">
-                    <a class="grid__subNavListLink {% if active_tab == 'notifications' %} is-active{% endif %}" href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
+                    <a class="grid__subNavListLink {% if active_tab == 'notifications' %} is-active{% endif %}" href="{% url 'customer:notifications-settings' %}">{% trans "Notifications" %}</a>
                 </li>
             </ul>
         </div>
@@ -84,7 +84,7 @@
                         <a class="categories__link {% if active_tab == 'password' %} is-active{% endif %}" href="{% url 'customer:change-password' %}">{% trans "Password" %}</a>
                     </li>
                     <li class="nested-lists__item">
-                        <a class="categories__link {% if active_tab == 'notifications' %} is-active{% endif %}" href="{% url 'customer:notifications-inbox' %}">{% trans "Notifications" %}</a>
+                        <a class="categories__link {% if active_tab == 'notifications' %} is-active{% endif %}" href="{% url 'customer:notifications-settings' %}">{% trans "Notifications" %}</a>
                     </li>
                 </ul>
             </li>
@@ -104,7 +104,7 @@
                 <option value="{% url 'customer:address-list' %}" {% if active_tab == 'addresses' %} selected="selected"{% endif %}>{% trans "My Address Book" %}</option>
                 <option value="{% url 'customer:my-payments' %}" {% if active_tab == 'payments' %} selected="selected"{% endif %}>{% trans "My Payment Methods" %}</option>
                 <option value="{% url 'customer:change-password' %}" {% if active_tab == 'password' %} selected="selected"{% endif %}>{% trans "Password" %}</option>
-                <option value="{% url 'customer:notifications-inbox' %}" {% if active_tab == 'notifications' %} selected="selected"{% endif %}>{% trans "Notifications" %}</option>
+                <option value="{% url 'customer:notifications-settings' %}" {% if active_tab == 'notifications' %} selected="selected"{% endif %}>{% trans "Notifications" %}</option>
             </optgroup>
         </select>
     </div>

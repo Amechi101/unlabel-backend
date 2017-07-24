@@ -190,4 +190,9 @@ class BankcardDeleteView(PageTitleMixin, generic.View):
         return HttpResponseRedirect(reverse('customer:my-payments'))
 
 
+class NotificationsSettingsView(PageTitleMixin, generic.TemplateView):
+    active_tab = 'notifications'
+    template_name = 'customer/notifications/settings.html'
+
+
 
