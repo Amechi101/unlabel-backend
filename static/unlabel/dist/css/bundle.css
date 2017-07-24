@@ -1587,6 +1587,40 @@ input[type=checkbox].checkbox:checked + label::before {
     padding-bottom: 96px;
   }
 }
+.container--pad24 {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+.container--pad24Top {
+  padding-top: 24px;
+}
+.container--pad24Bottom {
+  padding-bottom: 24px;
+}
+@media (max-width: 767px) {
+  .container--s-pad24 {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  .container--s-pad24Top {
+    padding-top: 24px;
+  }
+  .container--s-pad24Bottom {
+    padding-bottom: 24px;
+  }
+}
+@media (min-width: 768px) {
+  .container--m-pad24 {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+  .container--m-pad24Top {
+    padding-top: 24px;
+  }
+  .container--m-pad24Bottom {
+    padding-bottom: 24px;
+  }
+}
 .container--pad48 {
   padding-top: 48px;
   padding-bottom: 48px;
@@ -1970,6 +2004,15 @@ html.webkit .cta--facebook:not(button) {
 }
 .cta--inlineIconRight .fonticon {
   margin-left: 12px;
+}
+.delete {
+  color: #d0021b;
+  text-decoration: underline;
+}
+.delete:hover,
+.delete:focus {
+  text-decoration: none;
+  color: #d0021b;
 }
 @media (min-width: 768px) {
   .desc {
