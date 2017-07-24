@@ -4281,6 +4281,73 @@ a:hover .img-container img {
 .title .link {
   font-family: inherit;
 }
+.loader {
+  position: relative;
+  display: block;
+  width: 32px;
+  height: 4px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+.loader::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #232323;
+  -webkit-animation: loader-anim 2s ease-out infinite;
+          animation: loader-anim 2s ease-out infinite;
+}
+.loader--center {
+  margin: 0 auto;
+}
+@-webkit-keyframes loader-anim {
+  0% {
+    -webkit-transform: translate(-101%, 0);
+            transform: translate(-101%, 0);
+  }
+  20% {
+    -webkit-transform: translate(0%, 0);
+            transform: translate(0%, 0);
+  }
+  80% {
+    -webkit-transform: translate(0%, 0);
+            transform: translate(0%, 0);
+  }
+  90% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
+  }
+  100% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
+  }
+}
+@keyframes loader-anim {
+  0% {
+    -webkit-transform: translate(-101%, 0);
+            transform: translate(-101%, 0);
+  }
+  20% {
+    -webkit-transform: translate(0%, 0);
+            transform: translate(0%, 0);
+  }
+  80% {
+    -webkit-transform: translate(0%, 0);
+            transform: translate(0%, 0);
+  }
+  90% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
+  }
+  100% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0);
+  }
+}
 .logo {
   position: relative;
   width: 42px;
