@@ -48,31 +48,16 @@
   }
   
   // Classes generated :
-  // container--pad24
-  // container--pad24Top
-  // container--pad24Bottom
-  // container--s-pad24
-  // container--s-pad24Top
-  // container--s-pad24Bottom
-  // container--m-pad24
-  // container--m-pad24Top
-  // container--m-pad24Bottom
-  // container--pad48
-  // container--pad48Top
-  // container--pad48Bottom
-  // container--s-pad48
-  // container--s-pad48Top
-  // container--s-pad48Bottom
-  // container--m-pad48
-  // container--m-pad48Top
-  // container--m-pad48Bottom
-  // container--s-pad96
-  // container--s-pad96Top
-  // container--s-pad96Bottom
-  // container--m-pad96
-  // container--m-pad96Top
-  // container--m-pad96Bottom
-  for padding_size in (24px 48px 96px) {
+  // container--pad{SIZE}
+  // container--pad{SIZE}Top
+  // container--pad{SIZE}Bottom
+  // container--s-pad{SIZE}
+  // container--s-pad{SIZE}Top
+  // container--s-pad{SIZE}Bottom
+  // container--m-pad{SIZE}
+  // container--m-pad{SIZE}Top
+  // container--m-pad{SIZE}Bottom
+  for padding_size in (16px 24px 32px 48px 96px) {
     &--pad{padding_size} {
       padding-top: padding_size
       padding-bottom: padding_size
