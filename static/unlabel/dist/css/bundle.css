@@ -1780,6 +1780,9 @@ input[type=checkbox].checkbox:checked + label::before {
     max-width: 800px;
   }
 }
+.container--full {
+  max-width: 100%;
+}
 .container--left {
   margin-left: 0;
 }
@@ -4509,6 +4512,157 @@ a:hover .img-container img {
 }
 .notifications-feed__listItem + .notifications-feed__listItem {
   margin-top: 24px;
+}
+@media (min-width: 768px) {
+  .order-summary {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-item: stretch;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+@media (min-width: 768px) {
+  .order-summary__content {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    max-width: 600px;
+  }
+}
+.order-summary__info {
+  font-family: 'FaroWeb-BoldLucky';
+}
+.order-summary__status {
+  display: inline-block;
+  background-color: #232323;
+  color: #fff;
+  padding: 0 7px;
+  font-family: 'FaroWeb-BoldLucky';
+  border-radius: 3px;
+  font-size: 11px;
+  vertical-align: top;
+}
+@media (max-width: 767px) {
+  .order-summary__status {
+    margin-bottom: 8px;
+  }
+}
+@media (min-width: 768px) {
+  .order-summary__status {
+    margin-right: 8px;
+  }
+}
+.order-summary__sep {
+  margin: 0 5px;
+}
+.order-summary__productsList {
+  margin: 12px 0;
+}
+@media (min-width: 768px) {
+  .order-summary__productsList {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    margin: 16px 0;
+  }
+}
+.order-summary__productsItem {
+  width: 100%;
+  margin: 24px 0;
+}
+@media (min-width: 768px) {
+  .order-summary__productsItem {
+    margin: 16px 0;
+  }
+}
+@media (min-width: 1024px) {
+  .order-summary__productsItem {
+    width: 50%;
+  }
+}
+.order-summary__product {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.order-summary__productVisual {
+  width: 64px;
+  min-width: 64px;
+}
+.order-summary__productContent {
+  margin: 0;
+  padding: 4px 16px;
+}
+.order-summary__productName {
+  font-size: 16px;
+}
+.order-summary__productID {
+  font-size: 11px;
+}
+.order-summary__helpItem {
+  display: inline-block;
+}
+.order-summary__helpItem + .order-summary__helpItem {
+  margin-left: 16px;
+}
+@media (min-width: 768px) {
+  .order-summary__helpItem + .order-summary__helpItem {
+    margin-left: 42px;
+  }
+}
+.order-summary__helpLink {
+  text-decoration: underline;
+}
+.order-summary__helpLink:hover {
+  text-decoration: none;
+}
+.order-summary__footer {
+  background-color: #dde0ed;
+  padding: 32px;
+}
+@media (max-width: 767px) {
+  .order-summary__footer {
+    margin-top: 32px;
+  }
+}
+@media (min-width: 768px) {
+  .order-summary__footer {
+    width: 245px;
+    min-width: 245px;
+    margin-left: 32px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+.order-summary__totalLabel {
+  font-family: 'FaroWeb-BoldLucky';
+}
+.order-summary__totalPrice {
+  font-family: 'FaroWeb-DisplayLucky';
+  font-size: 24px;
+  margin-top: 8px;
+}
+.order-summary__footerActions {
+  margin-top: 48px;
 }
 .pagination__list {
   margin: 0 auto;
