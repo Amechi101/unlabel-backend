@@ -165,6 +165,26 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
+input[type=checkbox] {
+  display: none;
+}
+input[type=checkbox] + label {
+  cursor: pointer;
+}
+input[type=checkbox] + label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  vertical-align: middle;
+  margin: 8px 16px 8px 0;
+  box-shadow: 0 0 0 1px #ccc;
+}
+input[type=checkbox][checked=checked] + label::before,
+input[type=checkbox]:checked + label::before {
+  background-color: #232323;
+}
 textarea {
   -webkit-appearance: none;
      -moz-appearance: none;
