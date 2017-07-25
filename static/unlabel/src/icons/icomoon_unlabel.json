@@ -8,12 +8,28 @@
     {
       "selection": [
         {
+          "order": 28,
+          "id": 19,
+          "name": "more",
+          "prevSize": 32,
+          "code": 59665,
+          "tempChar": ""
+        },
+        {
+          "order": 27,
+          "id": 18,
+          "name": "less",
+          "prevSize": 32,
+          "code": 59666,
+          "tempChar": ""
+        },
+        {
           "order": 25,
           "id": 16,
           "name": "starFull",
           "prevSize": 32,
           "code": 59663,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 22,
@@ -21,7 +37,7 @@
           "name": "starStroke",
           "prevSize": 32,
           "code": 59664,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 21,
@@ -29,7 +45,7 @@
           "name": "profile",
           "prevSize": 32,
           "code": 59661,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 20,
@@ -37,7 +53,7 @@
           "name": "shoppingBag",
           "prevSize": 32,
           "code": 59662,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 15,
@@ -45,7 +61,7 @@
           "name": "unlabelLogo",
           "prevSize": 32,
           "code": 59660,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 14,
@@ -53,7 +69,7 @@
           "name": "instagram",
           "prevSize": 32,
           "code": 59659,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 2,
@@ -61,7 +77,7 @@
           "name": "carouselArrowLeft",
           "prevSize": 32,
           "code": 59648,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 3,
@@ -69,7 +85,7 @@
           "name": "carouselArrowRight",
           "prevSize": 32,
           "code": 59649,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 4,
@@ -77,7 +93,7 @@
           "name": "check",
           "prevSize": 32,
           "code": 59650,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 5,
@@ -85,7 +101,7 @@
           "name": "dropdownArrow",
           "prevSize": 32,
           "code": 59651,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 6,
@@ -93,7 +109,7 @@
           "name": "email",
           "prevSize": 32,
           "code": 59652,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 7,
@@ -101,7 +117,7 @@
           "name": "facebook",
           "prevSize": 32,
           "code": 59653,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 8,
@@ -109,7 +125,7 @@
           "name": "lock",
           "prevSize": 32,
           "code": 59654,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 13,
@@ -117,7 +133,7 @@
           "name": "magnifyingglass",
           "prevSize": 32,
           "code": 59655,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 10,
@@ -125,7 +141,7 @@
           "name": "pinterest",
           "prevSize": 32,
           "code": 59656,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 11,
@@ -133,7 +149,7 @@
           "name": "trash",
           "prevSize": 32,
           "code": 59657,
-          "tempChar": ""
+          "tempChar": ""
         },
         {
           "order": 12,
@@ -141,7 +157,7 @@
           "name": "twitter",
           "prevSize": 32,
           "code": 59658,
-          "tempChar": ""
+          "tempChar": ""
         }
       ],
       "id": 0,
@@ -155,6 +171,36 @@
       "height": 1024,
       "prevSize": 32,
       "icons": [
+        {
+          "id": 19,
+          "paths": [
+            "M810.667 554.667h-256v256h-85.333v-256h-256v-85.333h256v-256h85.333v256h256v85.333z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "more"
+          ]
+        },
+        {
+          "id": 18,
+          "paths": [
+            "M810.667 554.667h-597.333v-85.333h597.333v85.333z"
+          ],
+          "attrs": [
+            {}
+          ],
+          "isMulticolor": false,
+          "isMulticolor2": false,
+          "grid": 0,
+          "tags": [
+            "less"
+          ]
+        },
         {
           "id": 16,
           "paths": [
