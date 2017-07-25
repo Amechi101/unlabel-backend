@@ -1,0 +1,92 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<div class="account-mini">
+    <div class="account-mini__col account-mini__col--left">
+    	<div class="account-mini__colGroup">
+    		<p class="title title--small title--oneWordPerLine account-mini__userName">{{user.first_name}} {{user.last_name}}</p>
+    		<ul class="account-mini__navList color-context color-context--account">
+    			<li>
+    				<a class="account-mini__navLink" href="{% url 'customer:followed-brands' %}">{% trans "Followed Brands" %}</a>
+    			</li>
+    			<li>
+    				<a class="account-mini__navLink" href="{% url 'customer:followed-creators' %}">{% trans "Followed Creators" %}</a>
+    			</li>
+    			<li>
+    				<a class="account-mini__navLink" href="{% url 'customer:liked-products' %}">{% trans "My Likes" %}</a>
+    			</li>
+    			<li>
+    				<a class="account-mini__navLink" href="{% url 'customer:order-list' %}">{% trans "My Orders" %}</a>
+    			</li>
+    			<li>
+    				<a class="account-mini__navLink" href="{% url 'customer:profile-update' %}">{% trans "My Informations" %}</a>
+    			</li>
+    			<li>
+    				<a class="account-mini__navLink" href="{% url 'customer:my-payments' %}">{% trans "My Settings" %}</a>
+    			</li>
+    		</ul>
+    	</div>
+    	<div class="account-mini__colGroup">
+    		<a class="account-mini__logout" href="{% url 'customer:logout' %}">{% trans 'Sign out' %}</a>
+    		<a class="account-mini__profile cta cta--dark" href="{% url 'customer:profile-update' %}">{% trans 'My Account' %}</a>
+    	</div>
+    </div>
+    <div class="account-mini__col account-mini__col--right">
+        <p class="account-mini__notificationsTitle subtitle subtitle--small">{% trans 'Notifications' %}</p>
+        
+    	{# TODO : If at least 1 notification, display list  #}
+    	<ul class="account-mini__notificationsList">
+    		{# TODO : remove static data and loop through latest 3 notifications #}
+    		<li class="account-mini__notificationsListItem">
+    			<div class="notification">
+    			    <div class="notification__visual">
+    			        <div class="img-container img-container--square">
+    			            <img src="{% static 'unlabel/dist/img/temp/notification-product1.jpg' %}" alt=""/>
+    			        </div>
+    			    </div>
+    			    <div class="notification__content">
+    			        <p class="notification__title">New color available for this product</p>
+    			        <p class="notification__time">5 hours ago</p>
+    			    </div>
+    			</div>
+    		</li>
+    		<li class="account-mini__notificationsListItem">
+    			<div class="notification">
+    			    <div class="notification__visual">
+    			        <div class="img-container img-container--square">
+    			            <img src="{% static 'unlabel/dist/img/temp/notification-product2.jpg' %}" alt=""/>
+    			        </div>
+    			    </div>
+    			    <div class="notification__content">
+    			        <p class="notification__title">new product</p>
+    			        <p class="notification__time">18 hours ago</p>
+    			    </div>
+    			</div>
+    		</li>
+    		<li class="account-mini__notificationsListItem">
+    			<div class="notification">
+    			    <div class="notification__visual">
+    			        <div class="img-container img-container--square">
+    			            <img src="{% static 'unlabel/dist/img/temp/notification-product3.jpg' %}" alt=""/>
+    			        </div>
+    			    </div>
+    			    <div class="notification__content">
+    			        <p class="notification__title">This product is almost out of stock</p>
+    			        <p class="notification__time">1 day ago</p>
+    			    </div>
+    			</div>
+    		</li>
+    	</ul>
+    	{# TODO : If at least 3 notifications, display link  #}
+        <div class="account-mini__notificationsMore">
+            <a href="{% url 'customer:notifications-inbox' %}">{% trans 'See More' %}</a>
+        </div>
+
+    	{# TODO : If no notifications, display message  #}
+        <!--
+    	<div class="account-mini__notificationsMessage">
+    		<p class="missing">{% trans "It's pretty quiet for now." %}</p>
+    	</div>
+        -->
+    </div>
+</div>

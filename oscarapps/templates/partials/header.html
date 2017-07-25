@@ -15,66 +15,63 @@
             </a>
             <!-- TODO : add dynamic links -->
             <ul class="header__navList nav__list u-desktop-only">
-                <li>
+                <li class="header__navListItem">
                     <a class="link link--discrete" href="{% url 'catalogue:index' %}" title="{% trans 'Women' %}">{% trans 'Women' %}</a>
                 </li>
-                <li>
+                <li class="header__navListItem">
                     <a class="link link--discrete" href="{% url 'catalogue:index' %}" title="{% trans 'Men' %}">{% trans 'Men' %}</a>
                 </li>
-                <li>
+                <li class="header__navListItem">
                     <a class="link link--discrete" href="{% url 'brand-list' %}" title="{% trans 'Our brands' %}">{% trans 'Our brands' %}</a>
                 </li>
-                <li>
+                <li class="header__navListItem">
                     <a class="link link--discrete" href="{% url 'influencers' %}" title="{% trans 'Our creators' %}">{% trans 'Our creators' %}</a>
                 </li>
             </ul>
         </nav>
         <nav class="header__nav header__nav--secondary nav--inline">
             <ul class="header__navList nav__list">
-                <li>
+                <li class="header__navListItem header_submenuToggler">
                     {% if user.is_authenticated %}
-                        <a class="header__linkWithNotif header_linkWithSubmenu" href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:summary' %}{% endif %}" title="{% trans 'My Account' %}">
+                        <a class="header__linkWithNotif header_linkWithSubmenu" href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:profile-update' %}{% endif %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
                             <span class="fonticon fonticon--profile fonticon--box u-mobile-only"></span>
                             {% if num_unread_notifications > 0 %}
                                 <span class="notif">{{ num_unread_notifications }}</span>
                             {% endif %}
-
-                            <div class="header__submenu">
-                                <div class="header__submenuWrapper">
-                                    Account menu
-                                </div>
-                            </div>
                         </a>
+                        <div class="header__submenu">
+                            <div class="header__submenuWrapper">
+                                {% include 'partials/header_submenu_account.html' %}
+                            </div>
+                        </div>
                     {% else %}
                         <a class="header__linkWithNotif header_linkWithSubmenu" href="{% url 'customer:login' %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
                             <span class="fonticon fonticon--profile fonticon--box u-mobile-only"></span>
-
-                            <div class="header__submenu">
-                                <div class="header__submenuWrapper">
-                                    login menu
-                                </div>
-                            </div>
                         </a>
+                        <div class="header__submenu">
+                            <div class="header__submenuWrapper">
+                                login menu
+                            </div>
+                        </div>
                     {% endif %}
                 </li>
-                <li>
+                <li class="header__navListItem header_submenuToggler">
                     <a class="header__linkWithNotif header_linkWithSubmenu" href="{% url 'basket:summary' %}" title="{% trans 'Shopping Bag' %}">
                         <span class="u-desktop-only">{% trans 'Shopping Bag' %}</span>
                         <span class="fonticon fonticon--shoppingBag fonticon--box u-mobile-only"></span>
                         {% if request.basket.num_lines %}
                             <span class="notif">{{ request.basket.num_lines }}</span>
                         {% endif %}
-
-                        <div class="header__submenu">
-                            <div class="header__submenuWrapper">
-                                basket menu
-                            </div>
-                        </div>
                     </a>
+                    <div class="header__submenu">
+                        <div class="header__submenuWrapper">
+                            basket menu
+                        </div>
+                    </div>
                 </li>
-                <li>
+                <li class="header__navListItem">
                     <a class="header__searchBtn" href="#search-drawer" title="{% trans 'Search' %}"><span class="fonticon fonticon--magnifyingglass fonticon--box"></span></a>
                 </li>
             </ul>

@@ -822,6 +822,71 @@ button.swiper-pagination-bullet {
   width: 60px;
   height: 60px;
 }
+.account-mini {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+}
+.account-mini__col--left {
+  width: 224px;
+  background-color: #f5e5d9;
+  padding: 32px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.account-mini__col--right {
+  padding: 32px 0 0;
+  background-color: #232323;
+  color: #fff;
+  width: 320px;
+}
+.account-mini__colGroup + .account-mini__colGroup {
+  margin-top: 48px;
+}
+.account-mini__userName.title--small {
+  line-height: 30px;
+}
+.account-mini__navList {
+  margin-top: 48px;
+}
+.account-mini__navLink {
+  line-height: 24px;
+  font-family: 'FaroWeb-BoldLucky';
+}
+.account-mini__profile {
+  margin-top: 24px;
+}
+.account-mini__notificationsTitle {
+  padding: 0 32px;
+}
+.account-mini__notificationsListItem {
+  margin: 0;
+  padding: 32px;
+  border-bottom: 1px solid #333;
+}
+.account-mini__notificationsMore {
+  padding: 24px 32px;
+}
+.account-mini__notificationsMessage {
+  padding: 24px 32px;
+}
+.account-mini__notificationsMessage .missing {
+  color: #fff;
+}
 .account__settingsContent {
   margin-top: 48px;
   padding-bottom: 96px;
@@ -3628,27 +3693,27 @@ html.webkit .cta--facebook:not(button) {
   background: #fff;
   border-bottom: 1px solid #f0f0f0;
 }
-.header__navList li + li {
+.header__nav--primary .header__navList {
+  margin-left: 30px;
+  font-family: 'FaroWeb-BoldLucky';
+}
+.header__navListItem + .header__navListItem {
   margin-left: 15px;
 }
 @media (min-width: 768px) {
-  .header__navList li + li {
+  .header__navListItem + .header__navListItem {
     margin-left: 24px;
   }
 }
 @media (min-width: 1024px) {
-  .header__navList li + li {
+  .header__navListItem + .header__navListItem {
     margin-left: 32px;
   }
 }
 @media (min-width: 1280px) {
-  .header__navList li + li {
+  .header__navListItem + .header__navListItem {
     margin-left: 48px;
   }
-}
-.header__nav--primary .header__navList {
-  margin-left: 30px;
-  font-family: 'FaroWeb-BoldLucky';
 }
 .header__linkWithNotif {
   position: relative;
@@ -3708,12 +3773,13 @@ html.webkit .cta--facebook:not(button) {
     padding: 0 12px;
   }
 }
+.header_submenuToggler {
+  position: relative;
+}
 .header__submenu {
   position: absolute;
   top: 100%;
   right: 0;
-  width: 544px;
-  visibility: hidden;
   overflow: hidden;
 }
 @media (max-width: 767px) {
@@ -3721,16 +3787,8 @@ html.webkit .cta--facebook:not(button) {
     display: none;
   }
 }
-html.no-js .header__submenu {
-  display: none;
-}
-html.no-js .header_linkWithSubmenu:hover .header__submenu {
-  display: block;
-  visibility: visible;
-}
 .header__submenuWrapper {
-  background-color: #f00;
-  height: 234px;
+  background-color: #f0f0f0;
 }
 .header__searchBtn {
   margin-left: -10px;
