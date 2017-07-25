@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 <header class="header">
+    <div id="header-submenu-overlay" class="header__overlay"></div>
     <div class="header__bar cols cols--align-middle">
         <nav class="header__nav header__nav--primary nav--inline">
             <a href="{{ homepage_url }}" title="{% trans 'Home' %}">
@@ -32,27 +33,45 @@
             <ul class="header__navList nav__list">
                 <li>
                     {% if user.is_authenticated %}
-                        <a class="header__linkWithNotif" href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:summary' %}{% endif %}" title="{% trans 'My Account' %}">
+                        <a class="header__linkWithNotif header_linkWithSubmenu" href="{% if num_unread_notifications > 0 %}{% url 'customer:notifications-inbox' %}{% else %}{% url 'customer:summary' %}{% endif %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
                             <span class="fonticon fonticon--profile fonticon--box u-mobile-only"></span>
                             {% if num_unread_notifications > 0 %}
                                 <span class="notif">{{ num_unread_notifications }}</span>
                             {% endif %}
+
+                            <div class="header__submenu">
+                                <div class="header__submenuWrapper">
+                                    Account menu
+                                </div>
+                            </div>
                         </a>
                     {% else %}
-                        <a class="header__linkWithNotif" href="{% url 'customer:login' %}" title="{% trans 'My Account' %}">
+                        <a class="header__linkWithNotif header_linkWithSubmenu" href="{% url 'customer:login' %}" title="{% trans 'My Account' %}">
                             <span class="u-desktop-only">{% trans "My Account" %}</span>
                             <span class="fonticon fonticon--profile fonticon--box u-mobile-only"></span>
+
+                            <div class="header__submenu">
+                                <div class="header__submenuWrapper">
+                                    login menu
+                                </div>
+                            </div>
                         </a>
                     {% endif %}
                 </li>
                 <li>
-                    <a class="header__linkWithNotif" href="{% url 'basket:summary' %}" title="{% trans 'Shopping Bag' %}">
+                    <a class="header__linkWithNotif header_linkWithSubmenu" href="{% url 'basket:summary' %}" title="{% trans 'Shopping Bag' %}">
                         <span class="u-desktop-only">{% trans 'Shopping Bag' %}</span>
                         <span class="fonticon fonticon--shoppingBag fonticon--box u-mobile-only"></span>
                         {% if request.basket.num_lines %}
                             <span class="notif">{{ request.basket.num_lines }}</span>
                         {% endif %}
+
+                        <div class="header__submenu">
+                            <div class="header__submenuWrapper">
+                                basket menu
+                            </div>
+                        </div>
                     </a>
                 </li>
                 <li>

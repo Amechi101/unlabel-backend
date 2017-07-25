@@ -3604,6 +3604,23 @@ html.webkit .cta--facebook:not(button) {
   z-index: 10;
   position: relative;
 }
+.header__overlay {
+  z-index: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0,0,0,0.67);
+  visibility: hidden;
+}
+@media (max-width: 767px) {
+  .header__overlay {
+    display: none;
+  }
+}
 .header__bar {
   position: relative;
   height: 79px;
@@ -3648,6 +3665,72 @@ html.webkit .cta--facebook:not(button) {
   .header__linkWithNotif .notif {
     margin-left: 5px;
   }
+}
+.header_linkWithSubmenu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.header_linkWithSubmenu::before {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background-color: #232323;
+  transition: opacity 250ms cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 250ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 250ms cubic-bezier(0.19, 1, 0.22, 1), transform 250ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 250ms cubic-bezier(0.19, 1, 0.22, 1), transform 250ms cubic-bezier(0.19, 1, 0.22, 1), -webkit-transform 250ms cubic-bezier(0.19, 1, 0.22, 1);
+  -webkit-transform: translate(0, 100%);
+          transform: translate(0, 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (min-width: 768px) {
+  .header_linkWithSubmenu:hover::before {
+    opacity: 1;
+    -webkit-transform: translate(0, 0%);
+            transform: translate(0, 0%);
+  }
+}
+@media (min-width: 768px) {
+  .header_linkWithSubmenu {
+    height: 79px;
+  }
+}
+@media (min-width: 1024px) {
+  .header_linkWithSubmenu {
+    padding: 0 12px;
+  }
+}
+.header__submenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 544px;
+  visibility: hidden;
+  overflow: hidden;
+}
+@media (max-width: 767px) {
+  .header__submenu {
+    display: none;
+  }
+}
+html.no-js .header__submenu {
+  display: none;
+}
+html.no-js .header_linkWithSubmenu:hover .header__submenu {
+  display: block;
+  visibility: visible;
+}
+.header__submenuWrapper {
+  background-color: #f00;
+  height: 234px;
 }
 .header__searchBtn {
   margin-left: -10px;

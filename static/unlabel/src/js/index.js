@@ -11,6 +11,7 @@ import {TweenMax, Power3} from 'gsap'
 import Basket from './components/basket'
 import FileInput from './components/fileinput'
 import SelectNav from './components/select-nav'
+import HeaderSubmenu from './components/header-submenu'
 
 class App {
   constructor() {
@@ -113,6 +114,14 @@ class App {
     const selectNav_arr = [].slice.call(document.querySelectorAll('.select-nav'))
     selectNav_arr.forEach((el) => {
       new SelectNav({
+        el: el
+      })
+    })
+
+    // HeaderSubmenu
+    const headerSubmenu_arr = [].slice.call(document.querySelectorAll('.header__submenu'))
+    headerSubmenu_arr.forEach((el) => {
+      new HeaderSubmenu({
         el: el
       })
     })
