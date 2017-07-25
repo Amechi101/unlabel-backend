@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load socialaccount %}
+
+<section class="connect connect--{{style|default:'page'}}">
+    <div class="{% if style == 'page' %}container{% endif %}">
+        <div class="cols cols--m-2">
+            <div class="col">
+                <div class="connect__option connect__option--register">
+                    <div>
+                        <div class="connect__optionHeader">
+                            <h2 class="{% if style == 'page' %}title title--small{% else %}subtitle subtitle--small{% endif %}">{% if style == 'page' %}{% trans "I’m a new customer" %}{% else %}{% trans "I’m new" %}{% endif %}</h2>
+                        </div>
+                        <p>{% trans "Creating an account is simple and easy. An account will allow you to follow brands updates, add products to your wishlist, manage your personal details and more. Follow the next quick steps to set up your account today." %}</p>
+                    </div>
+                    <div class="connect__optionFooter">
+                        <a href="{% url 'customer:register' %}" class="cta {% if not style == 'page' %} cta--dark cta--block{% endif %}">{% trans "Create an account" %}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <form class="connect__option connect__option--signin" id="login_form" action="{{ request.get_full_path }}" method="post">
+                    {% csrf_token %}
+                    <div class="connect__optionHeader">
+                        <h2 class="{% if style == 'page' %} title title--small{% else %} subtitle subtitle--small{% endif %}">{% if style == 'page' %}{% trans "I already have an account" %}{% else %}{% trans "Sign in" %}{% endif %}</h2>
+                    </div>
+                    {% include "partials/form_fields.html" with form=login_form %}
+                    <div class="form__group">
+                        <a class="link" href="{% url 'password-reset' %}">{% trans "Forgot password ?" %}</a>
+                    </div>
+                    <div class="form__actions connect__optionFooter">
+                        <button name="login_submit" type="submit" value="Log In" class="cta cta--{% if style == 'page' %}dark{% else %}light{% endif %}">{% trans 'Sign in' %}</button>
+                        <a class="cta cta--facebook cta--inlineIcon cta--inlineIconLeft" href="{% provider_login_url "facebook" method="oauth2" %}"><span class="fonticon fonticon--facebook"></span>{% if style == 'page' %}{% trans "Log in with Facebook" %}{% else %}{% trans "Log in" %}{% endif %}</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

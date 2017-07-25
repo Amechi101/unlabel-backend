@@ -10,37 +10,6 @@
 
 {% block content %}
 
-    <section class="connect">
-        <div class="container">
-            <div class="cols cols--m-2">
-                <div class="col">
-                    <div class="connect__option register-push">
-                        <div>
-                            <h2 class="title title--small">{% trans "I’m a new customer" %}</h2>
-                            <p>{% trans "Creating an account is simple and easy. An account will allow you to follow brands updates, add products to your wishlist, manage your personal details and more. Follow the next quick steps to set up your account today." %}</p>
-                        </div>
-                        <div class="register-push__actions">
-                            <a href="{% url 'customer:register' %}" class="cta">{% trans "Create an account" %}</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <form class="connect__option" id="login_form" action="{{ request.get_full_path }}" method="post">
-                        {% csrf_token %}
-                        <h2 class="title title--small">{% trans "I already have an account" %}</h2>
-                        {% include "partials/form_fields.html" with form=login_form %}
-                        <div class="form__group">
-                            <a class="link" href="{% url 'password-reset' %}">{% trans "Forgot password ?" %}</a>
-                        </div>
-                        <div class="form__actions">
-                            <button name="login_submit" type="submit" value="Log In" class="cta cta--dark"
-                                    data-loading-text="{% trans "Signing in..." %}">{% trans 'Sign in' %}</button>
-                            <a class="cta cta--facebook cta--inlineIcon cta--inlineIconLeft" href="{% provider_login_url "facebook" method="oauth2" %}"><span class="fonticon fonticon--facebook"></span>{% trans "Log in with Facebook" %}</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% include "partials/connect_form.html" with style="page" %}
 
 {% endblock content %}

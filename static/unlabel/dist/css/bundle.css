@@ -1511,40 +1511,88 @@ input[type=checkbox].checkbox:checked + label::before {
   }
 }
 @media (max-width: 767px) {
-  .connect {
+  .connect--page {
     padding: 22px 0 46px;
   }
 }
 @media (min-width: 768px) {
-  .connect .container {
-    padding: 72px 32px;
+  .connect--page {
+    padding: 72px 0;
   }
 }
+.connect--mini label {
+  display: none;
+}
+.connect--mini .form__group {
+  margin-top: 16px;
+}
 @media (min-width: 768px) {
-  .connect .register-push {
+  .connect__option {
     height: 100%;
   }
 }
-.connect .connect__option {
+.connect__option--register {
+  background-color: #f5e5d9;
+}
+@media (min-width: 768px) {
+  .connect__option--register {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+.connect--page .connect__option {
   padding: 42px 32px 50px;
 }
 @media (min-width: 768px) {
-  .connect .connect__option {
+  .connect--page .connect__option {
     padding: 72px 24px;
   }
 }
 @media (min-width: 1024px) {
-  .connect .connect__option {
+  .connect--page .connect__option {
     padding: 72px 48px;
   }
 }
 @media (min-width: 1280px) {
-  .connect .connect__option {
+  .connect--page .connect__option {
     padding: 72px 96px;
   }
 }
-.connect .title {
+.connect--mini .connect__option {
+  width: 320px;
+  padding: 32px;
+}
+.connect--mini .connect__option--signin {
+  background-color: #232323;
+  color: #fff;
+}
+.connect--page .connect__optionHeader {
   margin-bottom: 42px;
+}
+.connect--mini .connect__optionHeader {
+  margin-bottom: 24px;
+}
+.connect__optionFooter {
+  margin-top: 42px;
+}
+@media (min-width: 768px) {
+  .connect__optionFooter {
+    margin-top: 48px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
 }
 .contact {
   padding: 42px 0 96px;
@@ -3780,12 +3828,20 @@ html.webkit .cta--facebook:not(button) {
   position: absolute;
   top: 100%;
   right: 0;
+  visibility: hidden;
   overflow: hidden;
 }
 @media (max-width: 767px) {
   .header__submenu {
     display: none;
   }
+}
+html.no-js .header__submenu {
+  display: none;
+}
+html.no-js .header_submenuToggler:hover .header__submenu {
+  display: block;
+  visibility: visible;
 }
 .header__submenuWrapper {
   background-color: #f0f0f0;
@@ -5105,34 +5161,6 @@ a:hover .img-container img {
 }
 .quantity__submit {
   display: none;
-}
-.register-push {
-  background-color: #f5e5d9;
-}
-@media (min-width: 768px) {
-  .register-push {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: stretch;
-        -ms-flex-align: stretch;
-            align-items: stretch;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-  }
-}
-.register-push__actions {
-  margin-top: 42px;
-}
-@media (min-width: 768px) {
-  .register-push__actions {
-    margin-top: 48px;
-  }
 }
 .register__header {
   padding: 48px 0;

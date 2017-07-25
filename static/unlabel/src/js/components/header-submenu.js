@@ -25,7 +25,7 @@ class HeaderSubmenu {
     this.contentWrapper_el = this.el.querySelector('.header__submenuWrapper')
     this.headerOverlay_el = document.querySelector('#header-submenu-overlay')
 
-    // this.hide(true)
+    this.hide(true)
     this.stickToright()
   }
   addEvents() {
@@ -56,16 +56,16 @@ class HeaderSubmenu {
     TweenLite.killTweensOf(this.contentWrapper_el)
   }
   show(preventAnim = false) {
-    // this.killCurrentAnimation()
-    // TweenLite.to(this.headerOverlay_el, preventAnim ? 0 : 0.3, {'autoAlpha': 1})
-    // TweenLite.to(this.el, preventAnim ? 0 : 0.3, {'autoAlpha': 1})
-    // TweenLite.to(this.contentWrapper_el, preventAnim ? 0 : 0.3, {y:'0px'})
+    this.killCurrentAnimation()
+    TweenLite.to(this.headerOverlay_el, preventAnim ? 0 : 0.3, {'autoAlpha': 1})
+    TweenLite.to(this.el, preventAnim ? 0 : 0.3, {'autoAlpha': 1})
+    TweenLite.to(this.contentWrapper_el, preventAnim ? 0 : 0.3, {y:'0px'})
   }
   hide(preventAnim = false) {
-    // this.killCurrentAnimation()
-    // TweenLite.to(this.headerOverlay_el, preventAnim ? 0 : 0.2, {'autoAlpha': 0, delay: 0.05})
-    // TweenLite.to(this.el, preventAnim ? 0 : 0.2, {'autoAlpha': 0})
-    // TweenLite.to(this.contentWrapper_el, preventAnim ? 0 : 0.2, {y:'-20px'})
+    this.killCurrentAnimation()
+    TweenLite.to(this.headerOverlay_el, preventAnim ? 0 : 0.2, {'autoAlpha': 0, delay: 0.05})
+    TweenLite.to(this.el, preventAnim ? 0 : 0.2, {'autoAlpha': 0})
+    TweenLite.to(this.contentWrapper_el, preventAnim ? 0 : 0.2, {y:'-20px'})
   }
   stickToright() {
     const toggler_clientRect = this.toggler_el.getBoundingClientRect()
