@@ -1,0 +1,59 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+<div class="basket-mini">
+	<div class="basket-mini__col basket-mini__col--content">
+		{% if not request.basket.is_empty %}
+			<ul class="basket-mini__productList">
+				{% for line in request.basket.all_lines %}
+					{# Display only 3 items #}
+					{% if forloop.counter0 < 3 %}
+						<li class="basket-mini__productListItem">
+							<a class="u-block" href="{{ line.product.get_absolute_url }}">
+								<figure class="order-summary__product">
+								    <div class="order-summary__productVisual">
+								        <div class="img-container img-container--square">
+								        	{% with image=line.product.primary_image %}
+								        	    {% thumbnail image.original "128x128" upscale=False as thumb %}
+								        	    	<img class="thumbnail" src="{{ thumb.url }}" alt="{{ line.product.get_title }}">
+								        	    {% endthumbnail %}
+								        	{% endwith %}
+								        </div>
+								    </div>
+								    <figcaption class="order-summary__productContent">
+								        <p class="order-summary__productName">{{ line.description }}</p>
+								        <p class="order-summary__productPrice">{% trans 'Unit Price : ' %}{{ line.unit_price_excl_tax|currency:request.basket.currency }}</p>
+								    </figcaption>
+								</figure>
+							</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+			{# Display only if more than 3 items #}
+			{% if request.basket.all_lines.count > 3 %}
+				<div class="basket-mini__productsMore">
+					<a href="{% url 'basket:summary' %}">{% trans "See more" %}</a>
+				</div>
+			{% endif %}
+		{% else %}
+			<div class="basket-mini__emptyMessage">
+				<p class="missing missing--matchColor">{% trans "Your bag is currently empty." %}</p>
+			</div>
+		{% endif %}
+	</div>
+	<div class="basket-mini__col basket-mini__col--total">
+		<div class="basket-mini__colGroup">
+			<p class="basket-mini__totalTitle subtitle subtitle--small">{% trans "Subtotal" %}</p>
+			<p class="basket-mini__totalPrice title title--small">{{ request.basket.total_excl_tax|currency:request.basket.currency }}</p>
+		</div>
+		<div class="basket-mini__colGroup">
+			<p class="basket-mini__totalNote">{% trans "Excluding tax & shipping" %}</p>
+			<div class="basket-mini__actions">
+				<a class="cta cta--dark cta--block {% if request.basket.is_empty %} is-disabled{% endif %}" href="{% url 'basket:summary' %}">{% trans "Checkout" %}</a>
+			</div>
+		</div>
+	</div>
+</div>

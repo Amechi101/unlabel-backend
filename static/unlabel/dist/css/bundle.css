@@ -1102,6 +1102,56 @@ button.swiper-pagination-bullet {
     padding-left: 80px;
   }
 }
+.basket-mini {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+}
+.basket-mini__col--content {
+  background-color: #232323;
+  color: #fff;
+  width: 320px;
+}
+.basket-mini__col--total {
+  background-color: #dde0ed;
+  width: 224px;
+  padding: 32px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.basket-mini__colGroup + .basket-mini__colGroup {
+  margin-top: 48px;
+}
+.basket-mini__emptyMessage {
+  padding: 32px;
+}
+.basket-mini__productListItem {
+  padding: 32px;
+  border-bottom: 1px solid #333;
+}
+.basket-mini__productsMore {
+  padding: 24px 32px;
+}
+.basket-mini__totalPrice {
+  margin-top: 5px;
+}
+.basket-mini__totalNote {
+  font-size: 11px;
+}
+.basket-mini__actions {
+  margin-top: 16px;
+}
 .basket__header {
   padding: 42px 0;
   border-bottom: 1px solid #f0f0f0;
@@ -2172,10 +2222,13 @@ html.webkit .cta--facebook:not(button) {
   text-align: center;
   display: block;
 }
+.cta.is-disabled,
 .cta[disabled="disabled"] {
   cursor: default;
   opacity: 0.67;
+  pointer-events: none;
 }
+.cta.is-disabled:hover,
 .cta[disabled="disabled"]:hover {
   background-position: 100% 0, 100% 0;
 }
@@ -4586,6 +4639,9 @@ a:hover .img-container img {
     line-height: 28px;
   }
 }
+.missing--matchColor {
+  color: inherit;
+}
 .nav--inline {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -4800,11 +4856,11 @@ a:hover .img-container img {
   margin: 0;
   padding: 4px 16px;
 }
-.order-summary__productName {
-  font-size: 16px;
-}
 .order-summary__productID {
   font-size: 11px;
+}
+.order-summary__productPrice {
+  font-family: 'FaroWeb-BoldLucky';
 }
 .order-summary__helpItem {
   display: inline-block;

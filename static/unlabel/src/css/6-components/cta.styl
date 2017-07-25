@@ -100,9 +100,11 @@ cta-colors(text_default, text_hover, bg_default, bg_hover, border_default, borde
     display: block
   }
   
+  &.is-disabled,
   &[disabled="disabled"] {
     cursor: default
     opacity: 0.67
+    pointer-events: none
     &:hover {
       background-position: 100% 0, 100% 0
     }

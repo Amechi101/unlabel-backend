@@ -1,0 +1,57 @@
+.basket-mini {
+  display: flex
+  align-items: stretch
+}
+
+.basket-mini__col {
+  &--content {
+    background-color: $color_darkGrey
+    color: #fff
+    width: 320px
+  }
+  
+  &--total {
+    background-color: $color_product
+    width: 224px
+    padding: 32px
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+  }
+}
+
+.basket-mini__colGroup {
+  
+  & + .basket-mini__colGroup {
+    margin-top 48px
+  }
+}
+
+.basket-mini__emptyMessage {
+  padding: 32px
+}
+
+.basket-mini__productListItem {
+  padding: 32px
+  border-bottom: 1px solid #333333
+}
+
+.basket-mini__productsMore {
+  padding: 24px 32px
+}
+
+.basket-mini__totalTitle {
+  
+}
+
+.basket-mini__totalPrice {
+  margin-top: 5px
+}
+
+.basket-mini__totalNote {
+  font-size: 11px
+}
+
+.basket-mini__actions {
+  margin-top 16px
+}
