@@ -80,7 +80,7 @@
                             <li class="nested-lists__item">
                               <div class="nested-lists__link drawer__link">
                                 <span class="drawer__linkLabel">
-                                  <input class="checkbox" type="checkbox" id="filter2_gender_male" name="gender" value="M"> <label for="filter2_gender_male">{% trans 'Male' %}</label>
+                                  <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_gender_male" name="gender" value="M"> <label for="filter2_gender_male">{% trans 'Male' %}</label>
                                 </span>
                                 <span class="drawer__linkIcon"></span>
                               </div>
@@ -88,7 +88,7 @@
                             <li class="nested-lists__item">
                               <div class="nested-lists__link drawer__link">
                                 <span class="drawer__linkLabel">
-                                  <input class="checkbox" type="checkbox" id="filter2_gender_female" name="gender" value="F"> <label for="filter2_gender_female">{% trans 'Female' %}</label>
+                                  <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_gender_female" name="gender" value="F"> <label for="filter2_gender_female">{% trans 'Female' %}</label>
                                 </span>
                                 <span class="drawer__linkIcon"></span>
                               </div>
@@ -108,7 +108,7 @@
                                 <li class="nested-lists__item">
                                   <div class="nested-lists__link drawer__link">
                                     <span class="drawer__linkLabel">
-                                      <input class="checkbox" type="checkbox" id="filter2_style_{{ style.id }}" name="style" value="{{ style.id }}"> <label for="filter2_style_{{ style.id }}">{{ style }}</label>
+                                      <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_style_{{ style.id }}" name="style" value="{{ style.id }}"> <label for="filter2_style_{{ style.id }}">{{ style }}</label>
                                     </span>
                                     <span class="drawer__linkIcon"></span>
                                   </div>
@@ -130,7 +130,7 @@
                                 <li class="nested-lists__item">
                                   <div class="nested-lists__link drawer__link">
                                     <span class="drawer__linkLabel">
-                                      <input class="checkbox" type="checkbox" id="filter2_location_{{ location.id }}" name="location" value="{{ location.id }}"> <label for="filter2_location_{{ location.id }}">{{ location }}</label>
+                                      <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_location_{{ location.id }}" name="location" value="{{ location.id }}"> <label for="filter2_location_{{ location.id }}">{{ location }}</label>
                                     </span>
                                     <span class="drawer__linkIcon"></span>
                                   </div>
@@ -231,8 +231,8 @@
         query_string += (index > 0 ? '&' : '?') + key + '=' + query_obj[key].join(',');
       });
 
-      // console.log('query_obj', query_obj);
-      // console.log('query_string', query_string);
+      console.log('query_obj', query_obj);
+      console.log('query_string', query_string);
       alert('query_string : ' + query_string);
 
       getFilteredData(query_string);
