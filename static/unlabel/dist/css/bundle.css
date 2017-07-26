@@ -2239,15 +2239,6 @@ html.webkit .cta--facebook:not(button) {
 .cta--inlineIconRight .fonticon {
   margin-left: 12px;
 }
-.delete {
-  color: #d0021b;
-  text-decoration: underline;
-}
-.delete:hover,
-.delete:focus {
-  text-decoration: none;
-  color: #d0021b;
-}
 @media (min-width: 768px) {
   .desc {
     font-size: 24px;
