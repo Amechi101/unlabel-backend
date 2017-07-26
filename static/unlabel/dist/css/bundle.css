@@ -2284,6 +2284,11 @@ html.webkit .cta--facebook:not(button) {
     max-width: 320px;
   }
 }
+@media (min-width: 768px) {
+  .drawer--right.drawer--medium .drawer__frame {
+    max-width: 544px;
+  }
+}
 .drawer--top .drawer__frame {
   top: 0;
   right: 0;

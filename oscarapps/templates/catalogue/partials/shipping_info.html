@@ -1,0 +1,19 @@
+{% load i18n %}
+
+{# TODO - make all dynamic #}
+<section id="shipping-drawer" class="drawer drawer--bigHeader drawer--right drawer--dark drawer--medium shipping-drawer">
+	<a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Drawer' %}"></a>
+	<div class="drawer__frame">
+		<div class="drawer__header">
+			<div class="drawer__headerContent">
+				<h2 class="title title--small">{% trans "Shipping Info" %}</h2>
+		    </div>
+		    <a href="#close-drawer" class="drawer__close close close--medium" title="{% trans 'Close Drawer' %}"></a>
+		</div>
+		<div class="drawer__scroller">
+			<div class="drawer__content drawer__content--padded">
+				Shipping Info content
+			</div>
+		</div>
+	</div>
+</section>
