@@ -1,12 +1,10 @@
 .link {
-  font-family: $font_bold
   text-decoration: none !important
   display: inline-block
   position relative
   overflow: hidden
   vertical-align top // hotfix - explained here https://stackoverflow.com/questions/9273016/why-is-this-inline-block-element-pushed-downward
   white-space: nowrap // because can't be on several lines with custom underline
-  padding-bottom: 5px
   
   &::after {
     content: ''
@@ -15,7 +13,7 @@
     bottom: 0
     left: 0
     width: 100%
-    height: 2px
+    height: 1px
     background-color currentColor
     transition(transform)
     transform: translate(0%, 0)
@@ -32,6 +30,14 @@
     color: inherit // prevent default hover color
     &::after {
       transform: translate(101%, 0)
+    }
+  }
+    
+  &--thick {
+    padding-bottom: 1px
+    
+    &::after {
+      height: 2px
     }
   }
   
@@ -53,12 +59,15 @@
     }
   }
   
-  &--matchFont {
-    font-family: inherit
+  &--danger {
+    color: $color_danger
+    
+    &:hover {
+      color: $color_danger  
+    }
   }
   
-  // if child of title component
-  .title & {
+  &--matchFont {
     font-family: inherit
   }
 }

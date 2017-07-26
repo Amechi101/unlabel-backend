@@ -35,7 +35,7 @@
 			{# Display only if more than 3 items #}
 			{% if request.basket.all_lines.count > 3 %}
 				<div class="basket-mini__productsMore">
-					<a href="{% url 'basket:summary' %}">{% trans "See more" %}</a>
+					<a class="link" href="{% url 'basket:summary' %}">{% trans "See more" %}</a>
 				</div>
 			{% endif %}
 		{% else %}

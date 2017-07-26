@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="payment__delete" href="{% url 'customer:my-payments-delete' pk=bankcard.id %}">{% trans "Delete" %}</a>
+                        <a class="link link--danger payment__delete" href="{% url 'customer:my-payments-delete' pk=bankcard.id %}">{% trans "Delete" %}</a>
                     </div>
                 {% endfor %}
             </ul>
@@ -42,7 +42,7 @@
                 {# TODO : debug "add payment" url #}
                 {% url 'customer:my-payments-add' as redirect_url %}
                 {% blocktrans %}
-                    You don't have any. <a class="link link--discrete link--matchFont" href="{{redirect_url}}">Add a card</a> ! 
+                    You don't have any. <a class="link link--discrete" href="{{redirect_url}}">Add a card</a> ! 
                 {% endblocktrans %}
             </p>
         {% endif %}

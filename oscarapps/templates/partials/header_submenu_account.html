@@ -27,7 +27,7 @@
     		</ul>
     	</div>
     	<div class="account-mini__colGroup">
-    		<a class="account-mini__logout" href="{% url 'customer:logout' %}">{% trans 'Sign out' %}</a>
+    		<a class="link account-mini__logout" href="{% url 'customer:logout' %}">{% trans 'Sign out' %}</a>
     		<a class="account-mini__profile cta cta--dark" href="{% url 'customer:profile-update' %}">{% trans 'My Account' %}</a>
     	</div>
     </div>
@@ -79,7 +79,7 @@
     	</ul>
     	{# TODO : If at least 3 notifications, display link  #}
         <div class="account-mini__notificationsMore">
-            <a href="{% url 'customer:notifications-inbox' %}">{% trans 'See More' %}</a>
+            <a class="link" href="{% url 'customer:notifications-inbox' %}">{% trans 'See More' %}</a>
         </div>
 
     	{# TODO : If no notifications, display message  #}
