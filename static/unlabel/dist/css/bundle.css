@@ -1621,11 +1621,6 @@ input[type=checkbox].checkbox--borderLess + label::before {
 .connect--mini .form__group {
   margin-top: 16px;
 }
-@media (min-width: 768px) {
-  .connect__option {
-    height: 100%;
-  }
-}
 .connect__option--register {
   background-color: #f5e5d9;
 }
