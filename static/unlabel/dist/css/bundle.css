@@ -161,6 +161,12 @@ input[type=password]:-ms-input-placeholder,
 input[type=number]:-ms-input-placeholder {
   color: #a3a3a3;
 }
+input[type=text].has-error,
+input[type=email].has-error,
+input[type=password].has-error,
+input[type=number].has-error {
+  border-color: #d0021b;
+}
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -188,6 +194,9 @@ textarea::-moz-placeholder {
 }
 textarea:-ms-input-placeholder {
   color: #a3a3a3;
+}
+textarea.has-error {
+  border-color: #d0021b;
 }
 
 /**
@@ -2510,6 +2519,9 @@ html.webkit .cta--facebook:not(button) {
   white-space: nowrap;
   min-width: 0;
 }
+.fileinput.has-error .fileinput__filename {
+  border-color: #d0021b;
+}
 .filters__category + .filters__category {
   margin-top: 36px;
 }
@@ -2786,6 +2798,15 @@ html.webkit .cta--facebook:not(button) {
             align-items: center;
   }
 }
+.form__group.has-error input[type="text"],
+.form__group.has-error input[type="number"],
+.form__group.has-error input[type="email"],
+.form__group.has-error input[type=password],
+.form__group.has-error select,
+.form__group.has-error textarea,
+.form__group.has-error .fileinput .fileinput__filename {
+  border-color: #d0021b;
+}
 .form--stacked .form__label {
   font-family: 'FaroWeb-BoldLucky';
 }
@@ -2810,9 +2831,17 @@ html.webkit .cta--facebook:not(button) {
 @media (min-width: 768px) {
   .form--stacked .form__field input[type=text],
   .form--stacked .form__field input[type=number],
+  .form--stacked .form__field input[type=password],
   .form--stacked .form__field select {
     width: 50%;
   }
+}
+.form__fieldMessage {
+  margin-top: 5px;
+  font-size: 11px;
+}
+.form__fieldMessage--error {
+  color: #d0021b;
 }
 .form__passwordSecurity {
   margin-top: 12px;
@@ -2857,6 +2886,12 @@ html.webkit .cta--facebook:not(button) {
   .form__alternative {
     margin-top: 48px;
   }
+}
+.form__alert {
+  margin: 24px 0;
+}
+.form__alert--error {
+  color: #d0021b;
 }
 .gallery {
   position: relative;
@@ -5522,6 +5557,9 @@ a:hover .img-container img {
   border-color: transparent !important;
   padding-left: 0;
   padding-right: 12px;
+}
+.select.has-error select {
+  border-color: #d0021b;
 }
 @media (max-width: 767px) {
   .share {

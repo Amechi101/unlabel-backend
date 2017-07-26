@@ -49,6 +49,18 @@
       align-items: center
     }
   }
+  
+  &.has-error {
+    input[type="text"], 
+    input[type="number"], 
+    input[type="email"], 
+    input[type=password],
+    select,
+    textarea,
+    .fileinput .fileinput__filename {
+      border-color: $color_danger
+    }
+  }
 }
 
 .form__label {
@@ -75,12 +87,22 @@
     }
     
     input[type=text]
-    input[type=number],
+    input[type=number]
+    input[type=password],
     select {
       @media $mq_m {
         width: 50%
       }
     }
+  }
+}
+
+.form__fieldMessage {
+  margin-top: 5px
+  font-size: 11px
+  
+  &--error {
+    color: $color_danger
   }
 }
 
@@ -133,3 +155,12 @@
     margin-top: 48px
   }
 }
+
+.form__alert {
+  margin: 24px 0
+  
+  &--error {
+    color: $color_danger
+  }
+}
+  

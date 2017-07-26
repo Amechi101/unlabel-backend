@@ -1,21 +1,11 @@
 {% load i18n %}
 
-{% if form.is_bound and not form.is_valid %}
-    <div class="alert alert-danger">
-        <strong>{% trans "Oops! We found some errors" %}</strong> - {% trans "please check the error messages below and try again" %}
-    </div>
-{% endif %}
-
-{% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
-        <div class="alert alert-danger">
-            <i class="icon-exclamation-sign"></i> {{ error }}
-        </div>
-    {% endfor %}
-{% endif %}
+{% include "partials/form_errors.html" %}
 
 {% for field in form %}
 	<div class="form__row">
     	{% include 'partials/form_field.html' with field=field style=style %}
     </div>
 {% endfor %}
+
+{% include "partials/form_errors.html" %}
