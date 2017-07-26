@@ -884,9 +884,6 @@ button.swiper-pagination-bullet {
 .account-mini__notificationsMessage {
   padding: 24px 32px;
 }
-.account-mini__notificationsMessage .missing {
-  color: #fff;
-}
 .account__settingsContent {
   margin-top: 48px;
   padding-bottom: 96px;
