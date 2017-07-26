@@ -14,7 +14,7 @@
 
 {% block content %}
 <div class="product">
-<div class="container container--m-pad-l">
+<div class="container container--m-pad">
 	<div class="product__overview">
 		<div class="product__galleryContainer">
 			{% block product_gallery %}
@@ -81,13 +81,13 @@
 <nav class="nav nav--internal">
     <ul class="nav__list">
         <li class="nav__item">
-            <a href="" class="link">{% trans 'Shipping Info' %}</a>
+            <a href="#shipping-drawer" class="link link--thick">{% trans 'Shipping Info' %}</a>
         </li>
         <li class="nav__item">
-            <a href="#returns-drawer" class="link">{% trans 'Returns Policy' %}</a>
+            <a href="#returns-drawer" class="link link--thick">{% trans 'Returns Policy' %}</a>
         </li>
         <li class="nav__item">
-            <a href="" class="link">{% trans 'About Jessi' %}</a>
+            <a href="" class="link link--thick">{% trans 'About Jessi' %}</a>
         </li>
     </ul>
 </nav>
@@ -96,6 +96,7 @@
 {% trans 'More products' as triptych_title %}
 {% include "catalogue/partials/products_triptych.html" with triptych_title=triptych_title %}
 
+{% include "catalogue/partials/shipping_info.html" %}
 {% include "catalogue/partials/returns_policy.html" %}
 
 </div>

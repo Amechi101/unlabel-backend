@@ -1,0 +1,25 @@
+.payment {}
+
+.payment__cardsList {
+  display: flex
+  flex-wrap: wrap
+}
+
+.payment__cardsListItem {
+  width 100%
+  
+  @media $mq_m {
+    margin: 0 24px 24px 0
+    max-width 320px
+  }
+  
+  & + .payment__cardsListItem {
+    @media $mq_s_only {
+      margin-top: 24px
+    }
+  }
+}
+
+.payment__delete {
+  margin-top: 16px
+}

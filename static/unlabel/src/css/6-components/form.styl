@@ -42,13 +42,71 @@
   @media $mq_m {
     margin-top: 32px
   }
+  
+  .form--stacked & {
+    @media $mq_m {
+      display: flex
+      align-items: flex-start
+    }
+  }
+  
+  &.has-error {
+    input[type="text"], 
+    input[type="number"],
+    input[type="email"], 
+    input[type=password],
+    select,
+    textarea,
+    .fileinput .fileinput__filename {
+      border-color: $color_danger
+    }
+  }
 }
 
 .form__label {
+  
+  .form--stacked & {
+    font-family: $font_bold
+    
+    @media $mq_m {
+      width: 150px
+      text-align: right
+      margin-right: 32px
+      min-height 46px
+      display: flex
+      align-items: center
+      justify-content: flex-end
+    }
+  }
 }
 
 .form__field {
   margin-top: 12px
+  
+  .form--stacked & {
+    @media $mq_m {
+      margin-top: 0
+      flex-grow: 1
+    }
+    
+    input[type=text]
+    input[type=number]
+    input[type=password],
+    select {
+      @media $mq_m {
+        width: 50%
+      }
+    }
+  }
+}
+
+.form__fieldMessage {
+  margin-top: 5px
+  font-size: 11px
+  
+  &--error {
+    color: $color_danger
+  }
 }
 
 .form__passwordSecurity {
@@ -85,6 +143,12 @@
       margin-left: 12px
     }
   }
+  
+  .form--stacked & {
+    @media $mq_m {
+      padding-left: 150px + 32px // label width + gutter
+    }
+  }
 }
 
 .form__alternative {
@@ -94,3 +158,12 @@
     margin-top: 48px
   }
 }
+
+.form__alert {
+  margin: 24px 0
+  
+  &--error {
+    color: $color_danger
+  }
+}
+  

@@ -1,11 +1,30 @@
+$header_height = 79px
+
 .header {
   z-index: 10
   position: relative
 }
 
+.header__overlay {
+  z-index 0
+  position fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  height: 100vh
+  width: 100%
+  background-color: rgba(0, 0, 0, 0.67)
+  visibility hidden
+  
+  @media $mq_s_only {
+    display: none
+  }
+}
+
 .header__bar {
   position: relative
-  height: 79px
+  height: $header_height
   padding: 0 20px
   background: #fff
   border-bottom: 1px solid $color_lightGrey
@@ -16,7 +35,14 @@
 }
 
 .header__navList {
-  li + li {
+  .header__nav--primary & {
+    margin-left: 30px
+    font-family $font_bold
+  }
+}
+
+.header__navListItem {
+  & + .header__navListItem {
     margin-left: 15px
     
     @media $mq_m {
@@ -28,11 +54,6 @@
     @media $mq_xl {
       margin-left: 48px
     }
-  }
-  
-  .header__nav--primary & {
-    margin-left: 30px
-    font-family $font_bold
   }
 }
 
@@ -50,6 +71,70 @@
       margin-left 5px
     }
   }
+}
+
+.header_linkWithSubmenu {
+  display: flex
+  align-items: center
+  
+  &::before {
+    content: ''
+    display: block
+    position absolute
+    bottom: 0
+    right: 0
+    left: 0
+    height 4px
+    background-color $color_darkGrey
+    transition(opacity transform)
+    transform: translate(0, 100%)
+    opacity: 0
+    pointer-events: none
+  }
+  
+  .header_submenuToggler.is-active &::before,
+  &:hover::before {
+    @media $mq_m {
+      opacity: 1
+      transform: translate(0, 0%)
+    }
+  }
+  
+  @media $mq_m {
+    height: $header_height
+  }
+  @media $mq_l {
+    padding: 0 12px
+  }
+}
+
+.header_submenuToggler {
+  position: relative
+}
+
+.header__submenu {
+  position: absolute
+  top: 100%
+  right: 0
+  visibility hidden
+  overflow: hidden
+  
+  @media $mq_s_only {
+    display: none
+  }
+  
+  html.no-js & {
+    display: none
+  }
+  
+  html.no-js .header_submenuToggler:hover & {
+    display: block
+    visibility visible
+  }
+}
+
+.header__submenuWrapper {
+  background-color: $color_lightGrey // TODO : remove
 }
 
 .header__searchBtn {

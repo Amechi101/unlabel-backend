@@ -1,0 +1,147 @@
+.order-summary {
+ 
+  @media $mq_m {
+    display: flex
+    align-items: stretch
+    justify-content: space-between
+  }
+}
+
+.order-summary__content {
+  @media $mq_m {
+    flex-grow: 1
+    max-width 600px
+  }
+}
+
+.order-summary__info {
+  font-family $font_bold
+}
+
+.order-summary__status {
+  display: inline-block
+  background-color $color_darkGrey
+  color: #fff
+  padding: 0 7px
+  font-family $font_bold
+  border-radius 3px
+  font-size: 11px
+  vertical-align top
+  
+  @media $mq_s_only {
+    margin-bottom 8px
+  }
+
+  @media $mq_m {
+    margin-right 8px 
+  }
+}
+
+.order-summary__date {
+}
+
+.order-summary__sep {
+  margin: 0 5px
+}
+
+.order-summary__productsList {
+  margin: 12px 0
+  
+  @media $mq_m {
+    display: flex
+    flex-wrap: wrap
+    margin: 16px 0
+  }
+}
+
+.order-summary__productsItem {
+  width: 100%
+  margin: 24px 0
+  
+  @media $mq_m {
+    margin: 16px 0 
+  }
+  
+  @media $mq_l {
+    width: 50%
+  }
+}
+
+.order-summary__product {
+  display: flex
+  justify-content: flex-start
+}
+
+.order-summary__productVisual {
+  width: size = 64px
+  min-width: size
+}
+
+.order-summary__productContent {
+  margin: 0
+  padding: 4px 16px
+}
+
+.order-summary__productName {
+}
+
+.order-summary__productID {
+  font-size: 11px
+}
+
+.order-summary__productPrice {
+  font-family $font_bold
+}
+
+.order-summary__helpItem {
+  display: inline-block
+  
+  & + .order-summary__helpItem {
+    margin-left: 16px
+    
+    @media $mq_m {
+      margin-left: 42px
+    }
+  }
+}
+
+.order-summary__helpLink {
+  text-decoration underline
+  
+  &:hover {
+    text-decoration none
+  }
+}
+
+.order-summary__footer {
+  background-color: $color_product
+  padding 32px
+  
+  @media $mq_s_only {
+    margin-top: 32px
+  }
+  
+  @media $mq_m {
+    width: size = 245px
+    min-width size
+    margin-left 32px
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    justify-content: space-between
+  }
+}
+
+.order-summary__totalLabel {
+  font-family: $font_bold
+}
+
+.order-summary__totalPrice {
+  font-family: $font_display
+  font-size: 24px
+  margin-top: 8px
+}
+
+.order-summary__footerActions {
+  margin-top: 48px
+}

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from oscar.apps.customer.app import CustomerApplication as CoreCustomerApplication
 from oscar.core.application import Application
 from oscar.core.loading import get_class
-from oscarapps.customer.views import BrandView, BrandUnfollowView, InfluencerView, InfluencerUnfollowView, ProductsView, BankcardView, BankcardDeleteView
+from oscarapps.customer.views import BrandView, BrandUnfollowView, InfluencerView, InfluencerUnfollowView, ProductsView, BankcardView, BankcardDeleteView, NotificationsSettingsView
 
 class CustomerApplication(CoreCustomerApplication):
 
@@ -31,6 +31,9 @@ class CustomerApplication(CoreCustomerApplication):
 
             url(r'^my-payments/delete/(?P<pk>\d+)$',
                 login_required(BankcardDeleteView.as_view()),name='my-payments-delete'),
+
+            url(r'^notifications/settings/$',
+                login_required(NotificationsSettingsView.as_view()),name='notifications-settings'),
 
         ]
 

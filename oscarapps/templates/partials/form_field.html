@@ -46,9 +46,11 @@
                     {% endblock %}
 
                     {% block errors %}
-                        {% for error in field.errors %}
-                            <span class="error-block"><i class="icon-exclamation-sign"></i> {{ error }}</span>
-                        {% endfor %}
+                        <div class="form__fieldMessage form__fieldMessage--error">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
                     {% endblock %}
 
                     {% block help_text %}

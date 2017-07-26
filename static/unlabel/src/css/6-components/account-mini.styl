@@ -1,0 +1,72 @@
+.account-mini {
+  display: flex
+  align-items: stretch
+}
+
+.account-mini__col {
+  &--left {
+    width: 224px
+    background-color: $color_account
+    padding: 32px
+    display: flex
+    flex-direction: column
+    align-items: stretch
+    justify-content: space-between
+  }
+  
+  &--right {
+    padding: 32px 0 0
+    background-color: $color_darkGrey
+    color: #fff
+    width: 320px
+  }
+}
+
+.account-mini__colGroup {
+  & + .account-mini__colGroup {
+    margin-top: 48px
+  }
+}
+
+.account-mini__userName {
+  &.title--small {
+    line-height: 30px // better line-height
+  }
+}
+
+.account-mini__navList {
+  margin-top 48px
+}
+
+.account-mini__navLink {
+  line-height 24px
+  font-family: $font_bold
+}
+
+.account-mini__profile {
+  margin-top: 24px
+}
+
+.account-mini__notificationsTitle {
+  padding: 0 32px
+}
+
+.account-mini__notificationsList {
+  
+}
+
+.account-mini__notificationsListItem {
+  margin: 0
+  padding: 32px
+  border-bottom 1px solid #333333
+}
+
+.account-mini__notificationsMore {
+  padding: 24px 32px
+}
+
+.account-mini__notificationsMessage {
+  padding: 24px 32px
+}
+
+

@@ -2,5 +2,18 @@
 {% load i18n %}
 
 {% block tabcontent %}
-    {% include 'partials/form.html' with form_id="profile_form" action="." %}
+	<form id="profile_form" class="form form--stacked" action="." method="post">
+		<div class="container container--medium container--left container--pad48Bottom">
+			{% csrf_token %}
+			{% include 'partials/form_fields.html' %}
+		</div>
+		<hr>
+		<div class="container container--medium container--left container--pad24">
+			<button class="cta cta--dark" type="submit" id="id_save_button">{% trans "Save Changes" %}</button>
+		</div>
+	</form>
+	<hr>
+    <div class="container container--pad24 container--medium container--left">
+    	<a href="{% url 'customer:profile-delete' %}" class="link link--danger">{% trans 'Deativate my account' %}</a>
+    </div>
 {% endblock tabcontent %}

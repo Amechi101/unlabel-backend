@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+{% load i18n %}
+{% load staticfiles %}
+
+{% block body_class %}notifications-feed{% endblock %}
+
+{# TODO : make all content dynamic #}
+{% block content %}
+    
+    <div class="container container--m-narrow container--pad32">
+        <h1 class="title title--caps">{% trans "Notifications" %}</h1>
+    </div>
+    <hr>
+    {# TODO : remove 'not' condition once we have dynamic data (this is only for integration purposes) #}
+    {% if not notifications %}
+        <div class="container container--m-narrow container--pad32">
+            <h2 class="subtitle">{% trans "This Week" %}</h2>
+            <ul class="notifications-feed__list">
+                <li class="notifications-feed__listItem">
+                    <div class="notification">
+                        <div class="notification__visual">
+                            <div class="img-container img-container--square">
+                                <img src="{% static 'unlabel/dist/img/temp/notification-product1.jpg' %}" alt=""/>
+                            </div>
+                        </div>
+                        <div class="notification__content">
+                            <p class="notification__title">New color available for this product</p>
+                            <p class="notification__time">5 hours ago</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="notifications-feed__listItem">
+                    <div class="notification">
+                        <div class="notification__visual">
+                            <div class="img-container img-container--square">
+                                <img src="{% static 'unlabel/dist/img/temp/notification-product2.jpg' %}" alt=""/>
+                            </div>
+                        </div>
+                        <div class="notification__content">
+                            <p class="notification__title">new product</p>
+                            <p class="notification__time">18 hours ago</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="notifications-feed__listItem">
+                    <div class="notification">
+                        <div class="notification__visual">
+                            <div class="img-container img-container--square">
+                                <img src="{% static 'unlabel/dist/img/temp/notification-product3.jpg' %}" alt=""/>
+                            </div>
+                        </div>
+                        <div class="notification__content">
+                            <p class="notification__title">This product is almost out of stock</p>
+                            <p class="notification__time">1 day ago</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <div class="container container--m-narrow container--pad32">
+            <h2 class="subtitle">{% trans "This Month" %}</h2>
+            <ul class="notifications-feed__list">
+                <li class="notifications-feed__listItem">
+                    <div class="notification">
+                        <div class="notification__visual">
+                            <div class="img-container img-container--square">
+                                <img src="{% static 'unlabel/dist/img/temp/notification-product1.jpg' %}" alt=""/>
+                            </div>
+                        </div>
+                        <div class="notification__content">
+                            <p class="notification__title">Your size is now available</p>
+                            <p class="notification__time">12 days ago</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="notifications-feed__listItem">
+                    <div class="notification">
+                        <div class="notification__visual">
+                            <div class="img-container img-container--square">
+                                <img src="{% static 'unlabel/dist/img/temp/notification-product2.jpg' %}" alt=""/>
+                            </div>
+                        </div>
+                        <div class="notification__content">
+                            <p class="notification__title">You liked this product</p>
+                            <p class="notification__time">15 days ago</p>
+                        </div>
+                    </div>
+                </li>
+                <li class="notifications-feed__listItem">
+                    <div class="notification">
+                        <div class="notification__visual">
+                            <div class="img-container img-container--square">
+                                <img src="{% static 'unlabel/dist/img/temp/notification-product3.jpg' %}" alt=""/>
+                            </div>
+                        </div>
+                        <div class="notification__content">
+                            <p class="notification__title">Discover this new product</p>
+                            <p class="notification__time">23 days ago</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        {# TODO : hide/show when needed #}
+        <div class="container container--m-narrow container--pad32">
+            <div class="loader loader--center">
+            </div>
+        </div>
+    {% else %}
+        <div class="container container--m-narrow container--pad">
+            <p class="missing">{% trans "It's pretty quiet for now.<br> Follow brands and Creators to have news from us." %}</p>
+        </div>
+    {% endif %}
+
+{% endblock content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.notifications.init();
+{% endblock %}

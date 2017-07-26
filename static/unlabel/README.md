@@ -16,6 +16,7 @@
 ### CSS
 The css files are written in (Stylus)[http://stylus-lang.com/] and following the (ITCSS)[https://www.xfive.co/blog/itcss-scalable-maintainable-css-architecture/] architecture and (BEM)[http://getbem.com/] naming convention
 
+
 ### Icons
 Exported in svg from Sketch and bundled in a webfont using (icomoon)[http://icomoon.io]. The webfont configuration can be found in `./src/icons`.
 

@@ -21,12 +21,10 @@
           <h3 class="subtitle">{% trans "Gender" %}</h3>
           <ul class="filters__list">
               <li class="filters__item">
-                <input type="checkbox" id="filter1_gender_male" name="gender" onclick="generateFilteredData('gender','male')"
-                   value="male"> Male
+                <input class="checkbox checkbox--small" type="checkbox" id="filter1_gender_male" name="gender" onclick="applyFilters('filter1')" value="M"> <label for="filter1_gender_male">{% trans "Male" %}</label>
               </li>
               <li class="filters__item">
-                <input type="checkbox" id="filter1_gender_female" name="gender" onclick="generateFilteredData('gender','female')"
-               value="male"> Female
+                <input class="checkbox checkbox--small" type="checkbox" id="filter1_gender_female" name="gender" onclick="applyFilters('filter1')" value="F"> <label for="filter1_gender_female">{% trans "Female" %}</label>
               </li>
           </ul>
         </div>
@@ -36,8 +34,7 @@
           <ul class="filters__list">
             {% for style in styles %}
               <li class="filters__item">
-                <input type="checkbox" id="filter1_style_{{ style.id }}" name="style" onclick="generateFilteredData('style',{{ style.id }})"
-               value="{{ style.id }}"> {{ style }}
+                <input class="checkbox checkbox--small" type="checkbox" id="filter1_style_{{ style.id }}" name="style" onclick="applyFilters('filter1')" value="{{ style.id }}"> <label for="filter1_style_{{ style.id }}">{{ style }}</label>
               </li>
             {% endfor %}
           </ul>
@@ -48,8 +45,7 @@
           <ul class="filters__list">
             {% for location in locations %}
               <li class="filters__item">
-                <input type="checkbox" id="filter1_location_{{ location.id }}" name="location" onclick="generateFilteredData('location',{{ location.id }})"
-               value="{{ location.id }}"> {{ location }}
+                <input class="checkbox checkbox--small" type="checkbox" id="filter1_location_{{ location.id }}" name="location" onclick="applyFilters('filter1')" value="{{ location.id }}"> <label for="filter1_location_{{ location.id }}">{{ location }}</label>
               </li>
             {% endfor %}
           </ul>
@@ -58,7 +54,7 @@
 {% endblock column_left %}
 
 {% block grid_header_filters %}
-  <a class="link u-mobile-only" href="#drawer-filters">{% trans 'Filters' %}</a>
+  <a class="link link--thick u-mobile-only" href="#drawer-filters">{% trans 'Filters' %}</a>
 
   <div class="drawer drawer--right" id="drawer-filters">
       <a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Filters' %}"></a>
@@ -84,8 +80,7 @@
                             <li class="nested-lists__item">
                               <div class="nested-lists__link drawer__link">
                                 <span class="drawer__linkLabel">
-                                  <input type="checkbox" id="filter2_gender_male" name="gender" onclick="generateFilteredData('gender', 'male')" value="male">
-                                  {% trans 'Male' %}
+                                  <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_gender_male" name="gender" value="M"> <label for="filter2_gender_male">{% trans 'Male' %}</label>
                                 </span>
                                 <span class="drawer__linkIcon"></span>
                               </div>
@@ -93,8 +88,7 @@
                             <li class="nested-lists__item">
                               <div class="nested-lists__link drawer__link">
                                 <span class="drawer__linkLabel">
-                                  <input type="checkbox" id="filter2_gender_female" name="gender" onclick="generateFilteredData('gender', 'female')" value="female">
-                                  {% trans 'Female' %}
+                                  <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_gender_female" name="gender" value="F"> <label for="filter2_gender_female">{% trans 'Female' %}</label>
                                 </span>
                                 <span class="drawer__linkIcon"></span>
                               </div>
@@ -114,8 +108,7 @@
                                 <li class="nested-lists__item">
                                   <div class="nested-lists__link drawer__link">
                                     <span class="drawer__linkLabel">
-                                      <input type="checkbox" id="filter2_style_{{ style.id }}" name="style" onclick="generateFilteredData('style',{{ style.id }})" value="{{ style.id }}">
-                                      {{ style }}
+                                      <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_style_{{ style.id }}" name="style" value="{{ style.id }}"> <label for="filter2_style_{{ style.id }}">{{ style }}</label>
                                     </span>
                                     <span class="drawer__linkIcon"></span>
                                   </div>
@@ -137,8 +130,7 @@
                                 <li class="nested-lists__item">
                                   <div class="nested-lists__link drawer__link">
                                     <span class="drawer__linkLabel">
-                                      <input type="checkbox" id="filter2_location_{{ location.id }}" name="location" onclick="generateFilteredData('location',{{ location.id }})" value="{{ location.id }}">
-                                      {{ location }}
+                                      <input class="checkbox checkbox--borderLess" type="checkbox" id="filter2_location_{{ location.id }}" name="location" value="{{ location.id }}"> <label for="filter2_location_{{ location.id }}">{{ location }}</label>
                                     </span>
                                     <span class="drawer__linkIcon"></span>
                                   </div>
@@ -150,7 +142,7 @@
                       </ul>
                   </div>
                   <div class="drawer__actions">
-                    <a class="cta cta--dark cta--block">Apply Filters</a>
+                    <a class="cta cta--dark cta--block" href="#close-drawer" onclick="applyFilters('filter2');">Apply Filters</a>
                   </div>
               </div>
           </div>
@@ -200,10 +192,9 @@
 
 
 {% block extrascripts %}
-    {# TODO : create js component #}
-    <script>
-
-        {# --------------------------------README-------------------------- #}
+  {# TODO : create js component #}
+  <script>
+    {# --------------------------------README-------------------------- #}
 
     {# Send data to the below api link, to get response and replace the div#}
     {# the keys are as follows:#}
@@ -217,39 +208,47 @@
     {#     ASC - sort by date ascending    #}
     {#     DESC - sort by date descending    #}
 
-        function generateFilteredData(filter_type,id) {
-            alert("--------------");
-            var query;
+    function applyFilters(filters_id) {
+      // Get all checkboxes checked with id starting by 'filters_id'
+      var $checkbox_check_arr = $('input[type=checkbox][id^="'+filters_id+'"]:checked');
+      var query_obj = { gender:[], location:[], style:[] };
+      var query_string = '';
 
-            if(filter_type=='gender'){
-                query = "?gender="+id+'&location=&style=';
-            }
-            if(filter_type=='location'){
-                query = "?location="+id+'&style=&gender=';
-            }
-            if(filter_type=='style'){
-                query = "?style="+id+'&location=&gender=';
-            }
+      // Loop through checkboxes and add each value to the query object (in the good category)
+      $checkbox_check_arr.each(function(i, checkbox) {
+        var $checkbox = $(checkbox);
+        var checkbox_id = $checkbox.attr('id');
+        var checkbox_value = $checkbox.attr('value');
+        Object.keys(query_obj).forEach(function(key) {
+          if( checkbox_id.indexOf('_'+key+'_') > -1 ){
+            query_obj[key].push(checkbox_value);
+          }
+        });
+      });
 
+      // Build the query string based on the query object
+      Object.keys(query_obj).forEach(function(key, index) {
+        query_string += (index > 0 ? '&' : '?') + key + '=' + query_obj[key].join(',');
+      });
 
-            $.ajax({
-    {#            url: "/influencers/influencers-filter/?gender=F&location=60&style=",#}
-                url: "/api_v2/influencer_profile_listing/?gender=F",
-    //            data: {
-    //                'username': "hai",
-    //                'date' : "date",
-    //
-    //            },
-    //            dataType: 'json',
-                success: function (data) {
-                    $( "#influencer_list" ).replaceWith( data['html'] );
+      console.log('query_obj', query_obj);
+      console.log('query_string', query_string);
+      alert('query_string : ' + query_string);
 
-                }
-            });
-        };
+      getFilteredData(query_string);
+    }
 
-
-    </script>
+    function getFilteredData(query_string) {
+      $.ajax({
+        // url: "/influencers/influencers-filter/" + query_string,
+        url: "/api_v2/influencer_profile_listing/" + query_string,
+        success: function (data) {
+          // $( "#influencer_list" ).replaceWith( data['html'] );
+          console.log('getFilteredData', data);
+        }
+      });
+    }
+  </script>
 {% endblock %}
 
 

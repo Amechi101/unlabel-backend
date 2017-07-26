@@ -3,7 +3,7 @@
 
 <!-- TODO // dynamic content -->
 <article class="review">
-    <div class="container container--s-pad-m container--m-pad-l">
+    <div class="container container--pad">
         <div class="cols cols--m-2 cols--m-gutter32">
             <div class="col">
                 {# TODO : redirect to creator's page #}
@@ -36,10 +36,13 @@
                             <li class="sizechart__item">{% trans 'Chest' %}: <span data-sizechart-unit="cm">88 cm</span> <span data-sizechart-unit="inch">34"</span></li>
                             {# {{ influencer.waist }} #}
                             <li class="sizechart__item">{% trans 'Waist' %}: <span data-sizechart-unit="cm">66 cm</span> <span data-sizechart-unit="inch">25"</span></li>
+                            {# TODO : KEEP THIS CODE, the functionality will be added later on #}
+                            <!-- 
                             {# {{ influencer.weight }} #}
                             <li class="sizechart__item">{% trans 'Weight' %}: <span data-sizechart-unit="kg">52 kg</span> <span data-sizechart-unit="lb">114 lb</span></li>
                             {# {{ influencer.age }} #}
                             <li class="sizechart__item">{% trans 'Age' %}: 23 yo</li>
+                            -->
                         </ul>
                         <div class="sizechart__toggles">
                             <div class="toggle">
@@ -47,11 +50,14 @@
                                 <a href="#" class="toggle__slider" data-toggle-values="cm,inch"></a>
                                 <a href="#" class="toggle__label toggle__label--right" data-toggle-value="inch">{% trans 'Inches' %}</a>
                             </div>
+                            {# TODO : KEEP THIS CODE, the functionality will be added later on #}
+                            <!-- 
                             <div class="toggle">
                                 <a href="#" class="toggle__label toggle__label--left" data-toggle-value="kg">{% trans 'Kilograms' %}</a>
                                 <a href="#" class="toggle__slider" data-toggle-values="kg,lb"></a>
                                 <a href="#" class="toggle__label toggle__label--right" data-toggle-value="lb">{% trans 'Pounds' %}</a>
                             </div>
+                            -->
                         </div>
                     </div>
                 </div>

@@ -95,6 +95,58 @@ grid_sidebarSize = 254px
   }
 }
 
+.grid__subNav {
+  border-bottom: 1px solid $color_lightGrey
+}
+
+.grid__subNavList {
+  display: flex
+  align-items: stretch
+  justify-content: center
+  margin: 0 auto
+}
+
+.grid__subNavListItem {
+  & + .grid__subNavListItem {
+    @media $mq_m {
+      margin-left: 64px
+    }
+  }
+}
+
+.grid__subNavListLink {
+  position relative
+  display: block
+  height: 96px
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: 0 16px
+  overflow: hidden
+  
+  &::before {
+    position absolute
+    bottom: 0
+    left: 0
+    right: 0
+    display: block
+    content: ''
+    height: 4px
+    width: 100%
+    background-color: currentColor
+    transition(transform)
+    transform: translate(0, 102%)
+  }
+  
+  &:focus,
+  &.is-active,
+  &:hover {
+    &::before {
+      transform: translate(0, 0%)
+    }
+  }
+}
+
 .grid__main {
   position relative
   

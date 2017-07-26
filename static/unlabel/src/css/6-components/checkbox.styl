@@ -1,0 +1,72 @@
+input[type=checkbox].checkbox {
+  display: none
+  
+  & + label {
+    position relative
+    cursor: pointer
+    font-family: $font_regular
+  }
+
+  & + label::before {
+    content: ''
+    display: inline-block
+    width: size = 18px
+    height: size
+    border: 2px solid #fff
+    vertical-align middle
+    margin: 8px 15px 8px 0
+    box-shadow: 0 0 0 1px $color_formInput
+    background-color #fff
+  }
+  
+  & + label::after {
+    position relative
+    content: ''
+    display: inline-block
+    position absolute
+    top: 9px
+    left: 6px
+    width: 2px
+    height: 2px
+    vertical-align middle
+    background-color $color_darkGrey
+    box-shadow: 2px 0 0 $color_darkGrey, 4px 0 0 $color_darkGrey, 4px -2px 0 $color_darkGrey, 4px -4px 0 $color_darkGrey, 4px -6px 0 $color_darkGrey, 4px -8px 0 $color_darkGrey;
+    transform: rotate(45deg)
+    opacity: 0
+    transition(opacity)
+  }
+  
+  &[checked=checked] + label,
+  &:checked + label {
+    font-family: $font_bold
+    &::after {
+      opacity: 1
+    }
+  }
+  
+  & + label:hover {
+    &::after {
+      opacity: 0.2
+    }
+  }
+  
+  &--small {
+    & + label {
+      &::before {
+        width: size = 14px
+        height: size
+        margin: 5px 10px 5px 0
+      }
+      &::after {
+        top: 9px
+        left: 4px
+      }
+    }
+  }
+  
+  &--borderLess {
+    & + label::before {
+      box-shadow: 0 0 0 0 
+    }
+  }
+}
