@@ -3858,6 +3858,7 @@ html.webkit .cta--facebook:not(button) {
   pointer-events: none;
 }
 @media (min-width: 768px) {
+  .header_submenuToggler.is-active .header_linkWithSubmenu::before,
   .header_linkWithSubmenu:hover::before {
     opacity: 1;
     -webkit-transform: translate(0, 0%);

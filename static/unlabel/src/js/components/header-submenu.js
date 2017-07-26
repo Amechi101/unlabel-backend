@@ -45,10 +45,12 @@ class HeaderSubmenu {
     if( !device.isMobile ){
       this.stickToright()
       this.show()
+      this.toggler_el.classList.add('is-active')
     }
   }
   onMouseoutToggler() {
     this.hide()
+    this.toggler_el.classList.remove('is-active')
   }
   killCurrentAnimation() {
     TweenLite.killTweensOf(this.headerOverlay_el)
