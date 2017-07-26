@@ -5,6 +5,9 @@ from oscarapps.partner.forms import PartnerSignUpForm
 from oscarapps.partner.models import PartnerInvite, Partner
 from oscarapps.catalogue.models import Product
 from users.models import User
+from oscar.core.loading import (
+    get_class, get_classes, get_model, get_profile_class)
+from oscar.core.compat import get_user_model, user_is_authenticated
 
 from django.contrib.auth.models import Permission
 from django.http import HttpResponse
@@ -12,6 +15,8 @@ from django.shortcuts import render
 from django.utils.timezone import utc
 from django.views.generic import View, ListView
 from django.conf import settings
+
+UserBrandLike = get_model('customer','UserBrandLike')
 
 
 class PartnerSignUpView(View):
@@ -145,8 +150,14 @@ class BrandDetailView(View):
         partner_slug = self.kwargs['slug']
         qs = Partner.objects.get(slug=partner_slug)
         data = {'brand': qs}
+        try:
+            brand_followed = UserBrandLike.objects.get(user=request.user,brand=qs)
+            data.update({'brand_followed':True})
+        except:
+            data.update({'brand_followed':False})
         products = Product.objects.filter(brand=qs)
         data.update({'products': products})
+        data.update({'follow_count':UserBrandLike.objects.filter(brand=qs).count()})
         data.update({'filters': ['all', 'Menswear', 'Womenswear']}) # Make this list dynamic
 
         return render(request, self.template_name, data)

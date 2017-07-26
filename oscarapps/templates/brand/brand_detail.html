@@ -21,9 +21,10 @@
                 </div>
                 <div class="brand__infoContent">
                     <form class="brand__followForm">
-                        <button class="cta cta--dark">Follow brand</button> {# TODO - add follow brand functionality #}
+                        <button class="cta cta--dark" id="follow_button" onclick="getFollowData('{{ brand.pk }}')">
+                            {% if brand_followed %} UnFollow {% else %} Follow {% endif %} brand</button> {# TODO - add follow brand functionality #}
                     </form>
-                    <p class="brand__nbOfFollowers">X followers</p> {# TODO - make number of followers it dynamic #}
+                    <p class="brand__nbOfFollowers" id="follow_count">{{follow_count}} followers</p> {# TODO - make number of followers it dynamic #}
                 </div>
             </div>
         </div>
@@ -128,3 +129,29 @@
       {% include "brand/partials/brand_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True %}
     </div>
 {% endblock after_layout %}
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+      function getFollowData(brand_id) {
+      $.ajax({
+        // url: "/influencers/influencers-filter/" + query_string,
+        url: "/accounts/follow-unfollow-brand/" + brand_id,
+
+        success: function (data) {
+            if (data['followed'] == true){
+                $( "#follow_button" ).text( 'Unfollow brand' );
+            }
+            else{
+                $( "#follow_button" ).text( 'Follow brand' );
+            }
+            $( "#follow_count" ).text( data['follow_count'] );
+        }
+      });
+    }
+
+    </script>
+
+
+{% endblock %}
+

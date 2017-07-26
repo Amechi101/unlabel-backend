@@ -11,6 +11,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views import generic
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from oscar.apps.customer.utils import get_password_reset_url,Dispatcher
 from oscar.core.compat import get_user_model, user_is_authenticated
@@ -195,4 +197,33 @@ class NotificationsSettingsView(PageTitleMixin, generic.TemplateView):
     template_name = 'customer/notifications/settings.html'
 
 
+class BrandFollowUnfollowView(APIView):
+
+
+
+    def get(self,request,*args,**kwargs):
+        if self.request.user.is_authenticated():
+            brand_id = kwargs.get('pk')
+            try:
+                brand = Partner.objects.get(id=brand_id)
+                try:
+                    follow_obj = UserBrandLike.objects.get(user=request.user,brand=brand)
+                    follow_obj.delete()
+                    message = "Brand unfollowed"
+                    followed = False
+                except:
+                    follow_obj = UserBrandLike(user=request.user,brand=brand)
+                    follow_obj.save()
+                    message = "Brand followed"
+                    followed = True
+            except:
+                message = "Brand not found"
+
+            follow_count = UserBrandLike.objects.filter(brand=brand).count()
+
+            respone_dict = {'followed':followed, 'message':message, 'follow_count':follow_count }
+
+            return Response(respone_dict)
+        else:
+            return Response({})
 

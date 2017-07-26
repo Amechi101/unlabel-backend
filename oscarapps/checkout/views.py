@@ -1,23 +1,49 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect , Http404
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext as _
+from django.views import generic
 
 import stripe
 from oscar.apps.checkout.views import ThankYouView as CoreThankYouView
+from oscar.apps.checkout.views import IndexView as CoreIndexView
 from oscar.apps.checkout.views import PaymentDetailsView as CorePaymentDetailsView
 from oscar.apps.payment import forms, models
-from oscarapps.payment.models import CommissionConfiguration,\
-    InfluencerCommission,\
-    BrandCommission,\
-    UnlabelCommission
+from oscarapps.payment.models import CommissionConfiguration,InfluencerCommission,BrandCommission,UnlabelCommission
 
 from oscar.apps.payment.models import Bankcard
 from oscar.apps.order.models import Order
 from oscar.apps.basket.models import Line
 from oscarapps.influencers.models import InfluencerProductReserve
+from oscar.core.loading import get_class, get_classes, get_model
 
 from unlabel import base_settings
+from .forms import InvoiceAddressForm
+
+ShippingAddressForm, ShippingMethodForm, GatewayForm \
+    = get_classes('checkout.forms', ['ShippingAddressForm', 'ShippingMethodForm', 'GatewayForm'])
+CheckoutSessionMixin = get_class('checkout.session', 'CheckoutSessionMixin')
+BillingAddress = get_model('order', 'BillingAddress')
+BillingAddressForm = get_class('payment.forms', 'BillingAddressForm')
+
+
+class IndexView(CoreIndexView):
+    success_url = reverse_lazy('checkout:checkout-process')
+
+##########################################################################################################
+
+class CheckoutProcess(CheckoutSessionMixin,generic.TemplateView):
+    template_name = 'checkout/checkout_process.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(CheckoutProcess, self).get_context_data(**kwargs)
+        ctx['use_shipping'] = True
+        ctx['invoice_address_form'] = BillingAddressForm
+        ctx['shipping_address_form'] = ShippingAddressForm
+        ctx['bankcard_form'] = forms.BankcardForm()
+        return ctx
+
+##########################################################################################################
 
 
 class PaymentDetailsView(CorePaymentDetailsView):

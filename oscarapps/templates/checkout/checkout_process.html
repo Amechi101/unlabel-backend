@@ -1,0 +1,57 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Shipping address" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav.html' with step=1 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Shipping address" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+
+{% block shipping_address %}
+<div class="col-sm-12" xmlns="http://www.w3.org/1999/html">
+    <div class="sub-header">
+        <h2>{% trans "Where should we ship to?" %}</h2>
+    </div>
+
+
+
+    {% block new_address_form %}
+        <div class="well">
+            <div style="margin: 80px;">
+            <form action="{% url 'checkout:checkout-process' %}" method="post" id="new_shipping_address" class="form form-horizontal">
+                {% csrf_token %}
+
+                <h1>Shipping Address</h1>
+                {% include "partials/form_fields.html" with form=shipping_address_form style='horizontal' %}
+
+                <h1>Invoicing Address</h1>
+                <input type="checkbox" id="use_shipping">Use shipping address as invoicing address</input>
+                <!--TODO-->
+                <!--use the context variable to check/uncheck the use above shipping method option-->
+                {% include "partials/form_fields.html" with form=invoice_address_form style='horizontal' %}
+
+
+                {% include "partials/form_fields.html" with form=bankcard_form style='horizontal' %}
+
+
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button type="submit" class="btn btn-lg btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
+                        {% trans "or" %} <a href="{% url 'basket:summary' %}">{% trans "return to basket" %}</a>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    {% endblock %}
+</div>
+{% endblock shipping_address %}
+
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}

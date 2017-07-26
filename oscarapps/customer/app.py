@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from oscar.apps.customer.app import CustomerApplication as CoreCustomerApplication
 from oscar.core.application import Application
 from oscar.core.loading import get_class
-from oscarapps.customer.views import BrandView, BrandUnfollowView, InfluencerView, InfluencerUnfollowView, ProductsView, BankcardView, BankcardDeleteView, NotificationsSettingsView
+from oscarapps.customer.views import BrandView, BrandUnfollowView, InfluencerView, InfluencerUnfollowView
+from oscarapps.customer.views import ProductsView, BankcardView, BankcardDeleteView, NotificationsSettingsView, BrandFollowUnfollowView
 
 class CustomerApplication(CoreCustomerApplication):
 
@@ -16,6 +17,9 @@ class CustomerApplication(CoreCustomerApplication):
 
             url(r'^unfollow-brand/(?P<pk>\d+)$',
                 login_required(BrandUnfollowView.as_view()),name='unfollow-brand'),
+
+            url(r'^follow-unfollow-brand/(?P<pk>\d+)$',
+                login_required(BrandFollowUnfollowView.as_view()),name='follow-brand'),
 
             url(r'followed-creators/$',
                 login_required(InfluencerView.as_view()),name='followed-creators'),
