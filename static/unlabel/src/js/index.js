@@ -59,7 +59,7 @@ class App {
       new Drawer({
         el: el,
         options: {
-          closeSelector: '.drawer__close, .drawer__backdrop'
+          closeSelector: '.drawer__close, .drawer__backdrop, a[href="#close-drawer"]'
         }
       })
     })
