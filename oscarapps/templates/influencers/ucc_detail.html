@@ -29,9 +29,15 @@
                 </div>
                 <div class="creator__infoContent">
                     <form class="creator__followForm">
-                        <button class="cta cta--dark">{% trans "Follow creator" %}</button> {# TODO - add "follow influencer" functionality #}
+                        {% if ucc_followed %}
+                        <button class="cta cta--dark" id="follow_button" onclick="getFollowData('{{influencer.id}}')">
+                            {% trans "Unfollow creator" %}</button> {# TODO - add "follow influencer" functionality #}
+                        {% else %}
+                            <button class="cta cta--dark" id="follow_button" onclick="getFollowData('{{influencer.id}}')">
+                            {% trans "Follow creator" %}</button> {# TODO - add "follow influencer" functionality #}
+                        {% endif %}
                     </form>
-                    <p class="creator__nbOfFollowers">X {% trans "followers" %}</p> {# TODO - make "number of followers" dynamic #}
+                    <p class="creator__nbOfFollowers">{{ follow_count }} {% trans "followers" %}</p> {# TODO - make "number of followers" dynamic #}
                 </div>
             </div>
         </div>
@@ -84,3 +90,30 @@
       {% include "influencers/partials/influencers_triptych.html" with triptych_title=triptych_title triptych_isBigTitle=True triptych_isWrapperThinner=True %}
     </div>
 {% endblock after_layout %}
+
+
+{% block extrascripts %}
+    {{ block.super }}
+    <script>
+
+      function getFollowData(ucc_id) {
+      $.ajax({
+        url: "/accounts/follow-unfollow-ucc/" + ucc_id,
+
+        success: function (data) {
+            // TODO the message to be shown is also sent in the response data
+            if (data['followed'] == true){
+                $( "#follow_button" ).text( 'Unfollow creator' );
+            }
+            else{
+                $( "#follow_button" ).text( 'Follow creator' );
+            }
+            $( "#follow_count" ).text( data['follow_count'] );
+        }
+      });
+    }
+
+    </script>
+
+
+{% endblock %}

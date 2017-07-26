@@ -23,6 +23,9 @@ from oscarapps.influencers.forms import InfluencerSignUpForm
 from oscarapps.address.models import Locations, States, Country
 
 from rest_framework import pagination
+from oscar.core.loading import (
+    get_class, get_classes, get_model, get_profile_class)
+
 from users.models import User
 import operator
 from functools import reduce
@@ -35,6 +38,7 @@ from django.shortcuts import render
 from oscarapps.partner.models import Category, Style
 import json
 
+UserInfluencerLike = get_model('customer','UserInfluencerLike')
 
 class InfluencerFilterView(generics.ListAPIView):
 
@@ -217,6 +221,12 @@ class UccDetail(View):
                                                                                                             flat=True)
             products = Product.objects.filter(id__in=p)
             data.update({'products': products})
+            try:
+                followed = UserInfluencerLike.objects.get(user=request.user,influencer=qs)
+                data.update({'ucc_followed':True})
+            except:
+                data.update({'ucc_followed':False})
+            data.update({'follow_count':UserInfluencerLike.objects.filter(influencer=qs).count()})
         except:
             return render(request,'404.html', {})
 

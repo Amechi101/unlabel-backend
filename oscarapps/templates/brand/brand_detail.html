@@ -133,12 +133,13 @@
 {% block extrascripts %}
     {{ block.super }}
     <script>
+
       function getFollowData(brand_id) {
       $.ajax({
-        // url: "/influencers/influencers-filter/" + query_string,
         url: "/accounts/follow-unfollow-brand/" + brand_id,
 
         success: function (data) {
+            // TODO the message to be shown is also sent in the response data
             if (data['followed'] == true){
                 $( "#follow_button" ).text( 'Unfollow brand' );
             }

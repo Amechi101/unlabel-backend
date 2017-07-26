@@ -199,8 +199,6 @@ class NotificationsSettingsView(PageTitleMixin, generic.TemplateView):
 
 class BrandFollowUnfollowView(APIView):
 
-
-
     def get(self,request,*args,**kwargs):
         if self.request.user.is_authenticated():
             brand_id = kwargs.get('pk')
@@ -227,3 +225,31 @@ class BrandFollowUnfollowView(APIView):
         else:
             return Response({})
 
+
+class UccFollowUnfollowView(APIView):
+
+    def get(self,request,*args,**kwargs):
+        if self.request.user.is_authenticated():
+            influencer_id = kwargs.get('pk')
+            try:
+                influencer = Influencers.objects.get(id=influencer_id)
+                try:
+                    follow_obj = UserInfluencerLike.objects.get(user=request.user,influencer=influencer)
+                    follow_obj.delete()
+                    message = "Influencer unfollowed"
+                    followed = False
+                except:
+                    follow_obj = UserInfluencerLike(user=request.user,influencer=influencer)
+                    follow_obj.save()
+                    message = "Influencer followed"
+                    followed = True
+            except:
+                message = "Influencer not found"
+
+            follow_count = UserInfluencerLike.objects.filter(influencer=influencer).count()
+
+            respone_dict = {'followed':followed, 'message':message, 'follow_count':follow_count }
+
+            return Response(respone_dict)
+        else:
+            return Response({})
