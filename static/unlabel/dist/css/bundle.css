@@ -1490,6 +1490,15 @@ input[type=checkbox].checkbox--borderLess + label::before {
     margin-left: 48px;
   }
 }
+.checkout__addressSection {
+  padding: 48px 0;
+}
+.checkout__addressIdenticalCheckbox {
+  margin-top: 16px;
+}
+.checkout__addressForm {
+  margin-top: 42px;
+}
 .close {
   position: relative;
   display: inline-block;
@@ -2906,10 +2915,10 @@ html.webkit .cta--facebook:not(button) {
   }
 }
 @media (min-width: 768px) {
-  .form--stacked .form__field input[type=text],
+  .form--stacked .form__field input[type=text]:not([id*='id_line']),
   .form--stacked .form__field input[type=number],
   .form--stacked .form__field input[type=password],
-  .form--stacked .form__field select {
+  .form--stacked .form__field .select {
     width: 50%;
   }
 }

@@ -55,10 +55,10 @@
 
                     {% block help_text %}
                         {% if field.help_text %}
-                            <span class='help-block'>
+                            <div class="form__fieldMessage">
                                 {# We allow HTML within form help fields #}
                                 {{ field.help_text|safe }}
-                            </span>
+                            </div>
                         {% endif %}
                     {% endblock %}
                 </div>

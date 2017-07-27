@@ -12,62 +12,70 @@
 {% include "catalogue/partials/shipping_info.html" %}
 {% include "catalogue/partials/returns_policy.html" %}
 
-<div class="container">
-    <header class="checkout__header">
-        <div class="checkout__headerGroup">
-            <h1 class="title title--small">{% trans "Checkout" %}</h1>
-        </div>
-        <div class="checkout__headerGroup">
-            <nav class="checkout__headerNav">
-                <ul class="checkout__headerNavList">
-                    <li class="checkout__headerNavListItem">
-                        <a class="link" href="#shipping-drawer">{% trans 'Shipping Info' %}</a>
-                    </li>
-                    <li class="checkout__headerNavListItem">
-                        <a class="link" href="#returns-drawer">{% trans 'Returns Policy' %}</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-</div>
-<hr>
+<form action="{% url 'checkout:checkout-process' %}" method="post" id="new_shipping_address" class="form form--stacked">
+    {% csrf_token %}
 
-
-
-<div class="col-sm-12" xmlns="http://www.w3.org/1999/html">
-    <div class="sub-header">
-        <h2>{% trans "Where should we ship to?" %}</h2>
+    <div class="container">
+        <header class="checkout__header">
+            <div class="checkout__headerGroup">
+                <h1 class="title title--small">{% trans "Checkout" %}</h1>
+            </div>
+            <div class="checkout__headerGroup">
+                <nav class="checkout__headerNav">
+                    <ul class="checkout__headerNavList">
+                        <li class="checkout__headerNavListItem">
+                            <a class="link" href="#shipping-drawer">{% trans 'Shipping Info' %}</a>
+                        </li>
+                        <li class="checkout__headerNavListItem">
+                            <a class="link" href="#returns-drawer">{% trans 'Returns Policy' %}</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
     </div>
+    
+    <hr>
+    
+    <div class="checkout__addressSection">
+        <div class="container">
+            <h2 class="title title--small">{% trans "Shipping address" %}</h2>
+        </div>
 
-    {% block new_address_form %}
-        <div class="well">
-            <div style="margin: 80px;">
-            <form action="{% url 'checkout:checkout-process' %}" method="post" id="new_shipping_address" class="form form-horizontal">
-                {% csrf_token %}
-
-                <h1>Shipping Address</h1>
-                {% include "partials/form_fields.html" with form=shipping_address_form style='horizontal' %}
-
-                <h1>Invoicing Address</h1>
-                <input type="checkbox" id="use_shipping">Use shipping address as invoicing address</input>
-                <!--TODO-->
-                <!--use the context variable to check/uncheck the use above shipping method option-->
-                {% include "partials/form_fields.html" with form=invoice_address_form style='horizontal' %}
-
-
-                {% include "partials/form_fields.html" with form=bankcard_form style='horizontal' %}
-
-
-                <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <button type="submit" class="btn btn-lg btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
-                        {% trans "or" %} <a href="{% url 'basket:summary' %}">{% trans "return to basket" %}</a>
-                    </div>
-                </div>
-            </form>
+        <div class="checkout__addressForm">
+            <div class="container container--medium">
+                {% include "partials/form_fields.html" with form=shipping_address_form style='stacked' %}
             </div>
         </div>
-    {% endblock %}
-</div>
+    </div>
+    <hr>
+    <div class="checkout__addressSection">
+        <div class="container">
+            <h2 class="title title--small">{% trans "Billing address" %}</h2>
+
+            <div class="checkout__addressIdenticalCheckbox">
+                <!--TODO-->
+                <!--use the context variable to check/uncheck the use above shipping method option-->
+                <input class="checkbox checkbox--small" type="checkbox" id="use_shipping"/> <label for="use_shipping">{% trans "Use shipping address as invoicing address" %}</label>
+            </div>
+        </div>
+
+        <div class="checkout__addressForm">
+            <div class="container container--medium">
+                {% include "partials/form_fields.html" with form=invoice_address_form style='stacked' %}
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="container container--medium">
+        {% include "partials/form_fields.html" with form=bankcard_form style='stacked' %}
+    </div>
+
+
+    <div class="checkout__footer">
+        <button type="submit" class="cta cta--dark">{% trans "Confirm my order" %}</button>
+    </div>
+</form>
+
 {% endblock content %}
