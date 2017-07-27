@@ -1,25 +1,44 @@
-{% extends "checkout/checkout.html" %}
+{% extends "layout.html" %}
 {% load i18n %}
 
 {% block title %}
-    {% trans "Shipping address" %} | {{ block.super }}
+    {% trans "Checkout" %} | {{ block.super }}
 {% endblock %}
 
-{% block checkout_nav %}
-    {% include 'checkout/nav.html' with step=1 %}
-{% endblock %}
+{% block body_class %}checkout{% endblock %}
 
-{% block checkout_title %}{% trans "Shipping address" %}{% endblock %}
+{% block content %}
 
-{% block order_contents %}{% endblock %}
+{% include "catalogue/partials/shipping_info.html" %}
+{% include "catalogue/partials/returns_policy.html" %}
 
-{% block shipping_address %}
+<div class="container">
+    <header class="checkout__header">
+        <div class="checkout__headerGroup">
+            <h1 class="title title--small">{% trans "Checkout" %}</h1>
+        </div>
+        <div class="checkout__headerGroup">
+            <nav class="checkout__headerNav">
+                <ul class="checkout__headerNavList">
+                    <li class="checkout__headerNavListItem">
+                        <a class="link" href="#shipping-drawer">{% trans 'Shipping Info' %}</a>
+                    </li>
+                    <li class="checkout__headerNavListItem">
+                        <a class="link" href="#returns-drawer">{% trans 'Returns Policy' %}</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</div>
+<hr>
+
+
+
 <div class="col-sm-12" xmlns="http://www.w3.org/1999/html">
     <div class="sub-header">
         <h2>{% trans "Where should we ship to?" %}</h2>
     </div>
-
-
 
     {% block new_address_form %}
         <div class="well">
@@ -51,7 +70,4 @@
         </div>
     {% endblock %}
 </div>
-{% endblock shipping_address %}
-
-{% block shipping_method %}{% endblock %}
-{% block payment_method %}{% endblock %}
+{% endblock content %}

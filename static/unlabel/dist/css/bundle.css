@@ -1457,6 +1457,39 @@ input[type=checkbox].checkbox--small + label::after {
 input[type=checkbox].checkbox--borderLess + label::before {
   box-shadow: 0 0 0 0;
 }
+.checkout__header {
+  padding: 42px 0;
+}
+@media (min-width: 768px) {
+  .checkout__header {
+    padding: 96px 0 48px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+@media (max-width: 767px) {
+  .checkout__headerNavList {
+    margin-top: 16px;
+  }
+}
+.checkout__headerNavListItem {
+  display: inline-block;
+}
+.checkout__headerNavListItem + .checkout__headerNavListItem {
+  margin-left: 24px;
+}
+@media (min-width: 768px) {
+  .checkout__headerNavListItem + .checkout__headerNavListItem {
+    margin-left: 48px;
+  }
+}
 .close {
   position: relative;
   display: inline-block;

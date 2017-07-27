@@ -1,0 +1,29 @@
+.checkout {}
+
+.checkout__header {
+  padding: 42px 0
+  
+  @media $mq_m {
+    padding: 96px 0 48px
+    display: flex
+    justify-content: space-between
+    align-items: center
+  }
+}
+
+.checkout__headerNavList {
+  @media $mq_s_only {
+    margin-top 16px
+  }
+}
+
+.checkout__headerNavListItem {
+  display: inline-block
+  
+  & + .checkout__headerNavListItem {
+    margin-left: 24px
+    @media $mq_m {
+      margin-left: 48px
+    }
+  }
+}
