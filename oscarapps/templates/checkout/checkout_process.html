@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="checkout__addressForm">
+        <div id="billing_address_form" class="checkout__addressForm">
             <div class="container container--medium">
                 {% include "partials/form_fields.html" with form=invoice_address_form style='stacked' %}
             </div>
@@ -76,10 +76,10 @@
             <div class="checkout__paymentNavGroup">
                 <ul class="checkout__paymentOptionsList">
                     <li class="checkout__paymentOptionsListItem">
-                        <input class="radio" id="payment_option1" type="radio" name="payment_option" value="bankcard"> <label for="payment_option1">{% trans "Credit card" %}<ul class="checkout__bankcardList"><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--visa"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--mastercard"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--american-express"></span></li></ul></label>
+                        <input checked class="radio" id="payment_option1" type="radio" name="payment_option" value="card" onClick="toggleCardForm(true)"> <label for="payment_option1">{% trans "Credit card" %}<ul class="checkout__bankcardList"><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--visa"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--mastercard"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--american-express"></span></li></ul></label>
                     </li>
                     <li class="checkout__paymentOptionsListItem">
-                        <input class="radio" id="payment_option2" type="radio" name="payment_option" value="bankcard"> <label for="payment_option2">{% trans "PayPal" %}</label>
+                        <input class="radio" id="payment_option2" type="radio" name="payment_option" value="paypal" onClick="toggleCardForm(false)"> <label for="payment_option2">{% trans "PayPal" %}</label>
                     </li>
                 </ul>
             </div>
@@ -89,8 +89,10 @@
         </div>
     </div>
 
-    <div class="container container--medium">
-        {% include "partials/form_fields.html" with form=bankcard_form style='stacked' %}
+    <div id="card_form">
+        <div class="container container--medium">
+            {% include "partials/form_fields.html" with form=bankcard_form style='stacked' %}
+        </div>
     </div>
 
 
@@ -100,3 +102,27 @@
 </form>
 
 {% endblock content %}
+
+{% block extrascripts %}
+    <script>
+        // Billing Address - Address form hide/show
+        function toggleBillingForm(){
+            var show_form = ! document.querySelector('#use_shipping:checked');
+            document.getElementById('billing_address_form').style.display = show_form ? '' : 'none';
+        }
+        document.getElementById('use_shipping').addEventListener('change', function(){
+            toggleBillingForm();
+        })
+        toggleBillingForm();
+        
+        // Payment Method - Card form hide/show
+        function toggleCardForm(){
+            var show_form = document.querySelector('input[name="payment_option"][value="card"]:checked');
+            document.getElementById('card_form').style.display = show_form ? '' : 'none';
+        }
+        $('input[name=payment_option]').on('change', function() {
+            toggleCardForm();
+        });
+        toggleCardForm();
+    </script>
+{% endblock %}
