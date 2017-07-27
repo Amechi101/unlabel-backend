@@ -25,10 +25,14 @@
             </div>
 
             <div class="basket-form__col">
-                <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft"><i class="fonticon fonticon--big fonticon--starStroke"></i>{% trans "Like" %}</a>
-                <!-- TODO : if user like product
-                    <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft cta--product"><i class="fonticon fonticon--big fonticon--starFull"></i>{% trans "Like" %}</a>
-                -->
+
+                {% if user_liked %}
+                    <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft cta--product" id="like_button" onclick="onToggleFollow(event, '{{ product.pk }}')">
+                    <i class="fonticon fonticon--big fonticon--starFull"></i>{% trans "Like" %}</a>
+                {% else %}
+                    <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft" id="like_button" onclick="onToggleFollow(event, '{{ product.pk }}')">
+                    <i class="fonticon fonticon--big fonticon--starStroke"></i>{% trans "Like" %}</a>
+                {% endif %}
             </div>
         </div>
     </form>
@@ -47,3 +51,24 @@
         {% include "catalogue/partials/add_to_wishlist.html" %}
     {% endiffeature %}
 {% endif %}
+
+
+{% block extrascripts %}
+    <script>
+
+      function onToggleFollow(e, product_id) {
+        e.preventDefault();
+        $.ajax({
+          url: "/accounts/like-unlike-product/" + product_id,
+
+          success: function (data) {
+              location.reload();
+          }
+        });
+        e.currentTarget.blur();
+      }
+
+    </script>
+
+
+{% endblock %}

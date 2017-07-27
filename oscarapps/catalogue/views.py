@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponsePermanentRedirect
 from django.utils.http import urlquote
 from django.views.generic import DetailView
@@ -15,6 +16,7 @@ ProductAlert = get_model('customer', 'ProductAlert')
 ProductAlertForm = get_class('customer.forms', 'ProductAlertForm')
 get_product_search_handler_class = get_class(
     'catalogue.search_handlers', 'get_product_search_handler_class')
+UserProductLike = get_model('customer','UserProductLike')
 
 
 
@@ -79,6 +81,11 @@ class ProductDetailView(DetailView):
                 ctx['influencer'] = inf
             except:
                 pass
+        try:
+            product_liked = UserProductLike.objects.get(user=self.request.user,product_like=product)
+            ctx['user_liked'] = True
+        except ObjectDoesNotExist:
+            ctx['user_liked'] = False
         ctx['alert_form'] = self.get_alert_form()
         ctx['has_active_alert'] = self.get_alert_status()
         return ctx
