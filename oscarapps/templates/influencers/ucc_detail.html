@@ -29,15 +29,10 @@
                 </div>
                 <div class="creator__infoContent">
                     <form class="creator__followForm">
-                        {% if ucc_followed %}
-                        <button class="cta cta--dark" id="follow_button" onclick="getFollowData('{{influencer.id}}')">
-                            {% trans "Unfollow creator" %}</button> {# TODO - add "follow influencer" functionality #}
-                        {% else %}
-                            <button class="cta cta--dark" id="follow_button" onclick="getFollowData('{{influencer.id}}')">
-                            {% trans "Follow creator" %}</button> {# TODO - add "follow influencer" functionality #}
-                        {% endif %}
+                        <button class="cta cta--dark" id="follow_button" onclick="onToggleFollow(event, '{{influencer.id}}')">
+                           {% if ucc_followed %}{% trans "Unfollow creator" %}{% else %}{% trans "Follow creator" %}{% endif %}</button>
                     </form>
-                    <p class="creator__nbOfFollowers">{{ follow_count }} {% trans "followers" %}</p> {# TODO - make "number of followers" dynamic #}
+                    <p class="creator__nbOfFollowers" id="follow_count">{{ follow_count }} {% trans "followers" %}</p>
                 </div>
             </div>
         </div>
@@ -96,22 +91,24 @@
     {{ block.super }}
     <script>
 
-      function getFollowData(ucc_id) {
-      $.ajax({
-        url: "/accounts/follow-unfollow-ucc/" + ucc_id,
+        function onToggleFollow(e, ucc_id) {
+          e.preventDefault()
+          $.ajax({
+            url: "/accounts/follow-unfollow-ucc/" + ucc_id,
 
-        success: function (data) {
-            // TODO the message to be shown is also sent in the response data
-            if (data['followed'] == true){
-                $( "#follow_button" ).text( 'Unfollow creator' );
+            success: function (data) {
+                // TODO the message to be shown is also sent in the response data
+                if (data['followed'] == true){
+                    $( "#follow_button" ).text( 'Unfollow creator' );
+                }
+                else{
+                    $( "#follow_button" ).text( 'Follow creator' );
+                }
+                $( "#follow_count" ).text( data['follow_count'] + ' follower' + (data['follow_count'] >1 ? 's' : '') );
             }
-            else{
-                $( "#follow_button" ).text( 'Follow creator' );
-            }
-            $( "#follow_count" ).text( data['follow_count'] );
+          });
+          e.currentTarget.blur();
         }
-      });
-    }
 
     </script>
 

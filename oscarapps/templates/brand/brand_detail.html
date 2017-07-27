@@ -21,10 +21,10 @@
                 </div>
                 <div class="brand__infoContent">
                     <form class="brand__followForm">
-                        <button class="cta cta--dark" id="follow_button" onclick="getFollowData('{{ brand.pk }}')">
-                            {% if brand_followed %} UnFollow {% else %} Follow {% endif %} brand</button> {# TODO - add follow brand functionality #}
+                        <button class="cta cta--dark" id="follow_button" onclick="onToggleFollow(event, '{{ brand.pk }}')">
+                            {% if brand_followed %} UnFollow {% else %} Follow {% endif %} brand</button>
                     </form>
-                    <p class="brand__nbOfFollowers" id="follow_count">{{follow_count}} followers</p> {# TODO - make number of followers it dynamic #}
+                    <p class="brand__nbOfFollowers" id="follow_count">{{follow_count}} followers</p>
                 </div>
             </div>
         </div>
@@ -134,22 +134,24 @@
     {{ block.super }}
     <script>
 
-      function getFollowData(brand_id) {
-      $.ajax({
-        url: "/accounts/follow-unfollow-brand/" + brand_id,
+      function onToggleFollow(e, brand_id) {
+        e.preventDefault();
+        $.ajax({
+          url: "/accounts/follow-unfollow-brand/" + brand_id,
 
-        success: function (data) {
-            // TODO the message to be shown is also sent in the response data
-            if (data['followed'] == true){
-                $( "#follow_button" ).text( 'Unfollow brand' );
-            }
-            else{
-                $( "#follow_button" ).text( 'Follow brand' );
-            }
-            $( "#follow_count" ).text( data['follow_count'] );
-        }
-      });
-    }
+          success: function (data) {
+              // TODO the message to be shown is also sent in the response data
+              if (data['followed'] == true){
+                  $( "#follow_button" ).text( 'Unfollow brand' );
+              }
+              else{
+                  $( "#follow_button" ).text( 'Follow brand' );
+              }
+              $( "#follow_count" ).text( data['follow_count'] + ' follower' + (data['follow_count'] >1 ? 's' : '') );
+          }
+        });
+        e.currentTarget.blur();
+      }
 
     </script>
 
