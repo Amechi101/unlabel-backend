@@ -123,7 +123,7 @@
             <div class="checkout__paymentNavGroup">
                 <ul class="checkout__paymentOptionsList">
                     <li class="checkout__paymentOptionsListItem">
-                        <input checked class="radio" id="payment_option1" type="radio" name="payment_option" value="card" onClick="toggleCardForm(true)"> <label for="payment_option1">{% trans "Credit card" %}<ul class="checkout__bankcardList"><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--visa"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--mastercard"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--american-express"></span></li></ul></label>
+                        <input checked class="radio" id="payment_option1" type="radio" name="payment_option" value="card" onClick="toggleCardForm(true)"> <label for="payment_option1">{% trans "Credit card" %}<span class="checkout__bankcardList"><span class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--visa"></span></span><span class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--mastercard"></span></span><span class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--american-express"></span></span></span></label>
                     </li>
                     <li class="checkout__paymentOptionsListItem">
                         <input class="radio" id="payment_option2" type="radio" name="payment_option" value="paypal" onClick="toggleCardForm(false)"> <label for="payment_option2">{% trans "PayPal" %}</label>
