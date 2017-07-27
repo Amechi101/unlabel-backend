@@ -89,6 +89,9 @@ body {
   line-height: 20px;
   color: #232323;
 }
+#content_inner {
+  min-height: calc(100vh - 80px - 153px);
+}
 a {
   display: inline-block;
   color: currentColor;
@@ -5521,6 +5524,9 @@ a:hover .img-container img {
   .product__actions {
     margin-top: 32px;
   }
+}
+.product__sizeWorn {
+  margin-top: 16px;
 }
 @media (min-width: 768px) {
   .product__details .grid__sidebar {
