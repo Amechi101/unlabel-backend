@@ -12,6 +12,12 @@
 			<button class="cta cta--dark" type="submit" id="id_save_button">{% trans "Save Changes" %}</button>
 		</div>
 	</form>
+	<div class="u-mobile-only">
+		<hr>
+		<div class="container container--pad24 container--medium container--left">
+			<a href="{% url 'customer:logout' %}" class="link">{% trans 'Sign out' %}</a>
+		</div>
+	</div>
 	<hr>
     <div class="container container--pad24 container--medium container--left">
     	<a href="{% url 'customer:profile-delete' %}" class="link link--danger">{% trans 'Deativate my account' %}</a>
