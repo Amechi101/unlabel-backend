@@ -77,7 +77,7 @@
                         <p class="title title--small checkout__basketTotalPrice"><strong>{{ request.basket.total_excl_tax|currency:request.basket.currency }}</strong></p>
                     </div>
                     <div class="checkout__basketColGroup">
-                        <a class="cta cta--dark cta--block">{% trans "Return to shopping bag" %}</a>
+                        <a href="{% url 'basket:summary' %}" class="cta cta--dark cta--block">{% trans "Return to shopping bag" %}</a>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
             <div class="checkout__addressIdenticalCheckbox">
                 <!--TODO-->
                 <!--use the context variable to check/uncheck the use above shipping method option-->
-                <input class="checkbox checkbox--small" type="checkbox" id="use_shipping"/> <label for="use_shipping">{% trans "Use shipping address as invoicing address" %}</label>
+                <input class="checkbox checkbox--small" type="checkbox" id="use_shipping"/> <label for="use_shipping">{% trans "Use shipping address as billing address" %}</label>
             </div>
         </div>
 
