@@ -9,12 +9,25 @@
     {% basket_form request product as basket_form %}
     <form id="add_to_basket_form" action="{% url 'basket:add' pk=product.pk  %}" method="post" class="form add-to-basket">
         {% csrf_token %}
-        {% include "partials/form_fields.html" with form=basket_form %}
-        <button type="submit" class="cta cta--dark btn-add-to-basket" value="{% trans "Add to basket" %}" data-loading-text="{% trans 'Adding...' %}">{% trans "Add to basket" %}</button>
+        {% include "partials/form_errors.html" %}
+
+        <div class="basket-form__row">
+            <div class="basket-form__col">
+                {% include "partials/form_field.html" with field=basket_form.child_id %} {# TODO : replace it by product size once working #}
+            </div>
+
+            <div class="basket-form__col">
+                <button type="submit" class="cta cta--dark btn-add-to-basket" value="{% trans "Add to basket" %}" data-loading-text="{% trans 'Adding...' %}">{% trans "Add to basket" %}</button>
+            </div>
+
+            <div class="basket-form__col">
+                <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft"><i class="fonticon fonticon--big fonticon--starStroke"></i>{% trans "Like" %}</a>
+                <!-- TODO : if user like product
+                    <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft cta--product"><i class="fonticon fonticon--big fonticon--starFull"></i>{% trans "Like" %}</a>
+                -->
+            </div>
+        </div>
     </form>
-    {% iffeature "wishlists" %}
-        {% include "catalogue/partials/add_to_star_wishlist.html" %}
-    {% endiffeature %}
 {% else %}
     {% if has_active_alert %}
         <p>{% trans "You have an active stock alert for this product." %}</p>
