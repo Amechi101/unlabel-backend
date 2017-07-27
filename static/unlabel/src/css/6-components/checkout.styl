@@ -114,3 +114,107 @@
   }
 }
 
+.checkout__cardForm {
+  margin: 48px 0
+}
+
+.checkout__footer {
+  overflow-x hidden
+  margin-bottom 48px
+  
+  @media $mq_m {
+    margin-bottom 96px
+  }
+}
+
+.checkout__footerRow {
+  @media $mq_m {
+    display: flex
+    align-items: stretch
+  }
+}
+
+.checkout__footerCol {
+  padding: 32px 0
+  position relative
+  
+  @media $mq_m {
+    padding: 32px 48px
+  }
+  
+  &--left {
+    @media $mq_m {
+      flex-grow: 1
+    }
+  }
+  
+  &--right {
+    color: #fff
+    
+    &::before {
+      content: ''
+      display: block
+      width: 100vw
+      height: 100%
+      position absolute
+      top: 0
+      bottom: 0
+      z-index -1
+      background-color $color_darkGrey
+      
+      @media $mq_s_only {
+        left: 50%
+        transform: translate(-50%, 0)
+      }
+      
+      @media $mq_m {
+        left: 0
+      }
+    }
+    
+    @media $mq_m {
+      width: 230px
+      padding-right 0
+    }
+  }
+}
+
+.checkout__footerCalculList {
+  @media $mq_m {
+    text-align: right
+  }
+}
+
+.checkout__footerCalculListItem {
+  & + .checkout__footerCalculListItem {
+    margin-top: 24px
+  }
+}
+
+.checkout__footerCalculPrice {
+  font-family: $font_bold
+}
+
+.checkout__footerTotalPrice {
+  margin-top: 5px
+}
+
+.checkout__footerTotalAction {
+  margin-top: 24px
+  
+  .cta {
+    @media $mq_s_only {
+      width: 100%
+    }
+  }
+}
+
+.checkout__footerTotalSecure {
+  margin-top: 24px
+  font-size: 11px
+  
+  .fonticon {
+    vertical-align top
+  }
+}
+

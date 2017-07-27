@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% load i18n %}
+{% load currency_filters %}
 
 {% block title %}
     {% trans "Checkout" %} | {{ block.super }}
@@ -89,15 +90,42 @@
         </div>
     </div>
 
-    <div id="card_form">
+    <div id="card_form" class="checkout__cardForm">
         <div class="container container--medium">
             {% include "partials/form_fields.html" with form=bankcard_form style='stacked' %}
         </div>
     </div>
 
-
+    <hr>
     <div class="checkout__footer">
-        <button type="submit" class="cta cta--dark">{% trans "Confirm my order" %}</button>
+        <div class="container">
+            <div class="checkout__footerRow">
+                <div class="checkout__footerCol checkout__footerCol--left">
+                    <ul class="checkout__footerCalculList">
+                        <li class="checkout__footerCalculListItem">
+                            <p class="checkout__footerCalculLabel">{% trans "Total items" %}</p>
+                            <p class="checkout__footerCalculPrice"><strong>{{ request.basket.total_excl_tax|currency:request.basket.currency }}</strong></p>
+                        </li>
+                        <li class="checkout__footerCalculListItem">
+                            <p class="checkout__footerCalculLabel">{% trans "Delivery" %}</p>
+                            <p class="checkout__footerCalculPrice"><strong>$00.00</strong></p> {# TODO : add delivery price #}
+                        </li>
+                        <li class="checkout__footerCalculListItem">
+                            <p class="checkout__footerCalculLabel">{% trans "Taxes included" %}</p>
+                            <p class="checkout__footerCalculPrice"><strong>$00.00</strong></p> {# TODO : add taxes price #}
+                        </li>
+                    </ul>
+                </div>
+                <div class="checkout__footerCol checkout__footerCol--right">
+                    <p class="subtitle subtitle--small checkout__footerTotalTitle">{% trans "Total" %}</p>
+                    <p class="title title--small checkout__footerTotalPrice">{{ request.basket.total_incl_tax|currency:request.basket.currency }}</p>
+                    <div class="checkout__footerTotalAction">
+                        <button type="submit" class="cta cta--light cta--block">{% trans "Confirm my order" %}</button>
+                    </div>
+                    <p class="checkout__footerTotalSecure"><i class="fonticon fonticon--lock"></i> {% trans "100% secured payment" %}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </form>
 
