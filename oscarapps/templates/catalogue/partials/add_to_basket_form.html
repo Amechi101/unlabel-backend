@@ -11,10 +11,14 @@
         {% csrf_token %}
         {% include "partials/form_errors.html" %}
 
+        {% include "partials/form_field.html" with field=basket_form.quantity %}
+
         <div class="basket-form__row">
-            <div class="basket-form__col">
-                {% include "partials/form_field.html" with field=basket_form.child_id %} {# TODO : replace it by product size once working #}
-            </div>
+            {% if basket_form.child_id %}
+                <div class="basket-form__col">
+                    {% include "partials/form_field.html" with field=basket_form.child_id %} {# TODO : replace it by product size once working #}
+                </div>
+            {% endif %}
 
             <div class="basket-form__col">
                 <button type="submit" class="cta cta--dark btn-add-to-basket" value="{% trans "Add to basket" %}" data-loading-text="{% trans 'Adding...' %}">{% trans "Add to basket" %}</button>
