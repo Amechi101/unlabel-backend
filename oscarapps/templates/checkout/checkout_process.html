@@ -31,7 +31,7 @@
                 {% include "partials/form_fields.html" with form=shipping_address_form style='horizontal' %}
 
                 <h1>Invoicing Address</h1>
-                <input type="checkbox" id="use_shipping">Use shipping address as invoicing address</input>
+                <input type="checkbox" name="use_shipping" id="use_shipping">Use shipping address as invoicing address</input>
                 <!--TODO-->
                 <!--use the context variable to check/uncheck the use above shipping method option-->
                 {% include "partials/form_fields.html" with form=invoice_address_form style='horizontal' %}
