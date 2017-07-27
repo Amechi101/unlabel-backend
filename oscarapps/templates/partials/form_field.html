@@ -46,19 +46,21 @@
                     {% endblock %}
 
                     {% block errors %}
-                        <div class="form__fieldMessage form__fieldMessage--error">
-                            {% for error in field.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
+                        {% if field.errors.count  %}
+                            <div class="form__fieldMessage form__fieldMessage--error">
+                                {% for error in field.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     {% endblock %}
 
                     {% block help_text %}
                         {% if field.help_text %}
-                            <span class='help-block'>
+                            <div class="form__fieldMessage">
                                 {# We allow HTML within form help fields #}
                                 {{ field.help_text|safe }}
-                            </span>
+                            </div>
                         {% endif %}
                     {% endblock %}
                 </div>

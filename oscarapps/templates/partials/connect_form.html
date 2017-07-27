@@ -16,12 +16,26 @@
                 </div>
             </div>
             <div class="col connect__option connect__option--signin">
-                <form id="login_form" action="{{ request.get_full_path }}" method="post">
+                <form id="login_form" action="{% url 'customer:login' %}" method="post">
                     {% csrf_token %}
                     <div class="connect__optionHeader">
                         <h2 class="{% if style == 'page' %} title title--small{% else %} subtitle subtitle--small{% endif %}">{% if style == 'page' %}{% trans "I already have an account" %}{% else %}{% trans "Sign in" %}{% endif %}</h2>
                     </div>
-                    {% include "partials/form_fields.html" with form=login_form %}
+                    {% if style == 'page' %}
+                        {% include "partials/form_fields.html" with form=login_form %}
+                    {% else %}
+                        <div class="form__row">
+                            <div class="form__group">
+                                {# TODO : populate email value if it exist #}
+                                <input type="email" name="login-username" value="" placeholder="{% trans 'Email address' %}">
+                            </div>
+                        </div>
+                        <div class="form__row">
+                            <div class="form__group">
+                                <input type="password" name="login-password" placeholder="{% trans 'Email address' %}">
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="form__group">
                         <a class="link" href="{% url 'password-reset' %}">{% trans "Forgot password ?" %}</a>
                     </div>

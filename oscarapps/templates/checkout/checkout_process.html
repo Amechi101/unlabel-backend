@@ -1,57 +1,201 @@
-{% extends "checkout/checkout.html" %}
+{% extends "layout.html" %}
 {% load i18n %}
+{% load currency_filters %}
+{% load thumbnail %}
 
 {% block title %}
-    {% trans "Shipping address" %} | {{ block.super }}
+    {% trans "Checkout" %} | {{ block.super }}
 {% endblock %}
 
-{% block checkout_nav %}
-    {% include 'checkout/nav.html' with step=1 %}
-{% endblock %}
+{% block body_class %}checkout{% endblock %}
 
-{% block checkout_title %}{% trans "Shipping address" %}{% endblock %}
+{% block content %}
 
-{% block order_contents %}{% endblock %}
+{% include "catalogue/partials/shipping_info.html" %}
+{% include "catalogue/partials/returns_policy.html" %}
 
-{% block shipping_address %}
-<div class="col-sm-12" xmlns="http://www.w3.org/1999/html">
-    <div class="sub-header">
-        <h2>{% trans "Where should we ship to?" %}</h2>
+<form action="{% url 'checkout:checkout-process' %}" method="post" id="new_shipping_address" class="form form--stacked">
+    {% csrf_token %}
+
+    <div class="container">
+        <header class="checkout__header">
+            <div class="checkout__headerGroup">
+                <h1 class="title title--small">{% trans "Checkout" %}</h1>
+            </div>
+            <div class="checkout__headerGroup">
+                <nav class="checkout__headerNav">
+                    <ul class="checkout__headerNavList">
+                        <li class="checkout__headerNavListItem">
+                            <a class="link" href="#shipping-drawer">{% trans 'Shipping Info' %}</a>
+                        </li>
+                        <li class="checkout__headerNavListItem">
+                            <a class="link" href="#returns-drawer">{% trans 'Returns Policy' %}</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
     </div>
 
-
-
-    {% block new_address_form %}
-        <div class="well">
-            <div style="margin: 80px;">
-            <form action="{% url 'checkout:checkout-process' %}" method="post" id="new_shipping_address" class="form form-horizontal">
-                {% csrf_token %}
-
-                <h1>Shipping Address</h1>
-                {% include "partials/form_fields.html" with form=shipping_address_form style='horizontal' %}
-
-                <h1>Invoicing Address</h1>
-                <input type="checkbox" name="use_shipping" id="use_shipping">Use shipping address as invoicing address</input>
-                <!--TODO-->
-                <!--use the context variable to check/uncheck the use above shipping method option-->
-                {% include "partials/form_fields.html" with form=invoice_address_form style='horizontal' %}
-
-
-                {% include "partials/form_fields.html" with form=bankcard_form style='horizontal' %}
-
-
-                <div class="form-group">
-                    <div class="col-sm-offset-4 col-sm-8">
-                        <button type="submit" class="btn btn-lg btn-primary" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
-                        {% trans "or" %} <a href="{% url 'basket:summary' %}">{% trans "return to basket" %}</a>
+    <div class="checkout__basket">
+        <div class="container">
+            <div class="checkout__basketRow">
+                <div class="checkout__basketCol checkout__basketCol--left">
+                    <ul class="checkout__basketProductList">
+                        {% for line in request.basket.all_lines %}
+                            <li class="checkout__basketProductListItem">
+                                <a class="u-block" href="{{ line.product.get_absolute_url }}">
+                                    <figure class="order-summary__product">
+                                        <div class="order-summary__productVisual">
+                                            <div class="img-container img-container--square">
+                                                {% with image=line.product.primary_image %}
+                                                    {% thumbnail image.original "128x128" upscale=False as thumb %}
+                                                        <img class="thumbnail" src="{{ thumb.url }}" alt="{{ line.product.get_title }}">
+                                                    {% endthumbnail %}
+                                                {% endwith %}
+                                            </div>
+                                        </div>
+                                        <figcaption class="order-summary__productContent">
+                                            <p class="order-summary__productName">{{ line.description }}</p>
+                                            <p class="order-summary__productID">#{{ line.product.upc }}</p>
+                                        </figcaption>
+                                    </figure>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="checkout__basketCol checkout__basketCol--right">
+                    <div class="checkout__basketColGroup">
+                        <p class="subtitle subtitle--small">
+                            {% blocktrans count request.basket.all_lines.count as nb_products %}
+                                {{nb_products}} product
+                            {% plural %}
+                                {{nb_products}} products
+                            {% endblocktrans %}
+                        </p>
+                        <p class="title title--small checkout__basketTotalPrice"><strong>{{ request.basket.total_excl_tax|currency:request.basket.currency }}</strong></p>
+                    </div>
+                    <div class="checkout__basketColGroup">
+                        <a href="{% url 'basket:summary' %}" class="cta cta--dark cta--block">{% trans "Return to shopping bag" %}</a>
                     </div>
                 </div>
-            </form>
             </div>
         </div>
-    {% endblock %}
-</div>
-{% endblock shipping_address %}
+    </div>
+    
+    <div class="checkout__addressSection">
+        <div class="container">
+            <h2 class="title title--small">{% trans "Shipping address" %}</h2>
+        </div>
 
-{% block shipping_method %}{% endblock %}
-{% block payment_method %}{% endblock %}
+        <div class="checkout__addressForm">
+            <div class="container container--medium">
+                {% include "partials/form_fields.html" with form=shipping_address_form style='stacked' %}
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="checkout__addressSection">
+        <div class="container">
+            <h2 class="title title--small">{% trans "Billing address" %}</h2>
+            <div class="checkout__addressIdenticalCheckbox">
+                <!--TODO-->
+                <!--use the context variable to check/uncheck the use above shipping method option-->
+                <input class="checkbox checkbox--small" type="checkbox" id="use_shipping"/> <label for="use_shipping">{% trans "Use shipping address as billing address" %}</label>
+            </div>
+        </div>
+
+        <div id="billing_address_form" class="checkout__addressForm">
+            <div class="container container--medium">
+                {% include "partials/form_fields.html" with form=invoice_address_form style='stacked' %}
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="checkout__paymentNav">
+        <div class="container checkout__paymentNavWrapper">
+            <div class="checkout__paymentNavGroup">
+                <h2 class="title title--small">{% trans "Payment method" %}</h2>
+            </div>
+            <div class="checkout__paymentNavGroup">
+                <ul class="checkout__paymentOptionsList">
+                    <li class="checkout__paymentOptionsListItem">
+                        <input checked class="radio" id="payment_option1" type="radio" name="payment_option" value="card" onClick="toggleCardForm(true)"> <label for="payment_option1">{% trans "Credit card" %}<span class="checkout__bankcardList"><span class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--visa"></span></span><span class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--mastercard"></span></span><span class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--american-express"></span></span></span></label>
+                    </li>
+                    <li class="checkout__paymentOptionsListItem">
+                        <input class="radio" id="payment_option2" type="radio" name="payment_option" value="paypal" onClick="toggleCardForm(false)"> <label for="payment_option2">{% trans "PayPal" %}</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="checkout__paymentNavGroup">
+                {# empty - defined for styling purposes #}
+            </div>
+        </div>
+    </div>
+
+    <div id="card_form" class="checkout__cardForm">
+        <div class="container container--medium">
+            {% include "partials/form_fields.html" with form=bankcard_form style='stacked' %}
+        </div>
+    </div>
+
+    <hr>
+    <div class="checkout__footer">
+        <div class="container">
+            <div class="checkout__footerRow">
+                <div class="checkout__footerCol checkout__footerCol--left">
+                    <ul class="checkout__footerCalculList">
+                        <li class="checkout__footerCalculListItem">
+                            <p class="checkout__footerCalculLabel">{% trans "Total items" %}</p>
+                            <p class="checkout__footerCalculPrice"><strong>{{ request.basket.total_excl_tax|currency:request.basket.currency }}</strong></p>
+                        </li>
+                        <li class="checkout__footerCalculListItem">
+                            <p class="checkout__footerCalculLabel">{% trans "Delivery" %}</p>
+                            <p class="checkout__footerCalculPrice"><strong>$00.00</strong></p> {# TODO : add delivery price #}
+                        </li>
+                        <li class="checkout__footerCalculListItem">
+                            <p class="checkout__footerCalculLabel">{% trans "Taxes included" %}</p>
+                            <p class="checkout__footerCalculPrice"><strong>$00.00</strong></p> {# TODO : add taxes price #}
+                        </li>
+                    </ul>
+                </div>
+                <div class="checkout__footerCol checkout__footerCol--right">
+                    <p class="subtitle subtitle--small checkout__footerTotalTitle">{% trans "Total" %}</p>
+                    <p class="title title--small checkout__footerTotalPrice">{{ request.basket.total_incl_tax|currency:request.basket.currency }}</p>
+                    <div class="checkout__footerTotalAction">
+                        <button type="submit" class="cta cta--light cta--block">{% trans "Confirm my order" %}</button>
+                    </div>
+                    <p class="checkout__footerTotalSecure"><i class="fonticon fonticon--lock"></i> {% trans "100% secured payment" %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock content %}
+
+{% block extrascripts %}
+    <script>
+        // Billing Address - Address form hide/show
+        function toggleBillingForm(){
+            var show_form = ! document.querySelector('#use_shipping:checked');
+            document.getElementById('billing_address_form').style.display = show_form ? '' : 'none';
+        }
+        document.getElementById('use_shipping').addEventListener('change', function(){
+            toggleBillingForm();
+        })
+        toggleBillingForm();
+        
+        // Payment Method - Card form hide/show
+        function toggleCardForm(){
+            var show_form = document.querySelector('input[name="payment_option"][value="card"]:checked');
+            document.getElementById('card_form').style.display = show_form ? '' : 'none';
+        }
+        $('input[name=payment_option]').on('change', function() {
+            toggleCardForm();
+        });
+        toggleCardForm();
+    </script>
+{% endblock %}

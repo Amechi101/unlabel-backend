@@ -89,10 +89,10 @@
       flex-grow: 1
     }
     
-    input[type=text]
+    input[type=text]:not([id*='id_line']) // fix address fields issue
     input[type=number]
     input[type=password],
-    select {
+    .select {
       @media $mq_m {
         width: 50%
       }

@@ -1,26 +1,19 @@
 .product {
   .add-to-basket {
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
     
-    & > * {
-      margin-right: 12px
-      
-      &:last-child {
-        margin-right: 0
-      }
+    .basket-form__row {
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      margin: -6px
+    }
+    
+    .basket-form__col {
+      margin: 6px
     }
 
     label {
       display: none
-    }
-    
-    &,
-    form {
-      & > * {
-        margin-bottom: 10px
-      }
     }
     
     .form__group,
@@ -99,21 +92,13 @@
   @media $mq_s_only {
     margin-top: 26px
   }
-  
   @media $mq_m {
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
     margin-top: 32px
-    align-items: flex-start
-    
-    & > * {
-      margin-right: 12px
-      &:last-child {
-        margin-right: 0
-      }
-    }
   }
+}
+
+.product__sizeWorn {
+  margin-top: 16px
 }
 
 .product__details {
