@@ -68,6 +68,27 @@
     </div>
     <hr>
 
+    <div class="checkout__paymentNav">
+        <div class="container checkout__paymentNavWrapper">
+            <div class="checkout__paymentNavGroup">
+                <h2 class="title title--small">{% trans "Payment method" %}</h2>
+            </div>
+            <div class="checkout__paymentNavGroup">
+                <ul class="checkout__paymentOptionsList">
+                    <li class="checkout__paymentOptionsListItem">
+                        <input class="radio" id="payment_option1" type="radio" name="payment_option" value="bankcard"> <label for="payment_option1">{% trans "Credit card" %}<ul class="checkout__bankcardList"><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--visa"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--mastercard"></span></li><li class="checkout__bankcardListItem"><span class="checkout__bankcardLogo checkout__bankcardLogo--american-express"></span></li></ul></label>
+                    </li>
+                    <li class="checkout__paymentOptionsListItem">
+                        <input class="radio" id="payment_option2" type="radio" name="payment_option" value="bankcard"> <label for="payment_option2">{% trans "PayPal" %}</label>
+                    </li>
+                </ul>
+            </div>
+            <div class="checkout__paymentNavGroup">
+                {# empty - defined for styling purposes #}
+            </div>
+        </div>
+    </div>
+
     <div class="container container--medium">
         {% include "partials/form_fields.html" with form=bankcard_form style='stacked' %}
     </div>

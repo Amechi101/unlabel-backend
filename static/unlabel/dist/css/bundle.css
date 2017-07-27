@@ -1499,6 +1499,85 @@ input[type=checkbox].checkbox--borderLess + label::before {
 .checkout__addressForm {
   margin-top: 42px;
 }
+.checkout__paymentNav {
+  background-color: #dde0ed;
+  padding: 30px 0;
+}
+@media (min-width: 768px) {
+  .checkout__paymentNavWrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+  }
+}
+@media (max-width: 767px) {
+  .checkout__paymentOptionsList {
+    margin-top: 16px;
+  }
+}
+@media (min-width: 768px) {
+  .checkout__paymentOptionsList {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+@media (max-width: 767px) {
+  .checkout__paymentOptionsListItem + .checkout__paymentOptionsListItem {
+    margin-top: 16px;
+  }
+}
+@media (min-width: 768px) {
+  .checkout__paymentOptionsListItem + .checkout__paymentOptionsListItem {
+    margin-left: 40px;
+  }
+}
+@media (min-width: 1024px) {
+  .checkout__paymentOptionsListItem + .checkout__paymentOptionsListItem {
+    margin-left: 80px;
+  }
+}
+.checkout__bankcardList {
+  display: inline-block;
+  word-wrap: nowrap;
+  white-space: nowrap;
+  margin-left: 20px;
+}
+.checkout__bankcardListItem {
+  display: inline-block;
+}
+.checkout__bankcardListItem + .checkout__bankcardListItem {
+  margin-left: 7px;
+}
+.checkout__bankcardLogo {
+  vertical-align: middle;
+  display: inline-block;
+  background-color: #fff;
+  height: 36px;
+  width: 60px;
+  background-size: 40px auto;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  border-radius: 3px;
+}
+.checkout__bankcardLogo--american-express {
+  background-image: url("../img/bankcard/american-express_logo.svg");
+}
+.checkout__bankcardLogo--visa {
+  background-image: url("../img/bankcard/visa_logo.svg");
+}
+.checkout__bankcardLogo--mastercard {
+  background-image: url("../img/bankcard/mastercard_logo.svg");
+}
 .close {
   position: relative;
   display: inline-block;
@@ -5335,6 +5414,37 @@ a:hover .img-container img {
 }
 .quantity__submit {
   display: none;
+}
+input[type=radio].radio {
+  display: none;
+}
+input[type=radio].radio + label {
+  position: relative;
+  cursor: pointer;
+  font-family: 'FaroWeb-RegularLucky';
+}
+input[type=radio].radio + label::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border: 5px solid #fff;
+  vertical-align: middle;
+  margin: 8px 12px 8px 0;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: background-color 250ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+input[type=radio].radio[checked=checked] + label,
+input[type=radio].radio:checked + label {
+  font-family: 'FaroWeb-BoldLucky';
+}
+input[type=radio].radio[checked=checked] + label::before,
+input[type=radio].radio:checked + label::before {
+  background-color: #232323;
+}
+input[type=radio].radio:not(:checked) + label:hover::before {
+  background-color: #f0f0f0;
 }
 .register__header {
   padding: 48px 0;

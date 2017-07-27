@@ -1,0 +1,36 @@
+input[type=radio].radio {
+  display: none
+  
+  & + label {
+    position relative
+    cursor: pointer
+    font-family: $font_regular
+  }
+
+  & + label::before {
+    content: ''
+    display: inline-block
+    width: size = 6px
+    height: size
+    border: 5px solid #fff
+    vertical-align middle
+    margin: 8px 12px 8px 0
+    background-color #fff
+    border-radius 50%
+    transition(background-color)
+  }
+  
+  &[checked=checked] + label,
+  &:checked + label {
+    font-family: $font_bold
+    &::before {
+      background-color $color_darkGrey
+    }
+  }
+  
+  &:not(:checked) + label:hover {
+    &::before {
+      background-color $color_lightGrey
+    }
+  }
+}
