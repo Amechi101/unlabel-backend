@@ -19,6 +19,7 @@ class HeaderSubmenu {
     this.onDeviceChanged = this.onDeviceChanged.bind(this)
     this.onMouseoverToggler = this.onMouseoverToggler.bind(this)
     this.onMouseoutToggler = this.onMouseoutToggler.bind(this)
+    this.onClickToggler = this.onClickToggler.bind(this)
   }
   init() {
     this.toggler_el = this.el.parentElement
@@ -32,6 +33,7 @@ class HeaderSubmenu {
     device.on('viewport_resized', this.onResize)
     device.on('device_changed', this.onDeviceChanged)
 
+    this.toggler_el.addEventListener('click', this.onClickToggler)
     this.toggler_el.addEventListener('mouseenter', this.onMouseoverToggler)
     this.toggler_el.addEventListener('mouseleave', this.onMouseoutToggler)
   }
@@ -40,6 +42,12 @@ class HeaderSubmenu {
   }
   onDeviceChanged() {
     this.hide(true)
+  }
+  onClickToggler(e) {
+    // Prevent click on all device except mobile
+    if( !device.isMobile ){
+      e.preventDefault()
+    }
   }
   onMouseoverToggler() {
     if( !device.isMobile ){
