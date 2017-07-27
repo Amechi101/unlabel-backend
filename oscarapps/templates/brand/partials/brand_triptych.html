@@ -10,11 +10,15 @@
 			<a href="#" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						<img src="{% static 'unlabel/dist/img/temp/more-brand-1.jpg' %}" alt="">
+                        {% if promoted_brands.0.image %}
+                            <img src="{{ promoted_brands.0.image.url }}" alt="">
+                        {% else %}
+                            <img src="" alt="">
+                        {% endif %}
 					</div>
 					<figcaption>
-						<p>Kai D. Utility</p>
-						<p><small>New York City, USA</small></p>
+						<p>{{ promoted_brands.0.name }}</p>
+						<p><small>{{ promoted_brands.0.location }}</small></p>
 					</figcaption>
 				</figure>
 			</a>
@@ -23,11 +27,15 @@
 			<a href="#" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						<img src="{% static 'unlabel/dist/img/temp/more-brand-2.jpg' %}" alt="">
+						{% if promoted_brands.1.image %}
+                            <img src="{{ promoted_brands.1.image.url }}" alt="">
+                        {% else %}
+                            <img src="" alt="">
+                        {% endif %}
 					</div>
 					<figcaption>
-						<p>Namesake</p>
-						<p><small>New York City, USA</small></p>
+						<p>{{ promoted_brands.1.name }}</p>
+						<p><small>{{ promoted_brands.1.location }}</small></p>
 					</figcaption>
 				</figure>
 			</a>
