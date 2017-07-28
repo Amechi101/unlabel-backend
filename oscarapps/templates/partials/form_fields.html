@@ -1,7 +1,5 @@
 {% load i18n %}
 
-{% include "partials/form_errors.html" %}
-
 {% for field in form %}
 	<div class="form__row">
     	{% include 'partials/form_field.html' with field=field style=style %}

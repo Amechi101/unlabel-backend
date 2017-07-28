@@ -46,7 +46,7 @@
                     {% endblock %}
 
                     {% block errors %}
-                        {% if field.errors.count  %}
+                        {% if field.errors  %}
                             <div class="form__fieldMessage form__fieldMessage--error">
                                 {% for error in field.errors %}
                                     <span>{{ error }}</span>
