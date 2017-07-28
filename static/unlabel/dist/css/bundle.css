@@ -5226,6 +5226,32 @@ a:hover .img-container img {
 .notifications-feed__listItem + .notifications-feed__listItem {
   margin-top: 24px;
 }
+.order-confirmation__successMessage {
+  margin-top: 42px;
+}
+.order-confirmation__instructions {
+  margin-top: 42px;
+}
+.order-confirmation__actions {
+  margin-top: 42px;
+}
+@media (max-width: 767px) {
+  .order-confirmation__actions .cta {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 767px) {
+  .order-confirmation__actions .cta + .cta {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 768px) {
+  .order-confirmation__actions .cta + .cta {
+    margin-left: 12px;
+  }
+}
 @media (min-width: 768px) {
   .order-summary {
     display: -webkit-box;
