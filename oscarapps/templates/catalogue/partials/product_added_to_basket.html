@@ -1,0 +1,44 @@
+{% load currency_filters %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load thumbnail %}
+
+<section id="basket-drawer" class="drawer drawer--right drawer--dark drawer--small basket-drawer">
+	<a href="#close-drawer" class="drawer__backdrop" title="{% trans 'Close Drawer' %}"></a>
+	<div class="drawer__frame">
+		<div class="drawer__header drawer__header--borderLess">
+			<div class="drawer__headerContent"></div>
+		    <a href="#close-drawer" class="drawer__close close close--medium" title="{% trans 'Close Drawer' %}"></a>
+		</div>
+		<div class="drawer__scroller">
+			<div class="drawer__content">
+				<div class="basket-drawer__product u-pad32">
+					<figure class="order-summary__product">
+					    <div class="order-summary__productVisual">
+					        <div class="img-container img-container--square">
+					        	{% with image=product.primary_image %}
+					        	    {% thumbnail image.original "128x128" upscale=False as thumb %}
+					        	    	<img class="thumbnail" src="{{ thumb.url }}" alt="{{ product.get_title }}">
+					        	    {% endthumbnail %}
+					        	{% endwith %}
+					        </div>
+					    </div>
+					    <figcaption class="order-summary__productContent">
+					        <p class="order-summary__productName">{{ product.get_title }}</p>
+				        	{% purchase_info_for_product request product as session %}
+				        	{% if session.price.exists %}
+				        		<p class="order-summary__productPrice">{{ session.price.incl_tax|currency:session.price.currency }}</p>
+				        	{% endif %}
+					    </figcaption>
+					</figure>
+				</div>
+				<div class="basket-drawer__actions u-pad32">
+					<a class="cta cta--bright cta--block" href="{% url 'basket:summary' %}">{% trans "Show basket" %}</a>
+					<a class="cta cta--light cta--block" href="#close-drawer">{% trans "Continue shopping" %}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<a href="#basket-drawer" style="display: none;"></a> {# Do not remove - prevent popin to display an error because their is no link to open it. This is normal as it is triggered automatically. #}

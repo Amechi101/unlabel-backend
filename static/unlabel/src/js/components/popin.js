@@ -54,6 +54,9 @@ export default class Popin {
     this.close_btns_arr.forEach((btn_el) => {
       btn_el.addEventListener('click', this.onClickClose)
     })
+
+    this.el.addEventListener('popin_show', () => this.show())
+    this.el.addEventListener('popin_hide', () => this.hide())
   }
   beforeShow() {
     this.el.style.display = 'block'

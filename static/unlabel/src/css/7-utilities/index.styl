@@ -22,6 +22,36 @@
   font-family: $font_bold
 }
 
+
+// Generates padding classes for each size
+// Such as, exemple with 16 :
+//  .u-pad16 - 16px for all sides
+//  .u-vPad16 - 16px for vertical (top bottom) sides
+//  .u-hPad16 - 16px for horizontal (left right) sides
+//  .u-topPad16 - 16px for top side
+//  .u-rightPad16 - 16px for right side
+//  .u-bottomPad16 - 16px for bottom side
+//  .u-leftPad16 - 16px for left side
+for size in (16 24 32 48 64 96) {
+  size_value = unit(size, 'px')
+  .u-pad{size} {
+    padding: size_value
+  }
+  .u-vPad{size} {
+    padding-top: size_value
+    padding-bottom: size_value
+  }
+  .u-hPad{size} {
+    padding-right: size_value
+    padding-left: size_value
+  }
+  for side in (top right bottom left) {
+    .u-{side}Pad{size} {
+      padding-{side}: size_value
+    }
+  }
+}
+
 // .u-icon-replace {
 //   text-align left
 //   display inline-block

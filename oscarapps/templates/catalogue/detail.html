@@ -99,7 +99,21 @@
 
 {% include "catalogue/partials/shipping_info.html" %}
 {% include "catalogue/partials/returns_policy.html" %}
+{% include "catalogue/partials/product_added_to_basket.html" %}
 
 </div>
 
 {% endblock content %}
+
+{% block extrascripts %}
+    {{ block.super }}
+
+    <script type="text/javascript">
+        function showBasketDrawer() {
+            var drawer = document.getElementById('basket-drawer');
+            var show_event = new Event('drawer_show');
+            drawer.dispatchEvent(show_event);
+        }
+        // setTimeout(function(){ showBasketDrawer() }, 2000);
+    </script>
+{% endblock %}

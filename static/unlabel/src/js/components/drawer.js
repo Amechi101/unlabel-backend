@@ -23,6 +23,9 @@ class Drawer extends Popin {
   addEvents() {
     super.addEvents(...arguments)
     device.on('device_changed', this.onDeviceChanged)
+
+    this.el.addEventListener('drawer_show', () => this.show())
+    this.el.addEventListener('drawer_hide', () => this.hide())
   }
   beforeShow() {
     super.beforeShow(...arguments)
