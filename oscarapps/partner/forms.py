@@ -30,8 +30,8 @@ class PartnerSignUpForm(forms.Form):
     name = forms.CharField(label="Store Name", required=True)
     image = forms.ImageField(required=False, label="Store Image")
     description = forms.CharField(widget=forms.Textarea, label="Store Description")
-    loc = forms.CharField(label="Location", required=True)
-    # location = forms.ModelChoiceField(label='Location',required=True, queryset=Locations.objects.all() )
+    # loc = forms.CharField(label="Location", required=True)
+    loc = forms.ModelChoiceField(label='Location',required=True, queryset=Locations.objects.all() )
     # city = forms.CharField(label="City", required=True)
     # country = forms.ModelChoiceField(label="Country", queryset=Country.objects.all(), required=True)
     # state = forms.ModelChoiceField(label="State", queryset=States.objects.all(), required=False,

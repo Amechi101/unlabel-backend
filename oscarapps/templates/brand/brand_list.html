@@ -15,25 +15,13 @@
 {# TODO : makes styles dynamic #}
 {% block column_left %}
   <div class="filters">
-    {% if styles %}
-      <div class="filters__category">
-        <h3 class="subtitle">{% trans "Style" %}</h3>
-        <ul class="filters__list">
-          {% for style in styles %}
-            <li class="filters__item">
-              <a href="?products_category={{ style }}">{{ style }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
     {% if locations %}
       <div class="filters__category">
         <h3 class="subtitle">{% trans "Location" %}</h3>
         <ul class="filters__list">
           {% for location in locations %}
-            <li class="filters__item">
-              <a href="?location={{ location }}">{{ location }}</a>
+            <li class='filters__item {% ifequal selected_location location.id %} active {%endifequal %}'>
+              <a href="?location={{ location.id }}">{{ location }}</a>
             </li>
           {% endfor %}
         </ul>

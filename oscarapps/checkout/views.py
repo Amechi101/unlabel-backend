@@ -6,8 +6,11 @@ from django import http
 from django.contrib import messages
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils import six
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views import generic
+from django.utils.http import urlquote
 
 from oscar.apps.checkout.views import ThankYouView as CoreThankYouView
 from oscar.apps.checkout.views import IndexView as CoreIndexView
@@ -43,9 +46,41 @@ logger = logging.getLogger('oscar.checkout')
 class IndexView(CoreIndexView):
     success_url = reverse_lazy('checkout:checkout-process')
 
+    def form_valid(self, form):
+        if form.is_guest_checkout() or form.is_new_account_checkout():
+            email = form.cleaned_data['username']
+            self.checkout_session.set_guest_email(email)
+
+            # We raise a signal to indicate that the user has entered the
+            # checkout process by specifying an email address.
+            signals.start_checkout.send_robust(
+                sender=self, request=self.request, email=email)
+
+            if form.is_new_account_checkout():
+                messages.info(
+                    self.request,
+                    _("Create your account and then you will be redirected "
+                      "back to the checkout process"))
+                self.success_url = "%s?next=%s&email=%s" % (
+                    reverse('customer:register'),
+                    reverse('checkout:checkout-process'),
+                    urlquote(email)
+                )
+        else:
+            user = form.get_user()
+            login(self.request, user)
+
+            # We raise a signal to indicate that the user has entered the
+            # checkout process.
+            signals.start_checkout.send_robust(
+                sender=self, request=self.request)
+
+        return redirect(self.get_success_url())
+
+
 ##########################################################################################################
 
-class CheckoutProcess( OrderPlacementMixin, generic.TemplateView):
+class CheckoutProcess(OrderPlacementMixin, generic.TemplateView):
     pre_conditions = [
         'check_basket_is_not_empty',
         'check_basket_is_valid',
@@ -62,9 +97,9 @@ class CheckoutProcess( OrderPlacementMixin, generic.TemplateView):
         ctx = super(CheckoutProcess, self).get_context_data(**kwargs)
         ctx['use_shipping'] = False
         user = self.request.user
-        self.shipping_address_obj = UserShipingAddress.objects.filter(user=self.request.user).first()
-        if self.shipping_address_obj:
-            ctx['shipping_address_form'] = ShippingAddressForm(instance=self.shipping_address_obj,prefix='shipping')
+        shipping_address_obj = UserShipingAddress.objects.filter(user=self.request.user).first()
+        if shipping_address_obj:
+            ctx['shipping_address_form'] = ShippingAddressForm(instance=shipping_address_obj,prefix='shipping')
         else:
             ctx['shipping_address_form'] = ShippingAddressForm(prefix='shipping')
         ctx['invoice_address_form'] = BillingAddressForm(prefix='invoicing')
@@ -86,23 +121,26 @@ class CheckoutProcess( OrderPlacementMixin, generic.TemplateView):
 
 
         if shipping_address_form.is_valid() and bankcard_form.is_valid() and invoice_address_form_valid==True:
-            self.shipping_address_obj.user = self.request.user
-            self.shipping_address_obj.is_default_for_shipping = True
-            self.shipping_address_obj.is_default_for_billing = True
-            self.shipping_address_obj.phone_number = shipping_address_form.cleaned_data['phone_number']
-            self.shipping_address_obj.title = shipping_address_form.cleaned_data['title']
-            self.shipping_address_obj.first_name = shipping_address_form.cleaned_data['first_name']
-            self.shipping_address_obj.last_name = shipping_address_form.cleaned_data['last_name']
-            self.shipping_address_obj.line1 = shipping_address_form.cleaned_data['line1']
-            self.shipping_address_obj.line2 = shipping_address_form.cleaned_data['line2']
-            self.shipping_address_obj.line3 = shipping_address_form.cleaned_data['line3']
-            self.shipping_address_obj.state = shipping_address_form.cleaned_data['state']
-            self.shipping_address_obj.postcode = shipping_address_form.cleaned_data['postcode']
-            self.shipping_address_obj.country = shipping_address_form.cleaned_data['country']
-            self.shipping_address_obj.save()
+            shipping_address_obj = UserShipingAddress.objects.filter(user=self.request.user).first()
+            if not shipping_address_obj:
+                shipping_address_obj = UserShipingAddress()
+            shipping_address_obj.user = self.request.user
+            shipping_address_obj.is_default_for_shipping = True
+            shipping_address_obj.is_default_for_billing = True
+            shipping_address_obj.phone_number = shipping_address_form.cleaned_data['phone_number']
+            shipping_address_obj.title = shipping_address_form.cleaned_data['title']
+            shipping_address_obj.first_name = shipping_address_form.cleaned_data['first_name']
+            shipping_address_obj.last_name = shipping_address_form.cleaned_data['last_name']
+            shipping_address_obj.line1 = shipping_address_form.cleaned_data['line1']
+            shipping_address_obj.line2 = shipping_address_form.cleaned_data['line2']
+            shipping_address_obj.line3 = shipping_address_form.cleaned_data['line3']
+            shipping_address_obj.state = shipping_address_form.cleaned_data['state']
+            shipping_address_obj.postcode = shipping_address_form.cleaned_data['postcode']
+            shipping_address_obj.country = shipping_address_form.cleaned_data['country']
+            shipping_address_obj.save()
+
 
             ###TODO get checkbox value from frontend and update billing address also
-
             address_fields = dict(
                 (k, v) for (k, v) in shipping_address_form.instance.__dict__.items()
                 if not k.startswith('_'))

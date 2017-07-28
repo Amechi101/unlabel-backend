@@ -44,11 +44,15 @@
 			<a href="#" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						<img src="{% static 'unlabel/dist/img/temp/more-brand-3.jpg' %}" alt="">
+						{% if promoted_brands.2.image %}
+                            <img src="{{ promoted_brands.2.image.url }}" alt="">
+                        {% else %}
+                            <img src="" alt="">
+                        {% endif %}
 					</div>
 					<figcaption>
-						<p>The Arrivals</p>
-						<p><small>New York City, USA</small></p>
+						<p>{{ promoted_brands.2.name }}</p>
+						<p><small>{{ promoted_brands.2.location }}</small></p>
 					</figcaption>
 				</figure>
 			</a>

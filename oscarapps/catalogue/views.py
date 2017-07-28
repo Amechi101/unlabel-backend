@@ -81,11 +81,14 @@ class ProductDetailView(DetailView):
                 ctx['influencer'] = inf
             except:
                 pass
-        try:
-            product_liked = UserProductLike.objects.get(user=self.request.user,product_like=product)
-            ctx['user_liked'] = True
-        except ObjectDoesNotExist:
-            ctx['user_liked'] = False
+
+        if not self.request.user.is_anonymous:
+            try:
+                product_liked = UserProductLike.objects.get(user=self.request.user,product_like=product)
+                ctx['user_liked'] = True
+            except ObjectDoesNotExist:
+                ctx['user_liked'] = False
+
         ctx['alert_form'] = self.get_alert_form()
         ctx['has_active_alert'] = self.get_alert_status()
         return ctx
