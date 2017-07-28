@@ -153,17 +153,8 @@
                     {% include 'partials/form_field.html' with field=user_form.waist %}
                 </div>
 
-                <div class="form__group">
-                    <p class="invite__registerInfo">
-                        {% url 'terms-and-conditions' as terms_url %}
-                        {% blocktrans %}
-                            By creating an account, you agree to Unlabel’s <a class="link" href="#">Privacy Policy</a> and <a class="link" href="{{terms_url}}">Terms of Use</a>
-                        {% endblocktrans %}
-                    </p>
-                </div>
-
                 <div class="form__actions">
-                    <button class="cta cta--dark" type="submit" name="submit">Get a creator access</button>
+                    <button class="cta cta--dark" type="submit" name="submit">{% trans "Sign up" %}</button>
                 </div>
             </form>
         </div>
