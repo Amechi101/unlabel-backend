@@ -4554,14 +4554,14 @@ html.no-js .header_submenuToggler:hover .header__submenu {
             transform: translate(96px, 0);
   }
 }
-@media (max-width: 767px) {
-  .home_creatorGridItem img {
-    max-width: 114px;
-  }
-}
 @media (min-width: 768px) {
   .home_creatorGridItem {
     max-width: 288px;
+  }
+}
+@media (max-width: 767px) {
+  .home__creatorPerson {
+    max-width: 114px;
   }
 }
 .home__brands {
