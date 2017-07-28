@@ -34,6 +34,7 @@ Influencers = get_model('influencers','Influencers')
 Product = get_model('catalogue','Product')
 UserProductLike = get_model('customer','UserProductLike')
 Bankcard = get_model('payment','Bankcard')
+UserProductLike = get_model('customer','UserProductLike')
 
 class BrandView(PageTitleMixin, generic.ListView):
     """
@@ -249,6 +250,37 @@ class UccFollowUnfollowView(APIView):
             follow_count = UserInfluencerLike.objects.filter(influencer=influencer).count()
 
             respone_dict = {'followed':followed, 'message':message, 'follow_count':follow_count }
+
+            return Response(respone_dict)
+        else:
+            return Response({})
+
+
+class ProductLikeUnlikeView(APIView):
+
+    def get(self,request,*args,**kwargs):
+        if self.request.user.is_authenticated():
+            product_id = kwargs.get('pk')
+
+            try:
+                product = Product.objects.get(pk=product_id)
+                try:
+                    like_obj = UserProductLike.objects.get(user=request.user,product_like=product)
+                    like_obj.delete()
+                    product.likes = product.likes - 1
+                    product.save()
+                    message = "Product disliked"
+                    liked = False
+                except:
+                    like_obj = UserProductLike(user=request.user,product_like=product)
+                    like_obj.save()
+                    product.likes = product.likes + 1
+                    product.save()
+                    message = "Product liked"
+                    liked = True
+            except:
+                message = "Product not found"
+            respone_dict = {'liked':liked, 'message':message, 'follow_count':product.likes }
 
             return Response(respone_dict)
         else:

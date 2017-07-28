@@ -174,7 +174,6 @@ class Product(AbstractProduct, BaseApplicationModel):
             influencer_user_details = settings.AUTH_USER_MODEL.objects.get(pk = influencer_details.users )
             return influencer_user_details
         else:
-            print("------------------------------- ",self)
             influencer_reserved = InfluencerProductReserve.objects.get(product = self).influencer
             influencer_details = Influencers.objects.get(pk=influencer_reserved.pk)
             influencer_user_details = User.objects.get(pk = influencer_details.users.pk )

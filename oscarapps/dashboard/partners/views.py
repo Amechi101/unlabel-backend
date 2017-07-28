@@ -27,6 +27,7 @@ from oscar.apps.dashboard.partners.views import PartnerManageView as CorePartner
 from oscar.apps.dashboard.partners.views import PartnerUserUpdateView as CorePartnerUserUpdateView
 
 from oscar.core.loading import get_classes, get_model
+from oscar.core.utils import slugify
 from oscar.views import sort_queryset
 from django.contrib.auth.models import Permission
 
@@ -147,6 +148,7 @@ class PartnerCreateView(generic.View):
             partner_profile = Partner.objects.create(name=partner_form['name'].value(),
                                                     description=partner_form['description'].value(),
                                                     location = partner_location,
+                                                    slug=slugify(partner_form['name'].value())
                                                     )
             partner_profile.users.add(partner_user)
             partner_profile.style.add(*list(Style.objects.filter(pk__in=partner_form['style'].value())))

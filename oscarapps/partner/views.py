@@ -15,6 +15,7 @@ from django.shortcuts import render
 from django.utils.timezone import utc
 from django.views.generic import View, ListView
 from django.conf import settings
+from oscar.core.utils import slugify
 
 UserBrandLike = get_model('customer','UserBrandLike')
 
@@ -81,6 +82,7 @@ class PartnerSignUpView(View):
                     partner_brand.description = partner_form.cleaned_data['description']
                     partner_brand.image = partner_form.cleaned_data['image']
                     partner_brand.location = partner_location
+                    partner_brand.slug = slugify(partner_form.cleaned_data['name'])
                     # partner_brand.style = partner_form.cleaned_data['style']
                     partner_brand.category = partner_form.cleaned_data['category']
                     partner_brand.sub_category = partner_form.cleaned_data['sub_category']
@@ -128,6 +130,7 @@ class BrandListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super(BrandListView, self).get_context_data(*args, **kwargs)
+        ctx['promoted_brands'] = Partner.objects.all().order_by('created')
         temp = [b.location.country for b in ctx['brands']]
         ctx['locations'] = []
         for i in temp:
