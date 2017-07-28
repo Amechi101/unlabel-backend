@@ -27,6 +27,9 @@ class EmailUserCreationForm(BaseEmailUserCreationForm):
     def __init__(self, *args, **kwargs):
         super(EmailUserCreationForm, self).__init__(*args, **kwargs)
         self.fields['dob'].widget.attrs['placeholder'] = 'yyyy-mm-dd'
+        if hasattr(self, 'sociallogin'):
+            if 'birthday' in self.sociallogin.account.extra_data:
+                self.initial['dob'] = self.sociallogin.account.extra_data['birthday']
 
     def save(self, commit=True):
         user = super(EmailUserCreationForm, self).save(commit=False)

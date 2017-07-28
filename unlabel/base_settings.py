@@ -336,8 +336,11 @@ assert len(SECRET_KEY) > 20, 'Please set SECRET_KEY in local_settings.py'
 SOCIALACCOUNT_PROVIDERS = \
     {'facebook':
        {'METHOD': 'oauth2',
-        'SCOPE': ['email', 'public_profile', 'user_friends'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        # 'SCOPE': ['email', 'public_profile', 'user_friends'],
+        # 'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+
+        'SCOPE': ['email', 'user_birthday', 'public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'https'},
         'FIELDS': [
             'id',
             'email',
@@ -349,12 +352,16 @@ SOCIALACCOUNT_PROVIDERS = \
             'timezone',
             'link',
             'gender',
+            'birthday',
             'updated_time'],
         'EXCHANGE_TOKEN': True,
         'LOCALE_FUNC': 'path.to.callable',
         'VERIFIED_EMAIL': False,
         'VERSION': 'v2.4'}}
 
+SOCIALACCOUNT_AUTO_SIGNUP = False
+ACCOUNT_SIGNUP_FORM_CLASS = 'oscarapps.customer.forms.EmailUserCreationForm'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 PUSH_NOTIFICATIONS_SETTINGS = {
         # "FCM_API_KEY": "[your api key]",
@@ -369,4 +376,10 @@ AWS_SNS_SECRET_ACCESS_KEY = "XaCKTRxXb/NBS60sQhJAvnWh6NcKpQJjlg80K0xb"
 AWS_DEFAULT_REGION = "ap-south-1"
 
 PAGE_SIZE = 16
+
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 

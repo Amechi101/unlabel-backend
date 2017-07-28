@@ -125,18 +125,22 @@ class BrandListView(ListView):
         elif products_type != 'all' and products_type == 'Womenswear':
             qs = qs.filter(category__name='Womenswear')
         if location:
-            qs = qs.filter(location__country=location)
+            qs = qs.filter(location=location)
         return qs
 
     def get_context_data(self, *args, **kwargs):
         ctx = super(BrandListView, self).get_context_data(*args, **kwargs)
-        ctx['promoted_brands'] = Partner.objects.all().order_by('created')
-        temp = [b.location.country for b in ctx['brands']]
-        ctx['locations'] = []
-        for i in temp:
-            if i not in ctx['locations']:
-                ctx['locations'].append(i)
-        ctx['styles'] = ['all', 'Menswear', 'Womenswear'] # Make this list dynamic
+        ctx['promoted_brands'] = Partner.objects.all().order_by('created')[:3]
+        # temp = [b.location.country for b in ctx['brands']]
+        # ctx['locations'] = []
+        # for i in temp:
+        #     if i not in ctx['locations']:
+        #         ctx['locations'].append(i)
+
+        brand_locations = Partner.objects.all().values_list('location',flat=True)
+        ctx['locations'] = Locations.objects.filter(pk__in=brand_locations)
+        ctx['selected_location'] =  self.request.GET.get('location','')
+
         return ctx
 
 
