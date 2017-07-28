@@ -4771,6 +4771,9 @@ a:hover .img-container img {
 .img-container--portrait {
   padding-bottom: 150%;
 }
+.info--danger {
+  color: #d0021b;
+}
 .invite__header {
   margin: 24px 0;
 }
