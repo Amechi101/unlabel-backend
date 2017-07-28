@@ -2594,6 +2594,19 @@ html.webkit .cta--facebook:not(button) {
 .cta--facebook:hover {
   color: #4460a0 !important;
 }
+.cta--danger {
+  border-color: #d0021b;
+  background-image: linear-gradient(to right, #d0021b 50%, #fff 50%);
+  color: #d0021b;
+}
+html.webkit .cta--danger:not(button) {
+  background-image: linear-gradient(to right, #fff 50%, #d0021b 50%), linear-gradient(to right, #d0021b 50%, #fff 50%);
+}
+.cta--danger.is-active,
+.cta--danger:focus,
+.cta--danger:hover {
+  color: #fff !important;
+}
 .cta--smallPad {
   padding-left: 16px;
   padding-right: 16px;
@@ -6313,5 +6326,8 @@ input[type=radio].radio:not(:checked) + label:hover::before {
 }
 .u-underline {
   text-decoration: underline;
+}
+.u-bold {
+  font-family: 'FaroWeb-BoldLucky';
 }
 /*# sourceMappingURL=bundle.css.map */
