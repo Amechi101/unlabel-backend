@@ -64,6 +64,23 @@
   }
 }
 
+.product__exclusiveLabel {
+  position absolute
+  bottom: 8px
+  left: 8px
+  background-color $color_darkGrey
+  padding: 5px 8px
+  font-size: 11px
+  color: #fff
+  z-index 2 // on top of swiper
+  font-family: $font_bold
+  
+  @media $mq_m {
+    bottom: 16px
+    left: 16px
+  }
+}
+
 .product__brand {
   font-family: $font_bold
   text-decoration: underline

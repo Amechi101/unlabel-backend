@@ -5490,6 +5490,23 @@ a:hover .img-container img {
     margin-left: -192px;
   }
 }
+.product__exclusiveLabel {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background-color: #232323;
+  padding: 5px 8px;
+  font-size: 11px;
+  color: #fff;
+  z-index: 2;
+  font-family: 'FaroWeb-BoldLucky';
+}
+@media (min-width: 768px) {
+  .product__exclusiveLabel {
+    bottom: 16px;
+    left: 16px;
+  }
+}
 .product__brand {
   font-family: 'FaroWeb-BoldLucky';
   text-decoration: underline;
