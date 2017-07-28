@@ -6,8 +6,11 @@ from django import http
 from django.contrib import messages
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils import six
+from django.contrib.auth import login
+from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views import generic
+from django.utils.http import urlquote
 
 from oscar.apps.checkout.views import ThankYouView as CoreThankYouView
 from oscar.apps.checkout.views import IndexView as CoreIndexView
@@ -42,6 +45,38 @@ logger = logging.getLogger('oscar.checkout')
 
 class IndexView(CoreIndexView):
     success_url = reverse_lazy('checkout:checkout-process')
+
+    def form_valid(self, form):
+        if form.is_guest_checkout() or form.is_new_account_checkout():
+            email = form.cleaned_data['username']
+            self.checkout_session.set_guest_email(email)
+
+            # We raise a signal to indicate that the user has entered the
+            # checkout process by specifying an email address.
+            signals.start_checkout.send_robust(
+                sender=self, request=self.request, email=email)
+
+            if form.is_new_account_checkout():
+                messages.info(
+                    self.request,
+                    _("Create your account and then you will be redirected "
+                      "back to the checkout process"))
+                self.success_url = "%s?next=%s&email=%s" % (
+                    reverse('customer:register'),
+                    reverse('checkout:checkout-process'),
+                    urlquote(email)
+                )
+        else:
+            user = form.get_user()
+            login(self.request, user)
+
+            # We raise a signal to indicate that the user has entered the
+            # checkout process.
+            signals.start_checkout.send_robust(
+                sender=self, request=self.request)
+
+        return redirect(self.get_success_url())
+
 
 ##########################################################################################################
 
