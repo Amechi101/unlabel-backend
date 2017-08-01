@@ -249,6 +249,43 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     pick_date = serializers.SerializerMethodField()
     return_date = serializers.SerializerMethodField()
     live_date = serializers.SerializerMethodField()
+    soonest_pickup_date = serializers.SerializerMethodField()
+    soonest_return_date = serializers.SerializerMethodField()
+    soonest_live_date = serializers.SerializerMethodField()
+
+    def influencer_user(self):
+        request = self.context['request']
+        inf_user = Influencers.objects.get(users=request.user)
+        return inf_user
+
+    def get_soonest_live_date(self,obj):
+        try:
+            inf_user = self.influencer_user()
+            i = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj.brand).order_by('date_live')
+            if i[0].date_live:
+                live_date = i[0].date_live.strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                live_date = i[0].date_live
+        except:
+            return None
+        return live_date
+
+
+    def get_soonest_return_date(self,obj):
+        try:
+            inf_user = self.influencer_user()
+            influencer_reserve = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj.brand).order_by('date_return')
+        except:
+            return None
+        return influencer_reserve[0].date_return
+
+    def get_soonest_pickup_date(self,obj):
+        try:
+            inf_user = self.influencer_user()
+            influencer_reserve = InfluencerProductReserve.objects.filter(influencer=inf_user, product__brand=obj.brand).order_by('date_picked')
+        except:
+            return None
+        return influencer_reserve[0].date_picked
 
     def get_sku(self, obj):
         try:
@@ -315,7 +352,7 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
                   'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes', 'share_url', 'sku',
-                  'pick_date', 'return_date', 'live_date']
+                  'pick_date', 'return_date', 'live_date', 'soonest_pickup_date', 'soonest_return_date','soonest_live_date']
 
 
 class InfluencerBrandInfoSerializer(serializers.ModelSerializer):
@@ -417,3 +454,15 @@ class InfluecnerBrandSpecializationSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubCategory
         fields = '__all__'
+
+
+class CutomerBrandSerializer(serializers.ModelSerializer):
+    location = serializers.SerializerMethodField()
+
+    def get_location(self,obj):
+        return obj.location.state+","+obj.location.country
+
+    class Meta:
+        model = Partner
+        fields = '__all__'
+
