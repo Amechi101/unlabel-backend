@@ -8,6 +8,7 @@ from oscar.core.compat import user_is_authenticated
 from oscar.core.loading import get_class, get_model
 from oscarapps.influencers.models import Influencers, InfluencerProductReserve
 from users.models import User
+from oscar.apps.catalogue.views import ProductDetailView as CoreProductDetailView
 
 
 Product = get_model('catalogue', 'product')
@@ -20,7 +21,7 @@ UserProductLike = get_model('customer','UserProductLike')
 
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(CoreProductDetailView):
     context_object_name = 'product'
     model = Product
     view_signal = product_viewed
@@ -81,8 +82,7 @@ class ProductDetailView(DetailView):
                 ctx['influencer'] = inf
             except:
                 pass
-
-        if not self.request.user.is_anonymous:
+        if not self.request.user.is_anonymous():
             try:
                 product_liked = UserProductLike.objects.get(user=self.request.user,product_like=product)
                 ctx['user_liked'] = True

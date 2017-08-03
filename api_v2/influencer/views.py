@@ -150,7 +150,7 @@ class InfluencerForgotPassword(APIView):
             content = {"message": "invalid email"}
             return Response(content, status=status.HTTP_206_PARTIAL_CONTENT)
         try:
-            if User.objects.filter(email__iexact=request.data["email"], is_influencer=True, is_active=True).exists():
+            if User.objects.filter(email__exact=request.data["email"], is_influencer=True, is_active=True).exists():
                 current_site = Site.objects.get_current()
                 domain = current_site.domain
                 user = User.objects.get(email__iexact=request.data["email"])
@@ -188,7 +188,7 @@ class InfluencerForgotPassword(APIView):
                 email.send()
                 return Response({'code': 'OK'}, status.HTTP_200_OK)
             else:
-                content = {'message : Not a valid Influencer email.'}
+                content = {'message' : 'We couldnt find your email'}
                 return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         except:
             return Response({'code': 'Please try again later'}, status=status.HTTP_400_BAD_REQUEST)

@@ -4,6 +4,7 @@ from .customer import views as customerViews
 from .address import views as addressViews
 from .catalogue import views as catalogueViews
 from .influencer import views as influencerViews
+from .search import views as searchViews
 from .utils import *
 
 
@@ -98,6 +99,20 @@ urlpatterns = [
         name='influencer-profile-listing'),
     url(r'^influencer_country_codes/', addressViews.CountryCode.as_view(),
         name='influencer_country_codes'),
+    url(r'^influencer_list_products/', catalogueViews.InfluencerProductListView.as_view(),
+        name='influencer_list_products'),
+    url(r'^customer_brands_list/', catalogueViews.CustomerBrandsFilterSortView.as_view(),
+        name='customer_brands_list'),
+    url(r'^customer_influencers_list/', catalogueViews.CustomerInfluencerFilterSortView.as_view(),
+        name='customer_ucc_list'),
+    url(r'^customer_brand_products/', catalogueViews.CustomerBrandProductsSortView.as_view(),
+        name='customer_products_list'),
+    url(r'^customer_influencer_products/', catalogueViews.CustomerInfluencerProducts.as_view(),
+        name='customer_influencer_products'),
+    url(r'^customer_search_brands/', searchViews.CustomerBrandSearchView.as_view(),
+        name='customer_influencer_products'),
+
+
 ]
 
 ##### address urls  #####

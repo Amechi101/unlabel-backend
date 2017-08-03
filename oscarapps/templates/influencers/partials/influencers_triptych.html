@@ -10,11 +10,15 @@
 			<a href="#" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						<img src="{% static 'unlabel/dist/img/temp/more-creator1.jpg' %}" alt="">
+                        {% if influencers.0.users.image %}
+                            <img src="{{ influencers.0.users.image.url }}" alt="">
+                        {%else%}
+                            <img src="" alt="">
+                        {% endif %}
 					</div>
 					<figcaption>
-						<p>Caitlin Miyako Taylor</p>
-						<p><small>Los Angeles, USA</small></p>
+						<p>{{ promoted_influencers.0.users.first_name }}{{ promoted_influencers.0.users.last_name }}</p>
+						<p><small>{{ promoted_influencers.0.location }}</small></p>
 					</figcaption>
 				</figure>
 			</a>
@@ -23,11 +27,15 @@
 			<a href="#" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						<img src="{% static 'unlabel/dist/img/temp/more-creator2.jpg' %}" alt="">
+						{% if influencers.1.users.image %}
+                            <img src="{{ influencers.1.users.image.url }}" alt="">
+                        {%else%}
+                            <img src="" alt="">
+                        {% endif %}
 					</div>
 					<figcaption>
-						<p>Rich Bhatia</p>
-						<p><small>New York City, USA</small></p>
+						<p>{{ promoted_influencers.1.users.first_name }}{{ promoted_influencers.1.users.last_name }}</p>
+						<p><small>{{ promoted_influencers.1.location }}</small></p>
 					</figcaption>
 				</figure>
 			</a>
@@ -36,11 +44,15 @@
 			<a href="#" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						<img src="{% static 'unlabel/dist/img/temp/more-creator3.jpg' %}" alt="">
+						{% if influencers.2.users.image %}
+                            <img src="{{ influencers.2.users.image.url }}" alt="">
+                        {%else%}
+                            <img src="" alt="">
+                        {% endif %}
 					</div>
 					<figcaption>
-						<p>Luca Deasti</p>
-						<p><small>Stockholm, Sw</small></p>
+						<p>{{ promoted_influencers.2.users.first_name }}{{ promoted_influencers.2.users.last_name }}</p>
+						<p><small>{{ promoted_influencers.2.location }}</small></p>
 					</figcaption>
 				</figure>
 			</a>

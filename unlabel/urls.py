@@ -35,7 +35,7 @@ urlpatterns = [  # admin
                  url(r"^influencers/", include('oscarapps.influencers.urls')),
 
                  # partners
-                 url(r"^partners/", include('oscarapps.partner.urls')),
+                 url(r"^partners/", include('oscarapps.partner.urls'), name='partner'),
 
                  # api's
                  url(r"unlabel-network/", include('unlabel_api.urls')),

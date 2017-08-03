@@ -168,6 +168,7 @@ class Partner(AbstractPartner, BaseApplicationModel):
                                     help_text=_('Check|Un check to activate|deactivate store'))
     rental_info = models.ForeignKey('RentalInformation', models.SET_NULL, null=True, blank=True, default="",
                                      verbose_name=_('Rental Informaton'))
+    follows = models.PositiveIntegerField(default=0,verbose_name=_('follow count'))
 
     class Meta:
         app_label = 'partner'

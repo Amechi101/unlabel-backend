@@ -151,7 +151,7 @@ class InfluencerManageForm(forms.ModelForm):
         super(InfluencerManageForm, self).__init__(*args, **kwargs)
         self.fields['gender'].choices = self.sex_choice
         self.fields['gender'].initial = self.instance.users.gender
-
+        self.fields['image'].initial = self.instance.users.image
     # password1 = forms.CharField(
     #     label=_('Password'),
     #     widget=forms.PasswordInput,
@@ -216,6 +216,7 @@ class InfluencerManageForm(forms.ModelForm):
 
         instance.users.is_active = self.cleaned_data['is_active']
         instance.users.gender = self.cleaned_data['gender']
+        instance.users.image = self.cleaned_data['image']
         if commit:
             instance.location.save()
             instance.users.save()

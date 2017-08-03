@@ -208,20 +208,20 @@ class BrandFollowUnfollowView(APIView):
                 try:
                     follow_obj = UserBrandLike.objects.get(user=request.user,brand=brand)
                     follow_obj.delete()
+                    brand.follows = int(brand.follows) - 1
+                    brand.save()
                     message = "Brand unfollowed"
                     followed = False
                 except:
                     follow_obj = UserBrandLike(user=request.user,brand=brand)
                     follow_obj.save()
+                    brand.follows = int(brand.follows) + 1
+                    brand.save()
                     message = "Brand followed"
                     followed = True
             except:
                 message = "Brand not found"
-
-            follow_count = UserBrandLike.objects.filter(brand=brand).count()
-
-            respone_dict = {'followed':followed, 'message':message, 'follow_count':follow_count }
-
+            respone_dict = {'followed':followed, 'message':message, 'follow_count':brand.follows }
             return Response(respone_dict)
         else:
             return Response({})
@@ -237,20 +237,20 @@ class UccFollowUnfollowView(APIView):
                 try:
                     follow_obj = UserInfluencerLike.objects.get(user=request.user,influencer=influencer)
                     follow_obj.delete()
+                    influencer.follows = int(influencer.follows)-1
+                    influencer.save()
                     message = "Influencer unfollowed"
                     followed = False
                 except:
                     follow_obj = UserInfluencerLike(user=request.user,influencer=influencer)
                     follow_obj.save()
+                    influencer.follows = int(influencer.follows)+1
+                    influencer.save()
                     message = "Influencer followed"
                     followed = True
             except:
                 message = "Influencer not found"
-
-            follow_count = UserInfluencerLike.objects.filter(influencer=influencer).count()
-
-            respone_dict = {'followed':followed, 'message':message, 'follow_count':follow_count }
-
+            respone_dict = {'followed':followed, 'message':message, 'follow_count':influencer.follows }
             return Response(respone_dict)
         else:
             return Response({})

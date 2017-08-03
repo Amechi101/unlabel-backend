@@ -5,7 +5,7 @@ from haversine import haversine
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import auth
 from django.core.mail.message import EmailMessage
-from django.db.models import Max
+from django.db.models import Max, Q
 from rest_framework import authentication
 from rest_framework.views import APIView
 from rest_framework import status
@@ -18,7 +18,7 @@ from oscar.core.loading import get_model, get_class
 from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
 
-from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer
+from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer, CustomerProductSerializer
 from oscarapps.partner.models import PartnerFollow, Style, Category, SubCategory
 
 from oscarapps.catalogue.models import InfluencerProductImage
@@ -26,9 +26,11 @@ from oscarapps.influencers.models import Influencers, InfluencerProductReserve, 
 from .serializers import PartnerSerializer, StoreTypeSerializer, ProductSerializer, \
     InfluencerBrandProductSerializer, \
     InfluencerProductImagesSerializer, InfluencerImageSerializer, InfluencerProductNoteSerializer, \
-    BaseProductSerializer, IdSerializer, InfluecnerBrandSpecializationSerializer
+    BaseProductSerializer, IdSerializer, InfluecnerBrandSpecializationSerializer, CutomerBrandSerializer
 from oscarapps.partner.models import PartnerFollow, Style
 from oscar.apps.partner.models import StockRecord
+
+from .pagination import BrandListPagination
 
 
 # from oscar.apps.basket.models import
@@ -600,6 +602,12 @@ class InfluencerReserveProduct(APIView):
         else:
             content = {"message": "Please login first."}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+        influencer_reserved_products_count = Product.objects.filter(influencer=influencer_user,rental_status='REN')
+        if influencer_reserved_products_count >=2:
+            content = {"message": "You have more than 2 rented products"}
+            return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
+
         id_ser = self.serializer_class(data=request.data, many=False)
         if id_ser.is_valid():
             try:
@@ -619,6 +627,7 @@ class InfluencerReserveProduct(APIView):
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
                     base_product.rental_status = 'R'
+                    base_product.influencer = influencer_user
                     base_product.save()
                 influencer_product_reserved.save()
                 product_to_reserve.save()
@@ -641,6 +650,7 @@ class InfluencerReserveProduct(APIView):
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
                     base_product.rental_status = 'U'
+                    base_product.influencer = None
                     base_product.save()
                 product_to_reserve.save()
                 content = {"message": "Product unreservered successfully."}
@@ -1056,5 +1066,158 @@ class InfluencerBrandSpecialization(APIView):
         category_ser = self.serializer_class(queryset, many=True)
         result_dict = {'results': category_ser.data}
         return Response(result_dict)
+
+
+class InfluencerProductListView(generics.ListAPIView):
+    '''
+    ZA - sort by a to z
+    AZ - sort by z to a
+    ASC - sort by date ascending
+    DESC - sort by date descending
+    '''
+
+    serializer_class = ProductSerializer
+    pagination_class = pagination.PageNumberPagination
+    http_method_names = ('get',)
+
+
+    def get_queryset(self,*args,**kwargs):
+        sort_by = self.request.GET.get('sort_by','').strip()
+        products_list = Product.objects.filter(~Q(structure = 'child'))
+        if sort_by == 'AZ':
+            products_list.order_by('title')
+        elif sort_by == 'ZA':
+            products_list.order_by('-title')
+        elif sort_by == 'ASC':
+            products_list.order_by('date_created')
+        elif sort_by == 'DSC':
+            products_list.order_by('-date_created')
+
+        return products_list
+
+
+
+class CustomerBrandsFilterSortView(generics.ListAPIView):
+    serializer_class = CutomerBrandSerializer
+    # pagination_class = BrandListPagination
+    paginate_by = 12
+    http_method_names = ('get',)
+
+    def get_queryset(self,*args,**kwargs):
+        brands_list = Partner.objects.all()
+        sort_by = self.request.GET.get('sort_by','').strip()
+        locations = self.request.GET.get('location',None)
+        location_list = []
+        if locations is not None:
+            for location in locations.split('|'):
+                location_list.append(int(location))
+            brands_list = Partner.objects.filter(location__in=location_list).order_by('name')
+        if sort_by == 'AZ':
+            brands_list = brands_list.order_by('-name')
+        elif sort_by == 'MR':
+            brands_list = brands_list.order_by('created')
+        elif sort_by == 'MF':
+            brands_list = brands_list.order_by('follows')
+        return brands_list
+
+
+class CustomerInfluencerFilterSortView(generics.ListAPIView):
+    serializer_class = CutomerBrandSerializer
+    pagination_class = BrandListPagination
+    http_method_names = ('get',)
+
+    def get_queryset(self,*args,**kwargs):
+        sort_by = self.request.GET.get('sort_by','').strip()
+        gender = self.request.GET.get('gender','').strip()
+        styles = self.request.GET.get('styles',None)
+        locations = self.request.GET.get('locations',None)
+
+        influencer_list = Influencers.objects.all()
+        style_list = []
+        location_list = []
+        if locations is not None:
+            for location in locations.split('|'):
+                location_list.append(int(location))
+            influencer_list = influencer_list.filter(location__in=location_list)
+
+        if styles is not None:
+            for style in styles.split('|'):
+                style_list.append(int(style))
+            influencer_list = influencer_list.filter(styles__in=style_list)
+
+        if gender == 'M' or gender == 'F':
+            influencer_list = influencer_list.filter(users__gender=gender)
+
+        if sort_by == 'AZ':
+            influencer_list = influencer_list.order_by('-name')
+        elif sort_by == 'MR':
+            influencer_list = influencer_list.order_by('created')
+        elif sort_by == 'MF':
+            influencer_list = influencer_list.order_by('follows')
+        return influencer_list
+
+
+class CustomerBrandProductsSortView(generics.ListAPIView):
+    serializer_class = BaseProductSerializer
+    pagination_class = BrandListPagination
+    http_method_names = ('get',)
+
+    def get_queryset(self,*args,**kwargs):
+        brand_id = self.request.GET.get('brand_id','').strip()
+        sort_by = self.request.GET.get('sort_by','').strip()
+        if brand_id:
+            brand = Partner.objects.get(id=brand_id)
+            products = Product.browsable.base_queryset()
+            products = products.filter(brand=brand).distinct()
+        else:
+            products = Product.browsable.base_queryset()
+        if sort_by == 'MR':
+            products = products.order_by('date_created')
+        elif sort_by == 'ML':
+            products = products.order_by('likes')
+        elif sort_by == 'HL':
+            products = products.order_by('-stockrecords__price_excl_tax')
+        elif sort_by == 'LH':
+            products = products = products.order_by('-stockrecords__price_excl_tax')
+
+        return products
+
+
+class CustomerInfluencerProducts(generics.ListAPIView):
+    serializer_class = BaseProductSerializer
+    pagination_class = BrandListPagination
+    http_method_names = ('get',)
+
+    def get_queryset(self,*args,**kwargs):
+        influencer_id = self.request.GET.get('influencer_id',None)
+        sort_by = self.request.GET.get('sort_by','').strip()
+
+        if influencer_id:
+            influencer = Influencers.objects.get(id=influencer_id)
+            products = Product.browsable.base_queryset()
+            products = products.filter(influencer=influencer).distinct()
+        else:
+            products = Product.browsable.base_queryset()
+
+        if sort_by == 'MR':
+            products = products.order_by('date_created')
+        elif sort_by == 'ML':
+            products = products.order_by('likes')
+        elif sort_by == 'HL':
+            products = products.order_by('-stockrecords__price_excl_tax')
+        elif sort_by == 'LH':
+            products = products = products.order_by('-stockrecords__price_excl_tax')
+
+        return products
+
+
+
+
+
+
+
+
+
+
 
 

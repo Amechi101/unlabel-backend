@@ -12,22 +12,38 @@
 
 {% block layout_sidebar_extra_classnames %}u-desktop-only{% endblock %}
 
-{# TODO : makes styles dynamic #}
 {% block column_left %}
-  <div class="filters">
-    {% if locations %}
-      <div class="filters__category">
-        <h3 class="subtitle">{% trans "Location" %}</h3>
-        <ul class="filters__list">
-          {% for location in locations %}
-            <li class='filters__item {% ifequal selected_location location.id %} active {%endifequal %}'>
-              <a href="?location={{ location.id }}">{{ location }}</a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-  </div>
+    <div class="filters">
+
+        {% if locations %}
+        <div class="filters__category">
+          <h3 class="subtitle">{% trans "Locations" %}</h3>
+          <ul class="filters__list">
+            {% for location in locations %}
+              <li class="filters__item">
+                <input class="checkbox checkbox--small" type="checkbox" id="filter1_location_{{ location.id }}" name="location" onclick="applyFilters('filter1')" value="{{ location.id }}"> <label for="filter1_location_{{ location.id }}">{{ location }}</label>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+       </div>
+
+
+  {# <div class="filters"> #}
+    {# {% if locations %} #}
+      {# <div class="filters__category"> #}
+        {# <h3 class="subtitle">{% trans "Location" %}</h3> #}
+        {# <ul class="filters__list"> #}
+          {# {% for location in locations %} #}
+            {# <li class='filters__item {% ifequal selected_location location.id %} active {%endifequal %}'> #}
+              {# <a href="?location={{ location.id }}">{{ location }}</a> #}
+            {# </li> #}
+          {# {% endfor %} #}
+        {# </ul> #}
+      {# </div> #}
+    {# {% endif %} #}
+  {# </div> #}
 {% endblock column_left %}
 
 {% block grid_header_filters %}
@@ -121,3 +137,12 @@
         {% include "partials/pagination.html" %}
     </div>
 {% endblock %}
+
+
+    <!--
+        TODO
+        Send request to /api_v2/customer_brands_list/
+        sort by parameters - AZ, MR, MF
+        filter by location - '|' seperated location ids
+        example - /api_v2/customer_brands_list/?location=31|32|33&sort_by=MR
+    -->

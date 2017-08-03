@@ -95,7 +95,7 @@ class InfluencerListView(View):
     def get(self,request,*args,**kwargs):
         influencers_list = Influencers.objects.filter(users__is_active=True).order_by('-created')
 
-        paginator = Paginator(influencers_list, 2) # Show 25 contacts per page
+        paginator = Paginator(influencers_list, 16) # Show 25 contacts per page
         page = request.GET.get('page')
         try:
             influencers = paginator.page(page)
@@ -109,6 +109,9 @@ class InfluencerListView(View):
 
         data = {'influencers':influencers,'styles':Style.objects.all(),
                 'locations':Locations.objects.all().distinct('city') }
+        promoted_influencers = Influencers.objects.all().order_by('created')[:3]
+        data.update({'promoted_influencers':promoted_influencers})
+
         return render(request, self.template_name , data)
 
 
@@ -229,5 +232,7 @@ class UccDetail(View):
             data.update({'follow_count':UserInfluencerLike.objects.filter(influencer=qs).count()})
         except:
             return render(request,'404.html', {})
+        promoted_influencers = Influencers.objects.all().order_by('created')[:3]
+        data.update({'promoted_influencers':promoted_influencers})
 
         return render(request,self.template_name,data)

@@ -1,6 +1,7 @@
 {% extends "layout_2_col.html" %}
 {% load i18n %}
 {% load product_tags  %}
+        {% debug %}
 
 {% block body_class %}brand{% endblock %}
 
@@ -36,20 +37,20 @@
         {{ brand.description }}
     </div>
 
-    <div class="grid__sidebarWidget u-desktop-only">
-        <div class="filters">
-            <div class="filters__category">
-              <h3 class="subtitle">{% trans "Filters" %}</h3>
-              <ul class="filters__list">
-                {% for f in filters %}
-                  <li class="filters__item">
-                    <a href="?products_category={{ f }}">{{ f }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-            </div>
-        </div>
-    </div>
+    <!--<div class="grid__sidebarWidget u-desktop-only">-->
+        <!--<div class="filters">-->
+            <!--<div class="filters__category">-->
+              <!--<h3 class="subtitle">{% trans "Filters" %}</h3>-->
+              <!--<ul class="filters__list">-->
+                <!--{% for f in filters %}-->
+                  <!--<li class="filters__item">-->
+                    <!--<a href="?products_category={{ f }}">{{ f }}</a>-->
+                  <!--</li>-->
+                <!--{% endfor %}-->
+              <!--</ul>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
     <div class="grid__sidebarWidget">
         {% include "partials/share_menu.html" %}
     </div>

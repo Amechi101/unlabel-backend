@@ -16,3 +16,6 @@ class CustomPagination(LimitOffsetPagination):
             ('results', data.get('data'))
         ]))
 
+
+class BrandListPagination(pagination.PageNumberPagination):
+       page_size = 12

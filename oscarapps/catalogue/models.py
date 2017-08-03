@@ -8,6 +8,7 @@ from oscar.core.loading import get_class, get_classes, get_model
 from django.conf import settings
 from oscarapps.partner.models import Partner
 from oscar.apps.catalogue.abstract_models import AbstractProduct
+# from oscarapps.influencers.models import Influencers
 
 
 
@@ -108,6 +109,7 @@ class Product(AbstractProduct, BaseApplicationModel):
     likes = models.PositiveIntegerField(default=0)
     influencer_product_note = models.TextField(blank=True, null=True,
                                               verbose_name=_('Influencer product Note'))
+    influencer = models.ForeignKey("influencers.Influencers", null=True,blank=True, verbose_name=_('Influencer Reserved'))
     weight = models.DecimalField(max_digits=8, decimal_places=5, blank=True, null=True, verbose_name=_('Weight information'))
     on_sale = models.BooleanField(default=True, verbose_name=_('Product on sale'))
     item_sex_type = models.CharField(

@@ -95,10 +95,10 @@
               <h2 class="title title--small">{% trans "Join Unlabel in few steps" %}</h2>
           </div>
           
-          <form class="invite__registerForm" id="Partner_register_form" method="post" action="../dashboard/partners" enctype="multipart/form-data">
+          <form class="invite__registerForm" id="Partner_register_form" method="post" action="." enctype="multipart/form-data">
               {% csrf_token %}
 
-              {% include "partials/form_errors.html" %}
+              {% include "partials/form_errors.html" with form=user_form %}
 
               <div class="form__row form__row--m-2">
                   {% include 'partials/form_field.html' with field=user_form.gender %}
@@ -125,6 +125,10 @@
               </div>
 
               <div class="form__row">
+                {% include 'partials/form_field.html' with field=user_form.description %}
+              </div>
+
+              <div class="form__row">
                   {% include 'partials/form_field.html' with field=user_form.image %}
               </div>
 
@@ -145,6 +149,7 @@
               </p>
 
               <div class="form__actions">
+                  {{user_form.errors}}
                 <button class="cta cta--dark" type="submit" name="submit">Get a brand access</button>
               </div>
           </form>

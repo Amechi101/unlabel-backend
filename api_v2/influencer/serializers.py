@@ -29,10 +29,14 @@ class LoginSerializer(serializers.Serializer):
         max_length=field_length('password'), required=True)
 
     def validate(self, attrs):
+        try:
+            email_valid = User.objects.get(email=attrs['username'])
+        except:
+            raise serializers.ValidationError('Wrong email id')
         user = authenticate(
             username=attrs['username'], password=attrs['password'])
         if user is None:
-            raise serializers.ValidationError('invalid login')
+            raise serializers.ValidationError('invalid login credentials')
         elif not user.is_active:
             raise serializers.ValidationError(
                 'Can not log in as inactive user')

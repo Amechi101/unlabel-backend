@@ -51,6 +51,7 @@ class Influencers(BaseApplicationModel):
     hips = models.PositiveIntegerField(default=0, verbose_name=_('hips'), help_text=_('US Measurements'))
     waist = models.PositiveIntegerField(default=0, verbose_name=_('waist'), help_text=_('US Measurements'))
     styles = models.ManyToManyField(Style, null=True, blank=True)
+    follows = models.PositiveIntegerField(default=0, verbose_name=_('follow count'))
 
     def id_generator(self, size=10, chars=string.ascii_uppercase + string.digits):
         auto_id = ''.join(random.choice(chars) for _ in range(size))

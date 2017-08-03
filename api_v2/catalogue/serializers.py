@@ -466,3 +466,9 @@ class CutomerBrandSerializer(serializers.ModelSerializer):
         model = Partner
         fields = '__all__'
 
+
+class CustomerProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        fields = '__all__'

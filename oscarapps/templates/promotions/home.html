@@ -50,11 +50,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{% static 'unlabel/dist/img/temp/home-ucc-1.jpg' %}">
+                                <img src="{{ influencers.0.users.image.url }}">
                             </div>
                             <figcaption>
-                                <h3>Caitlin Miyako Taylor</h3>
-                                <p><small>Los Angeles, USA</small></p>
+                                <h3>{{ influencers.0.users.first_name }}</h3>
+                                <p><small>{{ influencers.0.location }}</small></p>
                             </figcaption>
                         </figure>
                     </a>
@@ -74,11 +74,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{% static 'unlabel/dist/img/temp/home-ucc-2.jpg' %}">
+                                <img src="{{ influencers.1.users.image.url }}">
                             </div>
                             <figcaption>
-                                <h3>Morgan Connellee</h3>
-                                <p><small>New York City, USA</small></p>
+                                <h3>{{ influencers.1.users.first_name }}</h3>
+                                <p><small>{{ influencers.1.location }}</small></p>
                             </figcaption>
                         </figure>
                     </a>
@@ -89,11 +89,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{% static 'unlabel/dist/img/temp/home-ucc-3.jpg' %}">
+                                <img src="{{ influencers.2.users.image.url }}">
                             </div>
                             <figcaption>
-                                <h3>Luca Deasti</h3>
-                                <p><small>Stockholm, Sw</small></p>
+                                <h3>{{ influencers.2.users.first_name }}</h3>
+                                <p><small>{{ influencers.2.location }}</small></p>
                             </figcaption>
                         </figure>
                     </a>
@@ -102,11 +102,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{% static 'unlabel/dist/img/temp/home-ucc-4.jpg' %}">
+                                <img src="{{ influencers.3.users.image.url }}">
                             </div>
                             <figcaption>
-                                <h3>Genesis Stuart</h3>
-                                <p><small>Miami, USA</small></p>
+                                <h3>{{ influencers.3.users.first_name }}</h3>
+                                <p><small>{{ influencers.3.location }}</small></p>
                             </figcaption>
                         </figure>
                     </a>
@@ -126,26 +126,26 @@
                     <div class="swiper-container carousel_visualsSlider home__brandsVisualsSlider">
                         <div class="swiper-wrapper">
                             {# TODO : remove static data #}
-                            <div class="swiper-slide">
-                                <div class="visual visual--landscape">
-                                    <img src="{% static 'unlabel/dist/img/temp/home-slide1.jpg' %}" alt="Brands Carousel Slide 1 Visual">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="visual visual--landscape">
-                                    <img src="{% static 'unlabel/dist/img/temp/home-slide2.jpg' %}" alt="Brands Carousel Slide 2 Visual">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="visual visual--landscape">
-                                    <img src="{% static 'unlabel/dist/img/temp/home-slide3.jpg' %}" alt="Brands Carousel Slide 3 Visual">
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="visual visual--landscape">
-                                    <img src="{% static 'unlabel/dist/img/temp/home-slide4.jpg' %}" alt="Brands Carousel Slide 4 Visual">
-                                </div>
-                            </div>
+                            <!--<div class="swiper-slide">-->
+                                <!--<div class="visual visual--landscape">-->
+                                    <!--<img src="{% static 'unlabel/dist/img/temp/home-slide1.jpg' %}" alt="Brands Carousel Slide 1 Visual">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="swiper-slide">-->
+                                <!--<div class="visual visual--landscape">-->
+                                    <!--<img src="{% static 'unlabel/dist/img/temp/home-slide2.jpg' %}" alt="Brands Carousel Slide 2 Visual">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="swiper-slide">-->
+                                <!--<div class="visual visual--landscape">-->
+                                    <!--<img src="{% static 'unlabel/dist/img/temp/home-slide3.jpg' %}" alt="Brands Carousel Slide 3 Visual">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="swiper-slide">-->
+                                <!--<div class="visual visual--landscape">-->
+                                    <!--<img src="{% static 'unlabel/dist/img/temp/home-slide4.jpg' %}" alt="Brands Carousel Slide 4 Visual">-->
+                                <!--</div>-->
+                            <!--</div>-->
                             {# TODO : dynamic brands images #}
                             {% for brand in brands %}
                                 <div class="swiper-slide">
@@ -222,13 +222,13 @@
             {# TODO : correct urls #}
             <ul class="home__brandsNavList">
                 <li class="home__brandsNavItem">
-                    <a href="{% url 'catalogue:index' %}" class="cta">{% trans 'See Women’s apparel' %}</a>
+                    <a href="/catalogue/category/women" class="cta">{% trans 'See Women’s apparel' %}</a>
                 </li>
                 <li class="home__brandsNavItem">
                     <a href="{% url 'brand-list' %}" class="cta cta--dark">{% trans 'See All Brands' %}</a>
                 </li>
                 <li class="home__brandsNavItem">
-                    <a href="{% url 'catalogue:index' %}" class="cta">{% trans 'See Men’s apparel' %}</a>
+                    <a href="/catalogue/category/men" class="cta">{% trans 'See Men’s apparel' %}</a>
                 </li>
             </ul>
         </nav>

@@ -28,7 +28,7 @@
 
                 {% if user_liked %}
                     <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft cta--product" id="like_button" onclick="onToggleFollow(event, '{{ product.pk }}')">
-                    <i class="fonticon fonticon--big fonticon--starFull"></i>{% trans "Like" %}</a>
+                    <i class="fonticon fonticon--big fonticon--starFull"></i>{% trans "DisLike" %}</a>
                 {% else %}
                     <a class="cta cta--smallPad cta--inlineIcon cta--inlineIconLeft" id="like_button" onclick="onToggleFollow(event, '{{ product.pk }}')">
                     <i class="fonticon fonticon--big fonticon--starStroke"></i>{% trans "Like" %}</a>

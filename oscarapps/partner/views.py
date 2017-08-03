@@ -13,7 +13,7 @@ from django.contrib.auth.models import Permission
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import utc
-from django.views.generic import View, ListView
+from django.views.generic import View, DetailView, ListView
 from django.conf import settings
 from oscar.core.utils import slugify
 
@@ -119,7 +119,7 @@ class BrandListView(ListView):
     def get_queryset(self):
         products_type = self.request.GET.get('products_category')
         location = self.request.GET.get('location')
-        qs = Partner.objects.all()
+        qs = Partner.objects.all().order_by('name')
         if products_type != 'all' and products_type == 'Menswear':
             qs = qs.filter(category__name='Menswear')
         elif products_type != 'all' and products_type == 'Womenswear':
@@ -144,27 +144,43 @@ class BrandListView(ListView):
         return ctx
 
 
-class BrandDetailView(View):
+class BrandDetailView(ListView):
     """
     Detail view of brand
     """
-    context_object_name = "brand"
+    context_object_name = "products"
     template_name = 'brand/brand_detail.html'
     model = Partner
     page_title = 'Brands'
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
+        partner_slug = self.kwargs['slug']
+        partner = Partner.objects.get(slug=partner_slug)
+        products = Product.objects.filter(brand=partner)
+        return products
+
+
+    def get_context_data(self, *args, **kwargs):
+        ctx = super(BrandDetailView, self).get_context_data(*args, **kwargs)
+        ctx['promoted_brands'] = Partner.objects.all().order_by('created')[:3]
+        # temp = [b.location.country for b in ctx['brands']]
+        # ctx['locations'] = []
+        # for i in temp:
+        #     if i not in ctx['locations']:
+        #         ctx['locations'].append(i)
+
+        brand_locations = Partner.objects.all().values_list('location',flat=True)
+        ctx['locations'] = Locations.objects.filter(pk__in=brand_locations)
+        ctx['selected_location'] =  self.request.GET.get('location','')
+
         partner_slug = self.kwargs['slug']
         qs = Partner.objects.get(slug=partner_slug)
-        data = {'brand': qs}
+        ctx['brand'] = qs
         try:
-            brand_followed = UserBrandLike.objects.get(user=request.user,brand=qs)
-            data.update({'brand_followed':True})
+            brand_followed = UserBrandLike.objects.get(user=self.request.user,brand=qs)
+            ctx['brand_followed'] = True
         except:
-            data.update({'brand_followed':False})
-        products = Product.objects.filter(brand=qs)
-        data.update({'products': products})
-        data.update({'follow_count':UserBrandLike.objects.filter(brand=qs).count()})
-        data.update({'filters': ['all', 'Menswear', 'Womenswear']}) # Make this list dynamic
+            ctx['brand_followed'] = False
 
-        return render(request, self.template_name, data)
+        return ctx
+
