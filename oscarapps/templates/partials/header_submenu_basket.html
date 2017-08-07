@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load custom_tags %}
 
 <div class="basket-mini">
 	<div class="basket-mini__col basket-mini__col--content">
@@ -24,6 +25,9 @@
 								    </div>
 								    <figcaption class="order-summary__productContent">
 								        <p class="order-summary__productName">{{ line.description }}</p>
+                                        <p class="order-summary__productName">{{ line.product.parent.upc }}</p>
+                                        {% get_line_size line.pk as line_size %}
+                                        <p class="order-summary__productName">{{ line_size }}</p>
 								        <p class="order-summary__productPrice">{% trans 'Unit Price : ' %}{{ line.unit_price_excl_tax|currency:request.basket.currency }}</p>
 								    </figcaption>
 								</figure>

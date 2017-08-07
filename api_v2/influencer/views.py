@@ -31,9 +31,9 @@ from users.models import User  # ,UserDevice
 # from scarface.models import Application, Platform, Device, Topic, PushMessage
 from .serializers import LoginSerializer, InfluencerProfileSerializer, InfluencerPicAndBioSerializer, \
     InfluencerPhysicalAttributesSerializer, InflencerProfileDetailsSerializer, InfluencerStyleSerializer, \
-    InfluencerPostStyleSerializer
+    InfluencerPostStyleSerializer, InfluencerIndustrySerializer, InfluencerIndustryOnlySerializer
 from oscarapps.partner.models import PartnerFollow, Partner
-from oscarapps.influencers.models import Influencers
+from oscarapps.influencers.models import Influencers, Industry
 from push_notification.models import APNSDevice
 from oscarapps.address.models import TelephoneCode
 from oscarapps.partner.models import Category, Style
@@ -208,7 +208,7 @@ class InfluencerFollowedBrands(generics.ListAPIView):
             return queryset
 
 
-class InfluencerProfileUpdate(APIView):
+class InfluencerProfileUpdate(generics.UpdateAPIView):
     authentication = authentication.SessionAuthentication
     permission_classes = (permissions.IsAuthenticated,)
     http_method_names = ('get', 'post')
@@ -292,11 +292,11 @@ class InfluencerProfileUpdate(APIView):
                     content = {"message": "Please select an image"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-                if request.data['influencer_industry']:
-                    influencer_user.influencer_industry = request.data['influencer_industry']
-                else:
-                    content = {"message": "Please enter an influencer insustry"}
-                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                # if request.data['influencer_industry']:
+                #     influencer_user.influencer_industry = request.data['influencer_industry']
+                # else:
+                #     content = {"message": "Please enter an influencer insustry"}
+                #     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
                 influencer_user.save();
                 content = {"message": "Influencer profile has been successfully updated."}
@@ -601,19 +601,16 @@ class InfluencerProfileStyles(APIView):
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 class InfluencerProfileListing(generics.ListAPIView):
-
     pagination_class = InfluencerListPagination
     permissions = permissions.AllowAny
     authentication=None
     serializer_class = InflencerProfileDetailsSerializer
     http_method_names = ('get',)
 
-
     # ZA - sort by a to z
     # AZ - sort by z to a
     # ASC - sort by date ascending
     # DESC - sort by date descending
-
 
     def get_queryset(self, *args, **kwargs):
         style_selected = self.request.GET.get('style',None)
@@ -647,3 +644,55 @@ class InfluencerProfileListing(generics.ListAPIView):
                 influencers_list = influencers_list.order_by('created')
 
         return influencers_list
+
+
+class InfluencerIndustryListView(generics.ListAPIView):
+    http_method_names = ('get',)
+    pagination_class = None
+    queryset = Industry.objects.all()
+    serializer_class = InfluencerIndustrySerializer
+
+
+class InfluencerIndustryUpdateView(APIView):
+
+    authentication = authentication.SessionAuthentication
+    permission_classes = (permissions.IsAuthenticated,)
+    http_method_names = ('get', 'post')
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            try:
+                influencer = Influencers.objects.get(users=request.user)
+            except:
+                influencer = Influencers()
+                influencer.users = request.user
+                influencer.save()
+            ser = InfluencerIndustryOnlySerializer(influencer, many=False)
+            return Response(ser.data)
+        content = {"message": "user not authenticated"}
+        return Response(content, status=status.HTTP_204_NO_CONTENT)
+
+    def post(self,request,*args,**kwargs):
+        if request.user.is_authenticated() and request.user.is_influencer is True:
+            try:
+                influencer = Influencers.objects.get(users=request.user)
+            except:
+                content = {"message": "Influencer profile not found."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            industry_data = InfluencerIndustryOnlySerializer(data=request.data)
+            if industry_data.is_valid():
+                influencer.industry = industry_data.data['industry']
+                influencer.save()
+                content = {"message": "successfully updated."}
+                return Response(content, status=status.HTTP_200_OK)
+            else:
+                content = {"message": "Please try again."}
+                return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        else:
+            content = {"message": "Please login as influencer and try again."}
+            return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+
+
+
+

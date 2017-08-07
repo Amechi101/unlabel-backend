@@ -30,6 +30,17 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
                                  'LocationManageView')
     location_delete_view = get_class('oscarapps.dashboard.influencers.views',
                                  'LocationDeleteView')
+    industry_list_view = get_class('oscarapps.dashboard.influencers.views',
+                                 'IndustryListView')
+    IndustryCreateView = get_class('oscarapps.dashboard.influencers.views',
+                                 'IndustryCreateView')
+    IndustryEditView = get_class('oscarapps.dashboard.influencers.views',
+                                 'IndustryEditView')
+    IndustryDeleteView = get_class('oscarapps.dashboard.influencers.views',
+                                 'IndustryDeleteView')
+
+
+
 
 
     def get_urls(self):
@@ -53,6 +64,15 @@ class InfluencersDashboardApplication(CorePartnersDashboardApplication):
                 name='location-manage'),
             url(r'^location/(?P<pk>\d+)/delete/$', self.location_delete_view.as_view(),
                 name='location-delete'),
+            url(r'^influencer-industries$', self.industry_list_view.as_view(),
+                name='influencer-industries-list'),
+            url(r'^industry/create/$', self.IndustryCreateView.as_view(),
+                name='industry-create'),
+            url(r'^industry/(?P<pk>\d+)/$', self.IndustryEditView.as_view(),
+                name='industry-edit'),
+            url(r'^industry/(?P<pk>\d+)/delete/$', self.IndustryDeleteView.as_view(),
+                name='industry-delete'),
+
         ]
         return self.post_process_urls(urls)
 application = InfluencersDashboardApplication()

@@ -25,7 +25,7 @@ from users.models import User
 from oscarapps.address.models import Locations, States, Country
 from users.models import User
 from oscarapps.dashboard.influencers.forms import ExistingUserForm
-from oscarapps.influencers.models import Influencers, InfluencerInvite
+from oscarapps.influencers.models import Influencers, InfluencerInvite, Industry
 from oscar.core.loading import get_classes, get_model
 
 
@@ -33,10 +33,11 @@ from oscar.core.loading import get_classes, get_model
 # ================
 # Influencer views
 # ================
-(InfluencerSearchForm, InfluencerCreateForm, InfluencerManageForm) = get_classes('dashboard.influencers.forms',
+(InfluencerSearchForm, InfluencerCreateForm, InfluencerManageForm, IndustrySearchForm) = get_classes('dashboard.influencers.forms',
                                                                                  ['InfluencerSearchForm',
                                                                                   'InfluencerCreateForm',
-                                                                                  'InfluencerManageForm'],
+                                                                                  'InfluencerManageForm',
+                                                                                  'IndustrySearchForm'],
                                                                                  'oscarapps')
 
 
@@ -419,3 +420,63 @@ class LocationDeleteView(generic.DeleteView):
                          _("Location '%s' was deleted successfully.") %
                          self.object.city)
         return reverse('dashboard:location-list')
+
+
+class IndustryListView(generic.ListView):
+    model = Industry
+    context_object_name = 'industries'
+    template_name = 'dashboard/influencers/industry_list.html'
+    form_class = IndustrySearchForm
+
+    def get_queryset(self):
+        qs = self.model._default_manager.all()
+        qs = sort_queryset(qs, self.request, ['name'])
+        self.description = _("All Influencer Industries")
+
+        # We track whether the queryset is filtered to determine whether we
+        # show the search form 'reset' button.
+        self.is_filtered = False
+        self.form = self.form_class(self.request.GET)
+        if not self.form.is_valid():
+            return qs
+
+        data = self.form.cleaned_data
+
+        if data['name']:
+            qs = qs.filter(name__icontains=data['name'])
+            self.description = _("Industries matching '%s'") % data['name']
+            self.is_filtered = True
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(IndustryListView, self).get_context_data(**kwargs)
+        ctx['queryset_description'] = self.description
+        ctx['form'] = self.form
+        ctx['is_filtered'] = self.is_filtered
+        return ctx
+
+class IndustryCreateView(generic.CreateView):
+
+    model = Industry
+    template_name = 'dashboard/influencers/industry_create.html'
+    form_class = IndustrySearchForm
+    success_url = reverse_lazy('dashboard:influencer-industries-list')
+
+
+class IndustryEditView(generic.UpdateView):
+    template_name = 'dashboard/influencers/industry_create.html'
+    form_class = IndustrySearchForm
+    success_url = reverse_lazy('dashboard:influencer-industries-list')
+    model = Industry
+
+
+class IndustryDeleteView(generic.DeleteView):
+    model = Industry
+    template_name = 'dashboard/influencers/industry_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Industry '%s' was deleted successfully.") %
+                         self.object.name)
+        return reverse('dashboard:influencer-industries-list')

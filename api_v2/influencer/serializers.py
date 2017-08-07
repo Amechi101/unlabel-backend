@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from oscarapi.utils import overridable
 from users.models import User
-from oscarapps.influencers.models import Influencers
+from oscarapps.influencers.models import Influencers, Industry
 from api_v2.catalogue.serializers import LocationSerializer
 from oscarapps.partner.models import Style
 from oscarapps.address.models import TelephoneCode
@@ -52,12 +52,15 @@ class LoginSerializer(serializers.Serializer):
         self.instance = user
         return attrs
 
+
 class InfluencerProfileSerializer(serializers.ModelSerializer):
     telephone_code = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['contact_number', 'email', 'first_name', 'last_name', 'ucc_handle', 'image', 'influencer_industry', 'telephone_code']
+        fields = ['contact_number', 'email', 'first_name', 'last_name', 'ucc_handle', 'image',
+                  # 'influencer_industry',
+                  'telephone_code', 'gender', 'dob']
 
     def get_telephone_code(self,obj):
 
@@ -74,6 +77,7 @@ class InfluencerPicAndBioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Influencers
         fields = ['bio']
+
 
 class InfluencerPhysicalAttributesSerializer(serializers.ModelSerializer):
     sex = serializers.SerializerMethodField()
@@ -175,3 +179,16 @@ class InfluencerPostStyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Influencers
         fields = ['styles']
+
+
+class InfluencerIndustrySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Industry
+        fields = ['name', 'id']
+
+class InfluencerIndustryOnlySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Influencers
+        fields = ['industry']

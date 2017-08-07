@@ -9,7 +9,7 @@ from oscar.core.compat import existing_user_fields
 from oscar.core.validators import password_validators
 from oscar.forms.widgets import ImageInput
 
-from oscarapps.influencers.models import Influencers
+from oscarapps.influencers.models import Influencers, Industry
 from oscarapps.address.models import Country, States
 from users.models import User
 from oscar.core.loading import get_model
@@ -284,3 +284,12 @@ class ExistingUserForm(forms.ModelForm):
         fields = existing_user_fields(
             ['username', 'first_name', 'last_name','email']) + ['contact_number', 'gender']
         exclude = ('password1',)
+
+
+class IndustrySearchForm(forms.ModelForm):
+    name = forms.CharField(
+        required=False, label=pgettext_lazy(u"Industry name", u"Name"))
+
+    class Meta:
+        model = Industry
+        fields = '__all__'

@@ -34,6 +34,13 @@ class BaseApplicationModel(models.Model):
         abstract = True
 
 
+class Industry(BaseApplicationModel):
+    name = models.CharField( max_length=120, unique=True )
+
+    def __str__(self):
+        return self.name
+
+
 class Influencers(BaseApplicationModel):
     """
     Information for each influencer
@@ -52,6 +59,7 @@ class Influencers(BaseApplicationModel):
     waist = models.PositiveIntegerField(default=0, verbose_name=_('waist'), help_text=_('US Measurements'))
     styles = models.ManyToManyField(Style, null=True, blank=True)
     follows = models.PositiveIntegerField(default=0, verbose_name=_('follow count'))
+    industry = models.ManyToManyField(Industry, null=True, blank=True, verbose_name=_('Industry') )
 
     def id_generator(self, size=10, chars=string.ascii_uppercase + string.digits):
         auto_id = ''.join(random.choice(chars) for _ in range(size))
@@ -67,7 +75,6 @@ class Influencers(BaseApplicationModel):
             self.save()
 
     def __str__(self):
-
         return self.users.first_name
 
 

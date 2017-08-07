@@ -174,6 +174,11 @@ OSCAR_DASHBOARD_NAVIGATION = [
                 'label': _('Size Options'),
                 'url_name': 'dashboard:size-options-list',
             },
+            {
+                'label': _('Influencer Industry'),
+                'url_name': 'dashboard:influencer-industries-list',
+            },
+
         ],
     },
     {

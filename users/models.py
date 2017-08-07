@@ -22,14 +22,9 @@ class User(AbstractUser):
     is_brand = models.BooleanField(default=False)
     gender = models.CharField(choices=sex_choice, max_length=1, null=True, blank=True)
     image = models.ImageField(upload_to='Influencers', null=True, blank=True)
-    influencer_industry = models.CharField(
-        max_length=120,
-        blank=True,
-        null=True
-    )
     country = models.ForeignKey(Country, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
-    telephone_code = models.ForeignKey(TelephoneCode,null=True,blank=True)
+    telephone_code = models.ManyToManyField(TelephoneCode,null=True,blank=True)
 
     def get_full_name(self):
         full_name = '%s %s' % (self.last_name.upper(), self.first_name)
