@@ -58,6 +58,8 @@ User = auth.get_user_model()
 Country = get_model('address', 'Country')
 Partner = get_model('partner', 'Partner')
 Locations = get_model('address', 'Locations')
+ProductCategory = get_model('catalogue', 'ProductCategory')
+Category = get_model('catalogue', 'Category')
 
 
 class ProductLikeView(APIView):
@@ -241,7 +243,7 @@ class InfluencerBrandListView(generics.ListAPIView):
     # get the queryset for pagination based on the parameter given from ios
     def get_queryset(self, *args, **kwargs):
         display_type = self.request.GET.get('display')
-        radius = int(self.request.GET.get('radius'))
+        radius = int(self.request.GET.get('radius',))
         lat = float(self.request.GET.get('lat'))
         lon = float(self.request.GET.get('lon'))
         influencer_location = (lat, lon)
@@ -265,7 +267,7 @@ class InfluencerBrandListView(generics.ListAPIView):
             return queryset
 
         elif display_type == 'FILTER':
-            search_text = ""
+            search_text = ''
             search_category = []
             search_location = []
             search_style = []
@@ -1082,8 +1084,14 @@ class InfluencerProductListView(generics.ListAPIView):
 
 
     def get_queryset(self,*args,**kwargs):
+        category = self.request.GET.get('category','').strip()
         sort_by = self.request.GET.get('sort_by','').strip()
-        products_list = Product.objects.filter(~Q(structure = 'child'))
+        # products_list = Product.objects.filter(~Q(structure = 'child'), rental_status='U', status='D')
+        products_list = Product.browsable.base_queryset()
+        if category:
+            category_object = Category.objects.get(pk=category)
+            category_tree = category_object.get_descendants_and_self()
+            products_list = products_list.filter(categories__in=category_tree).distinct()
         if sort_by == 'AZ':
             products_list.order_by('title')
         elif sort_by == 'ZA':
@@ -1210,6 +1218,13 @@ class CustomerInfluencerProducts(generics.ListAPIView):
 
         return products
 
+class CategoryBaseListView(APIView):
+    serializer_class = BaseProductSerializer
+    pagination_class = None
+    http_method_names = ('get',)
+
+    def get(self,request,*args,**kwargs):
+        return Response(Category.dump_bulk(), status=status.HTTP_200_OK)
 
 
 

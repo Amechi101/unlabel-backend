@@ -22,8 +22,10 @@ from oscar.core.utils import safe_referrer
 from oscar.views.generic import PostActionMixin
 from oscar.apps.customer.views import ChangePasswordView as CoreChangePasswordView
 from oscar.apps.customer.views import AddressCreateView as CoreAddressCreateView
+from .forms import CustomProfileForm
+from oscar.apps.customer.views import ProfileUpdateView as CoreProfileUpdateView
 
-
+User = get_user_model()
 PageTitleMixin, RegisterUserMixin = get_classes(
     'customer.mixins', ['PageTitleMixin', 'RegisterUserMixin'])
 
@@ -35,6 +37,7 @@ Product = get_model('catalogue','Product')
 UserProductLike = get_model('customer','UserProductLike')
 Bankcard = get_model('payment','Bankcard')
 UserProductLike = get_model('customer','UserProductLike')
+CommunicationEventType = get_model('customer', 'CommunicationEventType')
 
 class BrandView(PageTitleMixin, generic.ListView):
     """
@@ -285,3 +288,14 @@ class ProductLikeUnlikeView(APIView):
             return Response(respone_dict)
         else:
             return Response({})
+
+class ProfileUpdateView(CoreProfileUpdateView):
+    form_class = CustomProfileForm
+    template_name = 'customer/profile/profile_form.html'
+    communication_type_code = 'EMAIL_CHANGED'
+    page_title = _('Edit Profile')
+    active_tab = 'profile'
+    success_url = reverse_lazy('customer:profile-view')
+
+
+

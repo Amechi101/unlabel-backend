@@ -114,7 +114,9 @@ urlpatterns = [
     url(r'^customer_search_influencers/', searchViews.CustomerBrandSearchView.as_view(),
         name='customer_search_influencers'),
     url(r'^influencer_industries_list/',influencerViews.InfluencerIndustryListView.as_view(), name='industry-list'),
-    url(r'^influencer_industries_update/',influencerViews.InfluencerIndustryUpdateView.as_view(), name='industry-update')
+    url(r'^influencer_industries_update/',influencerViews.InfluencerIndustryUpdateView.as_view(), name='industry-update'),
+    url(r'^get_product_categories/',catalogueViews.CategoryBaseListView.as_view(), name='category-list'),
+
 
 
 ]

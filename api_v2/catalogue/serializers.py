@@ -24,6 +24,7 @@ ProductAttributeValue = get_model('catalogue', 'ProductAttributeValue')
 ProductImage = get_model('catalogue', 'ProductImage')
 Option = get_model('catalogue', 'Option')
 Partner = get_model('partner', 'Partner')
+Category = get_model('catalogue', 'Category')
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -64,7 +65,8 @@ class PartnerSerializer(OscarModelSerializer):
     share_url = serializers.SerializerMethodField()
 
     def get_share_url(self,obj):
-        return "http://35.166.138.246"
+        url = obj.slug
+        return "http://35.166.138.246/partners/brand/"+url
 
     def get_followed(self, obj):
         request = self.context.get("request")
@@ -309,7 +311,8 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         return desc
 
     def get_share_url(self,obj):
-        return "http://35.166.138.246/"
+        url = obj.slug
+        return "http://35.166.138.246/catalogue/"+url
 
     def get_images(self, obj):
         if obj.structure == "child":
@@ -472,3 +475,9 @@ class CustomerProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = ['name']
