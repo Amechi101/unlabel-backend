@@ -18,7 +18,8 @@ from oscar.core.loading import get_model, get_class
 from oscarapps.customer.models import UserProductLike
 from .pagination import CustomPagination
 
-from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer, CustomerProductSerializer
+from .serializers import InfluencerBrandCategorySerializer, InfluencerBrandStyleSerializer,\
+    CustomerProductSerializer, ProductListSerializer
 from oscarapps.partner.models import PartnerFollow, Style, Category, SubCategory
 
 from oscarapps.catalogue.models import InfluencerProductImage
@@ -1078,7 +1079,7 @@ class InfluencerProductListView(generics.ListAPIView):
     DESC - sort by date descending
     '''
 
-    serializer_class = ProductSerializer
+    serializer_class = ProductListSerializer
     pagination_class = pagination.PageNumberPagination
     http_method_names = ('get',)
 

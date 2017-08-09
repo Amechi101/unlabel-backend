@@ -481,3 +481,57 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['name']
+
+class ProductListSerializer(OscarModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='product-detail')
+    stockrecords = serializers.HyperlinkedIdentityField(
+        view_name='product-stockrecord-list')
+    attributes = ProductAttributeValueSerializer(
+        many=True, required=False, source="attribute_values")
+    categories = serializers.StringRelatedField(many=True, required=False)
+    product_class = serializers.StringRelatedField(required=False)
+    images = ProductImageSerializer(many=True, required=False)
+    price = serializers.HyperlinkedIdentityField(view_name='product-price')
+    availability = serializers.SerializerMethodField(source='get_availability')
+    options = OptionSerializer(many=True, required=False)
+    recommended_products = RecommmendedProductSerializer(
+        many=True, required=False)
+    sku = serializers.SerializerMethodField(source='get_sku')
+    retail_price = serializers.SerializerMethodField(source='get_retail_price')
+    brand_details = serializers.SerializerMethodField()
+
+    def get_brand_details(self,obj):
+        ser = PartnerSerializer(obj.brand)
+        return ser.data
+
+
+    def get_sku(self, obj):
+        try:
+            stock_record = StockRecord.objects.get(product=obj)
+        except ObjectDoesNotExist:
+            return False
+        return stock_record.partner_sku
+
+    def get_retail_price(self, obj):
+        try:
+            stock_record = StockRecord.objects.get(product=obj)
+        except ObjectDoesNotExist:
+            return "0.00"
+        return stock_record.price_retail
+
+    def get_availability(self, obj):
+        product = obj
+        strategy = Selector().strategy()
+        ser = AvailabilitySerializer(
+            strategy.fetch_for_product(product).availability)
+        return ser.data
+
+    class Meta:
+        model = Product
+        fields = overridable(
+            'OSCARAPI_PRODUCTDETAIL_FIELDS',
+            default=(
+                'url', 'id', 'title', 'description', 'material_info',
+                'date_created', 'date_updated', 'recommended_products',
+                'attributes', 'categories', 'product_class','brand_details',
+                'stockrecords', 'images', 'price', 'availability', 'options', 'sku', 'retail_price'))
