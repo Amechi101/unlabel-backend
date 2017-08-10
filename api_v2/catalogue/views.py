@@ -1220,7 +1220,6 @@ class CustomerInfluencerProducts(generics.ListAPIView):
         return products
 
 class CategoryBaseListView(APIView):
-    serializer_class = BaseProductSerializer
     pagination_class = None
     http_method_names = ('get',)
 
@@ -1228,6 +1227,15 @@ class CategoryBaseListView(APIView):
         return Response(Category.dump_bulk(), status=status.HTTP_200_OK)
 
 
+class CategoryChildrenListView(APIView):
+    pagination_class = None
+    http_method_names = ('get',)
+
+    def get(self,request,*args,**kwargs):
+        category_id = request.GET.get('category_id',None)
+        if category_id:
+            category_parent = Category.objects.get(id=category_id)
+            return Response(category_parent.dump_bulk(parent=category_parent),status=status.HTTP_200_OK)
 
 
 
