@@ -693,6 +693,15 @@ class InfluencerIndustryUpdateView(APIView):
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
 
+class InfluencerProfileAnalyticsView(APIView):
+    '''
+    View for retrieving
+    '''
+    http_method_names = ('get',)
+    pagination_class = None
 
+    def get(self,request,*args,**kwargs):
+        data = {'completed_rentals':99, 'total_earnings':99,'engagement':99 }
+        return Response(data, status=status.HTTP_200_OK)
 
 

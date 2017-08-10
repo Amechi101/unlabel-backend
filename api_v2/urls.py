@@ -117,6 +117,8 @@ urlpatterns = [
     url(r'^influencer_industries_update/',influencerViews.InfluencerIndustryUpdateView.as_view(), name='industry-update'),
     url(r'^get_product_categories/',catalogueViews.CategoryBaseListView.as_view(), name='category-list'),
     url(r'^get_categories_children/',catalogueViews.CategoryChildrenListView.as_view(), name='subcategory-list'),
+    url(r'^influencer_profile_analytics/',influencerViews.InfluencerProfileAnalyticsView.as_view(),
+        name='influencer-profile-analytics'),
 
 
 
