@@ -713,7 +713,7 @@ class InfluencerReservedProducts(APIView):
             reserved_items = InfluencerProductReserve.objects.filter(influencer=influencer).values_list('product',
                                                                                                         flat=True)
             products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='R',
-                                                       status='D').values_list('id', flat=True)
+                                                       status='D')
             brands_id = []
             for product in products_reserved:
                 brands_id.append(product.brand)
