@@ -281,8 +281,8 @@ class InfluencerBrandListView(generics.ListAPIView):
             #     search_category = list(map(int, self.request.GET.get('store_type', '').split(',')))
             # if self.request.GET.get('specialization', '') != '':
             #     search_specialization = list(map(int, self.request.GET.get('specialization', '').split(',')))
-            # if self.request.GET.get('style', '') != '':
-            #     search_style = list(map(int, self.request.GET.get('style').split(',')))
+            if self.request.GET.get('style', '') != '':
+                search_style = list(map(int, self.request.GET.get('style').split(',')))
 
 
             # if search_text is not None:
@@ -293,8 +293,8 @@ class InfluencerBrandListView(generics.ListAPIView):
             #     partner = partner.filter(category__in=search_category)
             # if search_specialization:
             #     partner = partner.filter(sub_category__in=search_specialization)
-            # if search_style:
-            #     partner = partner.filter(style__in=search_style)
+            if search_style:
+                partner = partner.filter(style__in=search_style)
 
             param = self.request.GET.get('param')
             if param == "ZA":
@@ -714,18 +714,33 @@ class InfluencerReservedProducts(APIView):
                                                                                                         flat=True)
             products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='R',
                                                        status='D').values_list('id', flat=True)
-            stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
-            brands = Partner.objects.filter(pk__in=stock_brand)
+            brands_id = []
+            for product in products_reserved:
+                brands_id.append(product.brand)
+            # brands = Partner.objects.filter(pk__in=brands_id)
             influencer_reserved_products = []
-            for brand in brands:
-                prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
-                    'product', flat=True)
-                brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='R')
+            for brand in brands_id:
+                brand_prod = Product.objects.filter(pk__in=products_reserved, brand=brand, rental_status='R',status='D')
                 BrandAndProd = {'products': brand_prod, 'brand': brand}
                 brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd, context={'request':request})
                 influencer_reserved_products.append(brand_product_ser.data)
             results_dict = {'results': influencer_reserved_products}
             return Response(results_dict)
+
+            # products_reserved = Product.objects.filter(pk__in=reserved_items, rental_status='R',
+            #                                            status='D').values_list('id', flat=True)
+            # stock_brand = StockRecord.objects.filter(product__in=products_reserved).values_list('partner', flat=True)
+            # brands = Partner.objects.filter(pk__in=stock_brand)
+            # influencer_reserved_products = []
+            # for brand in brands:
+            #     prod_stock = StockRecord.objects.filter(partner=brand, product__in=products_reserved).values_list(
+            #         'product', flat=True)
+            #     brand_prod = Product.objects.filter(pk__in=prod_stock, rental_status='R')
+            #     BrandAndProd = {'products': brand_prod, 'brand': brand}
+            #     brand_product_ser = InfluencerBrandProductSerializer(BrandAndProd, context={'request':request})
+            #     influencer_reserved_products.append(brand_product_ser.data)
+            # results_dict = {'results': influencer_reserved_products}
+            # return Response(results_dict)
 
 
 class InfluencerRentedProducts(APIView):
