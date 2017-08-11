@@ -606,8 +606,8 @@ class InfluencerReserveProduct(APIView):
             content = {"message": "Please login first."}
             return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-        influencer_reserved_products_count = Product.objects.filter(influencer=influencer_user,rental_status='REN')
-        if influencer_reserved_products_count >=2:
+        influencer_reserved_products = Product.objects.filter(influencer=influencer_user,rental_status='REN')
+        if influencer_reserved_products.count() >= 2:
             content = {"message": "You have more than 2 rented products"}
             return Response(content, status=status.HTTP_406_NOT_ACCEPTABLE)
 
