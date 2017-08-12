@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
+from rest_framework.exceptions import ErrorDetail
+from rest_framework.utils.serializer_helpers import ReturnDict
+from rest_framework.settings import api_settings
 
 from oscarapi.utils import overridable
 from users.models import User
@@ -29,20 +32,13 @@ class LoginSerializer(serializers.Serializer):
         max_length=field_length('password'), required=True)
 
     def validate(self, attrs):
-        try:
-            email_valid = User.objects.get(email=attrs['username'])
-        except:
-            raise serializers.ValidationError('Wrong email id')
         user = authenticate(
             username=attrs['username'], password=attrs['password'])
         if user is None:
-            raise serializers.ValidationError('invalid login credentials')
+            raise serializers.ValidationError('Email/Password Error')
         elif not user.is_active:
             raise serializers.ValidationError(
                 'Can not log in as inactive user')
-        elif not user.is_influencer:
-            raise serializers.ValidationError(
-                'Normal Users cannot login via the app.')
         elif user.is_staff and overridable(
                 'OSCARAPI_BLOCK_ADMIN_API_ACCESS', True):
             raise serializers.ValidationError(
@@ -51,6 +47,7 @@ class LoginSerializer(serializers.Serializer):
         # set instance to the user so we can use this in the view
         self.instance = user
         return attrs
+
 
 
 class InfluencerProfileSerializer(serializers.ModelSerializer):

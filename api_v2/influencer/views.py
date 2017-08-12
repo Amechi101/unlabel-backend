@@ -85,6 +85,8 @@ class LoginView(APIView):
 
     def post(self, request, format=None):
         ser = self.serializer_class(data=request.data)
+
+
         if ser.is_valid():
 
             anonymous_basket = operations.get_anonymous_basket(request)
@@ -110,8 +112,13 @@ class LoginView(APIView):
             operations.store_basket_in_session(basket, request.session)
 
             return Response("")
-
-        return Response(ser.errors, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            try:
+                email_valid = User.objects.get(email=ser['username'].value,is_influencer=True )
+            except:
+                data = {"non_field_errors":["Email Error"]}
+                return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(ser.errors, status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self, request, format=None):
         """
