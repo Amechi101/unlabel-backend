@@ -56,7 +56,6 @@ class InfluencerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['contact_number', 'email', 'first_name', 'last_name', 'ucc_handle', 'image',
-                  # 'influencer_industry',
                   'telephone_code', 'gender', 'dob']
 
     def get_telephone_code(self,obj):
