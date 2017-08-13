@@ -1102,20 +1102,21 @@ class InfluencerProductListView(generics.ListAPIView):
     def get_queryset(self,*args,**kwargs):
         category = self.request.GET.get('category','').strip()
         sort_by = self.request.GET.get('sort_by','').strip()
-        # products_list = Product.objects.filter(~Q(structure = 'child'), rental_status='U', status='D')
-        products_list = Product.browsable.base_queryset()
+        print("---------------------- ",sort_by)
+        products_list = Product.objects.filter(~Q(structure = 'child'), rental_status='U', status='D').order_by('title')
+        # products_list = Product.browsable.base_queryset()
         if category:
             category_object = Category.objects.get(pk=category)
             category_tree = category_object.get_descendants_and_self()
             products_list = products_list.filter(categories__in=category_tree).distinct()
         if sort_by == 'AZ':
-            products_list.order_by('title')
+            products_list = products_list.order_by('title')
         elif sort_by == 'ZA':
-            products_list.order_by('-title')
+            products_list = products_list.order_by('-title')
         elif sort_by == 'ASC':
-            products_list.order_by('date_created')
+            products_list = products_list.order_by('date_created')
         elif sort_by == 'DSC':
-            products_list.order_by('-date_created')
+            products_list = products_list.order_by('-date_created')
 
         return products_list
 
