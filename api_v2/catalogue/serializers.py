@@ -255,6 +255,7 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
     soonest_return_date = serializers.SerializerMethodField()
     soonest_live_date = serializers.SerializerMethodField()
 
+
     def influencer_user(self):
         request = self.context['request']
         inf_user = Influencers.objects.get(users=request.user)
@@ -311,7 +312,7 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
         return desc
 
     def get_share_url(self,obj):
-        url = obj.slug
+        url = obj.slug+"_"+str(obj.id)
         return "http://35.166.138.246/catalogue/"+url
 
     def get_images(self, obj):
@@ -353,7 +354,7 @@ class InfluencerProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status',
+        fields = ['material_info', 'influencer_product_note', 'weight', 'item_sex_type', 'rental_status','status',
                   'requires_shipping', 'title', 'description', 'id', 'images', 'price', 'attributes', 'share_url', 'sku',
                   'pick_date', 'return_date', 'live_date', 'soonest_pickup_date', 'soonest_return_date','soonest_live_date']
 

@@ -81,24 +81,25 @@ class ProductDetailView(CoreProductDetailView):
     def get_context_data(self, **kwargs):
         ctx = super(ProductDetailView, self).get_context_data(**kwargs)
         product = self.get_object()
-        if product.structure != 'parent':
+        if product.structure == 'parent':
             child_products = Product.objects.filter(parent=product)
             for child in child_products:
                 try:
                     inf_reserved = InfluencerProductReserve.objects.get(product=child)
                     reserved_product = child
+                    influencer = Influencers.objects.get(pk=inf_reserved.influencer.pk)
                     break
                 except:
-                    pass
+                    influencer = None
             try:
                 attr_value = ProductAttributeValue.objects.get(product=reserved_product,attribute__code__iexact='size')
                 size = attr_value.value_option
             except:
                 size = ''
             ctx['influencer_size'] = size
-            ctx['influencer'] = Influencers.objects.get(pk=inf_reserved.influencer.pk)
+            ctx['influencer'] = influencer
 
-        elif product.structure == 'parent':
+        elif product.structure == 'standalone':
             try:
                 inf_res = InfluencerProductReserve.objects.get(product=product,is_live=True)
                 inf = Influencers.objects.get(pk=inf_res.influencer.pk)

@@ -74,7 +74,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{{ influencers.1.users.image.url }}">
+                                {% if influencers.1.users.image %}
+                                    <img src="{{ influencers.1.users.image.url }}">
+                                {% else %}
+                                <img src="">
+                                {% endif %}
                             </div>
                             <figcaption>
                                 <h3>{{ influencers.1.users.first_name }}</h3>
@@ -89,7 +93,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{{ influencers.2.users.image.url }}">
+                                {% if influencers.2.users.image %}
+                                    <img src="{{ influencers.2.users.image.url }}">
+                                {% else %}
+                                <img src="">
+                                {% endif %}
                             </div>
                             <figcaption>
                                 <h3>{{ influencers.2.users.first_name }}</h3>
@@ -102,7 +110,11 @@
                     <a href="#" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
-                                <img src="{{ influencers.3.users.image.url }}">
+                                {% if influencers.3.users.image %}
+                                    <img src="{{ influencers.3.users.image.url }}">
+                                {% else %}
+                                <img src="">
+                                {% endif %}
                             </div>
                             <figcaption>
                                 <h3>{{ influencers.3.users.first_name }}</h3>

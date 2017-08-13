@@ -292,6 +292,18 @@ class InfluencerProfileUpdate(generics.UpdateAPIView):
                     content = {"message": "Please enter valid telephone code"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
+                if request.data['gender']:
+                    if request.data['gender']== 'M':
+                        influencer_user.gender = 'M'
+                    elif request.data['gender'] == 'F':
+                        influencer_user.gender = 'F'
+                    else:
+                        content = {"message": "Please enter valid gender"}
+                        return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+                else:
+                    content = {"message": "Please enter valid gender"}
+                    return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
                 if request.data['image']:
                     influencer_user.image.delete()
                     influencer_user.image = request.data['image']
@@ -299,16 +311,9 @@ class InfluencerProfileUpdate(generics.UpdateAPIView):
                     content = {"message": "Please select an image"}
                     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
-                # if request.data['influencer_industry']:
-                #     influencer_user.influencer_industry = request.data['influencer_industry']
-                # else:
-                #     content = {"message": "Please enter an influencer insustry"}
-                #     return Response(content, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-
                 influencer_user.save();
                 content = {"message": "Influencer profile has been successfully updated."}
                 return Response(content, status=status.HTTP_200_OK)
-
 
             else:
                 content = {"message": "user is not an influencer"}
