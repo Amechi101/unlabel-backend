@@ -713,7 +713,20 @@ class InfluencerProfileAnalyticsView(APIView):
     pagination_class = None
 
     def get(self,request,*args,**kwargs):
-        data = {'completed_rentals':99, 'total_earnings':99,'engagement':99 }
+        data = {
+                'completed_rentals':99,
+                'rental_desc':"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum "
+                              "has been the industry's standard dummy text ever since the 1500s, when an unknown "
+                              "printer took a galley of type and scrambled it to make a type specimen book.",
+                'total_earnings':99,
+                'earning_desc':"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum "
+                              "has been the industry's standard dummy text ever since the 1500s, when an unknown "
+                              "printer took a galley of type and scrambled it to make a type specimen book.",
+                'engagement':99,
+                'engagement_desc':"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum "
+                              "has been the industry's standard dummy text ever since the 1500s, when an unknown "
+                              "printer took a galley of type and scrambled it to make a type specimen book.",
+        }
         return Response(data, status=status.HTTP_200_OK)
 
 
