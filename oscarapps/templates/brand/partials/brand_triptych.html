@@ -7,7 +7,7 @@
 {% block triptych_content %}
 	<ul class="cols cols--m-3">
 		<li class="col">
-			<a href="#" class="triptych__itemLink">
+			<a href="{% url 'brand_detail' slug=promoted_brands.0.slug %}" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
                         {% if promoted_brands.0.image %}
@@ -24,7 +24,7 @@
 			</a>
 		</li>
 		<li class="col">
-			<a href="#" class="triptych__itemLink">
+			<a href="{% url 'brand_detail' slug=promoted_brands.1.slug %}" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
 						{% if promoted_brands.1.image %}
@@ -41,7 +41,7 @@
 			</a>
 		</li>
 		<li class="col">
-			<a href="#" class="triptych__itemLink">
+			<a href="{% url 'brand_detail' slug=promoted_brands.2.slug %}" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
 						{% if promoted_brands.2.image %}

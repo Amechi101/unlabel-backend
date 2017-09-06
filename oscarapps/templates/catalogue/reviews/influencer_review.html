@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load custom_tags %}
 
 <!-- TODO // dynamic content -->
 <article class="review">
@@ -13,8 +14,8 @@
                             <img src="{% static 'unlabel/dist/img/temp/influencer-review-visual.jpg' %}" alt="">
                         </div>
                         <figcaption>
-                            <p>Inluencer Name {# {{ influencer.users.first_name }} {{ influencer.users.last_name }} #}</p>
-                            <p><small>Influencer City, Sate, Country {# {{ influencer.location.city }}, {{ influencer.location.state }}, {{ influencer.location.country }} #}</small></p>
+                            <p>{{ influencer.users.first_name }} {{ influencer.users.last_name }}</p>
+                            <p><small>{{ influencer.location.city }}, {{ influencer.location.state }}, {{ influencer.location.country }} </small></p>
                         </figcaption>
                     </figure>
                 </a>
@@ -23,19 +24,22 @@
                 <div class="review__content">
                     <h2 class="subtitle">{% trans 'Product Review' %}</h2>
                     <div class="desc">
-                        {# {{ influencer.users.bio }} #}
-                        Milo is a streamlined wool bomber, evolved from a softly structured silhouette with minimal, elevated street details. Milo features an in-seam kangaroo pocket, hidden wind placket, and fitted rib knit accents for optimized utility and comfort.
+                         {{ influencer.users.bio }}
                     </div>
                     <div class="sizechart">
                         <ul class="sizechart__list">
-                            {# {{ influencer.height }} #}
-                            <li class="sizechart__item">{% trans 'Height' %}: <span data-sizechart-unit="cm">167 cm</span> <span data-sizechart-unit="inch">65"</span></li>
-                            {# {{ influencer.hips }} #}
-                            <li class="sizechart__item">{% trans 'Hips' %}: <span data-sizechart-unit="cm">91 cm</span> <span data-sizechart-unit="inch">35"</span></li>
-                            {# {{ influencer.chest_or_bust }} #}
-                            <li class="sizechart__item">{% trans 'Chest' %}: <span data-sizechart-unit="cm">88 cm</span> <span data-sizechart-unit="inch">34"</span></li>
-                            {# {{ influencer.waist }} #}
-                            <li class="sizechart__item">{% trans 'Waist' %}: <span data-sizechart-unit="cm">66 cm</span> <span data-sizechart-unit="inch">25"</span></li>
+                            <li class="sizechart__item">{% trans 'Height' %}: <span data-sizechart-unit="cm">{{ influencer.height }} cm</span>
+                                {% get_inch_value influencer.height as height_value %}
+                                <span data-sizechart-unit="inch">{{ height_value }}"</span></li>
+                            <li class="sizechart__item">{% trans 'Hips' %}: <span data-sizechart-unit="cm">{{ influencer.hips }} cm</span>
+                                {% get_inch_value influencer.hips as hips_value %}
+                                <span data-sizechart-unit="inch">{{ hips_value }}"</span></li>
+                            <li class="sizechart__item">{% trans 'Chest' %}: <span data-sizechart-unit="cm">{{ influencer.chest_or_bust }} cm</span>
+                                {% get_inch_value influencer.chest_or_bust as chest_value %}
+                                <span data-sizechart-unit="inch">{{ chest_value }}"</span></li>
+                            <li class="sizechart__item">{% trans 'Waist' %}: <span data-sizechart-unit="cm">{{ influencer.waist }} cm</span>
+                                {% get_inch_value influencer.waist as waist_value %}
+                                <span data-sizechart-unit="inch">{{ waist_value }}"</span></li>
                             {# TODO : KEEP THIS CODE, the functionality will be added later on #}
                             <!-- 
                             {# {{ influencer.weight }} #}

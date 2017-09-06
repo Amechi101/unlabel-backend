@@ -20,3 +20,13 @@ def get_line_size(line_id):
         size = ''
 
     return "size : " + str(size)
+
+
+@register.assignment_tag
+def get_inch_value(num):
+    try:
+        inch_value = int(int(num)*0.393)
+    except:
+        inch_value = "Not found"
+    return inch_value
+

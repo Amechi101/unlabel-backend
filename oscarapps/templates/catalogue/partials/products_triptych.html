@@ -1,6 +1,9 @@
 {% extends "partials/triptych.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load currency_filters %}
+{% load purchase_info_tags %}
+        {% load thumbnail %}
 
 {% block triptych_extraClasses %}color-context color-context--products{% endblock %}
 
@@ -10,14 +13,50 @@
 {% block triptych_content %}
 	<ul class="cols cols--m-3">
 		<li class="col">
-			<a href="" class="triptych__itemLink">
+			<a href="{{ promoted_products.0.get_absolute_url }}" class="triptych__itemLink">
 				<figure>
-					<div class="img-container img-container--square">
-						<img src="{% static 'unlabel/dist/img/temp/more-product-1.jpg' %}" alt="">
-					</div>
+                    {% block product_image_partial_1 %}
+                        {% with image=promoted_products.0.primary_image %}
+                            {% thumbnail image.original "284x284" crop="center" upscale=True as thumb %}
+                            <div class="img-container img-container--square">
+                                <img src="{{ thumb.url }}" alt="{{ promoted_products.0.get_title }}" width="284" height="284">
+                            </div>
+                            {% endthumbnail %}
+                        {% endwith %}
+                    {% endblock %}
+
 					<figcaption>
-						<p>Bonded Wool Parka</p>
-						<p><small>$695.00</small></p>
+						<p>{{promoted_products.0.title}}</p>
+                        {% purchase_info_for_product request promoted_products.0 as session %}
+                            {% if session.price.exists %}
+                                {% if session.price.is_tax_known %}
+                                    <p><small>{{ session.price.incl_tax|currency:session.price.currency }}</small></p>
+                                {% endif %}
+                            {% endif %}
+					</figcaption>
+				</figure>
+			</a>
+		</li>
+		<li class="col">
+			<a href="{{ promoted_products.1.get_absolute_url }}" class="triptych__itemLink">
+				<figure>
+					{% block product_image_partial_2 %}
+                        {% with image=promoted_products.1.primary_image %}
+                            {% thumbnail image.original "284x284" crop="center" upscale=True as thumb %}
+                            <div class="img-container img-container--square">
+                                <img src="{{ thumb.url }}" alt="{{ promoted_products.1.get_title }}" width="284" height="284">
+                            </div>
+                            {% endthumbnail %}
+                        {% endwith %}
+                    {% endblock %}
+					<figcaption>
+						<p>{{promoted_products.1.title}}</p>
+						{% purchase_info_for_product request promoted_products.1 as session %}
+                            {% if session.price.exists %}
+                                {% if session.price.is_tax_known %}
+                                    <p><small>{{ session.price.incl_tax|currency:session.price.currency }}</small></p>
+                                {% endif %}
+                            {% endif %}
 					</figcaption>
 				</figure>
 			</a>
@@ -25,25 +64,23 @@
 		<li class="col">
 			<a href="" class="triptych__itemLink">
 				<figure>
-					<div class="img-container img-container--square">
-						<img src="{% static 'unlabel/dist/img/temp/more-product-2.jpg' %}" alt="">
-					</div>
+					{% block product_image_partial_3 %}
+                        {% with image=promoted_products.2.primary_image %}
+                            {% thumbnail image.original "284x284" crop="center" upscale=True as thumb %}
+                            <div class="img-container img-container--square">
+                                <img src="{{ thumb.url }}" alt="{{ promoted_products.2.get_title }}" width="284" height="284">
+                            </div>
+                            {% endthumbnail %}
+                        {% endwith %}
+                    {% endblock %}
 					<figcaption>
-						<p>Unisex Bomber</p>
-						<p><small>$345.00</small></p>
-					</figcaption>
-				</figure>
-			</a>
-		</li>
-		<li class="col">
-			<a href="" class="triptych__itemLink">
-				<figure>
-					<div class="img-container img-container--square">
-						<img src="{% static 'unlabel/dist/img/temp/more-product-3.jpg' %}" alt="">
-					</div>
-					<figcaption>
-						<p>Petra Long Coat</p>
-						<p><small>$465.00</small></p>
+						<p>{{promoted_products.2.title}}</p>
+						{% purchase_info_for_product request promoted_products.2 as session %}
+                            {% if session.price.exists %}
+                                {% if session.price.is_tax_known %}
+                                    <p><small>{{ session.price.incl_tax|currency:session.price.currency }}</small></p>
+                                {% endif %}
+                            {% endif %}
 					</figcaption>
 				</figure>
 			</a>

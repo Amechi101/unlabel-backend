@@ -87,23 +87,20 @@ class ProductDetailView(CoreProductDetailView):
                 try:
                     inf_reserved = InfluencerProductReserve.objects.get(product=child)
                     reserved_product = child
-                    influencer = Influencers.objects.get(pk=inf_reserved.influencer.pk)
                     break
                 except:
-                    influencer = None
+                    pass
             try:
                 attr_value = ProductAttributeValue.objects.get(product=reserved_product,attribute__code__iexact='size')
                 size = attr_value.value_option
             except:
                 size = ''
             ctx['influencer_size'] = size
-            ctx['influencer'] = influencer
+            ctx['influencer'] = product.influencer
 
         elif product.structure == 'standalone':
             try:
                 inf_res = InfluencerProductReserve.objects.get(product=product,is_live=True)
-                inf = Influencers.objects.get(pk=inf_res.influencer.pk)
-                ctx['influencer'] = inf
             except:
                 pass
             try:
@@ -111,6 +108,7 @@ class ProductDetailView(CoreProductDetailView):
                 size = attr_value.value_option
             except:
                 size = ''
+            ctx['influencer'] = product.influencer
             ctx['influencer_size'] = size
 
         if not self.request.user.is_anonymous():
@@ -123,28 +121,34 @@ class ProductDetailView(CoreProductDetailView):
         ctx['alert_form'] = self.get_alert_form()
         ctx['has_active_alert'] = self.get_alert_status()
 
-        try:
-            product_categories = product.categories.all()
-            sibling_categories = []
-            for category in product_categories:
-                sibling_categories.append(category.get_siblings())
+        # try:
+        #     product_categories = product.categories.all()
+        #     sibling_categories = []
+        #     for category in product_categories:
+        #         sibling_categories.append(category.get_siblings())
+        #
+        #     sibling_categories = list(set(sibling_categories))
+        #     promoted_products = []
+        #
+        #     for sibling in sibling_categories:
+        #         try:
+        #             promoted_products.append(Product.objects.filter(status='L',categories__in=sibling).exclude(id=product.id))
+        #         except:
+        #             pass
+        #     flat_promoted_products = [item for sublist in promoted_products for item in sublist]
+        #     if len(flat_promoted_products) < 3:
+        #         prods = Product.objects.filter(Q(structure='parent')|Q(structure='standalone')).order_by('date_created')[:3-len(flat_promoted_products)]
+        #         for prod in prods:
+        #             flat_promoted_products.append(prod)
+        # except:
+        #     flat_promoted_products = Product.objects.filter(Q(structure='parent')|Q(structure='standalone')).order_by('date_created')[:3]
 
-            sibling_categories = list(set(sibling_categories))
-            promoted_products = []
+        # ctx['promoted_products'] = flat_promoted_products
 
-            for sibling in sibling_categories:
-                try:
-                    promoted_products.append(Product.objects.filter(status='L',categories__in=sibling).exclude(id=product.id))
-                except:
-                    pass
-            flat_promoted_products = [item for sublist in promoted_products for item in sublist]
-            if len(flat_promoted_products) < 3:
-                prods = Product.objects.filter(Q(structure='parent')|Q(structure='standalone')).order_by('date_created')[:3-len(flat_promoted_products)]
-                for prod in prods:
-                    flat_promoted_products.append(prod)
-        except:
-            Product.objects.filter(Q(structure='parent')|Q(structure='standalone')).order_by('date_created')[:3]
-        ctx['promoted_products'] = flat_promoted_products
+        brand_products = Product.objects.filter(brand=product.brand)
+        filtered_products = brand_products.filter(Q(structure='parent')|Q(structure='standalone')).order_by('date_created')[:3]
+        ctx['promoted_products'] = filtered_products
+
 
         return ctx
 

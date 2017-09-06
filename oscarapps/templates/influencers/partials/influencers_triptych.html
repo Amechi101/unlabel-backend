@@ -7,12 +7,12 @@
 {% block triptych_content %}
 	<ul class="cols cols--m-3">
 		<li class="col">
-			<a href="#" class="triptych__itemLink">
+			<a href="{% url 'ucc_detail' id=promoted_influencers.0.id %}" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-                        {% if influencers.0.users.image %}
-                            <img src="{{ influencers.0.users.image.url }}" alt="">
-                        {%else%}
+                        {% if promoted_influencers.0.users.image %}
+                            <img src="{{ promoted_influencers.0.users.image.url }}" alt="">
+                        {% else %}
                             <img src="" alt="">
                         {% endif %}
 					</div>
@@ -24,12 +24,12 @@
 			</a>
 		</li>
 		<li class="col">
-			<a href="#" class="triptych__itemLink">
+			<a href="{% url 'ucc_detail' id=promoted_influencers.1.id %}" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						{% if influencers.1.users.image %}
-                            <img src="{{ influencers.1.users.image.url }}" alt="">
-                        {%else%}
+						{% if promoted_influencers.1.users.image %}
+                            <img src="{{ promoted_influencers.1.users.image.url }}" alt="">
+                        {% else %}
                             <img src="" alt="">
                         {% endif %}
 					</div>
@@ -41,11 +41,11 @@
 			</a>
 		</li>
 		<li class="col">
-			<a href="#" class="triptych__itemLink">
+			<a href="{% url 'ucc_detail' id=promoted_influencers.2.id %}" class="triptych__itemLink">
 				<figure>
 					<div class="img-container img-container--portrait">
-						{% if influencers.2.users.image %}
-                            <img src="{{ influencers.2.users.image.url }}" alt="">
+						{% if promoted_influencers.2.users.image %}
+                            <img src="{{ promoted_influencers.2.users.image.url }}" alt="">
                         {%else%}
                             <img src="" alt="">
                         {% endif %}

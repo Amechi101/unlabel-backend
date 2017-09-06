@@ -154,7 +154,7 @@ INSTALLED_APPS = [
     ### for user
     'users',
     'push_notification',
-    'import_export'
+    'import_export',
 ]
 
 INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
@@ -174,7 +174,8 @@ INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
         'oscarapps.dashboard.ranges',
         'oscarapps.promotions',
         'oscarapps.search',
-        'oscarapps.influencers'
+        'oscarapps.influencers',
+        'oscarapps.basket',
     ])
 
 MIDDLEWARE_CLASSES = (

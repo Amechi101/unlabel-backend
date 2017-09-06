@@ -47,7 +47,7 @@
         <div class="home__creatorsCols">
             <div class="home__creatorsCol home__creatorsCol--left">
                 <article class="home_creatorGridItem">
-                    <a href="#" class="u-block">
+                    <a href="{% url 'ucc_detail' id=influencers.0.id %}" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
                                 <img src="{{ influencers.0.users.image.url }}">
@@ -71,7 +71,7 @@
             </div>
             <div class="home__creatorsCol home__creatorsCol--middle">
                 <article class="home_creatorGridItem">
-                    <a href="#" class="u-block">
+                    <a href="{% url 'ucc_detail' id=influencers.1.id %}" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
                                 {% if influencers.1.users.image %}
@@ -90,7 +90,7 @@
             </div>
             <div class="home__creatorsCol home__creatorsCol--right u-desktop-only">
                 <article class="home_creatorGridItem">
-                    <a href="#" class="u-block">
+                    <a href="{% url 'ucc_detail' id=influencers.2.id %}" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
                                 {% if influencers.2.users.image %}
@@ -107,7 +107,7 @@
                     </a>
                 </article>
                 <article class="home_creatorGridItem">
-                    <a href="#" class="u-block">
+                    <a href="{% url 'ucc_detail' id=influencers.3.id %}" class="u-block">
                         <figure>
                             <div class="img-container img-container--portrait">
                                 {% if influencers.3.users.image %}
@@ -196,24 +196,6 @@
                     <div class="home__brandsCarouselContentWrapper">
                         <div class="swiper-container carousel_contentsSlider home__brandsContentsSlider">
                             <div class="swiper-wrapper">
-                                {# TODO : remove static data #}
-                                <div class="swiper-slide">
-                                    <h3 class="carousel_contentItem subtitle">Lily Stan</h3>
-                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <h3 class="carousel_contentItem subtitle">Stan Lily</h3>
-                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <h3 class="carousel_contentItem subtitle">Lily Stan</h3>
-                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <h3 class="carousel_contentItem subtitle">Stan Lily</h3>
-                                    <div class="carousel__contentItem desc desc--small">Lily Stan Studio was created by Lily Harris inspired simply by the clothing she wished she had. Lily designs each style to be easy to wear &amp; layer with one another as a uniform.</div>
-                                </div>
-                                {# TODO : dynamic brands titles and descriptions #}
                                 {% for brand in brands %}
                                     <div class="swiper-slide">
                                         <h3 class="carousel_contentItem subtitle">{{ brand.name|default:'Brand Name' }}</h3>

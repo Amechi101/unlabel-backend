@@ -627,6 +627,7 @@ class InfluencerReserveProduct(APIView):
                 influencer_product_reserved.date_return = id_ser.validated_data['date_return']
                 # self.send_email_for_reserved_product(product_to_reserve, influencer_user)  # Email notification when product is reserved
                 product_to_reserve.rental_status = 'R'
+                product_to_reserve.influencer = influencer_user
                 if product_to_reserve.structure == "child":
                     base_product = Product.objects.get(pk=product_to_reserve.parent.id)
                     base_product.rental_status = 'R'
@@ -655,6 +656,7 @@ class InfluencerReserveProduct(APIView):
                     base_product.rental_status = 'U'
                     base_product.influencer = None
                     base_product.save()
+                product_to_reserve.influencer = None
                 product_to_reserve.save()
                 content = {"message": "Product unreservered successfully."}
                 return Response(content, status=status.HTTP_200_OK)
