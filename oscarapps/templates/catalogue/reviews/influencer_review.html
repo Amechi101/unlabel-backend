@@ -11,7 +11,11 @@
                 <a class="u-block" href="#">
                     <figure>
                         <div class="img-container img-container--landscape">
-                            <img src="{% static 'unlabel/dist/img/temp/influencer-review-visual.jpg' %}" alt="">
+                            {% if influencer.users.image %}
+                                    <img src="{{ influencer.users.image.url }}">
+                                {% else %}
+                                <img src="">
+                                {% endif %}
                         </div>
                         <figcaption>
                             <p>{{ influencer.users.first_name }} {{ influencer.users.last_name }}</p>
