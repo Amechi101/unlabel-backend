@@ -8,7 +8,7 @@
         <div class="cols cols--m-2 cols--m-gutter32">
             <div class="col">
                 {# TODO : redirect to creator's page #}
-                <a class="u-block" href="#">
+                <a class="u-block" href="{% url 'ucc_detail' id=influencer.id %}">
                     <figure>
                         <div class="img-container img-container--landscape">
                             {% if influencer.users.image %}
@@ -28,7 +28,7 @@
                 <div class="review__content">
                     <h2 class="subtitle">{% trans 'Product Review' %}</h2>
                     <div class="desc">
-                         {{ influencer.users.bio }}
+                         {{ product.influencer_product_note }}
                     </div>
                     <div class="sizechart">
                         <ul class="sizechart__list">
