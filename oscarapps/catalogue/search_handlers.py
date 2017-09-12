@@ -100,6 +100,7 @@ class SimpleProductSearchHandler(MultipleObjectMixin):
 
     def get_queryset(self):
         qs = Product.browsable.base_queryset()
+        qs = qs.filter(status='L')
         if self.categories:
             qs = qs.filter(categories__in=self.categories).distinct()
         return qs
